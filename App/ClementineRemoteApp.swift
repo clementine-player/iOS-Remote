@@ -3,7 +3,13 @@ import SwiftUI
 
 @main
 struct ClementineRemoteApp: App {
-    @State private var model = AppModel()
+    @State private var model: AppModel
+
+    init() {
+        let model = AppModel()
+        AppModel.shared = model
+        _model = State(initialValue: model)
+    }
 
     var body: some Scene {
         WindowGroup {
@@ -37,8 +43,27 @@ struct RootView: View {
             model.statusChanged(from: old)
             model.updateIdleTimer()
         }
+        .onChange(of: SharedSnapshot(session: session)) { _, _ in
+            model.updateSharedState()
+        }
         .onChange(of: scenePhase) { _, phase in
             model.scenePhaseChanged(to: phase)
         }
+    }
+}
+
+/// What the widget shows, to notice when it changes.
+private struct SharedSnapshot: Equatable {
+    let status: RemoteSession.Status
+    let title: String?
+    let artist: String?
+    let playing: Bool
+
+    @MainActor
+    init(session: RemoteSession) {
+        status = session.status
+        title = session.song?.title
+        artist = session.song?.artist
+        playing = session.playState == .playing
     }
 }

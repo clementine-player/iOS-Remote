@@ -5,6 +5,9 @@ import SwiftUI
 @MainActor
 @Observable
 final class AppModel {
+    /// The app's model, for Shortcuts actions that run in the app.
+    static weak var shared: AppModel?
+
     enum Tab: Hashable {
         case queue, library, search, downloads
     }
@@ -13,6 +16,7 @@ final class AppModel {
     let settings = Settings()
     let toasts = ToastCenter()
     let network = NetworkMonitor()
+    private let sharedState = SharedStateWriter()
     @ObservationIgnored private(set) var library: LibraryModel!
     @ObservationIgnored private(set) var search: SearchModel!
     @ObservationIgnored private(set) var downloads: DownloadsModel!
@@ -87,6 +91,11 @@ final class AppModel {
             break
         }
         updateIdleTimer()
+    }
+
+    /// Tells the widget and Shortcuts what's playing, and where.
+    func updateSharedState() {
+        sharedState.update(from: self)
     }
 
     func updateIdleTimer() {

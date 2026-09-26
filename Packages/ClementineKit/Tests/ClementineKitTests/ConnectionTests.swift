@@ -226,3 +226,15 @@ struct ConnectionTests {
         #expect(clementine.received.last?.requestPlaylistSongs.id == 1)
     }
 }
+
+struct RemoteCommandTests {
+    @Test func sendsOneCommandOnAShortConnection() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        try await RemoteCommand.send(RemoteMessage(.next), to: clementine.endpoint, authCode: 7)
+        try await clementine.waitUntil { $0.received.count == 3 }
+        #expect(clementine.received.map(\.type) == [.connect, .next, .disconnect])
+        #expect(clementine.received[0].requestConnect.authCode == 7)
+        #expect(!clementine.received[0].requestConnect.sendPlaylistSongs)
+    }
+}

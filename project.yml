@@ -25,8 +25,15 @@ targets:
     platform: iOS
     sources:
       - path: App
+      - path: Shared
     dependencies:
       - package: ClementineKit
+      - target: ClementineWidget
+    entitlements:
+      path: App/ClementineRemote.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.davidsansome.ClementineRemote
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.davidsansome.ClementineRemote
@@ -58,6 +65,35 @@ targets:
         UIFileSharingEnabled: true
         LSSupportsOpeningDocumentsInPlace: true
         ITSAppUsesNonExemptEncryption: false
+  ClementineWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: Widget
+      - path: Shared
+      - path: App/Resources/Assets.xcassets
+    dependencies:
+      - package: ClementineKit
+      - sdk: WidgetKit.framework
+      - sdk: SwiftUI.framework
+    entitlements:
+      path: Widget/ClementineWidget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.davidsansome.ClementineRemote
+    info:
+      path: Widget/Info.plist
+      properties:
+        CFBundleDisplayName: Clementine
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.davidsansome.ClementineRemote.Widget
+        PRODUCT_NAME: ClementineWidget
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: NO
+        SKIP_INSTALL: YES
   ClementineRemoteUITests:
     type: bundle.ui-testing
     platform: iOS
