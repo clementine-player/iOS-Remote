@@ -406,16 +406,31 @@ public final class RemoteSession {
         send(Messages.closePlaylist(playlistID))
     }
 
-    /// Adds songs, by their URLs, to the active playlist.
-    public func add(urls: [String]) {
-        guard let activePlaylistID, !urls.isEmpty else { return }
-        send(Messages.insertURLs(urls, playlistID: activePlaylistID))
+    /// Adds songs, by their URLs, to playlist [playlistID], or the active playlist when nil.
+    public func add(urls: [String], to playlistID: Int32? = nil) {
+        guard let playlistID = playlistID ?? activePlaylistID, !urls.isEmpty else { return }
+        send(Messages.insertURLs(urls, playlistID: playlistID))
     }
 
-    /// Adds songs, described in full, to the active playlist.
-    public func add(songs: [SongMetadata]) {
-        guard let activePlaylistID, !songs.isEmpty else { return }
-        send(Messages.insertSongs(songs, playlistID: activePlaylistID))
+    /// Adds songs, described in full, to playlist [playlistID], or the active playlist when nil.
+    public func add(songs: [SongMetadata], to playlistID: Int32? = nil) {
+        guard let playlistID = playlistID ?? activePlaylistID, !songs.isEmpty else { return }
+        send(Messages.insertSongs(songs, playlistID: playlistID))
+    }
+
+    /// Creates a playlist called [name], and returns it once Clementine has; nil if Clementine
+    /// doesn't say it has in [timeout] (Clementine before 1.4 can't create playlists).
+    public func createPlaylist(named name: String, timeout: Duration = .seconds(5)) async -> Playlist? {
+        let before = Set(playlists.map(\.id))
+        send(Messages.createPlaylist(named: name))
+        let deadline = ContinuousClock.now + timeout
+        while ContinuousClock.now < deadline, status.isActive {
+            if let created = playlists.first(where: { !before.contains($0.id) }) {
+                return created
+            }
+            try? await Task.sleep(for: .milliseconds(50))
+        }
+        return nil
     }
 
     public func search(_ query: String) {

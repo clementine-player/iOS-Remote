@@ -148,6 +148,14 @@ public enum Messages {
         RemoteMessage(.closePlaylist) { $0.requestClosePlaylist.playlistID = playlistID }
     }
 
+    /// Creates a playlist called [name], which Clementine then shows. Needs Clementine 1.4.
+    public static func createPlaylist(named name: String) -> RemoteMessage {
+        RemoteMessage(.updatePlaylist) {
+            $0.requestUpdatePlaylist.createNewPlaylist = true
+            $0.requestUpdatePlaylist.newPlaylistName = name
+        }
+    }
+
     public static func globalSearch(_ query: String) -> RemoteMessage {
         RemoteMessage(.globalSearch) { $0.requestGlobalSearch.query = query }
     }

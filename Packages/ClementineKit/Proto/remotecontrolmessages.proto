@@ -80,6 +80,9 @@ enum MsgType {
     GLOBAL_SEARCH_RESULT = 54;
     TRANSCODING_FILES = 55;
     GLOBAL_SEARCH_STATUS = 56;
+
+    // Messages from Clementine 1.4 on
+    UPDATE_PLAYLIST = 60;
 }
 
 // Valid Engine states
@@ -271,6 +274,15 @@ message RequestRemoveSongs {
     repeated int32 songs = 2;
 }
 
+// Creates, clears, renames or favourites a playlist (Clementine 1.4 and later)
+message RequestUpdatePlaylist {
+    optional int32 playlist_id = 1;
+    optional string new_playlist_name = 2;
+    optional bool favorite = 3;
+    optional bool create_new_playlist = 4;
+    optional bool clear_playlist = 5;
+}
+
 // Messages for opening / closing playlists
 message RequestOpenPlaylist {
     optional int32 playlist_id = 1;
@@ -380,6 +392,7 @@ message Message {
     optional RequestDownloadSongs request_download_songs = 31;
     optional RequestRateSong request_rate_song = 35;
     optional RequestGlobalSearch request_global_search = 37;
+    optional RequestUpdatePlaylist request_update_playlist = 53;
 
     optional Repeat repeat = 13;
     optional Shuffle shuffle = 14;

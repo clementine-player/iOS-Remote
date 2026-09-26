@@ -40,6 +40,7 @@
 		D64BCDEA186CDD0D6C01E9BB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8231CF7038EDE553E2AC1660 /* Localizable.xcstrings */; };
 		D7EBC5574BEE449B6894CAC1 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325DF06B37A9ED9447D1F0EA /* SearchView.swift */; };
 		DF7E75F26D11DC8C8C821618 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175C247F8C73B1831518D42C /* SettingsView.swift */; };
+		E52201111A30A07B353D1DA9 /* PlaylistPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D27E1EDA6F353DEF40CB /* PlaylistPicker.swift */; };
 		E615AF26FE3FE54B8A706F57 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B17CFBC70A46B3612277583 /* Assets.xcassets */; };
 		ECC005CFCC20810B3ADA1F4D /* ConnectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216338887AAE5E1DC3F81FD0 /* ConnectUITests.swift */; };
 		F654C2A83CDAA6826BF57BF4 /* SongDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0567EB712221368C115A0A43 /* SongDetailsView.swift */; };
@@ -101,6 +102,7 @@
 		9DD37699892851B35F20411F /* CommandIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandIntents.swift; sourceTree = "<group>"; };
 		A27CF1AC8998F6F615C91C80 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		A5B044E45F9BBD1D9AA21079 /* SharedState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedState.swift; sourceTree = "<group>"; };
+		AAE9D27E1EDA6F353DEF40CB /* PlaylistPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistPicker.swift; sourceTree = "<group>"; };
 		AE9B3C025F4213A8DA1AFDBF /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		AFB6C96030EC2FA49A4E8212 /* QueueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueView.swift; sourceTree = "<group>"; };
 		BB1826BB720362B7433CE882 /* ClementineKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ClementineKit; path = Packages/ClementineKit; sourceTree = SOURCE_ROOT; };
@@ -142,6 +144,7 @@
 		21619A064D78FFF7022E0CAD /* Queue */ = {
 			isa = PBXGroup;
 			children = (
+				AAE9D27E1EDA6F353DEF40CB /* PlaylistPicker.swift */,
 				AFB6C96030EC2FA49A4E8212 /* QueueView.swift */,
 			);
 			path = Queue;
@@ -532,6 +535,7 @@
 				2E89727B527288C7A3667C8D /* MainView.swift in Sources */,
 				8337C9D440F6AFBDF803EC32 /* NetworkMonitor.swift in Sources */,
 				4BFB403F92B90FA8717655D2 /* PlayerView.swift in Sources */,
+				E52201111A30A07B353D1DA9 /* PlaylistPicker.swift in Sources */,
 				6F00AA6F669DE2D2094B9ED6 /* QueueView.swift in Sources */,
 				B8EC98BE34CAFE2B40D01CE0 /* SearchModel.swift in Sources */,
 				D7EBC5574BEE449B6894CAC1 /* SearchView.swift in Sources */,

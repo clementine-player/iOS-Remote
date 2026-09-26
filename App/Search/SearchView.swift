@@ -35,8 +35,8 @@ private struct SearchLevelView: View {
     var body: some View {
         List(selection: editMode.isEditing ? $selection : nil) {
             if let opened, let level, !editMode.isEditing {
-                BrowseHeader(item: opened, count: level.items.count) {
-                    Task { await search.add([opened]) }
+                BrowseHeader(item: opened, count: level.items.count) { target in
+                    Task { await search.add([opened], to: target) }
                 }
             }
             if let level {
@@ -93,8 +93,8 @@ private struct SearchLevelView: View {
                 Text("\(items.count) selected")
                     .textStyle(.bodyMedium)
                 Spacer()
-                Button("Add to playlist", systemImage: "plus") {
-                    Task { await search.add(items) }
+                AddToPlaylistMenu { target in
+                    Task { await search.add(items, to: target) }
                     endSelection()
                 }
                 .disabled(items.isEmpty)

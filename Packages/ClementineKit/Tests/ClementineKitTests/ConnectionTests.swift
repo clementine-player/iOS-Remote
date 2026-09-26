@@ -184,6 +184,52 @@ struct ConnectionTests {
         #expect(reason == .lost)
     }
 
+    @Test func createsAPlaylistAndAddsToIt() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        clementine.respondLikeClementine()
+
+        let session = RemoteSession()
+        session.connect(to: clementine.endpoint, authCode: 0)
+        try await eventually { session.status == .connected }
+
+        clementine.respond { message, client in
+            guard message.type == .updatePlaylist else { return }
+            try? await client.send(RemoteMessage(.playlists) {
+                var first = Pb_Remote_Playlist()
+                first.id = 1
+                first.name = "Playlist 1"
+                first.active = true
+                var created = Pb_Remote_Playlist()
+                created.id = 9
+                created.name = message.requestUpdatePlaylist.newPlaylistName
+                $0.responsePlaylists.playlist = [first, created]
+            })
+        }
+        let playlist = await session.createPlaylist(named: "Road trip")
+        #expect(playlist == Playlist(id: 9, name: "Road trip"))
+        let request = try #require(clementine.received.last { $0.type == .updatePlaylist })
+        #expect(request.requestUpdatePlaylist.createNewPlaylist)
+        #expect(request.requestUpdatePlaylist.newPlaylistName == "Road trip")
+
+        session.add(urls: ["file:///a.ogg"], to: 9)
+        session.add(urls: ["file:///b.ogg"])
+        try await clementine.waitUntil { $0.received.filter { $0.type == .insertUrls }.count == 2 }
+        let inserts = clementine.received.filter { $0.type == .insertUrls }
+        #expect(inserts.map(\.requestInsertUrls.playlistID) == [9, 1])
+    }
+
+    @Test func anOlderClementineDoesntCreatePlaylists() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        clementine.respondLikeClementine()
+
+        let session = RemoteSession()
+        session.connect(to: clementine.endpoint, authCode: 0)
+        try await eventually { session.status == .connected }
+        #expect(await session.createPlaylist(named: "Nope", timeout: .milliseconds(200)) == nil)
+    }
+
     @Test func disconnectSaysGoodbye() async throws {
         let clementine = try await FakeClementine()
         defer { clementine.stop() }

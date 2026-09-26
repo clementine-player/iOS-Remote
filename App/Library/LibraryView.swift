@@ -35,8 +35,8 @@ private struct LibraryLevelView: View {
     var body: some View {
         List(selection: editMode.isEditing ? $selection : nil) {
             if let opened, let level, !editMode.isEditing {
-                BrowseHeader(item: opened, count: level.items.count) {
-                    Task { await library.add([opened]) }
+                BrowseHeader(item: opened, count: level.items.count) { target in
+                    Task { await library.add([opened], to: target) }
                 } download: {
                     Task { await model.downloads.download(libraryItems: [opened]) }
                 }
@@ -120,8 +120,8 @@ private struct LibraryLevelView: View {
                 Text("\(items.count) selected")
                     .textStyle(.bodyMedium)
                 Spacer()
-                Button("Add to playlist", systemImage: "plus") {
-                    Task { await library.add(items) }
+                AddToPlaylistMenu { target in
+                    Task { await library.add(items, to: target) }
                     endSelection()
                 }
                 .disabled(items.isEmpty)

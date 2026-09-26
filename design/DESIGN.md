@@ -91,11 +91,12 @@ Shown at launch and whenever the app is not connected. From the redesign's Conne
 From the Queue board. The playlists Clementine has open.
 
 - Large title: the playlist's name. Subtitle: "13 songs · 50 min" (`… h … min` above an hour).
-- Toolbar: ConnectionChip, and a menu with Download playlist, Close playlist, Clear playlist (asks
-  first).
+- Toolbar: ConnectionChip, and a menu with New playlist, Download playlist, Close playlist, Clear
+  playlist (asks first).
 - `.searchable` filters the playlist by title, artist and album.
-- Chips, one per playlist, when there is more than one. The selected chip is filled
+- Chips, one per playlist, then a "+" chip for a new playlist. The selected chip is filled
   `secondary-container` with a check.
+- New playlist asks for a name; Clementine creates the playlist, and the queue shows it.
 - Rows (media list items): a 48 pt rounded (8 pt) `surface-container-highest` tile with a note glyph,
   the title (one line), "artist · album", and the length at the end. The song playing has an
   equaliser glyph and its title in `primary`, medium weight.
@@ -160,6 +161,9 @@ From the Library and Album boards. Clementine's library, copied to the phone.
 - Tapping a group pushes the level below. Its header: title, "*n* items", and **Add to playlist**
   (filled) and **Download** (tonal) buttons for everything in it. Tapping a song adds it to the
   playlist playing.
+- **Add to playlist** adds to the playlist playing when tapped. Touched and held, it's a menu of
+  every playlist, the one playing first, and **New playlist…**, which asks for a name, creates
+  the playlist and adds to it. Search's Add to playlist works the same way.
 - Select mode: Add to playlist, Download.
 - Pull to refresh downloads the library again.
 - Not on the phone yet: a disc glyph, "Your library isn't on this phone yet.", and a **Download
@@ -354,8 +358,14 @@ hidden while the app is active.
 - Play: `CHANGE_SONG` (playlist id, song index); that playlist becomes the active one.
 - Remove: `REMOVE_SONGS` with the songs' indices. Clear playlist removes every song. Close playlist:
   `CLOSE_PLAYLIST`.
-- Adding from the library: `INSERT_URLS` with URLs, into the active playlist. Adding from search:
-  `INSERT_URLS` with the songs' metadata.
+- Adding from the library: `INSERT_URLS` with URLs, into the playlist picked (the active one
+  unless another is picked). Adding from search: `INSERT_URLS` with the songs' metadata.
+- New playlist: `UPDATE_PLAYLIST` with `create_new_playlist` and the name (Clementine 1.4 and
+  later; the Android app's protocol doesn't have it, so the app's copy adds it). Clementine
+  creates the playlist, switches to it and sends `PLAYLISTS`; the new id there is the new
+  playlist. Adding to a new playlist creates it this way first, then adds to its id: Clementine's
+  own `new_playlist_name` in `INSERT_URLS` adds songs with metadata to the old playlist. If no new
+  playlist arrives within 5 s, the app says creating playlists needs Clementine 1.4.
 
 ### Library
 

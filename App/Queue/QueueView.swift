@@ -10,6 +10,7 @@ struct QueueView: View {
     @State private var selection = Set<Int32>()
     @State private var editMode = EditMode.inactive
     @State private var isClearConfirmationPresented = false
+    @State private var isNamingPlaylist = false
 
     /// The playlist picked, else the one playing, else the first.
     private var shown: Playlist? {
@@ -80,6 +81,13 @@ struct QueueView: View {
             .searchable(text: $filter, placement: .navigationBarDrawer, prompt: "Search this playlist")
             .environment(\.editMode, $editMode)
             .toolbar { toolbar }
+            .newPlaylistAlert(isPresented: $isNamingPlaylist) { name in
+                Task {
+                    if let created = await model.playlist(for: .new(name)) {
+                        shownID = created.id
+                    }
+                }
+            }
             .confirmationDialog(
                 "Clear playlist?", isPresented: $isClearConfirmationPresented, titleVisibility: .visible
             ) {
@@ -105,7 +113,7 @@ struct QueueView: View {
 
     @ViewBuilder
     private var header: some View {
-        if session.playlists.count > 1 {
+        if !session.playlists.isEmpty {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Metrics.space2) {
                     ForEach(session.playlists) { playlist in
@@ -113,6 +121,17 @@ struct QueueView: View {
                             shownID = playlist.id
                         }
                     }
+                    Button("New playlist", systemImage: "plus") { isNamingPlaylist = true }
+                        .labelStyle(.iconOnly)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(Palette.onSurfaceVariant)
+                        .frame(width: 32, height: 32)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: Metrics.shapeSmall).strokeBorder(Palette.outline)
+                        }
+                        .contentShape(.rect)
+                        .buttonStyle(.plain)
+                        .accessibilityIdentifier("newPlaylist")
                 }
                 .padding(.vertical, Metrics.space2)
             }
@@ -198,6 +217,9 @@ struct QueueView: View {
                         editMode = .active
                     }
                     .disabled(songs.isEmpty)
+                    Button("New playlist", systemImage: "plus") {
+                        isNamingPlaylist = true
+                    }
                     Divider()
                     Button("Download playlist", systemImage: "arrow.down.circle") {
                         if let shown {

@@ -55,11 +55,11 @@ final class SearchModel {
     }
 
     /// Adds the songs of [items] to the playlist playing.
-    func add(_ items: [BrowseItem]) async {
+    func add(_ items: [BrowseItem], to target: PlaylistTarget = .playing) async {
         let settings = model.settings
         guard let songs = try? await store.songs(of: items, grouping: settings.libraryGrouping, sorting: settings.librarySorting),
-              !songs.isEmpty else { return }
-        model.session.add(songs: songs)
-        model.toasts.show("\(songs.count) songs added to the playlist")
+              !songs.isEmpty, let playlist = await model.playlist(for: target) else { return }
+        model.session.add(songs: songs, to: playlist.id)
+        model.showAdded(songs.count, to: playlist, target: target)
     }
 }

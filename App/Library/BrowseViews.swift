@@ -113,7 +113,7 @@ struct BrowseRow: View {
 struct BrowseHeader: View {
     let item: BrowseItem
     let count: Int
-    let add: () -> Void
+    let add: (PlaylistTarget) -> Void
     var download: (() -> Void)?
 
     var body: some View {
@@ -129,9 +129,7 @@ struct BrowseHeader: View {
                     .foregroundStyle(Palette.onSurfaceVariant)
             }
             HStack(spacing: Metrics.space2) {
-                Button("Add to playlist", systemImage: "plus", action: add)
-                    .buttonStyle(.borderedProminent)
-                    .accessibilityIdentifier("addAll")
+                AddToPlaylistMenu(style: .prominent, add: add)
                 if let download {
                     Button("Download", systemImage: "arrow.down", action: download)
                         .buttonStyle(.bordered)

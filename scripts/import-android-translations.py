@@ -150,6 +150,7 @@ ENGLISH_PLURALS = {
     "%lld selected": ("%lld selected", "%lld selected"),
     "%lld songs added to the playlist": ("%lld song added to the playlist", "%lld songs added to the playlist"),
     "Rated %lld stars": ("Rated %lld star", "Rated %lld stars"),
+    "%lld songs added to %@": ("%lld song added to %@", "%lld songs added to %@"),
     "Rate %lld stars": ("Rate %lld star", "Rate %lld stars"),
 }
 
