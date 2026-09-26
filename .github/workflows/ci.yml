@@ -1,0 +1,53 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ClementineKit's tests, on macOS: quick, and no simulator needed.
+  package:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v5
+      - name: Show Xcode
+        run: xcodebuild -version
+      - name: Test ClementineKit
+        working-directory: Packages/ClementineKit
+        run: swift test
+
+  # The app built for the simulator, with ClementineKit's and the UI tests.
+  app:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Pick a simulator
+        run: |
+          id=$(xcrun simctl list devices available --json | python3 -c '
+          import json, sys
+          runtimes = json.load(sys.stdin)["devices"]
+          for runtime in sorted(runtimes, reverse=True):
+              if "iOS-2" not in runtime:
+                  continue
+              for device in runtimes[runtime]:
+                  if device["name"].startswith("iPhone"):
+                      print(device["udid"])
+                      sys.exit()
+          ')
+          echo "Using simulator $id"
+          echo "DESTINATION=id=$id" >> "$GITHUB_ENV"
+      - name: Check the Xcode project is up to date
+        run: |
+          xcodegen generate --quiet
+          git diff --exit-code -- ClementineRemote.xcodeproj
+      - name: Build and test
+        # CI has no signing account: build for the simulator without a team.
+        run: scripts/build.sh test DEVELOPMENT_TEAM=
