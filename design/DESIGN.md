@@ -1,0 +1,471 @@
+# Clementine Remote for iOS: design
+
+Clementine Remote for iOS controls the Clementine music player on a computer, over the local
+network. It does everything the Android app ([Clementine-Android]) does, laid out as the Android
+redesign has it (the "Clementine Remote redesign" canvas), in Clementine's design system, drawn with
+iOS's own controls and patterns.
+
+[Clementine-Android]: https://github.com/clementine-player/Android-Remote
+
+- **Platform:** iOS 26 and later, iPhone and iPad. Swift 6, SwiftUI, Observation.
+- **Look:** Clementine's colours (orange and plum, with Material 3 roles generated from them), light
+  and dark following the system. SF Pro type at the design system's sizes. SF Symbols, with the
+  Android app's own player glyphs where SF Symbols has no match.
+
+## Contents
+
+1. [Screens and navigation](#screens-and-navigation)
+2. [Screen by screen](#screen-by-screen)
+3. [Visual language](#visual-language)
+4. [Behaviour](#behaviour)
+5. [Architecture](#architecture)
+6. [Platform differences from Android](#platform-differences-from-android)
+7. [Settings](#settings)
+
+## Screens and navigation
+
+```
+                    ┌──────────────┐
+  launch ─────────▶ │   Connect    │  (shown whenever not connected)
+                    └──────┬───────┘
+                           │ connected
+                           ▼
+ ┌──────────────────────────────────────────────────────────────┐
+ │ TabView                                                      │
+ │  Queue │ Library │ Search │ Downloads                        │
+ │                                                              │
+ │  every tab: toolbar ConnectionChip ──▶ Connection sheet      │
+ │                                          ├─ Switch Clementine│
+ │                                          ├─ Settings (push)  │
+ │                                          └─ Disconnect       │
+ │                                                              │
+ │  tabViewBottomAccessory: MiniPlayer ──▶ Player (full screen) │
+ │                                          └─ Details / Lyrics │
+ │                                             sheet            │
+ └──────────────────────────────────────────────────────────────┘
+```
+
+| Android (today) | Redesign | iOS |
+|---|---|---|
+| Drawer: Search, Player, Playlists, Library, Downloads, Settings, Quit | Bottom navigation: Queue, Library, Search, Downloads | `TabView` with four `Tab`s |
+| Player tab with pages Player, Song details, Clementine | Mini player above the navigation, full-screen player sheet | `.tabViewBottomAccessory` mini player; `.fullScreenCover` player with a zoom transition from it |
+| Song details page | Details and lyrics bottom sheet | `.sheet` with medium and large detents; Details / Lyrics segmented control |
+| Connection page, Settings and Quit in the drawer | Connection chip at the top right, opening the connection sheet | Toolbar button on every tab root; `.sheet` |
+| Playlist spinner | Large app bar with the playlist name, chips to switch playlists | Large navigation title, horizontally scrolling chips |
+| Library with its own back handling | Drill down with back navigation | `NavigationStack` pushes |
+| Contextual action bar for multiple selection | Selection bar | `List` edit mode, actions in the bottom toolbar |
+| Toasts | Toasts | A small capsule toast at the top of the screen, also posted as a VoiceOver announcement |
+| Menu items in the app bar | Overflow menu | Toolbar `Menu` (ellipsis) |
+
+On iPad, and in landscape on large iPhones, the tab view becomes a sidebar-adaptable tab view, the
+player lays the artwork beside the song, and sheets are presented as forms.
+
+## Screen by screen
+
+### Connect
+
+Shown at launch and whenever the app is not connected. From the redesign's Connect board.
+
+- **Hero:** the brand gradient (plum → orange, left to right) behind the Clementine mark (168 pt,
+  smaller on short screens, down to 96 pt) and "Clementine Remote" in 36 pt bold white. A settings
+  button (gear, white) at the top right. The gradient runs under the status bar.
+- **Intro:** "Pick the Clementine you want to control. It needs to be on the same Wi-Fi as this
+  phone." in `on-surface-variant`.
+- **On your network:** a section title with a refresh button ("Search again"). Below it a rounded
+  (12 pt) `surface-container-low` group: one row per Clementine found by Bonjour
+  (`_clementine._tcp`): a round `secondary-container` tile with a computer glyph, the service name,
+  and "192.168.1.20 · port 5500". While none are found: a small spinner, "Looking for Clementine…"
+  and help text.
+- **Or enter its address:** a text field (URL keyboard, no autocorrect, Go key) with the addresses
+  used before as suggestions below it while typing, and a filled Connect button.
+- **While connecting:** a linear progress bar, "Connecting…" then "Downloading data…", and a Cancel
+  button. The rest of the screen is disabled.
+- **Footer:** "Needs Clementine 1.3 or later, with Tools → Preferences → Network Remote turned on."
+- **Alerts:** the auth code prompt (numeric field; an invalid code keeps it open), couldn't connect
+  (with the reason: not on Wi-Fi, not a private address, or check the address), Clementine too old,
+  and the first-run welcome.
+- Landscape: the hero fills the left half, the rest scrolls on the right.
+
+### Queue (tab 1)
+
+From the Queue board. The playlists Clementine has open.
+
+- Large title: the playlist's name. Subtitle: "13 songs · 50 min" (`… h … min` above an hour).
+- Toolbar: ConnectionChip, and a menu with Download playlist, Close playlist, Clear playlist (asks
+  first).
+- `.searchable` filters the playlist by title, artist and album.
+- Chips, one per playlist, when there is more than one. The selected chip is filled
+  `secondary-container` with a check.
+- Rows (media list items): a 48 pt rounded (8 pt) `surface-container-highest` tile with a note glyph,
+  the title (one line), "artist · album", and the length at the end. The song playing has an
+  equaliser glyph and its title in `primary`, medium weight.
+- Tap plays the song (and makes its playlist the active one). Swipe to remove. "Select" enters edit
+  mode: Play, Download, Remove in the bottom toolbar.
+- While Clementine sends the playlists' songs, a determinate progress bar at the top.
+- Opening the queue, or changing song, scrolls the playing song into view, three rows down.
+- Empty: a note glyph and "This playlist is empty".
+
+### Player (full screen)
+
+From the Now playing board. Opened from the mini player; swipe down or the chevron to close.
+
+- Top row: chevron-down (close), "Playing from" / the playlist's name, centred, and a menu (Stop,
+  Download…).
+- Artwork: square, full width with 24 pt gutters, 28 pt corners, on `surface-container-highest`.
+  With no cover, the Clementine mark inset 32 pt. Tapping it shows the lyrics. Covers crossfade over
+  0.75 s.
+- Song info, start-aligned: title (28 pt), artist in `primary` (16 pt medium), album in
+  `on-surface-variant`, then "genre · year". One line each. A Love button (heart) beside it when
+  Last.fm buttons are on.
+- Seek bar: the position follows the finger while dragging and is sent on release. Times below
+  (`m:ss`, monospaced digits); "Stream" before the position for streams; the length is hidden and
+  the bar disabled when the length is unknown. Always left to right.
+- Transport: shuffle · previous · play/pause · next · repeat, spaced evenly, always left to right.
+  - Play/pause: 96 × 72 pt, `primary-container` fill, 36 pt `on-primary-container` glyph, 28 pt
+    corners tightening to 16 pt while pressed. Long press: "Stop after this song".
+  - Previous and next: 56 pt targets, 32 pt glyphs.
+  - Shuffle and repeat: 48 pt, `on-surface-variant` when off, `primary` when on; each tap moves to
+    the next mode and a toast names it ("Shuffle albums", "Repeat track"). Repeat track uses the
+    repeat-one glyph.
+- Volume: Clementine's volume (not the phone's) between speaker glyphs. The phone's volume buttons
+  move it too.
+- Bottom row: Lyrics and details, Queue (closes the player and shows the Queue tab), Download.
+- Download asks what to download: this song, its album, or the playlist. Streams can't be
+  downloaded.
+- Landscape and iPad: artwork on the left at full height; song, seek bar and controls beside it.
+
+### Details and lyrics sheet
+
+From the Song details sheet board. Medium and large detents, grabber, 28 pt corners.
+
+- Header: title (22 pt), "artist · album".
+- Segmented control: Details / Lyrics.
+- Details: rows of label (96 pt column, `on-surface-variant`) and value, with hairline separators:
+  Album, Genre, Year, Track, Disc, Length, Play count, Size, File. Empty values are left out.
+  Tapping the cover thumbnail shows the cover full size.
+- Rating: five stars in `primary`, filled, half or empty from Clementine's rating. Tapping star *n*
+  rates the song *n* stars and shows "Rated *n* stars". When Last.fm buttons are on: Love and Ban.
+- Lyrics: asks Clementine for them the first time, with a spinner; shows the longest lyrics any
+  provider found, with the provider's name, or "No lyrics found".
+
+### Library (tab 2)
+
+From the Library and Album boards. Clementine's library, copied to the phone.
+
+- Large title "Library", subtitle "*n* items". Toolbar: ConnectionChip; a menu with Grouping (the
+  seven groupings), Sort (ascending / descending) and Update library.
+- `.searchable` filters the level shown, using the library's full-text index.
+- Rows: artists (round `secondary-container` tile, person glyph), albums and years (disc glyph),
+  genres (note glyph), each with "*n* items"; songs as media rows with "artist / album".
+- Tapping a group pushes the level below. Its header: title, "*n* items", and **Add to playlist**
+  (filled) and **Download** (tonal) buttons for everything in it. Tapping a song adds it to the
+  playlist playing.
+- Select mode: Add to playlist, Download.
+- Pull to refresh downloads the library again.
+- Not on the phone yet: a disc glyph, "Your library isn't on this phone yet.", and a **Download
+  library** button. While downloading: a determinate bar and "Downloading the library…", then an
+  indeterminate bar and "Preparing the library…".
+- The library is kept per Clementine: connecting to another Clementine deletes it.
+
+### Search (tab 3)
+
+From the Search board. Searches everything Clementine can search (library and internet services).
+
+- A search field at the top (`.searchable`, always shown), "Search Clementine". Submitting sends the
+  search; a progress bar and "Searching for “…”" until Clementine finishes.
+- Results are grouped first by where they came from (with that provider's icon), then by the
+  library grouping, and browsed like the library: drill down, Add to playlist, select mode.
+- "No results" and a first-run "Search your library and Clementine's internet services" message.
+
+### Downloads (tab 4)
+
+From the Downloads board.
+
+- Large title "Downloads", subtitle "*x* free on this phone".
+- **Downloading:** a row per job ("Album Suite bergamasque", "(2/4) Claude Debussy - Prélude" or
+  "Transcoding (1/3)"), with a thin progress bar and "3.2 MiB / 18 MiB (1.1 MiB/s)". Cancel button.
+- **On this phone:** finished jobs, with their result ("Download complete", "Canceled",
+  "Insufficient space", …). Tapping one lists its songs; tapping a song plays it in the app. Swipe to
+  remove from the list (the files stay).
+- When downloads only run on Wi-Fi, a card says so with a **Change** button to the setting.
+- Files are saved in the app's Documents folder under `Clementine/`, visible in the Files app.
+
+### Connection sheet
+
+From the Connection sheet board. Opened from the ConnectionChip.
+
+- A 56 pt round tile with the computer glyph, "Clementine on *host*", and "Connected" in `primary`
+  with a check.
+- Facts: Address ("192.168.1.20 · port 5500"), Clementine version, Connected for (hh:mm:ss, live),
+  Data (sent / received and the average rate, live).
+- Actions: Switch Clementine (disconnects and shows Connect), Settings, Disconnect.
+
+### Mini player
+
+`.tabViewBottomAccessory`, shown while connected. Title and artist, a small cover (8 pt corners), a
+small play/pause and next. A thin `primary` progress line when the accessory is expanded. Tapping it
+opens the player. With nothing playing it reads "No song playing".
+
+### Settings
+
+A grouped `Form`, pushed from the Connection sheet or opened from the Connect screen. See
+[Settings](#settings).
+
+## Visual language
+
+The tokens are the design system's (`Clementine` design system, `tokens.json`), identical to
+`ClementineTheme.kt` on Android. They live in the asset catalogue as named colours with light and
+dark appearances, and are reached through `Color.clementine.*`.
+
+### Colour
+
+| Role | Light | Dark | Used for |
+|---|---|---|---|
+| `clementine-orange` | #db6835 | same | identity: the gradient, the mark |
+| `clementine-orange-ui` | #c05422 | same | fills that carry white text |
+| `clementine-plum` | #af597d | same | the gradient's start |
+| `primary` | #9f3c09 | #ffb598 | accents: artist line, active toggles, seek bar, tint |
+| `on-primary` | #ffffff | #591c00 | text on `primary` |
+| `primary-container` | #c05422 | #e46f3b | play/pause |
+| `on-primary-container` | #fffbff | #431300 | play/pause glyph |
+| `secondary-container` | #fdb69a | #6e3c27 | selected chips and rows, icon tiles |
+| `on-secondary-container` | #79452f | #eea88d | |
+| `surface` | #fff8f6 | #1b110d | every screen's background |
+| `surface-container-low` | #fff1ec | #241915 | sheets, grouped cards |
+| `surface-container` | #ffe9e2 | #281d19 | tab bar |
+| `surface-container-high` | #f9e4dc | #332723 | search field, ConnectionChip |
+| `surface-container-highest` | #f3ded7 | #3f322d | artwork and thumbnail grounds |
+| `on-surface` | #241915 | #f3ded7 | primary text |
+| `on-surface-variant` | #57423a | #dec0b6 | secondary text, inactive icons |
+| `outline` | #8a7269 | #a58b81 | chip outlines |
+| `outline-variant` | #dec0b6 | #57423a | separators |
+| `error` | #ba1a1a | #ffb4ab | errors, with a word or glyph |
+| `error-container` | #ffdad6 | #93000a | offline ConnectionChip |
+
+Rules, from the design system:
+
+- White text only on `clementine-orange-ui`, never on `clementine-orange`.
+- The brand gradient (plum → orange, left to right) only on the Connect hero. Only the mark and
+  large bold type sit on it.
+- Chrome is tonal: navigation bars on `surface`, the tab bar on `surface-container`. Orange carries
+  meaning: play/pause, progress, the current song, selection.
+- The app's tint is `primary`.
+
+### Type
+
+SF Pro (the system font) at the design system's sizes, scaled with Dynamic Type:
+
+| Style | Size / line | Used for |
+|---|---|---|
+| display | 36 / 44 bold | "Clementine Remote" on the hero |
+| headline-medium | 28 / 36 | song title on the player |
+| headline-small | 24 / 32 | album header |
+| title-large | 22 / 28 | sheet titles |
+| title-medium | 16 / 24 medium | artist |
+| body-large | 16 / 24 | list titles, values |
+| body-medium | 14 / 20 | meta lines |
+| label-large | 14 / 20 medium | section titles, buttons |
+| label-medium | 12 / 16 medium | times, "genre · year" (monospaced digits) |
+
+One line per fact, truncated at the end; song titles never wrap.
+
+### Shape, space, motion
+
+- Spacing on a 4 pt grid: 4, 8, 12, 16, 24, 32. Player gutters 24, gaps 16.
+- Corners: 28 (artwork, play/pause, sheets), 16 (mini player), 12 (grouped cards), 8 (thumbnails,
+  chips); capsules for buttons, search and the seek track.
+- Flat: no shadows beyond what iOS's own materials draw.
+- Touch targets at least 44 pt (48 where the design says so).
+- Motion: covers crossfade over 0.75 s; play/pause corners tighten while pressed (~0.2 s); the seek
+  thumb follows the finger. Nothing moves by itself.
+
+### Icons
+
+SF Symbols, filled, in the colour of their control:
+
+| Use | Symbol |
+|---|---|
+| Play / pause | `play.fill` / `pause.fill` |
+| Previous / next | `backward.end.fill` / `forward.end.fill` |
+| Shuffle / repeat / repeat track | `shuffle` / `repeat` / `repeat.1` |
+| Queue / Library / Search / Downloads | `list.bullet` / `square.stack` / `magnifyingglass` / `arrow.down.circle` |
+| Computer (host) | `desktopcomputer` |
+| Playing | `waveform` (animated only when Reduce Motion is off) |
+| Song / album / artist | `music.note` / `opticaldisc` / `person.fill` |
+| Love / ban | `heart` / `hand.thumbsdown` |
+| Lyrics | `quote.bubble` |
+| Stars | `star.fill` / `star.leadinghalf.filled` / `star` |
+
+The Clementine mark (from the desktop repo's `data/icon.svg`) is the app icon, the Connect hero and
+the missing-cover image.
+
+### Copy
+
+Plain, short, sentence case, as the design system says: "Connect", "Add to playlist", "No song
+playing", "Clementine on studio-pc". Mode feedback names the new mode. Strings come from the Android
+app's `strings.xml` and its translations, converted to a String Catalog.
+
+## Behaviour
+
+### Connecting
+
+- One TCP connection to Clementine (default port 5500). Each message is a big-endian 32-bit length
+  and a `pb.remote.Message` (proto2, version 21). Messages over 50 MB, or from a Clementine older than
+  version 21, end the connection.
+- The first message is `CONNECT` with the auth code, `send_playlist_songs = true` and
+  `downloader = false`. Clementine answers with `INFO` ("Downloading data…"), the current song,
+  playlists and state, then `FIRST_DATA_SENT_COMPLETE`, when the app shows the tabs.
+- `DISCONNECT` with *Wrong auth code* or *Not authenticated* asks for the code and tries again.
+- Clementine sends `KEEP_ALIVE` regularly. Nothing for 25 s means the connection is lost: the app
+  reconnects (`send_playlist_songs = false`) up to 5 times, then shows "Connection lost" and returns
+  to the Connect screen. A failed send also reconnects once.
+- The address, auth code and addresses used before are saved. With auto-connect on, the Connect
+  screen connects to the saved address at launch.
+- In the background iOS suspends the app, and the connection with it. When the app is sent to the
+  background it keeps the connection for as long as iOS allows, then disconnects quietly; on return
+  it reconnects without asking for the playlists again. Downloads in progress ask iOS for extra
+  background time.
+
+### Player state
+
+`RemoteSession` holds what Clementine last said: the song, state, position, volume, shuffle and
+repeat modes, playlists and their songs, the active playlist, lyrics and version. Some changes show
+at once rather than waiting for Clementine to confirm them: seeking, rating, and cycling shuffle and
+repeat (the next mode is set locally, then sent whole).
+
+- Shuffle cycles Off → All → Inside album → Albums. Repeat cycles Off → Track → Album → Playlist.
+- A song can be loved once.
+- Lyrics: `GET_LYRICS` the first time; the longest provider's lyrics win.
+
+### Volume buttons
+
+The phone's volume buttons change Clementine's volume, not the phone's, while the app is in front.
+The app keeps an ambient audio session active (it plays nothing and doesn't interrupt other audio),
+watches the session's output volume, and after each press puts the phone's volume back where it was
+through a hidden `MPVolumeView`, so presses keep registering even at 0 % and 100 %. Each press moves
+Clementine's volume by the "Volume step" setting and shows "Volume 60%". The system volume HUD is
+hidden while the app is active.
+
+### Playlists
+
+- On opening the Queue, the app asks for the songs of every playlist it doesn't have yet
+  (`REQUEST_PLAYLIST_SONGS`), showing how many have arrived.
+- Play: `CHANGE_SONG` (playlist id, song index); that playlist becomes the active one.
+- Remove: `REMOVE_SONGS` with the songs' indices. Clear playlist removes every song. Close playlist:
+  `CLOSE_PLAYLIST`.
+- Adding from the library: `INSERT_URLS` with URLs, into the active playlist. Adding from search:
+  `INSERT_URLS` with the songs' metadata.
+
+### Library
+
+- Downloaded over a second connection (`downloader = true`) with `GET_LIBRARY`: SQLite database file
+  in `LIBRARY_CHUNK`s, written to Application Support.
+- Then: delete unavailable songs, create the `songs_fts` FTS3 table and the artist, album and title
+  indices, as Android does.
+- Browsing runs the same queries as Android's `DynamicSongQuery`: each level groups by one field of
+  the grouping, songs are ordered by album, disc and track, and each group's "*n* items" counts the
+  distinct values below it. Filtering matches `songs_fts MATCH "text*"`.
+- Groupings: Artist; Artist / Album (default); Album artist / Album; Artist / Year; Album;
+  Genre / Album; Genre / Artist / Album. Sorting: ascending (default) or descending.
+
+### Search
+
+- `GLOBAL_SEARCH` with the query. `GLOBAL_SEARCH_STATUS` *started* gives the search's id; results
+  (`GLOBAL_SEARCH_RESULT`) for that id go into an in-memory SQLite table, with each provider's icon;
+  *finished* shows them. Grouped by provider, then the library grouping.
+
+### Downloads
+
+- Each job is its own connection (`downloader = true`) sending `DOWNLOAD_SONGS`: the current song,
+  its album, a playlist, or a list of URLs.
+- For each song Clementine first offers it (chunk 0, with the song's metadata); the app accepts
+  unless the file exists and overwriting is off (`SONG_OFFER_RESPONSE`). Then chunks until
+  `chunk_number == chunk_count`. `DOWNLOAD_TOTAL_SIZE` gives the total, `TRANSCODING_FILES` the
+  transcoding progress, and `DOWNLOAD_QUEUE_EMPTY` ends the job. `DISCONNECT` means downloads are
+  turned off in Clementine.
+- Files go to `Documents/Clementine/[playlist/][artist/[album/]]filename`, depending on the
+  settings. A partly written file is deleted.
+- Results: complete, canceled, insufficient space, can't save, connection error, forbidden, Wi-Fi
+  only.
+- A local notification says when downloads finish while the app is in the background.
+
+### Shortcuts
+
+App Intents replace the Android app's Tasker plugin: Connect, Disconnect, Play, Pause, Play/pause,
+Next, Stop. They appear in Shortcuts, Siri and automations. When the app isn't connected, an intent
+opens a short connection, sends its command and disconnects.
+
+### Widget
+
+A home screen widget (WidgetKit) with the last song seen and play/pause and next buttons (App
+Intents, as above). It can't update live while the app is suspended; it shows what the app last saw.
+
+## Architecture
+
+```
+ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
+├─ App/                              SwiftUI app
+│  ├─ ClementineRemoteApp.swift      scene, dependencies
+│  ├─ Theme/                         colours, type, shapes, reusable views
+│  ├─ Connect/  Queue/  Player/  Library/  Search/  Downloads/  Connection/  Settings/
+│  └─ Resources/                     Assets.xcassets, Localizable.xcstrings
+├─ Widget/                           widget extension
+└─ Packages/ClementineKit/           Swift package: everything testable without UI
+   ├─ Protocol/      generated remotecontrolmessages.pb.swift, framing, message builders
+   ├─ Connection/    MessageStream (NWConnection, framing), ClementineConnection (actor:
+   │                 connect, keep-alive, reconnects, byte counts)
+   ├─ Discovery/     ServiceBrowser (NWBrowser, resolution to IPv4)
+   ├─ Model/         Song, Playlist, modes, LyricsProvider
+   ├─ Session/       RemoteSession (@MainActor @Observable): state and commands
+   ├─ Browse/        SQLite wrapper, SongQuery, SongBrowser, LibraryStore, SearchStore
+   ├─ Downloads/     DownloadManager, SongDownloader, DownloadStorage
+   └─ Settings/      Settings keys and defaults
+```
+
+- **Only dependency:** swift-protobuf. SQLite is the system library, through a small wrapper.
+- **Protocol file:** `Packages/ClementineKit/Proto/remotecontrolmessages.proto`, the Android app's
+  copy. `scripts/generate-proto.sh` regenerates the Swift.
+- **Concurrency:** network I/O in actors; UI state on the main actor; the SQLite work in a
+  background actor.
+- **Testing:** Swift Testing in the package: framing and parsing, message builders, the connection
+  against an in-process fake Clementine, song offers and chunking, `SongQuery` on a sample library,
+  and the session's state changes. UI tests cover connecting and the tabs against the fake server.
+
+## Platform differences from Android
+
+| Android | iOS |
+|---|---|
+| Foreground service keeps the connection in the background | Connection kept while iOS allows, then reconnected on return |
+| Media notification and lock screen controls | Not provided |
+| Lower volume during calls | Not provided |
+| Volume keys control Clementine | Kept (see [Volume buttons](#volume-buttons)) |
+| Wake lock | Not applicable |
+| Keep screen on | `isIdleTimerDisabled` while connected and the setting is on |
+| Download directory setting, MediaStore | The app's Documents folder, shown in Files |
+| Open downloaded songs in another app | Play them in the app, or share them |
+| Tasker plugin | App Intents (Shortcuts) |
+| Home screen widget | WidgetKit widget |
+| Dynamic (wallpaper) colour | Not applicable: Clementine's colours always |
+| Unused "show track number" setting | Dropped |
+
+## Settings
+
+| Section | Setting | Default | Android key |
+|---|---|---|---|
+| Player | Volume buttons control Clementine | on | `pref_volumekey` |
+| | Volume step | 10 % (1–20 %) | `pref_volume_inc` |
+| | Show Last.fm buttons | on | `pref_show_lastfm` |
+| Library | Grouping | Artist / Album | `pref_library_grouping` |
+| | Sorting | Ascending | `pref_library_sorting` |
+| Downloads | Only on Wi-Fi | off | `pref_dl_wifi_only` |
+| | Replace existing files | off | `pref_dl_override` |
+| | Playlist folder | off | `pref_dl_pl_save_own_dir` |
+| | Artist folder | on | `pref_dl_artist_dir` |
+| | Album folder (needs artist folder) | on | `pref_dl_album_dir` |
+| Connection | Connect automatically | off | `pref_autoconnect` |
+| | Port | 5500 | `pref_port` |
+| Advanced | Keep the screen on | off | `pref_keep_screen_on` |
+| About | Version, Clementine's website, the source code, credits, licences | | |
+
+Saved state: last address (`save_clementine_ip`), addresses used (`known_ips`), last auth code
+(`last_auth_code`), the Clementine the library came from (`library_ip`), first launch (`first_call`).
