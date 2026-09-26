@@ -79,6 +79,7 @@ struct PlayerView: View {
             Spacer()
             Menu {
                 Button("Stop", systemImage: "stop.fill") { session.stop() }
+                DownloadMenu()
             } label: {
                 Image(systemName: "ellipsis")
                     .font(.title3)
@@ -134,6 +135,16 @@ struct PlayerView: View {
                 model.selectedTab = .queue
                 dismiss()
             }
+            Spacer()
+            Menu {
+                DownloadMenu()
+            } label: {
+                Image(systemName: "arrow.down.circle")
+                    .font(.title3)
+                    .foregroundStyle(Palette.onSurfaceVariant)
+                    .frame(width: 48, height: 48)
+            }
+            .accessibilityLabel("Download")
             Spacer()
         }
     }

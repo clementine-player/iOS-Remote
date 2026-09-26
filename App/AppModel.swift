@@ -15,6 +15,7 @@ final class AppModel {
     let network = NetworkMonitor()
     @ObservationIgnored private(set) var library: LibraryModel!
     @ObservationIgnored private(set) var search: SearchModel!
+    @ObservationIgnored private(set) var downloads: DownloadsModel!
 
     var selectedTab = Tab.queue
     var isPlayerPresented = false
@@ -26,6 +27,7 @@ final class AppModel {
     init() {
         library = LibraryModel(model: self)
         search = SearchModel(model: self)
+        downloads = DownloadsModel(model: self)
     }
 
     /// Connects to [host], remembering it.

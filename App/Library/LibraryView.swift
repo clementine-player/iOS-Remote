@@ -37,6 +37,8 @@ private struct LibraryLevelView: View {
             if let opened, let level, !editMode.isEditing {
                 BrowseHeader(item: opened, count: level.items.count) {
                     Task { await library.add([opened]) }
+                } download: {
+                    Task { await model.downloads.download(libraryItems: [opened]) }
                 }
             }
             if let level {
@@ -116,6 +118,11 @@ private struct LibraryLevelView: View {
                 Spacer()
                 Button("Add to playlist", systemImage: "plus") {
                     Task { await library.add(items) }
+                    endSelection()
+                }
+                .disabled(items.isEmpty)
+                Button("Download", systemImage: "arrow.down") {
+                    Task { await model.downloads.download(libraryItems: items) }
                     endSelection()
                 }
                 .disabled(items.isEmpty)

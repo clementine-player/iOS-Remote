@@ -19,7 +19,7 @@ struct MainView: View {
                 SearchView()
             }
             Tab("Downloads", systemImage: "arrow.down.circle", value: AppModel.Tab.downloads) {
-                LibraryPlaceholder(title: "Downloads")
+                DownloadsView()
             }
         }
         .tabViewBottomAccessory {
@@ -40,21 +40,6 @@ struct MainView: View {
         }
         .background {
             VolumeButtonsView(model: model)
-        }
-    }
-}
-
-/// Stands in for tabs still to come.
-private struct LibraryPlaceholder: View {
-    let title: LocalizedStringResource
-
-    var body: some View {
-        NavigationStack {
-            ContentUnavailableView(String(localized: title), systemImage: "hammer")
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .surfaceBackground()
-                .navigationTitle(Text(title))
-                .connectionToolbar()
         }
     }
 }

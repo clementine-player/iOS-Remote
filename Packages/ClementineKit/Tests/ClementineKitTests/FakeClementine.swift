@@ -97,7 +97,10 @@ final class FakeClementine: Sendable {
                     state.received.append(message)
                     return state.responder
                 }
-                await responder?(message, client)
+                // Answered separately, so a responder can wait for the client's next message.
+                if let responder {
+                    Task { await responder(message, client) }
+                }
             }
         }
     }

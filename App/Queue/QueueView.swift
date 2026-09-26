@@ -175,6 +175,11 @@ struct QueueView: View {
                     endSelection()
                 }
                 .disabled(selected.isEmpty)
+                Button("Download", systemImage: "arrow.down") {
+                    model.downloads.download(urls: selected.map(\.url))
+                    endSelection()
+                }
+                .disabled(selected.isEmpty)
                 Button("Remove from playlist", systemImage: "trash") {
                     remove(selected)
                     endSelection()
@@ -194,6 +199,11 @@ struct QueueView: View {
                     }
                     .disabled(songs.isEmpty)
                     Divider()
+                    Button("Download playlist", systemImage: "arrow.down.circle") {
+                        if let shown {
+                            model.downloads.download(playlist: shown)
+                        }
+                    }
                     Button("Close playlist", systemImage: "xmark.rectangle") {
                         if let shown {
                             session.close(playlistID: shown.id)

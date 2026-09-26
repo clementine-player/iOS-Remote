@@ -17,9 +17,11 @@
 		5519998FF94C9CDB9C36CA95 /* ConnectionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC8D6A33585EA2F0980CEEF /* ConnectionSheet.swift */; };
 		59F2ED95C3EC8E18D1C61A1F /* VolumeButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D0E12EF32CE14014407139 /* VolumeButtons.swift */; };
 		6F00AA6F669DE2D2094B9ED6 /* QueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB6C96030EC2FA49A4E8212 /* QueueView.swift */; };
+		761C4231EA060F078910BF81 /* DownloadsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C473DE02F14A3512CD1127FB /* DownloadsModel.swift */; };
 		8337C9D440F6AFBDF803EC32 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9B3C025F4213A8DA1AFDBF /* NetworkMonitor.swift */; };
 		8BC16A794293F5B9E10598BF /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0CF9A7519C0E1D02B75CB8 /* Components.swift */; };
 		A83B1DAF857B6BC5EB001422 /* LibraryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B11B3C0886EBF71B26160B /* LibraryModel.swift */; };
+		AF5B4FBB88A0EB985218B5A6 /* DownloadsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08CA8859F2B5F40175519D8 /* DownloadsView.swift */; };
 		B8EC98BE34CAFE2B40D01CE0 /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9487E83AC1EF9117BF817B9 /* SearchModel.swift */; };
 		C465668F76779553E3C62F78 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468183AFD2E06A2AAA047535 /* Toast.swift */; };
 		C4B3221C0EE87A4832DAB4B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B17CFBC70A46B3612277583 /* Assets.xcassets */; };
@@ -62,10 +64,12 @@
 		AFB6C96030EC2FA49A4E8212 /* QueueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueView.swift; sourceTree = "<group>"; };
 		BB1826BB720362B7433CE882 /* ClementineKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ClementineKit; path = Packages/ClementineKit; sourceTree = SOURCE_ROOT; };
 		C1EE8BBC662FAA0FC417A564 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C473DE02F14A3512CD1127FB /* DownloadsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsModel.swift; sourceTree = "<group>"; };
 		C4D0E12EF32CE14014407139 /* VolumeButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeButtons.swift; sourceTree = "<group>"; };
 		CD9202E1E8FCA97103ED358B /* ClementineRemoteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClementineRemoteApp.swift; sourceTree = "<group>"; };
 		D4806AC63E537A5050C1E6BD /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		D8B11B3C0886EBF71B26160B /* LibraryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryModel.swift; sourceTree = "<group>"; };
+		E08CA8859F2B5F40175519D8 /* DownloadsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsView.swift; sourceTree = "<group>"; };
 		E63B6AE23EEE05A3E90A3968 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		E9487E83AC1EF9117BF817B9 /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
 		EE0CF9A7519C0E1D02B75CB8 /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
@@ -99,6 +103,15 @@
 				D4806AC63E537A5050C1E6BD /* LibraryView.swift */,
 			);
 			path = Library;
+			sourceTree = "<group>";
+		};
+		34B9B7135F563F9C0F195796 /* Downloads */ = {
+			isa = PBXGroup;
+			children = (
+				C473DE02F14A3512CD1127FB /* DownloadsModel.swift */,
+				E08CA8859F2B5F40175519D8 /* DownloadsView.swift */,
+			);
+			path = Downloads;
 			sourceTree = "<group>";
 		};
 		38787F3E609D6D2A758E7A85 /* Packages */ = {
@@ -163,6 +176,7 @@
 				1DDDE87078B3BE38BF533D5A /* MainView.swift */,
 				DC1AA6546BD7B21A619AA358 /* Connect */,
 				C29638AE1C4D87CD5F503A3C /* Connection */,
+				34B9B7135F563F9C0F195796 /* Downloads */,
 				2AC6FAA5E7DBA023F4A9CDF9 /* Library */,
 				56F26C6A8DE02190C5639C9A /* Player */,
 				21619A064D78FFF7022E0CAD /* Queue */,
@@ -342,6 +356,8 @@
 				8BC16A794293F5B9E10598BF /* Components.swift in Sources */,
 				2DCED78B207233F308ECE495 /* ConnectView.swift in Sources */,
 				5519998FF94C9CDB9C36CA95 /* ConnectionSheet.swift in Sources */,
+				761C4231EA060F078910BF81 /* DownloadsModel.swift in Sources */,
+				AF5B4FBB88A0EB985218B5A6 /* DownloadsView.swift in Sources */,
 				A83B1DAF857B6BC5EB001422 /* LibraryModel.swift in Sources */,
 				015B3D7098D15696CE753DCA /* LibraryView.swift in Sources */,
 				2E89727B527288C7A3667C8D /* MainView.swift in Sources */,

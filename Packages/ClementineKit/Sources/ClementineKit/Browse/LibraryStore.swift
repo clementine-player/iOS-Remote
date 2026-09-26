@@ -180,7 +180,7 @@ public actor LibraryStore {
             """)
     }
 
-    static func freeSpace(at url: URL) -> Int64? {
+    public static func freeSpace(at url: URL) -> Int64? {
         let values = try? url.deletingLastPathComponent()
             .resourceValues(forKeys: [.volumeAvailableCapacityForImportantUsageKey])
         return values?.volumeAvailableCapacityForImportantUsage
