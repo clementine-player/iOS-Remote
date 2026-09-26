@@ -1,0 +1,80 @@
+name: ClementineRemote
+options:
+  bundleIdPrefix: org.clementine-player
+  deploymentTarget:
+    iOS: "26.0"
+  createIntermediateGroups: true
+  developmentLanguage: en
+packages:
+  ClementineKit:
+    path: Packages/ClementineKit
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    SWIFT_STRICT_CONCURRENCY: complete
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    SWIFT_EMIT_LOC_STRINGS: YES
+targets:
+  ClementineRemote:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+    dependencies:
+      - package: ClementineKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.clementine-player.ClementineRemote
+        PRODUCT_NAME: Clementine Remote
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: NO
+        INFOPLIST_FILE: App/Info.plist
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Clementine
+        UILaunchScreen:
+          UIColorName: Surface
+        UIApplicationSupportsIndirectInputEvents: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        NSLocalNetworkUsageDescription: Clementine Remote finds and talks to Clementine on your local network.
+        NSBonjourServices:
+          - _clementine._tcp
+        UIFileSharingEnabled: true
+        LSSupportsOpeningDocumentsInPlace: true
+        ITSAppUsesNonExemptEncryption: false
+  ClementineRemoteUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: UITests
+    dependencies:
+      - target: ClementineRemote
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.clementine-player.ClementineRemoteUITests
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  ClementineRemote:
+    build:
+      targets:
+        ClementineRemote: all
+    test:
+      targets:
+        - ClementineRemoteUITests
+        - package: ClementineKit/ClementineKitTests

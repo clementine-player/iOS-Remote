@@ -1,0 +1,542 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1B87E42072E67CED101AEDC9 /* ClementineRemoteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9202E1E8FCA97103ED358B /* ClementineRemoteApp.swift */; };
+		2DCED78B207233F308ECE495 /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E799EAA26048F3E7A685A1E /* ConnectView.swift */; };
+		2E89727B527288C7A3667C8D /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDE87078B3BE38BF533D5A /* MainView.swift */; };
+		4D6AE5E0768E9DF84BD802B2 /* ClementineKit in Frameworks */ = {isa = PBXBuildFile; productRef = 12273CB88A5BBB32D77ACFB5 /* ClementineKit */; };
+		8337C9D440F6AFBDF803EC32 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9B3C025F4213A8DA1AFDBF /* NetworkMonitor.swift */; };
+		8BC16A794293F5B9E10598BF /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0CF9A7519C0E1D02B75CB8 /* Components.swift */; };
+		C465668F76779553E3C62F78 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468183AFD2E06A2AAA047535 /* Toast.swift */; };
+		C4B3221C0EE87A4832DAB4B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B17CFBC70A46B3612277583 /* Assets.xcassets */; };
+		D2D6B3ACC523DF3DB5537C99 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A993163DF245FDB672E969 /* AppModel.swift */; };
+		D3DC501DC0E77D6C9758DFEE /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4856A6293D1829361A2A9A17 /* Theme.swift */; };
+		DF7E75F26D11DC8C8C821618 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175C247F8C73B1831518D42C /* SettingsView.swift */; };
+		ECC005CFCC20810B3ADA1F4D /* ConnectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216338887AAE5E1DC3F81FD0 /* ConnectUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B94B1BDADFF631DA4BC0BA61 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A96B9C98D2D96A5DC2AA80DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B55B382E90303C5A7F992938;
+			remoteInfo = ClementineRemote;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0FC17D2E6E8CD9D762D37F80 /* ClementineRemote.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ClementineRemote.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		175C247F8C73B1831518D42C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		1DDDE87078B3BE38BF533D5A /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		1E799EAA26048F3E7A685A1E /* ConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectView.swift; sourceTree = "<group>"; };
+		216338887AAE5E1DC3F81FD0 /* ConnectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectUITests.swift; sourceTree = "<group>"; };
+		468183AFD2E06A2AAA047535 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
+		4856A6293D1829361A2A9A17 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		4B17CFBC70A46B3612277583 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		53A993163DF245FDB672E969 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		5F415670725AF9A27921DB62 /* ClementineRemoteUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ClementineRemoteUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE9B3C025F4213A8DA1AFDBF /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		BB1826BB720362B7433CE882 /* ClementineKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ClementineKit; path = Packages/ClementineKit; sourceTree = SOURCE_ROOT; };
+		C1EE8BBC662FAA0FC417A564 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		CD9202E1E8FCA97103ED358B /* ClementineRemoteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClementineRemoteApp.swift; sourceTree = "<group>"; };
+		EE0CF9A7519C0E1D02B75CB8 /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D687E33C1743CE829FC9FC06 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D6AE5E0768E9DF84BD802B2 /* ClementineKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		38787F3E609D6D2A758E7A85 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				BB1826BB720362B7433CE882 /* ClementineKit */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+		5220779CAFE7847E9F864295 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0FC17D2E6E8CD9D762D37F80 /* ClementineRemote.app */,
+				5F415670725AF9A27921DB62 /* ClementineRemoteUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7E1CF2480281E4884473CF9F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4B17CFBC70A46B3612277583 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		88FE4D9DD28CB9D79CAE438C /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				AE9B3C025F4213A8DA1AFDBF /* NetworkMonitor.swift */,
+				468183AFD2E06A2AAA047535 /* Toast.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		8D847BEE25EA8C8460BE13C1 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				175C247F8C73B1831518D42C /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		A107A0264CBD3F0285DF1B50 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				53A993163DF245FDB672E969 /* AppModel.swift */,
+				CD9202E1E8FCA97103ED358B /* ClementineRemoteApp.swift */,
+				C1EE8BBC662FAA0FC417A564 /* Info.plist */,
+				1DDDE87078B3BE38BF533D5A /* MainView.swift */,
+				DC1AA6546BD7B21A619AA358 /* Connect */,
+				7E1CF2480281E4884473CF9F /* Resources */,
+				8D847BEE25EA8C8460BE13C1 /* Settings */,
+				88FE4D9DD28CB9D79CAE438C /* Support */,
+				E83A13DBBAE1A4DC8F4D8FEB /* Theme */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		CEF910D3DF895882F5AB4A3F = {
+			isa = PBXGroup;
+			children = (
+				A107A0264CBD3F0285DF1B50 /* App */,
+				38787F3E609D6D2A758E7A85 /* Packages */,
+				E30F36A8A2A2CAEAABD049F3 /* UITests */,
+				5220779CAFE7847E9F864295 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DC1AA6546BD7B21A619AA358 /* Connect */ = {
+			isa = PBXGroup;
+			children = (
+				1E799EAA26048F3E7A685A1E /* ConnectView.swift */,
+			);
+			path = Connect;
+			sourceTree = "<group>";
+		};
+		E30F36A8A2A2CAEAABD049F3 /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				216338887AAE5E1DC3F81FD0 /* ConnectUITests.swift */,
+			);
+			path = UITests;
+			sourceTree = "<group>";
+		};
+		E83A13DBBAE1A4DC8F4D8FEB /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				EE0CF9A7519C0E1D02B75CB8 /* Components.swift */,
+				4856A6293D1829361A2A9A17 /* Theme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		61CE098612E2DEBBC85A3C92 /* ClementineRemoteUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C20411687C17D9E03C7FA584 /* Build configuration list for PBXNativeTarget "ClementineRemoteUITests" */;
+			buildPhases = (
+				77107AAEA5E20D82D70CB117 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				04B8064E8697BC11D0675829 /* PBXTargetDependency */,
+			);
+			name = ClementineRemoteUITests;
+			packageProductDependencies = (
+			);
+			productName = ClementineRemoteUITests;
+			productReference = 5F415670725AF9A27921DB62 /* ClementineRemoteUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		B55B382E90303C5A7F992938 /* ClementineRemote */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 13CB235971657047202F574D /* Build configuration list for PBXNativeTarget "ClementineRemote" */;
+			buildPhases = (
+				A95C18A641326A799609AE47 /* Sources */,
+				73BB163DD87132B08E7B9C00 /* Resources */,
+				D687E33C1743CE829FC9FC06 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ClementineRemote;
+			packageProductDependencies = (
+				12273CB88A5BBB32D77ACFB5 /* ClementineKit */,
+			);
+			productName = ClementineRemote;
+			productReference = 0FC17D2E6E8CD9D762D37F80 /* ClementineRemote.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A96B9C98D2D96A5DC2AA80DC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					61CE098612E2DEBBC85A3C92 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+						TestTargetID = B55B382E90303C5A7F992938;
+					};
+					B55B382E90303C5A7F992938 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 3A2913C10D608FDDB7A56DB3 /* Build configuration list for PBXProject "ClementineRemote" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = CEF910D3DF895882F5AB4A3F;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				7DEA0FCB5392D9F41F0F3DDA /* XCLocalSwiftPackageReference "Packages/ClementineKit" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 5220779CAFE7847E9F864295 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B55B382E90303C5A7F992938 /* ClementineRemote */,
+				61CE098612E2DEBBC85A3C92 /* ClementineRemoteUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		73BB163DD87132B08E7B9C00 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C4B3221C0EE87A4832DAB4B6 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		77107AAEA5E20D82D70CB117 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ECC005CFCC20810B3ADA1F4D /* ConnectUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A95C18A641326A799609AE47 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D2D6B3ACC523DF3DB5537C99 /* AppModel.swift in Sources */,
+				1B87E42072E67CED101AEDC9 /* ClementineRemoteApp.swift in Sources */,
+				8BC16A794293F5B9E10598BF /* Components.swift in Sources */,
+				2DCED78B207233F308ECE495 /* ConnectView.swift in Sources */,
+				2E89727B527288C7A3667C8D /* MainView.swift in Sources */,
+				8337C9D440F6AFBDF803EC32 /* NetworkMonitor.swift in Sources */,
+				DF7E75F26D11DC8C8C821618 /* SettingsView.swift in Sources */,
+				D3DC501DC0E77D6C9758DFEE /* Theme.swift in Sources */,
+				C465668F76779553E3C62F78 /* Toast.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		04B8064E8697BC11D0675829 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B55B382E90303C5A7F992938 /* ClementineRemote */;
+			targetProxy = B94B1BDADFF631DA4BC0BA61 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		74A9EA0E2208886D1B202BA4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.ClementineRemoteUITests";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ClementineRemote;
+			};
+			name = Debug;
+		};
+		7CF09DB1C5A30532C2943B39 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		B91DDF982FCC9A84C9E739D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.ClementineRemote";
+				PRODUCT_NAME = "Clementine Remote";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BC6D26C91D1AA763BE9885BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.ClementineRemoteUITests";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ClementineRemote;
+			};
+			name = Release;
+		};
+		C985393B3654A53F8016975E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		CE58B44919415990422EBFFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.ClementineRemote";
+				PRODUCT_NAME = "Clementine Remote";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		13CB235971657047202F574D /* Build configuration list for PBXNativeTarget "ClementineRemote" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B91DDF982FCC9A84C9E739D0 /* Debug */,
+				CE58B44919415990422EBFFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		3A2913C10D608FDDB7A56DB3 /* Build configuration list for PBXProject "ClementineRemote" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C985393B3654A53F8016975E /* Debug */,
+				7CF09DB1C5A30532C2943B39 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C20411687C17D9E03C7FA584 /* Build configuration list for PBXNativeTarget "ClementineRemoteUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				74A9EA0E2208886D1B202BA4 /* Debug */,
+				BC6D26C91D1AA763BE9885BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		7DEA0FCB5392D9F41F0F3DDA /* XCLocalSwiftPackageReference "Packages/ClementineKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/ClementineKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		12273CB88A5BBB32D77ACFB5 /* ClementineKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ClementineKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = A96B9C98D2D96A5DC2AA80DC /* Project object */;
+}
