@@ -40,12 +40,16 @@ private struct SearchLevelView: View {
                 }
             }
             if let level {
-                BrowseRows(level: level, selection: $selection, isEditing: editMode.isEditing, icons: search.icons) { song in
+                BrowseRows(
+                    level: level, selection: $selection, isEditing: editMode.isEditing, icons: search.icons,
+                    alphabetical: true, descending: sorting == LibrarySorting.descending.rawValue
+                ) { song in
                     Task { await search.add([song]) }
                 }
             }
         }
         .listStyle(.plain)
+        .listSectionIndexVisibility(.visible)
         .surfaceBackground()
         .environment(\.editMode, $editMode)
         .overlay { placeholder }
