@@ -46,6 +46,8 @@ struct SongQuery {
     var hiddenWhere = ""
     /// The table to read instead of [table] when filtering for [text], if filtering is possible.
     var matching: ((String) -> String)?
+    /// Whether the table's URLs are encoded, as the library's are.
+    var decodesURLs = true
 
     var songLevel: Int { fields.count - 1 }
 
@@ -88,7 +90,7 @@ struct SongQuery {
                 level: level,
                 selection: itemSelection,
                 kind: kind(ofLevel: level),
-                url: Self.decode(row[fields.count + 1] ?? ""),
+                url: decodesURLs ? Self.decode(row[fields.count + 1] ?? "") : row[fields.count + 1] ?? "",
                 artist: row[fields.count + 2] ?? "",
                 album: row[fields.count + 3] ?? "")
             if !isSongLevel {

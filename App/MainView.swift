@@ -16,7 +16,7 @@ struct MainView: View {
                 LibraryView()
             }
             Tab("Search", systemImage: "magnifyingglass", value: AppModel.Tab.search, role: .search) {
-                LibraryPlaceholder(title: "Search")
+                SearchView()
             }
             Tab("Downloads", systemImage: "arrow.down.circle", value: AppModel.Tab.downloads) {
                 LibraryPlaceholder(title: "Downloads")

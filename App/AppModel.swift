@@ -13,7 +13,8 @@ final class AppModel {
     let settings = Settings()
     let toasts = ToastCenter()
     let network = NetworkMonitor()
-    @ObservationIgnored private(set) lazy var library = LibraryModel(model: self)
+    @ObservationIgnored private(set) var library: LibraryModel!
+    @ObservationIgnored private(set) var search: SearchModel!
 
     var selectedTab = Tab.queue
     var isPlayerPresented = false
@@ -21,6 +22,11 @@ final class AppModel {
 
     /// Why connecting failed, to explain on the connect screen.
     var connectProblem: ConnectProblem?
+
+    init() {
+        library = LibraryModel(model: self)
+        search = SearchModel(model: self)
+    }
 
     /// Connects to [host], remembering it.
     func connect(host: String, port: UInt16? = nil, name: String? = nil) {
