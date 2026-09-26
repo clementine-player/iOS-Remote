@@ -10,7 +10,10 @@
 		1B87E42072E67CED101AEDC9 /* ClementineRemoteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9202E1E8FCA97103ED358B /* ClementineRemoteApp.swift */; };
 		2DCED78B207233F308ECE495 /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E799EAA26048F3E7A685A1E /* ConnectView.swift */; };
 		2E89727B527288C7A3667C8D /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDE87078B3BE38BF533D5A /* MainView.swift */; };
+		4BFB403F92B90FA8717655D2 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B6AE23EEE05A3E90A3968 /* PlayerView.swift */; };
 		4D6AE5E0768E9DF84BD802B2 /* ClementineKit in Frameworks */ = {isa = PBXBuildFile; productRef = 12273CB88A5BBB32D77ACFB5 /* ClementineKit */; };
+		5519998FF94C9CDB9C36CA95 /* ConnectionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC8D6A33585EA2F0980CEEF /* ConnectionSheet.swift */; };
+		59F2ED95C3EC8E18D1C61A1F /* VolumeButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D0E12EF32CE14014407139 /* VolumeButtons.swift */; };
 		8337C9D440F6AFBDF803EC32 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9B3C025F4213A8DA1AFDBF /* NetworkMonitor.swift */; };
 		8BC16A794293F5B9E10598BF /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0CF9A7519C0E1D02B75CB8 /* Components.swift */; };
 		C465668F76779553E3C62F78 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468183AFD2E06A2AAA047535 /* Toast.swift */; };
@@ -19,6 +22,7 @@
 		D3DC501DC0E77D6C9758DFEE /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4856A6293D1829361A2A9A17 /* Theme.swift */; };
 		DF7E75F26D11DC8C8C821618 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175C247F8C73B1831518D42C /* SettingsView.swift */; };
 		ECC005CFCC20810B3ADA1F4D /* ConnectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216338887AAE5E1DC3F81FD0 /* ConnectUITests.swift */; };
+		F654C2A83CDAA6826BF57BF4 /* SongDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0567EB712221368C115A0A43 /* SongDetailsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0567EB712221368C115A0A43 /* SongDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetailsView.swift; sourceTree = "<group>"; };
 		0FC17D2E6E8CD9D762D37F80 /* ClementineRemote.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ClementineRemote.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		175C247F8C73B1831518D42C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		1DDDE87078B3BE38BF533D5A /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -41,11 +46,14 @@
 		4856A6293D1829361A2A9A17 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		4B17CFBC70A46B3612277583 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		53A993163DF245FDB672E969 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		5EC8D6A33585EA2F0980CEEF /* ConnectionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionSheet.swift; sourceTree = "<group>"; };
 		5F415670725AF9A27921DB62 /* ClementineRemoteUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ClementineRemoteUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE9B3C025F4213A8DA1AFDBF /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		BB1826BB720362B7433CE882 /* ClementineKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ClementineKit; path = Packages/ClementineKit; sourceTree = SOURCE_ROOT; };
 		C1EE8BBC662FAA0FC417A564 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C4D0E12EF32CE14014407139 /* VolumeButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeButtons.swift; sourceTree = "<group>"; };
 		CD9202E1E8FCA97103ED358B /* ClementineRemoteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClementineRemoteApp.swift; sourceTree = "<group>"; };
+		E63B6AE23EEE05A3E90A3968 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		EE0CF9A7519C0E1D02B75CB8 /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -78,6 +86,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		56F26C6A8DE02190C5639C9A /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				E63B6AE23EEE05A3E90A3968 /* PlayerView.swift */,
+				0567EB712221368C115A0A43 /* SongDetailsView.swift */,
+			);
+			path = Player;
+			sourceTree = "<group>";
+		};
 		7E1CF2480281E4884473CF9F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -91,6 +108,7 @@
 			children = (
 				AE9B3C025F4213A8DA1AFDBF /* NetworkMonitor.swift */,
 				468183AFD2E06A2AAA047535 /* Toast.swift */,
+				C4D0E12EF32CE14014407139 /* VolumeButtons.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -111,12 +129,22 @@
 				C1EE8BBC662FAA0FC417A564 /* Info.plist */,
 				1DDDE87078B3BE38BF533D5A /* MainView.swift */,
 				DC1AA6546BD7B21A619AA358 /* Connect */,
+				C29638AE1C4D87CD5F503A3C /* Connection */,
+				56F26C6A8DE02190C5639C9A /* Player */,
 				7E1CF2480281E4884473CF9F /* Resources */,
 				8D847BEE25EA8C8460BE13C1 /* Settings */,
 				88FE4D9DD28CB9D79CAE438C /* Support */,
 				E83A13DBBAE1A4DC8F4D8FEB /* Theme */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		C29638AE1C4D87CD5F503A3C /* Connection */ = {
+			isa = PBXGroup;
+			children = (
+				5EC8D6A33585EA2F0980CEEF /* ConnectionSheet.swift */,
+			);
+			path = Connection;
 			sourceTree = "<group>";
 		};
 		CEF910D3DF895882F5AB4A3F = {
@@ -266,11 +294,15 @@
 				1B87E42072E67CED101AEDC9 /* ClementineRemoteApp.swift in Sources */,
 				8BC16A794293F5B9E10598BF /* Components.swift in Sources */,
 				2DCED78B207233F308ECE495 /* ConnectView.swift in Sources */,
+				5519998FF94C9CDB9C36CA95 /* ConnectionSheet.swift in Sources */,
 				2E89727B527288C7A3667C8D /* MainView.swift in Sources */,
 				8337C9D440F6AFBDF803EC32 /* NetworkMonitor.swift in Sources */,
+				4BFB403F92B90FA8717655D2 /* PlayerView.swift in Sources */,
 				DF7E75F26D11DC8C8C821618 /* SettingsView.swift in Sources */,
+				F654C2A83CDAA6826BF57BF4 /* SongDetailsView.swift in Sources */,
 				D3DC501DC0E77D6C9758DFEE /* Theme.swift in Sources */,
 				C465668F76779553E3C62F78 /* Toast.swift in Sources */,
+				59F2ED95C3EC8E18D1C61A1F /* VolumeButtons.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,7 +327,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.ClementineRemoteUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.ClementineRemoteUITests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = ClementineRemote;
@@ -378,7 +410,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.ClementineRemote";
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.ClementineRemote;
 				PRODUCT_NAME = "Clementine Remote";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -395,7 +427,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.ClementineRemoteUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.ClementineRemoteUITests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = ClementineRemote;
@@ -485,7 +517,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.ClementineRemote";
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.ClementineRemote;
 				PRODUCT_NAME = "Clementine Remote";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

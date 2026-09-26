@@ -1,6 +1,6 @@
 name: ClementineRemote
 options:
-  bundleIdPrefix: org.clementine-player
+  bundleIdPrefix: com.davidsansome
   deploymentTarget:
     iOS: "26.0"
   createIntermediateGroups: true
@@ -29,7 +29,7 @@ targets:
       - package: ClementineKit
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: org.clementine-player.ClementineRemote
+        PRODUCT_BUNDLE_IDENTIFIER: com.davidsansome.ClementineRemote
         PRODUCT_NAME: Clementine Remote
         TARGETED_DEVICE_FAMILY: "1,2"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -67,7 +67,7 @@ targets:
       - target: ClementineRemote
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: org.clementine-player.ClementineRemoteUITests
+        PRODUCT_BUNDLE_IDENTIFIER: com.davidsansome.ClementineRemoteUITests
         GENERATE_INFOPLIST_FILE: YES
 schemes:
   ClementineRemote:
