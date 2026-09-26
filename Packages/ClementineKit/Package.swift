@@ -15,13 +15,11 @@ let package = Package(
         .target(
             name: "ClementineKit",
             dependencies: [.product(name: "SwiftProtobuf", package: "swift-protobuf")],
-            exclude: [],
             linkerSettings: [.linkedLibrary("sqlite3")]
         ),
         .testTarget(
             name: "ClementineKitTests",
-            dependencies: ["ClementineKit"],
-            resources: [.copy("Resources")]
+            dependencies: ["ClementineKit"]
         ),
     ]
 )

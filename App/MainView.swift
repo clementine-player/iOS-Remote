@@ -28,6 +28,7 @@ struct MainView: View {
             }
             .matchedTransitionSource(id: "player", in: playerTransition)
         }
+        .tabViewStyle(.sidebarAdaptable)
         .tabBarMinimizeBehavior(.onScrollDown)
         .fullScreenCover(isPresented: $model.isPlayerPresented) {
             PlayerView()

@@ -302,8 +302,9 @@ the missing-cover image.
 ### Copy
 
 Plain, short, sentence case, as the design system says: "Connect", "Add to playlist", "No song
-playing", "Clementine on studio-pc". Mode feedback names the new mode. Strings come from the Android
-app's `strings.xml` and its translations, converted to a String Catalog.
+playing", "Clementine on studio-pc". Mode feedback names the new mode. Where a string says what an
+Android string says, `scripts/import-android-translations.py` copies that string's translations into
+the String Catalog; the rest are English until translated.
 
 ## Behaviour
 
@@ -384,10 +385,12 @@ hidden while the app is active.
   transcoding progress, and `DOWNLOAD_QUEUE_EMPTY` ends the job. `DISCONNECT` means downloads are
   turned off in Clementine.
 - Files go to `Documents/Clementine/[playlist/][artist/[album/]]filename`, depending on the
-  settings. A partly written file is deleted.
+  settings, with the characters the Android app keeps out of file names removed (except "-", which
+  is harmless). A partly written file is deleted.
 - Results: complete, canceled, insufficient space, can't save, connection error, forbidden, Wi-Fi
   only.
-- A local notification says when downloads finish while the app is in the background.
+- A local notification says when downloads finish while the app is in the background. The app
+  asks for permission to notify when the first download starts.
 
 ### Shortcuts
 
@@ -396,6 +399,9 @@ Next, Stop. They appear in Shortcuts, Siri and automations. When the app isn't c
 opens a short connection, sends its command and disconnects.
 
 ### Widget
+
+The app shares the last Clementine and song with the widget and the intents through the app group
+`group.com.davidsansome.ClementineRemote`.
 
 A home screen widget (WidgetKit) with the last song seen and play/pause and next buttons (App
 Intents, as above). It can't update live while the app is suspended; it shows what the app last saw.
