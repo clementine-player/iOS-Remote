@@ -5,6 +5,7 @@ import SwiftUI
 /// to connect to by hand. While connecting, it shows how far along it is.
 struct ConnectView: View {
     @Environment(AppModel.self) private var model
+    @Environment(\.scenePhase) private var scenePhase
     @State private var browser = ServiceBrowser()
     @State private var host = ""
     @State private var authCode = ""
@@ -45,6 +46,12 @@ struct ConnectView: View {
         .background(Palette.surface)
         .onAppear(perform: appeared)
         .onDisappear { browser.stop() }
+        .onChange(of: scenePhase) { _, phase in
+            // iOS may have stopped the search while the app was in the background.
+            if phase == .active {
+                browser.start()
+            }
+        }
         .sheet(isPresented: $isSettingsPresented, onDismiss: { triedAutoConnect = true }) {
             NavigationStack {
                 SettingsView()

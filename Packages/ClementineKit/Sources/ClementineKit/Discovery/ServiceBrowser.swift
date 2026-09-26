@@ -30,9 +30,16 @@ public final class ServiceBrowser {
 
     private var browser: NWBrowser?
     private var resolvers: [String: Resolver] = [:]
+    private var restart: Task<Void, Never>?
+
+    /// How long to wait before looking again after browsing fails, or resolving a Clementine.
+    static let retryDelay = Duration.seconds(2)
+    static let resolveTimeout = Duration.seconds(5)
 
     public init() {}
 
+    /// Starts looking, from scratch: call it again when the app comes back to the foreground, as
+    /// iOS may have stopped the search while the app was suspended.
     public func start() {
         stop()
         let browser = NWBrowser(for: .bonjour(type: Self.serviceType, domain: "local."), using: NWParameters())
@@ -43,11 +50,33 @@ public final class ServiceBrowser {
             }
             Task { @MainActor in self?.update(names: Set(names)) }
         }
+        browser.stateUpdateHandler = { [weak self] state in
+            switch state {
+            case .failed, .waiting:
+                // Failed, or waiting for the network or the local network permission: look again
+                // shortly, as a browser doesn't always recover by itself.
+                Task { @MainActor in self?.retry(browser) }
+            default:
+                break
+            }
+        }
         browser.start(queue: .main)
         self.browser = browser
     }
 
+    private func retry(_ failed: NWBrowser) {
+        guard browser === failed, restart == nil else { return }
+        restart = Task { [weak self] in
+            try? await Task.sleep(for: Self.retryDelay)
+            guard let self, !Task.isCancelled, self.browser === failed else { return }
+            self.restart = nil
+            self.start()
+        }
+    }
+
     public func stop() {
+        restart?.cancel()
+        restart = nil
         browser?.cancel()
         browser = nil
         resolvers.values.forEach { $0.cancel() }
@@ -62,9 +91,22 @@ public final class ServiceBrowser {
             resolvers[name] = nil
         }
         for name in names where resolvers[name] == nil {
-            resolvers[name] = Resolver(name: name, type: Self.serviceType) { [weak self] host, port in
-                Task { @MainActor in self?.resolved(name: name, host: host, port: port) }
-            }
+            resolve(name)
+        }
+    }
+
+    /// Finds [name]'s address, trying again until it's found or gone.
+    private func resolve(_ name: String) {
+        let resolver = Resolver(name: name, type: Self.serviceType) { [weak self] host, port in
+            Task { @MainActor in self?.resolved(name: name, host: host, port: port) }
+        }
+        resolvers[name] = resolver
+        Task { [weak self] in
+            try? await Task.sleep(for: Self.resolveTimeout)
+            guard let self, self.resolvers[name] === resolver,
+                  !self.servers.contains(where: { $0.name == name }) else { return }
+            resolver.cancel()
+            self.resolve(name)
         }
     }
 
