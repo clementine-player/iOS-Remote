@@ -10,7 +10,7 @@ struct MainView: View {
         @Bindable var model = model
         TabView(selection: $model.selectedTab) {
             Tab("Queue", systemImage: "list.bullet", value: AppModel.Tab.queue) {
-                LibraryPlaceholder(title: "Queue")
+                QueueView()
             }
             Tab("Library", systemImage: "square.stack", value: AppModel.Tab.library) {
                 LibraryPlaceholder(title: "Library")
