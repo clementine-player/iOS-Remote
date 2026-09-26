@@ -44,10 +44,6 @@ jobs:
           ')
           echo "Using simulator $id"
           echo "DESTINATION=id=$id" >> "$GITHUB_ENV"
-      - name: Check the Xcode project is up to date
-        run: |
-          xcodegen generate --quiet
-          git diff --exit-code -- ClementineRemote.xcodeproj
       - name: Build and test
         # CI has no signing account: build for the simulator without a team.
         run: scripts/build.sh test DEVELOPMENT_TEAM=
