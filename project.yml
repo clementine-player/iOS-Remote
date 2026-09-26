@@ -46,7 +46,7 @@ targets:
     info:
       path: App/Info.plist
       properties:
-        CFBundleDisplayName: Clementine
+        CFBundleDisplayName: Clementine Remote
         UILaunchScreen:
           UIColorName: Surface
         UIApplicationSupportsIndirectInputEvents: true
@@ -84,7 +84,7 @@ targets:
     info:
       path: Widget/Info.plist
       properties:
-        CFBundleDisplayName: Clementine
+        CFBundleDisplayName: Clementine Remote
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
     settings:
