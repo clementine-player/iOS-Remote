@@ -13,7 +13,7 @@ struct MainView: View {
                 QueueView()
             }
             Tab("Library", systemImage: "square.stack", value: AppModel.Tab.library) {
-                LibraryPlaceholder(title: "Library")
+                LibraryView()
             }
             Tab("Search", systemImage: "magnifyingglass", value: AppModel.Tab.search, role: .search) {
                 LibraryPlaceholder(title: "Search")

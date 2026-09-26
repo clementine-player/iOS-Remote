@@ -14,10 +14,10 @@ final class ToastCenter {
     private var dismissal: Task<Void, Never>?
 
     func show(_ text: LocalizedStringResource, duration: Duration = .seconds(2)) {
-        show(String(localized: text), duration: duration)
+        show(verbatim: String(localized: text), duration: duration)
     }
 
-    func show(_ text: String, duration: Duration = .seconds(2)) {
+    func show(verbatim text: String, duration: Duration = .seconds(2)) {
         let toast = Toast(text: text)
         current = toast
         AccessibilityNotification.Announcement(text).post()

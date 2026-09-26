@@ -13,6 +13,7 @@ final class AppModel {
     let settings = Settings()
     let toasts = ToastCenter()
     let network = NetworkMonitor()
+    @ObservationIgnored private(set) lazy var library = LibraryModel(model: self)
 
     var selectedTab = Tab.queue
     var isPlayerPresented = false
