@@ -42,12 +42,16 @@ private struct LibraryLevelView: View {
                 }
             }
             if let level {
-                BrowseRows(level: level, selection: $selection, isEditing: editMode.isEditing) { song in
+                BrowseRows(
+                    level: level, selection: $selection, isEditing: editMode.isEditing,
+                    alphabetical: true, descending: sorting == LibrarySorting.descending.rawValue
+                ) { song in
                     Task { await library.add([song]) }
                 }
             }
         }
         .listStyle(.plain)
+        .listSectionIndexVisibility(.visible)
         .surfaceBackground()
         .environment(\.editMode, $editMode)
         .overlay { placeholder }

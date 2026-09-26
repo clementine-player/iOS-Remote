@@ -8,10 +8,49 @@ struct BrowseRows: View {
     @Binding var selection: Set<Int>
     let isEditing: Bool
     var icons: [String: UIImage] = [:]
+    /// Splits artists, albums and genres into sections by their first letter, with an index.
+    var alphabetical = false
+    var descending = false
     let addSong: (BrowseItem) -> Void
 
     var body: some View {
-        ForEach(Array(level.items.enumerated()), id: \.offset) { index, item in
+        if alphabetical, level.kind.isAlphabetical {
+            ForEach(sections, id: \.letter) { section in
+                Section {
+                    rows(section.rows)
+                } header: {
+                    Text(section.letter)
+                        .textStyle(.labelLarge)
+                        .foregroundStyle(Palette.primary)
+                }
+                .sectionIndexLabel(section.letter)
+            }
+        } else {
+            rows(Array(level.items.enumerated()))
+        }
+    }
+
+    /// The items by their first letter, in letter order; "#" holds those that don't start with one.
+    private var sections: [(letter: String, rows: [(offset: Int, element: BrowseItem)])] {
+        let grouped = Dictionary(grouping: level.items.enumerated()) { Self.letter(of: $0.element.value) }
+        let letters = grouped.keys.sorted { first, second in
+            if first == "#" || second == "#" {
+                return (first == "#") != descending
+            }
+            let order = first.localizedStandardCompare(second) == .orderedAscending
+            return descending ? !order : order
+        }
+        return letters.map { ($0, grouped[$0] ?? []) }
+    }
+
+    static func letter(of value: String) -> String {
+        let folded = value.folding(options: [.diacriticInsensitive, .caseInsensitive], locale: .current)
+        guard let first = folded.first, first.isLetter else { return "#" }
+        return String(first).uppercased()
+    }
+
+    private func rows(_ rows: [(offset: Int, element: BrowseItem)]) -> some View {
+        ForEach(rows, id: \.offset) { index, item in
             Group {
                 if isEditing {
                     Button {
@@ -128,6 +167,11 @@ extension BrowseItem {
 }
 
 extension ItemKind {
+    /// Whether items of this kind are named, and so listed by letter.
+    var isAlphabetical: Bool {
+        self == .artist || self == .album || self == .genre
+    }
+
     var systemImage: String {
         switch self {
         case .artist: "person.fill"
