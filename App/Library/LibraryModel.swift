@@ -120,6 +120,7 @@ extension DownloadFailure {
         case .onlyOnWiFi: "Downloads are only allowed on Wi-Fi"
         case .connection: "Couldn't connect to Clementine"
         case .forbidden: "Clementine doesn't allow downloads. Turn them on in its Network Remote settings."
+        case .wrongAuthCode: "Enter the auth code shown in Clementine's Network Remote settings."
         case .insufficientSpace: "There isn't enough space on this phone"
         case .cantSave: "Couldn't save the file"
         case .corrupt: "The library Clementine sent is damaged"

@@ -121,7 +121,7 @@ public struct SongDownloader: Sendable {
             }
             switch message.type {
             case .disconnect:
-                return .forbidden
+                return DownloadFailure(message.responseDisconnect)
             case .downloadQueueEmpty:
                 try? await channel.send(RemoteMessage(.disconnect))
                 return nil

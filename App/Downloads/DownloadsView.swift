@@ -110,7 +110,8 @@ private struct JobRow: View {
                 Text(job.subtitle)
                     .textStyle(.bodyMedium)
                     .foregroundStyle(Palette.onSurfaceVariant)
-                    .lineLimit(1)
+                    // Once finished it may be an error, which should be read in full.
+                    .lineLimit(job.isFinished ? nil : 1)
                 if !job.isFinished {
                     ProgressView(value: job.status.progress)
                 }
