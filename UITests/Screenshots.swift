@@ -1,15 +1,21 @@
 import XCTest
 
-/// Takes screenshots of every main screen, light and dark, with the app connected to a real
-/// Clementine playing the showcase library (clementine-it/). Runs only when given Clementine's
-/// host and a directory for the screenshots, as .github/workflows/screenshots.yml does:
+/// Takes screenshots of every main screen, with the app connected to a real Clementine playing
+/// the showcase library (clementine-it/). Runs only when given Clementine's host and a directory
+/// for the screenshots, as .github/workflows/screenshots.yml does, once with the simulator light
+/// and once dark:
 ///
+///     xcrun simctl ui booted appearance dark
 ///     TEST_RUNNER_CLEMENTINE_HOST=127.0.0.1 TEST_RUNNER_SCREENSHOTS_DIR=$PWD/screenshots \
+///         TEST_RUNNER_SCREENSHOTS_PREFIX=dark_ \
 ///         scripts/build.sh test -only-testing:ClementineRemoteUITests/Screenshots
 ///
 /// xcodebuild passes TEST_RUNNER_ variables to the tests without the prefix. The screenshots
-/// are PNGs named in the order they're taken; the dark theme's start with dark_. On a failure,
-/// failure.png and failure.txt keep the screen and its elements.
+/// are PNGs named in the order they're taken, after SCREENSHOTS_PREFIX. On a failure,
+/// failure.png and failure.txt (after the prefix too) keep the screen and its elements.
+///
+/// The simulator's appearance is set from outside: set from the test (XCUIDevice.appearance),
+/// the app stayed light.
 final class Screenshots: XCTestCase {
     private static let timeout: TimeInterval = 30
     /// Downloading and indexing the library takes a while on a simulator.
@@ -19,6 +25,7 @@ final class Screenshots: XCTestCase {
 
     private var app: XCUIApplication!
     private var directory: URL!
+    private var prefix = ""
 
     func testTakeScreenshots() throws {
         let environment = ProcessInfo.processInfo.environment
@@ -26,11 +33,9 @@ final class Screenshots: XCTestCase {
             throw XCTSkip("Needs CLEMENTINE_HOST and SCREENSHOTS_DIR")
         }
         directory = URL(fileURLWithPath: path, isDirectory: true)
+        prefix = environment["SCREENSHOTS_PREFIX"] ?? ""
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
 
-        XCUIDevice.shared.appearance = .light
-        // Back to the light theme, which the other tests expect.
-        defer { XCUIDevice.shared.appearance = .light }
         app = XCUIApplication()
         // Skip the welcome message, and fill in Clementine's address.
         app.launchArguments = ["-first_call", "NO", "-save_clementine_ip", host]
@@ -40,7 +45,7 @@ final class Screenshots: XCTestCase {
             // What the screen showed, to see why.
             try? save(XCUIScreen.main.screenshot(), as: "failure")
             try? app.debugDescription.write(
-                to: directory.appendingPathComponent("failure.txt"), atomically: true, encoding: .utf8)
+                to: directory.appendingPathComponent(prefix + "failure.txt"), atomically: true, encoding: .utf8)
             throw error
         }
     }
@@ -74,9 +79,7 @@ final class Screenshots: XCTestCase {
         try closeConnectionSheet()
 
         try showTab("Library")
-        // The library isn't on the phone yet: download it from Clementine.
-        try waitFor(app.buttons["downloadLibrary"], timeout: Self.libraryTimeout).tap()
-        try waitFor(item("Frédéric Chopin"), timeout: Self.libraryTimeout)
+        try openLibrary()
         pause(Self.settle)
         try screenshot("06_library")
         item("Frédéric Chopin").tap()
@@ -91,45 +94,6 @@ final class Screenshots: XCTestCase {
         try openSearchResults(until: tracks)
         pause(Self.settle)
         try screenshot("08_search")
-
-        // The same screens in the dark theme, each where the light pass left it.
-        XCUIDevice.shared.appearance = .dark
-        pause(Self.settle)
-        try waitFor(tracks)
-        try screenshot("dark_08_search")
-
-        try showTab("Library")
-        try waitFor(item(startingWith: "Nocturne in"))
-        try screenshot("dark_07_library_album")
-        // Up from the album's songs to Chopin's albums, then to the artists.
-        try goBack()
-        try waitFor(item("Nocturnes, Op. 9"))
-        try goBack()
-        try waitFor(item("Frédéric Chopin"))
-        pause(Self.settle)
-        try screenshot("dark_06_library")
-
-        try showTab("Queue")
-        try waitFor(queueRow("Clair de lune"))
-        try screenshot("dark_02_queue")
-        try openPlayer()
-        try screenshot("dark_03_player")
-        try closePlayer()
-
-        try openConnectionSheet()
-        try waitFor(app.buttons["Settings"]).tap()
-        try waitFor(app.navigationBars["Settings"])
-        pause(Self.settle)
-        try screenshot("dark_05_settings")
-        try goBack(in: "Settings")
-        try waitFor(app.buttons["disconnect"])
-        pause(Self.settle)
-        try screenshot("dark_04_connection")
-        // Disconnecting goes back to the connect screen.
-        app.buttons["disconnect"].tap()
-        try waitFor(app.buttons["connect"])
-        pause(Self.settle)
-        try screenshot("dark_01_connect")
     }
 
     // MARK: - Screens
@@ -143,11 +107,11 @@ final class Screenshots: XCTestCase {
         )).firstMatch
     }
 
-    /// A row whose name starts with [prefix].
-    private func item(startingWith prefix: String) -> XCUIElement {
+    /// A row whose name starts with [start].
+    private func item(startingWith start: String) -> XCUIElement {
         app.descendants(matching: .any).matching(NSPredicate(
             format: "(elementType == %lu OR elementType == %lu) AND label BEGINSWITH %@",
-            XCUIElement.ElementType.staticText.rawValue, XCUIElement.ElementType.button.rawValue, prefix
+            XCUIElement.ElementType.staticText.rawValue, XCUIElement.ElementType.button.rawValue, start
         )).firstMatch
     }
 
@@ -156,6 +120,21 @@ final class Screenshots: XCTestCase {
         app.descendants(matching: .any)
             .matching(NSPredicate(format: "identifier BEGINSWITH 'song-' AND label CONTAINS %@", title))
             .firstMatch
+    }
+
+    /// The library's artists. The library isn't on the phone the first time: it's downloaded from
+    /// Clementine then.
+    private func openLibrary() throws {
+        let artist = item("Frédéric Chopin")
+        let download = app.buttons["downloadLibrary"]
+        let deadline = Date.now.addingTimeInterval(Self.libraryTimeout)
+        while !artist.exists, Date.now < deadline {
+            if download.exists {
+                download.tap()
+            }
+            pause(1)
+        }
+        try waitFor(artist, timeout: Self.libraryTimeout)
     }
 
     private func showTab(_ name: String) throws {
@@ -285,10 +264,10 @@ final class Screenshots: XCTestCase {
     }
 
     private func save(_ screenshot: XCUIScreenshot, as name: String) throws {
-        try screenshot.pngRepresentation.write(to: directory.appendingPathComponent(name + ".png"))
+        try screenshot.pngRepresentation.write(to: directory.appendingPathComponent(prefix + name + ".png"))
         // Also in the test results, to see alongside the log.
         let attachment = XCTAttachment(screenshot: screenshot)
-        attachment.name = name
+        attachment.name = prefix + name
         attachment.lifetime = .keepAlways
         add(attachment)
     }

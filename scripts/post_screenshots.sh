@@ -36,7 +36,7 @@ r2() {
 public=${R2_PUBLIC_URL%/}
 
 # Only a complete run replaces main's screenshots: a failure's would be missing screens.
-if [ "$target" = main ] && [ -e "$dir/failure.png" ]; then
+if [ "$target" = main ] && { [ -e "$dir/failure.png" ] || [ -e "$dir/dark_failure.png" ]; }; then
   echo "Not replacing main's screenshots: the run failed"
   exit 0
 fi
@@ -79,12 +79,12 @@ run="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
   for shot in "${shots[@]}"; do
     name=$(basename "$shot" .png)
     case $name in
-      dark_*) continue ;;
-      # What a failing test left: the screen at the failure.
-      failure*)
+      # What a failing test left: the screen at the failure, in either appearance.
+      failure | dark_failure)
         failures+=("$shot")
         continue
         ;;
+      dark_*) continue ;;
     esac
     before="–"
     if [ -n "$main" ] && curl -fsSI "$main/$name.png" > /dev/null 2>&1; then
@@ -100,7 +100,7 @@ run="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
   done
   if [ ${#failures[@]} -gt 0 ]; then
     echo
-    echo "#### Screen at the failure"
+    echo "#### Screens at a failure"
     echo
     for shot in "${failures[@]}"; do
       name=$(basename "$shot" .png)

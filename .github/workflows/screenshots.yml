@@ -98,6 +98,7 @@ jobs:
           print((pro or iphones)[0]["udid"])
           ')
           echo "Using simulator $id"
+          echo "SIMULATOR=$id" >> "$GITHUB_ENV"
           echo "DESTINATION=id=$id" >> "$GITHUB_ENV"
           xcrun simctl boot "$id"
           xcrun simctl bootstatus "$id" -b
@@ -105,16 +106,24 @@ jobs:
             --wifiBars 3 --cellularMode notSupported --batteryState charged --batteryLevel 100
 
       # The simulator shares the Mac's network, so the app reaches Clementine at 127.0.0.1.
-      # xcodebuild passes TEST_RUNNER_ variables to the test without the prefix.
+      # xcodebuild passes TEST_RUNNER_ variables to the test without the prefix. The test runs
+      # twice, with the simulator light then dark: set from the test itself, the app stayed light.
       - name: Take the screenshots
         env:
           TEST_RUNNER_CLEMENTINE_HOST: 127.0.0.1
           TEST_RUNNER_SCREENSHOTS_DIR: ${{ github.workspace }}/screenshots
         run: |
-          # CI has no signing account: build for the simulator without a team.
           status=0
-          scripts/build.sh test -only-testing:ClementineRemoteUITests/Screenshots \
-            -resultBundlePath build/Screenshots.xcresult DEVELOPMENT_TEAM= || status=$?
+          for appearance in light dark; do
+            echo "::group::The screenshots, $appearance"
+            xcrun simctl ui "$SIMULATOR" appearance "$appearance"
+            prefix=$([ "$appearance" = dark ] && echo dark_ || true)
+            # CI has no signing account: build for the simulator without a team.
+            TEST_RUNNER_SCREENSHOTS_PREFIX=$prefix \
+              scripts/build.sh test -only-testing:ClementineRemoteUITests/Screenshots \
+              -resultBundlePath "build/Screenshots-$appearance.xcresult" DEVELOPMENT_TEAM= || status=1
+            echo "::endgroup::"
+          done
           # The test skips itself without its variables, which would pass with nothing to show.
           if ! ls screenshots/*.png > /dev/null 2>&1; then
             echo "::error::The test took no screenshots"
@@ -128,7 +137,7 @@ jobs:
           name: screenshots
           path: |
             screenshots/
-            build/Screenshots.xcresult
+            build/Screenshots-*.xcresult
             build/clementine.log
 
       - name: Post the screenshots
