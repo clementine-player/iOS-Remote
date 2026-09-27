@@ -22,6 +22,8 @@ final class AppModel {
     @ObservationIgnored private(set) var downloads: DownloadsModel!
 
     var selectedTab = Tab.queue
+    /// The playlist picked in the queue, if any.
+    var selectedPlaylistID: Int32?
     var isPlayerPresented = false
     var isConnectionSheetPresented = false
 
@@ -91,6 +93,11 @@ final class AppModel {
             break
         }
         updateIdleTimer()
+    }
+
+    /// The playlist picked in the queue, else the one playing, else the first.
+    var selectedPlaylist: Playlist? {
+        session.playlists.first { $0.id == selectedPlaylistID } ?? session.activePlaylist ?? session.playlists.first
     }
 
     /// Tells the widget and Shortcuts what's playing, and where.

@@ -3,8 +3,8 @@ import SwiftUI
 
 /// Where to add songs.
 enum PlaylistTarget: Equatable {
-    /// The playlist playing.
-    case playing
+    /// The playlist selected in the queue.
+    case selected
     case existing(Playlist)
     /// A playlist to create, with this name.
     case new(String)
@@ -14,8 +14,8 @@ extension AppModel {
     /// The playlist [target] means, creating it first if it's new. Nil if it couldn't be created.
     func playlist(for target: PlaylistTarget) async -> Playlist? {
         switch target {
-        case .playing:
-            return session.activePlaylist
+        case .selected:
+            return selectedPlaylist
         case .existing(let playlist):
             return playlist
         case .new(let name):
@@ -27,17 +27,13 @@ extension AppModel {
         }
     }
 
-    /// Says that [count] songs were added to [target]'s [playlist].
-    func showAdded(_ count: Int, to playlist: Playlist, target: PlaylistTarget) {
-        if target == .playing {
-            toasts.show("\(count) songs added to the playlist")
-        } else {
-            toasts.show("\(count) songs added to \(playlist.name)")
-        }
+    /// Says that [count] songs were added to [playlist].
+    func showAdded(_ count: Int, to playlist: Playlist) {
+        toasts.show("\(count) songs added to \(playlist.name)")
     }
 }
 
-/// "Add to playlist": a tap adds to the playlist playing; the menu picks another, or a new one.
+/// "Add to playlist": a tap adds to the playlist selected in the queue; the menu picks another, or a new one.
 struct AddToPlaylistMenu: View {
     enum Style {
         /// The prominent button of an opened group's header.
@@ -49,27 +45,32 @@ struct AddToPlaylistMenu: View {
     var style = Style.icon
     let add: (PlaylistTarget) -> Void
 
+    @Environment(AppModel.self) private var model
     @Environment(RemoteSession.self) private var session
     @State private var isNaming = false
 
     var body: some View {
         Menu {
-            let playing = session.activePlaylist
-            if let playing {
-                Button("\(playing.name) (playing)", systemImage: "waveform") { add(.playing) }
+            let selected = model.selectedPlaylist
+            if let selected {
+                Button(selected.name, systemImage: "checkmark") { add(.selected) }
             }
-            ForEach(session.playlists.filter { $0.id != playing?.id }) { playlist in
-                Button(playlist.name, systemImage: "list.bullet") { add(.existing(playlist)) }
+            ForEach(session.playlists.filter { $0.id != selected?.id }) { playlist in
+                if playlist.id == session.activePlaylistID {
+                    Button("\(playlist.name) (playing)", systemImage: "waveform") { add(.existing(playlist)) }
+                } else {
+                    Button(playlist.name, systemImage: "list.bullet") { add(.existing(playlist)) }
+                }
             }
             Divider()
             Button("New playlist…", systemImage: "plus") { isNaming = true }
         } label: {
             Label("Add to playlist", systemImage: "plus")
         } primaryAction: {
-            add(.playing)
+            add(.selected)
         }
         .modifier(AddButtonStyle(style: style))
-        .accessibilityHint("Adds to the playlist playing. Touch and hold to pick another.")
+        .accessibilityHint("Adds to the playlist selected in the queue. Touch and hold to pick another.")
         .newPlaylistAlert(isPresented: $isNaming) { name in
             add(.new(name))
         }

@@ -54,12 +54,12 @@ final class SearchModel {
         return try? await store.level(below: opened, grouping: settings.libraryGrouping, sorting: settings.librarySorting)
     }
 
-    /// Adds the songs of [items] to the playlist playing.
-    func add(_ items: [BrowseItem], to target: PlaylistTarget = .playing) async {
+    /// Adds the songs of [items] to [target], by default the playlist selected in the queue.
+    func add(_ items: [BrowseItem], to target: PlaylistTarget = .selected) async {
         let settings = model.settings
         guard let songs = try? await store.songs(of: items, grouping: settings.libraryGrouping, sorting: settings.librarySorting),
               !songs.isEmpty, let playlist = await model.playlist(for: target) else { return }
         model.session.add(songs: songs, to: playlist.id)
-        model.showAdded(songs.count, to: playlist, target: target)
+        model.showAdded(songs.count, to: playlist)
     }
 }

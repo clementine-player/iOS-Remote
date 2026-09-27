@@ -5,17 +5,13 @@ import SwiftUI
 struct QueueView: View {
     @Environment(AppModel.self) private var model
     @Environment(RemoteSession.self) private var session
-    @State private var shownID: Int32?
     @State private var filter = ""
     @State private var selection = Set<Int32>()
     @State private var editMode = EditMode.inactive
     @State private var isClearConfirmationPresented = false
     @State private var isNamingPlaylist = false
 
-    /// The playlist picked, else the one playing, else the first.
-    private var shown: Playlist? {
-        session.playlists.first { $0.id == shownID } ?? session.activePlaylist ?? session.playlists.first
-    }
+    private var shown: Playlist? { model.selectedPlaylist }
 
     private var allSongs: [Song] {
         shown.flatMap { session.playlistSongs[$0.id] } ?? []
@@ -84,7 +80,7 @@ struct QueueView: View {
             .newPlaylistAlert(isPresented: $isNamingPlaylist) { name in
                 Task {
                     if let created = await model.playlist(for: .new(name)) {
-                        shownID = created.id
+                        model.selectedPlaylistID = created.id
                     }
                 }
             }
@@ -118,7 +114,7 @@ struct QueueView: View {
                 HStack(spacing: Metrics.space2) {
                     ForEach(session.playlists) { playlist in
                         Chip(title: playlist.name, isSelected: playlist.id == shown?.id) {
-                            shownID = playlist.id
+                            model.selectedPlaylistID = playlist.id
                         }
                     }
                     Button("New playlist", systemImage: "plus") { isNamingPlaylist = true }
@@ -229,7 +225,7 @@ struct QueueView: View {
                     Button("Close playlist", systemImage: "xmark.rectangle") {
                         if let shown {
                             session.close(playlistID: shown.id)
-                            shownID = nil
+                            model.selectedPlaylistID = nil
                         }
                     }
                     Button("Clear playlist", systemImage: "trash", role: .destructive) {

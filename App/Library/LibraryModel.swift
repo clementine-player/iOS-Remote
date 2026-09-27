@@ -98,13 +98,13 @@ final class LibraryModel {
         }
     }
 
-    /// Adds the songs of [items] to the playlist playing.
-    func add(_ items: [BrowseItem], to target: PlaylistTarget = .playing) async {
+    /// Adds the songs of [items] to [target], by default the playlist selected in the queue.
+    func add(_ items: [BrowseItem], to target: PlaylistTarget = .selected) async {
         let settings = model.settings
         guard let urls = try? await store.songURLs(of: items, grouping: settings.libraryGrouping, sorting: settings.librarySorting),
               !urls.isEmpty, let playlist = await model.playlist(for: target) else { return }
         model.session.add(urls: urls, to: playlist.id)
-        model.showAdded(urls.count, to: playlist, target: target)
+        model.showAdded(urls.count, to: playlist)
     }
 
     /// The URLs of the songs [items] are or group.
