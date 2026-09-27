@@ -23,6 +23,25 @@ The Xcode project is generated from `project.yml`; after changing that file, run
 `xcodegen generate`. `ClementineKit` (in `Packages/`) holds everything that doesn't need a screen,
 and its tests also run with `swift test`.
 
+## Screenshots
+
+On pull requests that change the app, `.github/workflows/screenshots.yml` takes screenshots of
+every main screen, light and dark, and posts them on the pull request next to main's, as the
+Android remote does. The app runs on a simulator against a real Clementine: its latest macOS
+release, playing the showcase library in `clementine-it/`. `UITests/Screenshots.swift` drives the
+app; without Clementine's address it skips itself, so `scripts/build.sh test` doesn't run it. To
+run it locally, with a Clementine set up by `clementine-it/start-clementine.sh`:
+
+```sh
+TEST_RUNNER_CLEMENTINE_HOST=127.0.0.1 TEST_RUNNER_SCREENSHOTS_DIR=$PWD/screenshots \
+    scripts/build.sh test -only-testing:ClementineRemoteUITests/Screenshots
+```
+
+The comment needs a Cloudflare R2 bucket to host the images: the workflow's header says which
+secrets and variables to set. Without them, the screenshots are only the run's artifact.
+
+## Scripts
+
 `scripts/generate-proto.sh` regenerates the protocol code from
 `Packages/ClementineKit/Proto/remotecontrolmessages.proto`, and
 `scripts/import-android-translations.py` imports the Android remote's translations.

@@ -1,0 +1,151 @@
+# Takes screenshots of the app's screens, light and dark: the app on a simulator, connected to a
+# real Clementine (its latest macOS release, from clementine-player/Clementine's GitHub releases)
+# playing the showcase library in clementine-it/. The Android remote's store-screenshots.yml does
+# the same for its app, with the same library.
+#
+# On pull requests, the screenshots are posted as a comment next to main's
+# (scripts/post_screenshots.sh); each run on main replaces main's. They're hosted in a Cloudflare
+# R2 bucket, which charges nothing for bandwidth, with a token that can only read and write that
+# bucket:
+#   secrets R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY;
+#   variables R2_BUCKET, R2_PUBLIC_URL (the bucket's public address).
+# The Android remote's bucket can hold them too: this app's are under ios/. Without them, and on
+# pull requests from forks (which get no secrets), the screenshots are only the run's artifact.
+name: screenshots
+on:
+  pull_request:
+    paths:
+      - .github/workflows/screenshots.yml
+      - App/**
+      - Shared/**
+      - Packages/ClementineKit/Sources/**
+      - UITests/Screenshots.swift
+      - project.yml
+      - clementine-it/**
+      - scripts/build.sh
+      - scripts/post_screenshots.sh
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/screenshots.yml
+      - App/**
+      - Shared/**
+      - Packages/ClementineKit/Sources/**
+      - UITests/Screenshots.swift
+      - project.yml
+      - clementine-it/**
+      - scripts/build.sh
+      - scripts/post_screenshots.sh
+  workflow_dispatch:
+    inputs:
+      clementine:
+        description: The Clementine release tag to use; the latest when empty.
+        required: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write # for the screenshots comment
+
+env:
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  screenshots:
+    runs-on: macos-26
+    timeout-minutes: 60
+    env:
+      # A step's condition can't read secrets, so this says whether the R2 token is set.
+      HAS_R2_TOKEN: ${{ secrets.R2_ACCESS_KEY_ID != '' }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install XcodeGen and ffmpeg
+        run: brew install xcodegen ffmpeg
+
+      - name: Download Clementine
+        env:
+          CLEMENTINE_TAG: ${{ inputs.clementine }}
+        run: |
+          tag=${CLEMENTINE_TAG:-$(gh release view --repo clementine-player/Clementine --json tagName -q .tagName)}
+          echo "Clementine $tag"
+          gh release download "$tag" --repo clementine-player/Clementine --pattern '*.dmg' \
+            --dir "$RUNNER_TEMP/clementine"
+          dmg=$(find "$RUNNER_TEMP/clementine" -name '*.dmg' | head -n 1)
+          hdiutil attach -nobrowse -readonly -mountpoint "$RUNNER_TEMP/dmg" "$dmg"
+          cp -R "$(find "$RUNNER_TEMP/dmg" -maxdepth 1 -name '*.app' | head -n 1)" "$RUNNER_TEMP/Clementine.app"
+          hdiutil detach "$RUNNER_TEMP/dmg"
+
+      - name: Generate the showcase library
+        run: clementine-it/generate-music.sh "$RUNNER_TEMP/music"
+
+      - name: Start Clementine
+        run: clementine-it/start-clementine.sh "$RUNNER_TEMP/Clementine.app" "$RUNNER_TEMP/music" build/clementine.log
+
+      # With a clean status bar, as on Apple's own screenshots.
+      - name: Boot a simulator
+        run: |
+          id=$(xcrun simctl list devices available --json | python3 -c '
+          import json, sys
+          runtimes = json.load(sys.stdin)["devices"]
+          iphones = [device
+                     for runtime in sorted(runtimes, reverse=True) if "iOS-2" in runtime
+                     for device in runtimes[runtime] if device["name"].startswith("iPhone")]
+          pro = [device for device in iphones if device["name"].endswith(" Pro")]
+          print((pro or iphones)[0]["udid"])
+          ')
+          echo "Using simulator $id"
+          echo "DESTINATION=id=$id" >> "$GITHUB_ENV"
+          xcrun simctl boot "$id"
+          xcrun simctl bootstatus "$id" -b
+          xcrun simctl status_bar "$id" override --time 9:41 --dataNetwork wifi --wifiMode active \
+            --wifiBars 3 --cellularMode notSupported --batteryState charged --batteryLevel 100
+
+      # The simulator shares the Mac's network, so the app reaches Clementine at 127.0.0.1.
+      # xcodebuild passes TEST_RUNNER_ variables to the test without the prefix.
+      - name: Take the screenshots
+        env:
+          TEST_RUNNER_CLEMENTINE_HOST: 127.0.0.1
+          TEST_RUNNER_SCREENSHOTS_DIR: ${{ github.workspace }}/screenshots
+        run: |
+          # CI has no signing account: build for the simulator without a team.
+          status=0
+          scripts/build.sh test -only-testing:ClementineRemoteUITests/Screenshots \
+            -resultBundlePath build/Screenshots.xcresult DEVELOPMENT_TEAM= || status=$?
+          # The test skips itself without its variables, which would pass with nothing to show.
+          if ! ls screenshots/*.png > /dev/null 2>&1; then
+            echo "::error::The test took no screenshots"
+            exit 1
+          fi
+          exit $status
+
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: screenshots
+          path: |
+            screenshots/
+            build/Screenshots.xcresult
+            build/clementine.log
+
+      - name: Post the screenshots
+        if: >
+          always() && env.HAS_R2_TOKEN == 'true'
+          && (github.event_name == 'pull_request' || github.ref == 'refs/heads/main')
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ vars.R2_BUCKET }}
+          R2_PUBLIC_URL: ${{ vars.R2_PUBLIC_URL }}
+          TARGET: ${{ github.event_name == 'pull_request' && github.event.pull_request.number || 'main' }}
+        run: |
+          command -v aws > /dev/null || brew install awscli
+          scripts/post_screenshots.sh screenshots "$TARGET"
+
+      - name: Clementine log
+        if: always()
+        run: tail -n 100 build/clementine.log || true

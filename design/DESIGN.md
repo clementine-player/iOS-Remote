@@ -446,6 +446,8 @@ ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
 - **Testing:** Swift Testing in the package: framing and parsing, message builders, the connection
   against an in-process fake Clementine, song offers and chunking, `SongQuery` on a sample library,
   and the session's state changes. UI tests cover connecting and the tabs against the fake server.
+  On pull requests, a UI test also screenshots every screen, light and dark, against a real
+  Clementine, and posts them on the pull request (`.github/workflows/screenshots.yml`).
 
 ## Platform differences from Android
 
