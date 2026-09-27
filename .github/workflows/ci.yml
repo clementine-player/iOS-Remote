@@ -47,3 +47,18 @@ jobs:
       - name: Build and test
         # CI has no signing account: build for the simulator without a team.
         run: scripts/build.sh test DEVELOPMENT_TEAM=
+
+  # A single check for branch protection to require. It runs even when a job
+  # it needs fails, because GitHub treats a skipped required check as passing.
+  ci:
+    name: CI
+    needs: [package, app]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the other jobs passed
+        run: |
+          echo "package: ${{ needs.package.result }}"
+          echo "app: ${{ needs.app.result }}"
+          test "${{ needs.package.result }}" = success
+          test "${{ needs.app.result }}" = success
