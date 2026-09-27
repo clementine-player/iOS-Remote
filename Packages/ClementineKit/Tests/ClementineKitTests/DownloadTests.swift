@@ -128,4 +128,18 @@ struct DownloadTests {
         ).run { _ in }
         #expect(status.state == .finished(.forbidden))
     }
+
+    @Test func wrongAuthCode() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        clementine.respond { message, client in
+            guard message.type == .connect else { return }
+            try? await client.send(RemoteMessage(.disconnect) { $0.responseDisconnect.reasonDisconnect = .wrongAuthCode })
+        }
+        let status = await SongDownloader(
+            endpoint: clementine.endpoint, authCode: 0, request: Messages.downloadSongs(.currentItem),
+            playlistName: nil, options: DownloadOptions(directory: FileManager.default.temporaryDirectory)
+        ).run { _ in }
+        #expect(status.state == .finished(.wrongAuthCode))
+    }
 }

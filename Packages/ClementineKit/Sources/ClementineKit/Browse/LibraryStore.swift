@@ -1,4 +1,5 @@
 import Foundation
+import OSLog
 
 /// Why downloading the library or songs failed.
 public enum DownloadFailure: Error, Sendable, Equatable {
@@ -8,6 +9,8 @@ public enum DownloadFailure: Error, Sendable, Equatable {
     case connection
     /// Clementine doesn't allow downloads.
     case forbidden
+    /// Clementine didn't accept the auth code.
+    case wrongAuthCode
     /// Not enough space on the phone.
     case insufficientSpace
     /// Couldn't write the file.
@@ -15,6 +18,19 @@ public enum DownloadFailure: Error, Sendable, Equatable {
     /// The library that arrived isn't a usable database.
     case corrupt
     case cancelled
+
+    private static let log = Logger(subsystem: "com.davidsansome.ClementineRemote", category: "Downloads")
+
+    /// Why Clementine closed the connection, as a failure.
+    init(_ disconnect: Pb_Remote_ResponseDisconnect) {
+        let reason = disconnect.hasReasonDisconnect ? disconnect.reasonDisconnect : nil
+        Self.log.error("Clementine closed the download: \(reason.map { String(describing: $0) } ?? "no reason", privacy: .public)")
+        switch reason {
+        case .downloadForbidden: self = .forbidden
+        case .wrongAuthCode, .notAuthenticated: self = .wrongAuthCode
+        case .serverShutdown, nil: self = .connection
+        }
+    }
 }
 
 /// Clementine's library, copied to the phone: an SQLite database Clementine sends as it is, then
@@ -115,7 +131,7 @@ public actor LibraryStore {
                 throw Task.isCancelled ? .cancelled : .connection
             }
             if message.type == .disconnect {
-                throw .forbidden
+                throw DownloadFailure(message.responseDisconnect)
             }
             guard message.type == .libraryChunk else { continue }
             let chunk = message.responseLibraryChunk
