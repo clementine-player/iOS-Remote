@@ -246,6 +246,12 @@ struct ConnectionChip: View {
 }
 
 extension View {
+    /// Tints a filled button, whose label the system draws white: the Connect button, a sheet's
+    /// Done, Add to playlist.
+    func filledButtonTint() -> some View {
+        tint(Palette.primaryFill)
+    }
+
     /// Clementine's background for a screen.
     func surfaceBackground() -> some View {
         scrollContentBackground(.hidden)

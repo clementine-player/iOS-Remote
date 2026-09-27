@@ -58,6 +58,7 @@ struct ConnectView: View {
                     .toolbar {
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Done", systemImage: "checkmark") { isSettingsPresented = false }
+                                .filledButtonTint()
                         }
                     }
             }
@@ -149,6 +150,7 @@ struct ConnectView: View {
                         .disabled(connecting)
                     Button("Connect", action: connect)
                         .buttonStyle(.borderedProminent)
+                        .filledButtonTint()
                         .controlSize(.large)
                         .disabled(host.trimmingCharacters(in: .whitespaces).isEmpty || connecting)
                         .accessibilityIdentifier("connect")

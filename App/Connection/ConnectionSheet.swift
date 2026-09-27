@@ -66,6 +66,7 @@ struct ConnectionSheet: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done", systemImage: "checkmark") { dismiss() }
+                        .filledButtonTint()
                 }
             }
             .task {

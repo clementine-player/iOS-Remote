@@ -4,6 +4,9 @@ import SwiftUI
 enum Palette {
     static let primary = Color("Primary")
     static let onPrimary = Color("OnPrimary")
+    /// Fills under white text, which the system draws on prominent buttons: `primary` in the light,
+    /// `clementine-orange-ui` in the dark, where `primary` is too pale for white.
+    static let primaryFill = Color("PrimaryFill")
     static let primaryContainer = Color("PrimaryContainer")
     static let onPrimaryContainer = Color("OnPrimaryContainer")
     static let secondary = Color("Secondary")

@@ -85,6 +85,7 @@ private struct AddButtonStyle: ViewModifier {
         case .prominent:
             content
                 .buttonStyle(.borderedProminent)
+                .filledButtonTint()
                 .accessibilityIdentifier("addAll")
         case .icon:
             content

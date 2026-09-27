@@ -90,6 +90,7 @@ private struct LibraryLevelView: View {
             } actions: {
                 Button("Download library") { library.download() }
                     .buttonStyle(.borderedProminent)
+                    .filledButtonTint()
                     .accessibilityIdentifier("downloadLibrary")
             }
         } else if let level, level.items.isEmpty, !filter.isEmpty {
