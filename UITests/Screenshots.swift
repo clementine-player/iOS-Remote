@@ -76,18 +76,18 @@ final class Screenshots: XCTestCase {
         try showTab("Library")
         // The library isn't on the phone yet: download it from Clementine.
         try waitFor(app.buttons["downloadLibrary"], timeout: Self.libraryTimeout).tap()
-        try waitFor(app.staticTexts["Frédéric Chopin"], timeout: Self.libraryTimeout)
+        try waitFor(item("Frédéric Chopin"), timeout: Self.libraryTimeout)
         pause(Self.settle)
         try screenshot("06_library")
-        app.staticTexts["Frédéric Chopin"].tap()
-        try waitFor(app.staticTexts["Nocturnes, Op. 9"]).tap()
-        try waitFor(app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Nocturne in'")).firstMatch)
+        item("Frédéric Chopin").tap()
+        try waitFor(item("Nocturnes, Op. 9")).tap()
+        try waitFor(item(startingWith: "Nocturne in"))
         pause(Self.settle)
         try screenshot("07_library_album")
 
         try showTab("Search")
         try search("Gymnopédie")
-        let tracks = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Gymnopédie No.'")).firstMatch
+        let tracks = item(startingWith: "Gymnopédie No.")
         try openSearchResults(until: tracks)
         pause(Self.settle)
         try screenshot("08_search")
@@ -99,13 +99,13 @@ final class Screenshots: XCTestCase {
         try screenshot("dark_08_search")
 
         try showTab("Library")
-        try waitFor(app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Nocturne in'")).firstMatch)
+        try waitFor(item(startingWith: "Nocturne in"))
         try screenshot("dark_07_library_album")
         // Up from the album's songs to Chopin's albums, then to the artists.
         try goBack()
-        try waitFor(app.staticTexts["Nocturnes, Op. 9"])
+        try waitFor(item("Nocturnes, Op. 9"))
         try goBack()
-        try waitFor(app.staticTexts["Frédéric Chopin"])
+        try waitFor(item("Frédéric Chopin"))
         pause(Self.settle)
         try screenshot("dark_06_library")
 
@@ -133,6 +133,23 @@ final class Screenshots: XCTestCase {
     }
 
     // MARK: - Screens
+
+    /// A row of the library or search results, or its header, by its name: the text, or a row's
+    /// button, whose label is its texts together.
+    private func item(_ name: String) -> XCUIElement {
+        app.descendants(matching: .any).matching(NSPredicate(
+            format: "(elementType == %lu AND label == %@) OR (elementType == %lu AND label BEGINSWITH %@)",
+            XCUIElement.ElementType.staticText.rawValue, name, XCUIElement.ElementType.button.rawValue, name + ","
+        )).firstMatch
+    }
+
+    /// A row whose name starts with [prefix].
+    private func item(startingWith prefix: String) -> XCUIElement {
+        app.descendants(matching: .any).matching(NSPredicate(
+            format: "(elementType == %lu OR elementType == %lu) AND label BEGINSWITH %@",
+            XCUIElement.ElementType.staticText.rawValue, XCUIElement.ElementType.button.rawValue, prefix
+        )).firstMatch
+    }
 
     /// A song in the queue, by its title; not the mini player, which may show the same title.
     private func queueRow(_ title: String) -> XCUIElement {
@@ -165,16 +182,24 @@ final class Screenshots: XCTestCase {
         pause(Self.settle)
     }
 
-    /// The connection sheet, made tall enough to show its buttons.
+    /// The connection sheet, dragged up until its buttons show: it opens at half height, and its
+    /// list only makes the rows it shows.
     private func openConnectionSheet() throws {
         try waitFor(app.buttons["connectionChip"]).tap()
-        let sheet = try waitFor(app.navigationBars["Clementine"])
+        try waitFor(app.navigationBars["Clementine"])
         pause(Self.settle)
-        if !app.buttons["disconnect"].isHittable {
-            sheet.swipeUp()
+        let title = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Clementine on'")).firstMatch
+        let disconnect = app.buttons["disconnect"]
+        for _ in 0..<4 where !(disconnect.exists && disconnect.isHittable) {
+            // Grows the sheet, or scrolls its list once it's full height. From the title, else just
+            // below the sheet's navigation bar once the title has scrolled away.
+            let start = title.exists
+                ? title.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+                : app.navigationBars["Clementine"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 3))
+            start.press(forDuration: 0.1, thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.1)))
             pause(Self.settle)
         }
-        try waitFor(app.buttons["disconnect"])
+        try waitFor(disconnect)
     }
 
     /// From the settings in the connection sheet, back to the tab below.
@@ -219,8 +244,8 @@ final class Screenshots: XCTestCase {
             }
             // The album, else the artist, else the first entry: the source. Each level below the
             // top starts with a header naming what was opened, so rows are matched by name first.
-            let album = app.staticTexts["Gymnopédies"]
-            let artist = app.staticTexts["Erik Satie"]
+            let album = item("Gymnopédies")
+            let artist = item("Erik Satie")
             if album.exists {
                 album.tap()
             } else if artist.exists {
