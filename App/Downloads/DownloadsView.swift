@@ -87,6 +87,7 @@ struct DownloadsView: View {
                         .toolbar {
                             ToolbarItem(placement: .confirmationAction) {
                                 Button("Done", systemImage: "checkmark") { isSettingsPresented = false }
+                                    .filledButtonTint()
                             }
                         }
                 }
@@ -164,6 +165,7 @@ private struct DownloadedSongs: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done", systemImage: "checkmark") { dismiss() }
+                        .filledButtonTint()
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     ShareLink(items: job.status.songs.map(\.file))

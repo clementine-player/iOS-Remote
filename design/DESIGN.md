@@ -230,6 +230,7 @@ dark appearances, and are reached through `Color.clementine.*`.
 | `clementine-plum` | #af597d | same | the gradient's start |
 | `primary` | #9f3c09 | #ffb598 | accents: artist line, active toggles, seek bar, tint |
 | `on-primary` | #ffffff | #591c00 | text on `primary` |
+| `primary-fill` | #9f3c09 | #c05422 | filled buttons the system labels white: Connect, Done, Add to playlist |
 | `primary-container` | #c05422 | #e46f3b | play/pause |
 | `on-primary-container` | #fffbff | #431300 | play/pause glyph |
 | `secondary-container` | #fdb69a | #6e3c27 | selected chips and rows, icon tiles |
@@ -248,7 +249,9 @@ dark appearances, and are reached through `Color.clementine.*`.
 
 Rules, from the design system:
 
-- White text only on `clementine-orange-ui`, never on `clementine-orange`.
+- White text only on `clementine-orange-ui`, never on `clementine-orange`. Filled buttons, whose
+  labels the system draws white, take `primary-fill`, not `primary`: dark `primary` is too pale for
+  white (1.7:1).
 - The brand gradient (plum → orange, left to right) only on the Connect hero. Only the mark and
   large bold type sit on it.
 - Chrome is tonal: navigation bars on `surface`, the tab bar on `surface-container`. Orange carries
