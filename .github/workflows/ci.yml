@@ -44,6 +44,10 @@ jobs:
           ')
           echo "Using simulator $id"
           echo "DESTINATION=id=$id" >> "$GITHUB_ENV"
+          # Booted and ready before the tests: booting can take minutes on a runner, and the UI
+          # tests' first launch of the app times out after one while it's still booting.
+          xcrun simctl boot "$id"
+          xcrun simctl bootstatus "$id" -b
       - name: Build and test
         # CI has no signing account: build for the simulator without a team.
         run: scripts/build.sh test DEVELOPMENT_TEAM=
