@@ -9,6 +9,13 @@
 set -eu
 
 out=$1
+# Homebrew's ffmpeg has no libvorbis; its own Vorbis encoder is experimental and stereo only,
+# which is fine for a tone.
+if ffmpeg -hide_banner -encoders 2> /dev/null | grep -q ' libvorbis '; then
+  set -- -c:a libvorbis -q:a 0
+else
+  set -- -c:a vorbis -strict experimental -ac 2
+fi
 n=0
 t=0
 last_album=
@@ -22,7 +29,7 @@ while IFS="$(printf '\t')" read -r artist album year title seconds; do
   mkdir -p "$(dirname "$file")"
   # -nostdin: the loop reads its list on stdin, which ffmpeg would read too.
   ffmpeg -nostdin -loglevel error -f lavfi -i "sine=frequency=$((220 + n * 55)):duration=$seconds" \
-    -c:a libvorbis -q:a 0 \
+    "$@" \
     -metadata artist="$artist" -metadata albumartist="$artist" -metadata composer="$artist" \
     -metadata album="$album" -metadata title="$title" -metadata track="$t" \
     -metadata date="$year" -metadata genre=Classical \
