@@ -41,6 +41,31 @@ public final class RemoteSession {
     public private(set) var closeReason: ClementineConnection.CloseReason?
     public private(set) var clementineVersion = ""
     public private(set) var connectedSince: Date?
+    /// What this device offered Clementine when connecting, if it offered to play.
+    public private(set) var renderer: RendererCapabilities?
+
+    // MARK: Outputs
+
+    /// Whether this Clementine can play elsewhere than on its own computer (remote streaming).
+    public private(set) var canChooseOutput = false
+    /// Where Clementine can play: its computer and the renderers connected to it.
+    public private(set) var outputs: [Output] = []
+
+    /// Where Clementine plays now.
+    public var activeOutput: Output? {
+        outputs.first { $0.state == .active }
+    }
+
+    /// Whether there's anywhere to play but Clementine's computer.
+    public var hasOtherOutputs: Bool {
+        canChooseOutput && outputs.count > 1
+    }
+
+    /// Whether Clementine plays on this device.
+    public var isPlayingHere: Bool {
+        guard let renderer, let activeOutput else { return false }
+        return activeOutput.id == renderer.rendererID
+    }
 
     // MARK: Playing
 
@@ -80,13 +105,17 @@ public final class RemoteSession {
 
     // MARK: Connecting
 
-    /// Connects to Clementine at [endpoint], called [name] (its address if nil).
-    public func connect(to endpoint: Endpoint, name: String? = nil, authCode: Int32) {
+    /// Connects to Clementine at [endpoint], called [name] (its address if nil). With [renderer],
+    /// this device offers itself as somewhere Clementine can play.
+    public func connect(
+        to endpoint: Endpoint, name: String? = nil, authCode: Int32, renderer: RendererCapabilities? = nil
+    ) {
         drop()
         reset()
         self.endpoint = endpoint
         hostName = name ?? endpoint.host
         self.authCode = authCode
+        self.renderer = renderer
         closeReason = nil
         connectedSince = nil
         status = .connecting
@@ -140,7 +169,7 @@ public final class RemoteSession {
 
     private func open(sendPlaylistSongs: Bool) {
         guard let endpoint else { return }
-        let connection = ClementineConnection(endpoint: endpoint, authCode: authCode)
+        let connection = ClementineConnection(endpoint: endpoint, authCode: authCode, renderer: renderer)
         self.connection = connection
 
         // One queue of commands, so they reach Clementine in order.
@@ -183,6 +212,8 @@ public final class RemoteSession {
         playlistsLoading = nil
         requestedPlaylists = []
         refreshPlaylistsWhenReady = false
+        canChooseOutput = false
+        outputs = []
     }
 
     private func handle(_ event: ClementineConnection.Event, from source: ClementineConnection) {
@@ -221,6 +252,12 @@ public final class RemoteSession {
             if status == .connecting {
                 status = .downloadingData
             }
+            canChooseOutput = info.features.contains(.rendering)
+            if canChooseOutput {
+                send(RemoteMessage(.requestOutputs))
+            }
+        case .outputs:
+            outputs = message.responseOutputs.outputs.map(Output.init)
         case .firstDataSentComplete:
             if connectedSince == nil {
                 connectedSince = .now
@@ -437,6 +474,15 @@ public final class RemoteSession {
 
     public func search(_ query: String) {
         send(Messages.globalSearch(query))
+    }
+
+    // MARK: Output commands
+
+    /// Asks Clementine to play on output [id], showing it as switching until Clementine says.
+    public func setOutput(_ id: String) {
+        guard let index = outputs.firstIndex(where: { $0.id == id }), outputs[index].state != .active else { return }
+        outputs[index].state = .activating
+        send(Messages.setOutput(id))
     }
 }
 

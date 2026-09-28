@@ -50,6 +50,9 @@ struct RootView: View {
         .onChange(of: scenePhase) { _, phase in
             model.scenePhaseChanged(to: phase)
         }
+        .onChange(of: session.isPlayingHere) { _, _ in
+            model.playingHereChanged()
+        }
         .onChange(of: appearance, initial: true) { _, appearance in
             applyAppearance(Appearance(rawValue: appearance) ?? .system)
         }

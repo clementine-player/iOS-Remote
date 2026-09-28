@@ -17,6 +17,7 @@ struct SettingsView: View {
     @AppStorage(SettingKey.autoConnect) private var autoConnect = true
     @AppStorage(SettingKey.port) private var port = Int(RemoteProtocol.defaultPort)
     @AppStorage(SettingKey.keepScreenOn) private var keepScreenOn = false
+    @AppStorage(SettingKey.renderer) private var renderer = true
 
     var body: some View {
         Form {
@@ -85,6 +86,10 @@ struct SettingsView: View {
                 Toggle(isOn: $autoConnect) {
                     Text("Connect automatically")
                     Text("Connect to the last Clementine when the app starts.")
+                }
+                Toggle(isOn: $renderer) {
+                    Text("Let Clementine play on this phone")
+                    Text("Clementine can send its music here, when it plays on other devices (experimental). Takes effect the next time the app connects.")
                 }
                 LabeledContent("Port") {
                     TextField("Port", value: $port, format: .number.grouping(.never))

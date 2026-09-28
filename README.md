@@ -3,8 +3,9 @@
 Clementine Remote controls the [Clementine](https://www.clementine-player.org/) music player on
 your computer from your iPhone or iPad, over your local network. It does what the
 [Android remote](https://github.com/clementine-player/Android-Remote) does: play and pause, browse
-and search your library, manage playlists, read lyrics, rate songs, and download songs to your
-phone.
+and search your library, manage playlists, read lyrics, rate songs, download songs to your phone,
+and play Clementine's music on your phone instead of your computer (remote streaming, with
+Clementine started with `--experimental-remote-streaming`).
 
 You need Clementine 1.3 or later, with Tools → Preferences → Network Remote turned on.
 

@@ -44,6 +44,8 @@ public actor ClementineConnection {
 
     public let endpoint: Endpoint
     public let authCode: Int32
+    /// Offered when connecting, so Clementine can play on this device.
+    public let renderer: RendererCapabilities?
     public nonisolated let events: AsyncStream<Event>
 
     private let configuration: Configuration
@@ -56,9 +58,13 @@ public actor ClementineConnection {
     /// Bytes of the channels closed already.
     private var earlierBytes = (sent: 0, received: 0)
 
-    public init(endpoint: Endpoint, authCode: Int32, configuration: Configuration = Configuration()) {
+    public init(
+        endpoint: Endpoint, authCode: Int32, renderer: RendererCapabilities? = nil,
+        configuration: Configuration = Configuration()
+    ) {
         self.endpoint = endpoint
         self.authCode = authCode
+        self.renderer = renderer
         self.configuration = configuration
         (events, eventsContinuation) = AsyncStream.makeStream(of: Event.self)
     }
@@ -159,7 +165,8 @@ public actor ClementineConnection {
         let channel = MessageChannel(endpoint: endpoint)
         do {
             try await channel.open(timeout: configuration.connectTimeout)
-            try await channel.send(Messages.connect(authCode: authCode, sendPlaylistSongs: sendPlaylistSongs, downloader: false))
+            try await channel.send(Messages.connect(
+                authCode: authCode, sendPlaylistSongs: sendPlaylistSongs, downloader: false, renderer: renderer))
             return channel
         } catch {
             channel.cancel()

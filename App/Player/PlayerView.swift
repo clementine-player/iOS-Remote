@@ -1,4 +1,5 @@
 import ClementineKit
+import MediaPlayer
 import SwiftUI
 
 /// The full-screen player: artwork, the song, the seek bar, the controls and Clementine's volume.
@@ -9,6 +10,7 @@ struct PlayerView: View {
     @AppStorage(SettingKey.showLastFM) private var showLastFM = true
     @State private var isDetailsPresented = false
     @State private var detailsPage = SongDetailsView.Page.details
+    @State private var isOutputSheetPresented = false
 
     var body: some View {
         GeometryReader { geometry in
@@ -54,6 +56,12 @@ struct PlayerView: View {
             SongDetailsView(page: $detailsPage)
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
+                .presentationBackground(Palette.surfaceContainerLow)
+        }
+        // The player covers the tabs, so it shows its own.
+        .sheet(isPresented: $isOutputSheetPresented) {
+            OutputSheet()
+                .presentationDetents([.medium, .large])
                 .presentationBackground(Palette.surfaceContainerLow)
         }
         .toasts(model.toasts)
@@ -136,6 +144,10 @@ struct PlayerView: View {
                 dismiss()
             }
             Spacer()
+            if session.hasOtherOutputs {
+                OutputButton { isOutputSheetPresented = true }
+                Spacer()
+            }
             Menu {
                 DownloadMenu()
             } label: {
@@ -308,28 +320,46 @@ private struct TransportButton: View {
     }
 }
 
-/// Clementine's volume, not the phone's. While dragging, Clementine follows the thumb.
+/// Clementine's volume, not the phone's. While dragging, Clementine follows the thumb. While
+/// Clementine plays on this phone, it's the phone's volume instead.
 struct VolumeSlider: View {
     @Environment(RemoteSession.self) private var session
 
     var body: some View {
         HStack(spacing: Metrics.space3) {
             Image(systemName: "speaker.fill")
-            Slider(
-                value: Binding(
-                    get: { Double(session.volume) },
-                    set: { value in
-                        if Int(value.rounded()) != session.volume {
-                            session.setVolume(Int(value.rounded()))
-                        }
-                    }),
-                in: 0...100)
-            .accessibilityLabel("Clementine volume")
-            .accessibilityValue("\(session.volume)%")
+            if session.isPlayingHere {
+                PhoneVolumeSlider()
+                    .frame(height: 34)
+                    .accessibilityLabel("Phone volume")
+            } else {
+                Slider(
+                    value: Binding(
+                        get: { Double(session.volume) },
+                        set: { value in
+                            if Int(value.rounded()) != session.volume {
+                                session.setVolume(Int(value.rounded()))
+                            }
+                        }),
+                    in: 0...100)
+                .accessibilityLabel("Clementine volume")
+                .accessibilityValue("\(session.volume)%")
+            }
             Image(systemName: "speaker.wave.3.fill")
         }
         .font(.caption)
         .foregroundStyle(Palette.onSurfaceVariant)
         .environment(\.layoutDirection, .leftToRight)
     }
+}
+
+/// The phone's volume: iOS lets apps change it only through its own slider.
+private struct PhoneVolumeSlider: UIViewRepresentable {
+    func makeUIView(context: Context) -> MPVolumeView {
+        let view = MPVolumeView()
+        view.tintColor = UIColor(Palette.primary)
+        return view
+    }
+
+    func updateUIView(_ view: MPVolumeView, context: Context) {}
 }

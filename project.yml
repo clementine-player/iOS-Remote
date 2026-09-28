@@ -66,6 +66,13 @@ targets:
         UIFileSharingEnabled: true
         LSSupportsOpeningDocumentsInPlace: true
         ITSAppUsesNonExemptEncryption: false
+        # Remote streaming: Clementine's music keeps playing in the background, fetched over plain
+        # HTTP from Clementine's media server on the local network.
+        UIBackgroundModes:
+          - audio
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+          NSAllowsArbitraryLoadsForMedia: true
   ClementineWidget:
     type: app-extension
     platform: iOS

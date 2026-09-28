@@ -3,6 +3,9 @@
 # library and its playlist, for the screenshots (.github/workflows/screenshots.yml). Clementine
 # runs in the background, logging to <log>; this returns once it's ready.
 #
+# Remote streaming is on (--experimental-remote-streaming and "Allow playing on remote devices"),
+# so the app can offer to play on the phone, and the screenshots show where Clementine can play.
+#
 #   start-clementine.sh <Clementine.app> <music dir> <log>
 #
 # It changes Clementine's settings and library for the user running it: meant for CI runners.
@@ -47,10 +50,11 @@ defaults write "$domain" NetworkRemote.only_non_public_ip -bool false
 defaults write "$domain" NetworkRemote.use_auth_code -bool false
 defaults write "$domain" NetworkRemote.allow_downloads -bool true
 defaults write "$domain" NetworkRemote.convert_lossless -bool false
+defaults write "$domain" NetworkRemote.allow_streaming -bool true
 # The remote's CHANGE_SONG plays the song rather than queueing it.
 defaults write "$domain" MainWindow.doubleclick_playlist_addmode -int 1
 
-nohup "$binary" --verbose > "$log" 2>&1 &
+nohup "$binary" --verbose --experimental-remote-streaming > "$log" 2>&1 &
 pid=$!
 echo "$pid" > "$log.pid"
 if ! wait_for "the network remote" "nc -z localhost 5500"; then
