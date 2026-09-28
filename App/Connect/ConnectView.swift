@@ -186,15 +186,20 @@ struct ConnectView: View {
         if host.isEmpty {
             host = model.settings.lastHost
         }
-        if model.settings.isFirstLaunch {
-            model.settings.isFirstLaunch = false
+        let settings = model.settings
+        if settings.isFirstLaunch {
+            settings.isFirstLaunch = false
             isWelcomePresented = true
+        } else if settings.autoConnect, !model.isAutoConnectOver, settings.lastServerName.isEmpty,
+                  !settings.lastHost.isEmpty, model.session.status == .disconnected {
+            // An address typed in may never show up on the network, so connect to it straight away.
+            model.connect(host: settings.lastHost)
         }
     }
 
-    /// With "Connect automatically" on, connects to the Clementine last connected to as soon as
-    /// it's found on the network: by its name, whatever its address is now, or else by its
-    /// address. Only until something else has been done since the app started.
+    /// With "Connect automatically" on, connects to the Clementine last picked from the network
+    /// as soon as it's found there again: by its name, whatever its address is now, or else by
+    /// its address. Only until something else has been done since the app started.
     private func autoConnect(among servers: [DiscoveredServer]) {
         let settings = model.settings
         guard settings.autoConnect, !model.isAutoConnectOver, model.session.status == .disconnected,

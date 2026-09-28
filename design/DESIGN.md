@@ -329,8 +329,9 @@ the String Catalog; the rest are English until translated.
   to the Connect screen. A failed send also reconnects once.
 - The address, auth code and addresses used before are saved, and the name of the Clementine
   connected to if it was picked from the network. With "Connect automatically" on (the default),
-  the Connect screen connects by itself when the last Clementine shows up on the network, found
-  by its name, so a new address doesn't matter, or else by its address. It does so only until
+  the Connect screen connects by itself: to a Clementine picked from the network when it shows up
+  there again, found by its name, so a new address doesn't matter, or else by its address; to an
+  address typed in straight away, as it may never show up on the network. It does so only until
   something else is connected to or the settings are opened: disconnecting doesn't reconnect.
 - In the background iOS suspends the app, and the connection with it. When the app is sent to the
   background it keeps the connection for as long as iOS allows, then disconnects quietly; on return
