@@ -155,7 +155,9 @@ From the Library and Album boards. Clementine's library, copied to the phone.
 
 - Large title "Library", subtitle "*n* items". Toolbar: ConnectionChip; a menu with Grouping (the
   seven groupings), Sort (ascending / descending) and Update library.
-- `.searchable` filters the level shown, using the library's full-text index.
+- `.searchable` (at the top level) searches the whole library as you type, matching as the
+  Search tab does, and shows the results as it does, in sections (see Search). An artist or album
+  found opens to its albums or songs, with Add to playlist and Download.
 - Rows: artists (round `secondary-container` tile, person glyph), albums and years (disc glyph),
   genres (note glyph), each with "*n* items"; songs as media rows with "artist / album".
 - Tapping a group pushes the level below. Its header: title, "*n* items", and **Add to playlist**
@@ -177,8 +179,21 @@ From the Search board. Searches everything Clementine can search (library and in
 
 - A search field at the top (`.searchable`, always shown), "Search Clementine". Submitting sends the
   search; a progress bar and "Searching for “…”" until Clementine finishes.
-- Results are grouped first by where they came from (with that provider's icon), then by the
-  library grouping, and browsed like the library: drill down, Add to playlist, select mode.
+- Results are in sections by what matched, as music apps show them, filling in as providers
+  answer. The Library tab's search shows the library's results the same way. Clementine doesn't say why a song matched, so the app works it out as Clementine's
+  library search matches: each word must start a word of some field (ignoring case and accents).
+  - **Top Result:** the best match, if an artist, album, song or station matched on its own:
+    exactly, then by its start, then by its words. As good, an artist beats an album beats a song.
+    Its second line says what it is ("Song · Radiohead").
+  - **Songs:** titles that matched, or title, artist and album between them ("beatles help").
+  - **Artists:** album artists (else artists) that matched; "*n* albums".
+  - **Albums:** album names that matched, or name and artist between them, so an artist's albums
+    are listed too; each with its artist.
+  - **Stations:** internet radio (results that aren't files and have no album), with the provider's icon.
+  - **Other matches:** songs that matched some other way, such as by genre, so none is lost.
+- The first four of each section, the best first, with **See All** for the rest. Tapping a song or
+  station adds it to the playlist playing; an artist opens to its albums, and an album to its
+  songs, with Add to playlist and select mode as in the library. See All has select mode too.
 - "No results" and a first-run "Search your library and Clementine's internet services" message.
 
 ### Downloads (tab 4)

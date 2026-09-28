@@ -1,16 +1,17 @@
 import ClementineKit
 import SwiftUI
 
-/// Searches everything Clementine can: its library and its internet services.
+/// Searches everything Clementine can: its library and its internet services. Results are in
+/// sections by what matched, so a song found by its title is right there to add.
 struct SearchView: View {
     @Environment(AppModel.self) private var model
     @State private var query = ""
 
     var body: some View {
         NavigationStack {
-            SearchLevelView(opened: nil)
-                .navigationDestination(for: BrowseItem.self) { item in
-                    SearchLevelView(opened: item)
+            SearchResultsView()
+                .navigationDestination(for: SearchPage.self) { page in
+                    SearchListView(page: page, results: model.search)
                 }
         }
         .searchable(text: $query, prompt: "Search Clementine")
@@ -20,100 +21,39 @@ struct SearchView: View {
     }
 }
 
-private struct SearchLevelView: View {
-    let opened: BrowseItem?
-
+private struct SearchResultsView: View {
     @Environment(AppModel.self) private var model
-    @AppStorage(SettingKey.libraryGrouping) private var grouping = LibraryGrouping.artistAlbum.rawValue
-    @AppStorage(SettingKey.librarySorting) private var sorting = LibrarySorting.ascending.rawValue
-    @State private var level: BrowseLevel?
-    @State private var selection = Set<Int>()
-    @State private var editMode = EditMode.inactive
 
     private var search: SearchModel { model.search }
 
     var body: some View {
-        List(selection: editMode.isEditing ? $selection : nil) {
-            if let opened, let level, !editMode.isEditing {
-                BrowseHeader(item: opened, count: level.items.count) { target in
-                    Task { await search.add([opened], to: target) }
+        SearchSectionsList(results: search)
+            .overlay { placeholder }
+            .safeAreaInset(edge: .top, spacing: 0) {
+                if search.isSearching, let searchedFor = search.searchedFor {
+                    ProgressBanner(text: "Searching for “\(searchedFor)”…", fraction: nil)
                 }
             }
-            if let level {
-                BrowseRows(
-                    level: level, selection: $selection, isEditing: editMode.isEditing, icons: search.icons,
-                    alphabetical: true, descending: sorting == LibrarySorting.descending.rawValue
-                ) { song in
-                    Task { await search.add([song]) }
+            .navigationTitle("Search")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    ConnectionChip()
                 }
+                .sharedBackgroundVisibility(.visible)
             }
-        }
-        .listStyle(.plain)
-        .listSectionIndexVisibility(.visible)
-        .surfaceBackground()
-        .environment(\.editMode, $editMode)
-        .overlay { placeholder }
-        .safeAreaInset(edge: .top, spacing: 0) {
-            if opened == nil, search.isSearching, let searchedFor = search.searchedFor {
-                ProgressBanner(text: "Searching for “\(searchedFor)”…", fraction: nil)
-            }
-        }
-        .navigationTitle(opened == nil ? String(localized: "Search") : "")
-        .navigationBarTitleDisplayMode(opened == nil ? .large : .inline)
-        .toolbar { toolbar }
-        .task(id: [String(search.revision), grouping, sorting]) {
-            level = await search.level(below: opened)
-            selection = []
-        }
     }
 
     @ViewBuilder
     private var placeholder: some View {
-        if opened == nil, !search.isSearching {
+        if !search.isSearching {
             if search.searchedFor == nil {
                 ContentUnavailableView(
                     "Search Clementine", systemImage: "magnifyingglass",
                     description: Text("Find music in your library and in Clementine's internet services."))
-            } else if level?.items.isEmpty ?? true {
+            } else if search.sections.isEmpty {
                 ContentUnavailableView.search(text: search.searchedFor ?? "")
             }
         }
-    }
-
-    @ToolbarContentBuilder
-    private var toolbar: some ToolbarContent {
-        if editMode.isEditing {
-            ToolbarItem(placement: .topBarLeading) {
-                Button("Done", systemImage: "checkmark") { endSelection() }
-            }
-            ToolbarItemGroup(placement: .bottomBar) {
-                let items = selection.sorted().compactMap { index in
-                    level?.items.indices.contains(index) == true ? level?.items[index] : nil
-                }
-                Text("\(items.count) selected")
-                    .textStyle(.bodyMedium)
-                Spacer()
-                AddToPlaylistMenu { target in
-                    Task { await search.add(items, to: target) }
-                    endSelection()
-                }
-                .disabled(items.isEmpty)
-            }
-        } else {
-            ToolbarItem(placement: .topBarTrailing) {
-                ConnectionChip()
-            }
-            .sharedBackgroundVisibility(.visible)
-            ToolbarSpacer(.fixed, placement: .topBarTrailing)
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("Select", systemImage: "checkmark.circle") { editMode = .active }
-                    .disabled(level?.items.isEmpty ?? true)
-            }
-        }
-    }
-
-    private func endSelection() {
-        selection = []
-        editMode = .inactive
     }
 }

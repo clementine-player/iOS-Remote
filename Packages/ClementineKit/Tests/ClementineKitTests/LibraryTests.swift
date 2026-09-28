@@ -86,12 +86,48 @@ struct LibraryTests {
         #expect(years.items.first?.album == "Suite bergamasque")
     }
 
-    @Test func filtersWithTheFullTextIndex() async throws {
+    @Test func searchesAsTheGlobalSearchDoes() async throws {
         let library = try await SampleLibrary().store()
-        let artists = try await library.level(below: nil, filter: "clai", grouping: .artistAlbum, sorting: .ascending)
-        #expect(artists.items.map(\.value) == ["Claude Debussy"])
-        let quoted = try await library.level(below: nil, filter: "gymno\"", grouping: .artist, sorting: .ascending)
-        #expect(quoted.items.map(\.value) == ["Erik Satie"])
+        let clair = try await library.search("clai")
+        #expect(clair.songs.map(\.value) == ["Clair de lune"])
+        #expect(clair.top == clair.songs.first)
+        #expect(clair.artists.isEmpty && clair.albums.isEmpty)
+
+        // Every word is a prefix, not only the last.
+        let spread = try await library.search("debu clai")
+        #expect(spread.songs.map(\.value) == ["Clair de lune"])
+
+        // Quotes and other punctuation aren't operators.
+        let quoted = try await library.search("gymno\" (OR")
+        #expect(quoted.isEmpty)
+        let gymno = try await library.search("gymno\"")
+        #expect(gymno.songs.map(\.value) == ["Gymnopédie No. 1"])
+        #expect(gymno.albums.map(\.value) == ["Gymnopédies"])
+        #expect(try await library.search("\"").isEmpty)
+    }
+
+    @Test func searchesOneField() async throws {
+        let library = try await SampleLibrary().store()
+        #expect(try await library.search("artist:satie").artists.map(\.value) == ["Erik Satie"])
+        #expect(try await library.search("title:satie").isEmpty)
+    }
+
+    @Test func searchedArtistsOpenToTheirAlbums() async throws {
+        let library = try await SampleLibrary().store()
+        let found = try await library.search("debussy")
+        #expect(found.artists.map(\.value) == ["Claude Debussy"])
+        #expect(found.albums.map(\.value) == ["Suite bergamasque"])
+        #expect(found.songs.isEmpty)
+        #expect(found.top?.kind == .artist)
+
+        let artist = try #require(found.artists.first)
+        let albums = try await library.searchLevel(below: artist, sorting: .ascending)
+        #expect(albums.items.map(\.selection) == found.albums.map(\.selection))
+        let songs = try await library.searchLevel(below: albums.items[0], sorting: .ascending)
+        #expect(songs.items.map(\.value) == ["Prélude", "Menuet", "Clair de lune"])
+        let urls = try await library.searchSongURLs(of: [artist], sorting: .ascending)
+        #expect(urls.first == "file:///m/Debussy/01 Prélude.ogg")
+        #expect(urls.count == 3)
     }
 
     @Test func findsTheSongsOfGroups() async throws {

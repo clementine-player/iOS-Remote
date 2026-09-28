@@ -33,6 +33,12 @@ public struct BrowseLevel: Sendable, Hashable {
     public var opened: BrowseItem?
     public var kind: ItemKind
     public var items: [BrowseItem]
+
+    public init(opened: BrowseItem?, kind: ItemKind, items: [BrowseItem]) {
+        self.opened = opened
+        self.kind = kind
+        self.items = items
+    }
 }
 
 /// Browses a table of songs level by level, grouping by one field per level: the Android app's
@@ -44,8 +50,6 @@ struct SongQuery {
     let table: String
     /// A condition every row must meet, if any.
     var hiddenWhere = ""
-    /// The table to read instead of [table] when filtering for [text], if filtering is possible.
-    var matching: ((String) -> String)?
     /// Whether the table's URLs are encoded, as the library's are.
     var decodesURLs = true
 
@@ -64,18 +68,14 @@ struct SongQuery {
         }
     }
 
-    /// The items of [level] within [selection], matching [filter].
-    func items(in database: Database, level: Int, selection: [String], filter: String = "") throws -> [BrowseItem] {
-        var from = table
-        if !filter.isEmpty, let matching {
-            from = matching(filter)
-        }
+    /// The items of [level] within [selection].
+    func items(in database: Database, level: Int, selection: [String]) throws -> [BrowseItem] {
         let isSongLevel = level == songLevel
         var sql = "SELECT 0 AS _id"
         for field in fields {
             sql += ", \(field)"
         }
-        sql += ", CAST(filename AS TEXT), artist, album FROM \(from)"
+        sql += ", CAST(filename AS TEXT), artist, album FROM \(table)"
         sql += whereClause(selection)
         if isSongLevel {
             sql += " ORDER BY album, disc, track \(sorting.rawValue)"
@@ -125,11 +125,10 @@ struct SongQuery {
 struct SongBrowser {
     let query: SongQuery
 
-    /// The level below [opened], or the top level for nil, matching [filter].
-    func level(below opened: BrowseItem?, filter: String = "", in database: Database) throws -> BrowseLevel {
+    /// The level below [opened], or the top level for nil.
+    func level(below opened: BrowseItem?, in database: Database) throws -> BrowseLevel {
         let level = opened.map { $0.level + 1 } ?? 0
-        let items = try query.items(
-            in: database, level: level, selection: opened?.selection ?? [], filter: filter)
+        let items = try query.items(in: database, level: level, selection: opened?.selection ?? [])
         return BrowseLevel(opened: opened, kind: query.kind(ofLevel: level), items: items)
     }
 

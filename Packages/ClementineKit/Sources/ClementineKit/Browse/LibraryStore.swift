@@ -67,14 +67,13 @@ public actor LibraryStore {
 
     public func delete() {
         database = nil
+        columns = nil
         try? FileManager.default.removeItem(at: fileURL)
     }
 
-    /// The level below [opened] (the top level for nil), grouped by [grouping], matching [filter].
-    public func level(
-        below opened: BrowseItem?, filter: String = "", grouping: LibraryGrouping, sorting: LibrarySorting
-    ) throws -> BrowseLevel {
-        try browser(grouping, sorting).level(below: opened, filter: filter, in: open())
+    /// The level below [opened] (the top level for nil), grouped by [grouping].
+    public func level(below opened: BrowseItem?, grouping: LibraryGrouping, sorting: LibrarySorting) throws -> BrowseLevel {
+        try browser(grouping, sorting).level(below: opened, in: open())
     }
 
     /// The URLs of the songs [items] are or group.
@@ -83,12 +82,77 @@ public actor LibraryStore {
     }
 
     private func browser(_ grouping: LibraryGrouping, _ sorting: LibrarySorting) -> SongBrowser {
-        var query = SongQuery(fields: grouping.fields, sorting: sorting, table: "songs")
-        query.matching = { text in
-            let words = text.replacingOccurrences(of: "\"", with: " ").trimmingCharacters(in: .whitespaces)
-            return "(SELECT * FROM songs_fts WHERE songs_fts MATCH \"\(words)*\")"
+        SongBrowser(query: SongQuery(fields: grouping.fields, sorting: sorting, table: "songs"))
+    }
+
+    // MARK: - Searching
+
+    /// Songs are grouped by their album artist, else their artist, as Clementine groups albums.
+    private static let groupArtist = "IFNULL(NULLIF(albumartist, ''), artist)"
+
+    /// The songs matching [text] as Clementine's global search matches them (each word starts a
+    /// word of some field), in sections as its results are shown. Artists and albums of the
+    /// sections open with [searchLevel(below:sorting:)], not the library's grouping.
+    public func search(_ text: String) throws -> SearchSections {
+        let database = try open()
+        let match = try fullTextQuery(text, columns: fullTextColumns(database))
+        guard !match.isEmpty else { return SearchSections() }
+        let rows = try database.query("""
+            SELECT \(Self.groupArtist), album, title, artist, CAST(filename AS TEXT)
+            FROM songs_fts WHERE songs_fts MATCH ?
+            """, [match])
+        return SearchSections(query: text, songs: rows.map { row in
+            let values = row.map { $0 ?? "" }
+            return SearchCandidate(
+                item: BrowseItem(
+                    level: 2, selection: Array(values[0...2]), kind: .song, url: SongQuery.decode(values[4]),
+                    artist: values[3], album: values[1]),
+                artist: values[3])
+        })
+    }
+
+    /// The level below [opened], an artist or album of [search(_:)].
+    public func searchLevel(below opened: BrowseItem, sorting: LibrarySorting) throws -> BrowseLevel {
+        try searchBrowser(sorting).level(below: opened, in: open())
+    }
+
+    /// The URLs of the songs [items] of [search(_:)] are or group.
+    public func searchSongURLs(of items: [BrowseItem], sorting: LibrarySorting) throws -> [String] {
+        try searchBrowser(sorting).songs(items, in: open()).map(\.url).filter { !$0.isEmpty }
+    }
+
+    private func searchBrowser(_ sorting: LibrarySorting) -> SongBrowser {
+        SongBrowser(query: SongQuery(fields: [Self.groupArtist, "album", "title"], sorting: sorting, table: "songs"))
+    }
+
+    /// [text] as a full-text query, as Clementine makes one: every word must start a word of some
+    /// field, or of the field it's prefixed with ("artist:satie"). Words are quoted, so none is an
+    /// operator such as OR.
+    func fullTextQuery(_ text: String, columns: Set<String>) -> String {
+        text.split(whereSeparator: \.isWhitespace).flatMap { token -> [String] in
+            var token = Substring(token)
+            var column = ""
+            if let colon = token.firstIndex(of: ":") {
+                let name = token[..<colon].lowercased()
+                if columns.contains(name) {
+                    column = name + ":"
+                }
+                token = token[token.index(after: colon)...]
+            }
+            // A field's word can't be quoted, but after it, isn't an operator either.
+            return token.split { !$0.isLetter && !$0.isNumber }.map { column.isEmpty ? "\"\($0)*\"" : "\(column)\($0)*" }
+        }.joined(separator: " ")
+    }
+
+    private var columns: Set<String>?
+
+    private func fullTextColumns(_ database: Database) throws -> Set<String> {
+        if let columns {
+            return columns
         }
-        return SongBrowser(query: query)
+        let columns = Set(try database.query("PRAGMA table_info(songs_fts)").compactMap { $0[1]?.lowercased() })
+        self.columns = columns
+        return columns
     }
 
     private func open() throws -> Database {
@@ -166,6 +230,7 @@ public actor LibraryStore {
             throw .corrupt
         }
         database = nil
+        columns = nil
         do {
             _ = try FileManager.default.replaceItemAt(fileURL, withItemAt: partial)
         } catch {
