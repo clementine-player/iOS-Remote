@@ -19,7 +19,8 @@ xcodegen generate
 
 and commit the regenerated `ClementineRemote.xcodeproj` in the same commit as the change.
 `scripts/build.sh` regenerates before it builds, so after building, check `git status` for
-changes to the project you haven't committed.
+changes to the project you haven't committed. CI regenerates the project too, and fails if that
+changes it.
 
 If regenerating changes something you didn't mean to, fix `project.yml` rather than the
 generated project. For example, the app target sets `productName` as well as `PRODUCT_NAME`,

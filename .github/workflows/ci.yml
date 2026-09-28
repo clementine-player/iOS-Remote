@@ -29,6 +29,17 @@ jobs:
       - uses: actions/checkout@v5
       - name: Install XcodeGen
         run: brew install xcodegen
+      - name: Check the Xcode project matches project.yml
+        # The project is generated, but committed: a change to project.yml, or a source file added
+        # to a target's folder, needs the regenerated project committed with it.
+        run: |
+          xcodegen generate --quiet
+          if [ -n "$(git status --porcelain -- ClementineRemote.xcodeproj)" ]; then
+            git status --short -- ClementineRemote.xcodeproj
+            git diff -- ClementineRemote.xcodeproj
+            echo "::error::ClementineRemote.xcodeproj is out of date. Run xcodegen generate and commit the result."
+            exit 1
+          fi
       - name: Pick a simulator
         run: |
           id=$(xcrun simctl list devices available --json | python3 -c '
