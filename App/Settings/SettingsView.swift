@@ -14,7 +14,7 @@ struct SettingsView: View {
     @AppStorage(SettingKey.playlistFolder) private var playlistFolder = false
     @AppStorage(SettingKey.artistFolder) private var artistFolder = true
     @AppStorage(SettingKey.albumFolder) private var albumFolder = true
-    @AppStorage(SettingKey.autoConnect) private var autoConnect = false
+    @AppStorage(SettingKey.autoConnect) private var autoConnect = true
     @AppStorage(SettingKey.port) private var port = Int(RemoteProtocol.defaultPort)
     @AppStorage(SettingKey.keepScreenOn) private var keepScreenOn = false
 

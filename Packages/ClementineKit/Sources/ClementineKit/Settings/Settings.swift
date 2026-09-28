@@ -26,6 +26,7 @@ public enum SettingKey {
 
     // Saved state
     public static let lastHost = "save_clementine_ip"
+    public static let lastServerName = "last_server_name"
     public static let knownHosts = "known_ips"
     public static let lastAuthCode = "last_auth_code"
     public static let libraryHost = "library_ip"
@@ -46,7 +47,7 @@ public struct Settings: Sendable {
         SettingKey.playlistFolder: false,
         SettingKey.artistFolder: true,
         SettingKey.albumFolder: true,
-        SettingKey.autoConnect: false,
+        SettingKey.autoConnect: true,
         SettingKey.port: Int(RemoteProtocol.defaultPort),
         SettingKey.keepScreenOn: false,
         SettingKey.firstLaunch: true,
@@ -91,6 +92,12 @@ public struct Settings: Sendable {
         get { store.string(forKey: SettingKey.lastHost) ?? "" }
         nonmutating set { store.set(newValue, forKey: SettingKey.lastHost) }
     }
+    /// The network name of the Clementine last connected to, empty if it was reached by its
+    /// address.
+    public var lastServerName: String {
+        get { store.string(forKey: SettingKey.lastServerName) ?? "" }
+        nonmutating set { store.set(newValue, forKey: SettingKey.lastServerName) }
+    }
     /// Addresses connected to before, most recent first.
     public var knownHosts: [String] {
         get { store.stringArray(forKey: SettingKey.knownHosts) ?? [] }
@@ -110,10 +117,11 @@ public struct Settings: Sendable {
         nonmutating set { store.set(newValue, forKey: SettingKey.firstLaunch) }
     }
 
-    /// Remembers an address connected to.
-    public func remember(host: String) {
+    /// Remembers an address connected to, and the Clementine's network name if it was found there.
+    public func remember(host: String, name: String? = nil) {
         guard !host.isEmpty else { return }
         lastHost = host
+        lastServerName = name ?? ""
         knownHosts = [host] + knownHosts.filter { $0 != host }
     }
 }
