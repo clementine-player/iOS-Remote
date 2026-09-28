@@ -12,8 +12,9 @@ protocol SearchResults: AnyObject, Observable {
     var revision: Int { get }
     /// The level below [opened], an artist or album of the results.
     func level(below opened: BrowseItem) async -> BrowseLevel?
-    /// Adds the songs of [items] to [target].
-    func add(_ items: [BrowseItem], to target: PlaylistTarget) async
+    /// Adds the songs of [items] to [target]. With [playIfStopped], Clementine plays them unless
+    /// it's playing already, as it does when you double-click a song in it.
+    func add(_ items: [BrowseItem], to target: PlaylistTarget, playIfStopped: Bool) async
     /// Downloads the songs of [items] to the phone, when they can be.
     var download: (([BrowseItem]) async -> Void)? { get }
 }
@@ -154,7 +155,7 @@ private struct SearchRow: View {
         Group {
             if item.kind == .song {
                 Button {
-                    Task { await results.add([item], to: .selected) }
+                    Task { await results.add([item], to: .selected, playIfStopped: true) }
                 } label: {
                     row
                 }
@@ -199,7 +200,7 @@ struct SearchListView: View {
             if case .opened(let item) = page, let level, !editMode.isEditing {
                 BrowseHeader(
                     item: item, count: level.items.count,
-                    add: { target in Task { await results.add([item], to: target) } },
+                    add: { target in Task { await results.add([item], to: target, playIfStopped: false) } },
                     download: results.download.map { download in { Task { await download([item]) } } })
             }
             if let level {
@@ -216,7 +217,7 @@ struct SearchListView: View {
                     },
                     opens: { .opened($0) }
                 ) { song in
-                    Task { await results.add([song], to: .selected) }
+                    Task { await results.add([song], to: .selected, playIfStopped: true) }
                 }
             }
         }
@@ -255,7 +256,7 @@ struct SearchListView: View {
                     .textStyle(.bodyMedium)
                 Spacer()
                 AddToPlaylistMenu { target in
-                    Task { await results.add(items, to: target) }
+                    Task { await results.add(items, to: target, playIfStopped: false) }
                     endSelection()
                 }
                 .disabled(items.isEmpty)

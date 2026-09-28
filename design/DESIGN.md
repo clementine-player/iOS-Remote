@@ -162,7 +162,8 @@ From the Library and Album boards. Clementine's library, copied to the phone.
   genres (note glyph), each with "*n* items"; songs as media rows with "artist / album".
 - Tapping a group pushes the level below. Its header: title, "*n* items", and **Add to playlist**
   (filled) and **Download** (tonal) buttons for everything in it. Tapping a song adds it to the
-  playlist playing.
+  playlist playing, and plays it if Clementine isn't playing, as double-clicking a song in
+  Clementine does by default.
 - **Add to playlist** adds to the playlist playing when tapped. Touched and held, it's a menu of
   every playlist, the one playing first, and **New playlist…**, which asks for a name, creates
   the playlist and adds to it. Search's Add to playlist works the same way.
@@ -192,7 +193,7 @@ From the Search board. Searches everything Clementine can search (library and in
   - **Stations:** internet radio (results that aren't files and have no album), with the provider's icon.
   - **Other matches:** songs that matched some other way, such as by genre, so none is lost.
 - The first four of each section, the best first, with **See All** for the rest. Tapping a song or
-  station adds it to the playlist playing; an artist opens to its albums, and an album to its
+  station adds it to the playlist playing, and plays it if Clementine isn't playing; an artist opens to its albums, and an album to its
   songs, with Add to playlist and select mode as in the library. See All has select mode too.
 - "No results" and a first-run "Search your library and Clementine's internet services" message.
 

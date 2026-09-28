@@ -122,17 +122,21 @@ public enum Messages {
         RemoteMessage(.rateSong) { $0.requestRateSong.rating = rating }
     }
 
-    public static func insertURLs(_ urls: [String], playlistID: Int32) -> RemoteMessage {
+    /// Adds [urls] to a playlist; with [playNow], Clementine plays the first of them.
+    public static func insertURLs(_ urls: [String], playlistID: Int32, playNow: Bool = false) -> RemoteMessage {
         RemoteMessage(.insertUrls) {
             $0.requestInsertUrls.playlistID = playlistID
             $0.requestInsertUrls.urls = urls
+            $0.requestInsertUrls.playNow = playNow
         }
     }
 
-    public static func insertSongs(_ songs: [SongMetadata], playlistID: Int32) -> RemoteMessage {
+    /// Adds [songs] to a playlist; with [playNow], Clementine plays the first of them.
+    public static func insertSongs(_ songs: [SongMetadata], playlistID: Int32, playNow: Bool = false) -> RemoteMessage {
         RemoteMessage(.insertUrls) {
             $0.requestInsertUrls.playlistID = playlistID
             $0.requestInsertUrls.songs = songs
+            $0.requestInsertUrls.playNow = playNow
         }
     }
 
