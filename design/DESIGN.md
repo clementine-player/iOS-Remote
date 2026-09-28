@@ -9,8 +9,8 @@ iOS's own controls and patterns.
 
 - **Platform:** iOS 26 and later, iPhone and iPad. Swift 6, SwiftUI, Observation.
 - **Look:** Clementine's colours (orange and plum, with Material 3 roles generated from them), light
-  and dark following the system. SF Pro type at the design system's sizes. SF Symbols, with the
-  Android app's own player glyphs where SF Symbols has no match.
+  and dark following the system, or as chosen in Settings. SF Pro type at the design system's
+  sizes. SF Symbols, with the Android app's own player glyphs where SF Symbols has no match.
 
 ## Contents
 
@@ -473,6 +473,7 @@ ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
 
 | Section | Setting | Default | Android key |
 |---|---|---|---|
+| | Appearance: System, Light or Dark | System | none (`pref_appearance`) |
 | Player | Volume buttons control Clementine | on | `pref_volumekey` |
 | | Volume step | 10 % (1–20 %) | `pref_volume_inc` |
 | | Show Last.fm buttons | on | `pref_show_lastfm` |

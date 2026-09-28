@@ -25,6 +25,7 @@ struct ClementineRemoteApp: App {
 struct RootView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.scenePhase) private var scenePhase
+    @AppStorage(SettingKey.appearance) private var appearance = Appearance.system.rawValue
 
     var body: some View {
         let session = model.session
@@ -48,6 +49,19 @@ struct RootView: View {
         }
         .onChange(of: scenePhase) { _, phase in
             model.scenePhaseChanged(to: phase)
+        }
+        .onChange(of: appearance, initial: true) { _, appearance in
+            applyAppearance(Appearance(rawValue: appearance) ?? .system)
+        }
+    }
+
+    /// Overrides every window's style, rather than with `preferredColorScheme`, which leaves an
+    /// open sheet in the old style when going back to following the system.
+    private func applyAppearance(_ appearance: Appearance) {
+        for case let scene as UIWindowScene in UIApplication.shared.connectedScenes {
+            for window in scene.windows {
+                window.overrideUserInterfaceStyle = appearance.interfaceStyle
+            }
         }
     }
 }
