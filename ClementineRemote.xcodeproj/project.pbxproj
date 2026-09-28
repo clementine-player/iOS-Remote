@@ -31,6 +31,7 @@
 		A09283F3D3CC8256B986B1FD /* CommandIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD37699892851B35F20411F /* CommandIntents.swift */; };
 		A83B1DAF857B6BC5EB001422 /* LibraryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B11B3C0886EBF71B26160B /* LibraryModel.swift */; };
 		AF5B4FBB88A0EB985218B5A6 /* DownloadsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08CA8859F2B5F40175519D8 /* DownloadsView.swift */; };
+		B2C9C847429C2B76F2C1CA55 /* Screenshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9A6B2B1E90151D16A87EC0 /* Screenshots.swift */; };
 		B8EC98BE34CAFE2B40D01CE0 /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9487E83AC1EF9117BF817B9 /* SearchModel.swift */; };
 		C1F164DAF978032E7F746C0E /* ClementineKit in Frameworks */ = {isa = PBXBuildFile; productRef = 406A23301C2BC4419F6BA73E /* ClementineKit */; };
 		C465668F76779553E3C62F78 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468183AFD2E06A2AAA047535 /* Toast.swift */; };
@@ -79,8 +80,8 @@
 
 /* Begin PBXFileReference section */
 		0567EB712221368C115A0A43 /* SongDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetailsView.swift; sourceTree = "<group>"; };
-		0FC17D2E6E8CD9D762D37F80 /* ClementineRemote.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ClementineRemote.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		175C247F8C73B1831518D42C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		19DA434663A3FC3E7779EDD6 /* Clementine Remote.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "Clementine Remote.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DDDE87078B3BE38BF533D5A /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		1E799EAA26048F3E7A685A1E /* ConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectView.swift; sourceTree = "<group>"; };
 		216338887AAE5E1DC3F81FD0 /* ConnectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectUITests.swift; sourceTree = "<group>"; };
@@ -95,6 +96,7 @@
 		5EC8D6A33585EA2F0980CEEF /* ConnectionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionSheet.swift; sourceTree = "<group>"; };
 		5F415670725AF9A27921DB62 /* ClementineRemoteUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ClementineRemoteUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		603095C98126DB9E947CC1B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		6E9A6B2B1E90151D16A87EC0 /* Screenshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screenshots.swift; sourceTree = "<group>"; };
 		761E362C08E663B70599A6DD /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		7DF39D4B14D20BD86B19043B /* ClementineRemote.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ClementineRemote.entitlements; sourceTree = "<group>"; };
 		8231CF7038EDE553E2AC1660 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -197,7 +199,7 @@
 		5220779CAFE7847E9F864295 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0FC17D2E6E8CD9D762D37F80 /* ClementineRemote.app */,
+				19DA434663A3FC3E7779EDD6 /* Clementine Remote.app */,
 				5F415670725AF9A27921DB62 /* ClementineRemoteUITests.xctest */,
 				364851AE9A1126E4A11B1469 /* ClementineWidget.appex */,
 			);
@@ -325,6 +327,7 @@
 			isa = PBXGroup;
 			children = (
 				216338887AAE5E1DC3F81FD0 /* ConnectUITests.swift */,
+				6E9A6B2B1E90151D16A87EC0 /* Screenshots.swift */,
 			);
 			path = UITests;
 			sourceTree = "<group>";
@@ -398,7 +401,7 @@
 				12273CB88A5BBB32D77ACFB5 /* ClementineKit */,
 			);
 			productName = ClementineRemote;
-			productReference = 0FC17D2E6E8CD9D762D37F80 /* ClementineRemote.app */;
+			productReference = 19DA434663A3FC3E7779EDD6 /* Clementine Remote.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -513,6 +516,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ECC005CFCC20810B3ADA1F4D /* ConnectUITests.swift in Sources */,
+				B2C9C847429C2B76F2C1CA55 /* Screenshots.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

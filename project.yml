@@ -22,6 +22,7 @@ settings:
 targets:
   ClementineRemote:
     type: application
+    productName: Clementine Remote
     platform: iOS
     sources:
       - path: App
