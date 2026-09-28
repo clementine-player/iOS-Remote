@@ -52,11 +52,46 @@ jobs:
         # CI has no signing account: build for the simulator without a team.
         run: scripts/build.sh test DEVELOPMENT_TEAM=
 
+  # Whether the screenshots need taking again: what they show, or what takes them, changed.
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      screenshots: ${{ steps.filter.outputs.screenshots }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          filters: |
+            screenshots:
+              - .github/workflows/screenshots.yml
+              - App/**
+              - Shared/**
+              - Packages/ClementineKit/Sources/**
+              - UITests/Screenshots.swift
+              - project.yml
+              - clementine-it/**
+              - scripts/build.sh
+              - scripts/post_screenshots.sh
+
+  screenshots:
+    needs: changes
+    if: needs.changes.outputs.screenshots == 'true' || github.event_name == 'workflow_dispatch'
+    permissions:
+      contents: read
+      pull-requests: write # for the screenshots comment
+    uses: ./.github/workflows/screenshots.yml
+    secrets: inherit
+
   # A single check for branch protection to require. It runs even when a job
   # it needs fails, because GitHub treats a skipped required check as passing.
+  # The screenshots may be skipped, when nothing they depend on changed.
   ci:
     name: CI
-    needs: [package, app]
+    needs: [package, app, changes, screenshots]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -64,5 +99,9 @@ jobs:
         run: |
           echo "package: ${{ needs.package.result }}"
           echo "app: ${{ needs.app.result }}"
+          echo "changes: ${{ needs.changes.result }}"
+          echo "screenshots: ${{ needs.screenshots.result }}"
           test "${{ needs.package.result }}" = success
           test "${{ needs.app.result }}" = success
+          test "${{ needs.changes.result }}" = success
+          case "${{ needs.screenshots.result }}" in success|skipped) ;; *) exit 1 ;; esac

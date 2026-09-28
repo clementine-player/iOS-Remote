@@ -12,39 +12,19 @@
 # The Android remote's bucket can hold them too: this app's are under ios/. Without them, and on
 # pull requests from forks (which get no secrets), the screenshots are only the run's artifact.
 name: screenshots
+# ci.yml calls this when the files it depends on change, so its CI check covers the screenshots
+# too; ci.yml's concurrency group cancels superseded runs.
 on:
-  pull_request:
-    paths:
-      - .github/workflows/screenshots.yml
-      - App/**
-      - Shared/**
-      - Packages/ClementineKit/Sources/**
-      - UITests/Screenshots.swift
-      - project.yml
-      - clementine-it/**
-      - scripts/build.sh
-      - scripts/post_screenshots.sh
-  push:
-    branches: [main]
-    paths:
-      - .github/workflows/screenshots.yml
-      - App/**
-      - Shared/**
-      - Packages/ClementineKit/Sources/**
-      - UITests/Screenshots.swift
-      - project.yml
-      - clementine-it/**
-      - scripts/build.sh
-      - scripts/post_screenshots.sh
+  workflow_call:
+    inputs:
+      clementine:
+        type: string
+        required: false
   workflow_dispatch:
     inputs:
       clementine:
         description: The Clementine release tag to use; the latest when empty.
         required: false
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 permissions:
   contents: read
