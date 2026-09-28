@@ -44,7 +44,7 @@ private struct SearchLevelView: View {
                     level: level, selection: $selection, isEditing: editMode.isEditing, icons: search.icons,
                     alphabetical: true, descending: sorting == LibrarySorting.descending.rawValue
                 ) { song in
-                    Task { await search.add([song]) }
+                    Task { await search.add([song], playIfStopped: true) }
                 }
             }
         }

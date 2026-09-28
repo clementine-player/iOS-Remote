@@ -160,7 +160,8 @@ From the Library and Album boards. Clementine's library, copied to the phone.
   genres (note glyph), each with "*n* items"; songs as media rows with "artist / album".
 - Tapping a group pushes the level below. Its header: title, "*n* items", and **Add to playlist**
   (filled) and **Download** (tonal) buttons for everything in it. Tapping a song adds it to the
-  playlist playing.
+  playlist playing, and plays it if Clementine isn't playing, as double-clicking a song in
+  Clementine does by default.
 - **Add to playlist** adds to the playlist playing when tapped. Touched and held, it's a menu of
   every playlist, the one playing first, and **New playlist…**, which asks for a name, creates
   the playlist and adds to it. Search's Add to playlist works the same way.

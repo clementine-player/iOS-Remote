@@ -219,6 +219,26 @@ struct ConnectionTests {
         #expect(inserts.map(\.requestInsertUrls.playlistID) == [9, 1])
     }
 
+    @Test func playsAddedSongsOnlyIfNothingIsPlaying() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        clementine.respondLikeClementine()
+
+        let session = RemoteSession()
+        session.connect(to: clementine.endpoint, authCode: 0)
+        try await eventually { session.status == .connected && session.playState == .playing }
+
+        session.add(urls: ["file:///a.ogg"], playIfStopped: true)
+        await clementine.broadcast(RemoteMessage(.pause))
+        try await eventually { session.playState == .paused }
+        session.add(urls: ["file:///b.ogg"], playIfStopped: true)
+        session.add(songs: [FakeClementine.song], playIfStopped: true)
+        session.add(urls: ["file:///c.ogg"])
+        try await clementine.waitUntil { $0.received.filter { $0.type == .insertUrls }.count == 4 }
+        let inserts = clementine.received.filter { $0.type == .insertUrls }
+        #expect(inserts.map(\.requestInsertUrls.playNow) == [false, true, true, false])
+    }
+
     @Test func anOlderClementineDoesntCreatePlaylists() async throws {
         let clementine = try await FakeClementine()
         defer { clementine.stop() }

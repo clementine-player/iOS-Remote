@@ -407,15 +407,17 @@ public final class RemoteSession {
     }
 
     /// Adds songs, by their URLs, to playlist [playlistID], or the active playlist when nil.
-    public func add(urls: [String], to playlistID: Int32? = nil) {
+    /// With [playIfStopped], plays the first of them unless something is playing already.
+    public func add(urls: [String], to playlistID: Int32? = nil, playIfStopped: Bool = false) {
         guard let playlistID = playlistID ?? activePlaylistID, !urls.isEmpty else { return }
-        send(Messages.insertURLs(urls, playlistID: playlistID))
+        send(Messages.insertURLs(urls, playlistID: playlistID, playNow: playIfStopped && playState != .playing))
     }
 
     /// Adds songs, described in full, to playlist [playlistID], or the active playlist when nil.
-    public func add(songs: [SongMetadata], to playlistID: Int32? = nil) {
+    /// With [playIfStopped], plays the first of them unless something is playing already.
+    public func add(songs: [SongMetadata], to playlistID: Int32? = nil, playIfStopped: Bool = false) {
         guard let playlistID = playlistID ?? activePlaylistID, !songs.isEmpty else { return }
-        send(Messages.insertSongs(songs, playlistID: playlistID))
+        send(Messages.insertSongs(songs, playlistID: playlistID, playNow: playIfStopped && playState != .playing))
     }
 
     /// Creates a playlist called [name], and returns it once Clementine has; nil if Clementine

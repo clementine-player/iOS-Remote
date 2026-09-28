@@ -46,7 +46,7 @@ private struct LibraryLevelView: View {
                     level: level, selection: $selection, isEditing: editMode.isEditing,
                     alphabetical: true, descending: sorting == LibrarySorting.descending.rawValue
                 ) { song in
-                    Task { await library.add([song]) }
+                    Task { await library.add([song], playIfStopped: true) }
                 }
             }
         }
