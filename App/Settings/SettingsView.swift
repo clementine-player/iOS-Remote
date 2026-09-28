@@ -3,6 +3,7 @@ import SwiftUI
 
 /// The app's settings, from the connect screen or the connection sheet.
 struct SettingsView: View {
+    @AppStorage(SettingKey.appearance) private var appearance = Appearance.system.rawValue
     @AppStorage(SettingKey.volumeButtons) private var volumeButtons = true
     @AppStorage(SettingKey.volumeStep) private var volumeStep = 10
     @AppStorage(SettingKey.showLastFM) private var showLastFM = true
@@ -19,6 +20,14 @@ struct SettingsView: View {
 
     var body: some View {
         Form {
+            Section {
+                Picker("Appearance", selection: $appearance) {
+                    ForEach(Appearance.allCases, id: \.rawValue) { appearance in
+                        Text(appearance.title).tag(appearance.rawValue)
+                    }
+                }
+            }
+
             Section("Player") {
                 Toggle(isOn: $volumeButtons) {
                     Text("Volume buttons control Clementine")
@@ -109,6 +118,24 @@ struct SettingsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .scrollContentBackground(.hidden)
         .background(Palette.surface)
+    }
+}
+
+extension Appearance {
+    var title: LocalizedStringResource {
+        switch self {
+        case .system: "System"
+        case .light: "Light"
+        case .dark: "Dark"
+        }
+    }
+
+    var interfaceStyle: UIUserInterfaceStyle {
+        switch self {
+        case .system: .unspecified
+        case .light: .light
+        case .dark: .dark
+        }
     }
 }
 
