@@ -414,7 +414,7 @@ opens a short connection, sends its command and disconnects.
 ### Widget
 
 The app shares the last Clementine and song with the widget and the intents through the app group
-`group.com.davidsansome.ClementineRemote`.
+`group.org.clementine-player.remote`.
 
 A home screen widget (WidgetKit) with the last song seen and play/pause and next buttons (App
 Intents, as above). It can't update live while the app is suspended; it shows what the app last saw.

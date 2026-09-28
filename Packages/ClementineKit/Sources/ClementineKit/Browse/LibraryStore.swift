@@ -19,7 +19,7 @@ public enum DownloadFailure: Error, Sendable, Equatable {
     case corrupt
     case cancelled
 
-    private static let log = Logger(subsystem: "com.davidsansome.ClementineRemote", category: "Downloads")
+    private static let log = Logger(subsystem: "org.clementine-player.remote", category: "Downloads")
 
     /// Why Clementine closed the connection, as a failure.
     init(_ disconnect: Pb_Remote_ResponseDisconnect) {

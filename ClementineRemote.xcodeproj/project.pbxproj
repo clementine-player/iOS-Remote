@@ -575,7 +575,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.ClementineRemote.Widget;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.remote.widget";
 				PRODUCT_NAME = ClementineWidget;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -594,7 +594,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.ClementineRemote.Widget;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.remote.widget";
 				PRODUCT_NAME = ClementineWidget;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -612,7 +612,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.ClementineRemoteUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.remote.uitests";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = ClementineRemote;
@@ -696,7 +696,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.ClementineRemote;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.remote";
 				PRODUCT_NAME = "Clementine Remote";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -713,7 +713,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.ClementineRemoteUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.remote.uitests";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = ClementineRemote;
@@ -804,7 +804,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.davidsansome.ClementineRemote;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.remote";
 				PRODUCT_NAME = "Clementine Remote";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
