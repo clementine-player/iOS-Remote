@@ -30,17 +30,23 @@ final class AppModel {
     /// Why connecting failed, to explain on the connect screen.
     var connectProblem: ConnectProblem?
 
+    /// Whether the connect screen has stopped waiting to connect by itself: once something has
+    /// been connected to, or the settings opened, since the app started.
+    var isAutoConnectOver = false
+
     init() {
         library = LibraryModel(model: self)
         search = SearchModel(model: self)
         downloads = DownloadsModel(model: self)
     }
 
-    /// Connects to [host], remembering it.
+    /// Connects to [host], remembering it and [name], Clementine's name on the network if it was
+    /// found there.
     func connect(host: String, port: UInt16? = nil, name: String? = nil) {
         let host = host.trimmingCharacters(in: .whitespaces)
         guard !host.isEmpty else { return }
-        settings.remember(host: host)
+        settings.remember(host: host, name: name)
+        isAutoConnectOver = true
         connectProblem = nil
         session.connect(to: Endpoint(host: host, port: port ?? settings.port), name: name, authCode: settings.lastAuthCode)
     }

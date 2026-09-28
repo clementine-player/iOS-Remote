@@ -15,7 +15,8 @@ struct ConnectIntent: AppIntent {
             throw CommandError.noClementine
         }
         if model.session.status == .disconnected {
-            model.connect(host: model.settings.lastHost)
+            let name = model.settings.lastServerName
+            model.connect(host: model.settings.lastHost, name: name.isEmpty ? nil : name)
         }
         return .result()
     }

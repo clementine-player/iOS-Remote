@@ -327,8 +327,11 @@ the String Catalog; the rest are English until translated.
 - Clementine sends `KEEP_ALIVE` regularly. Nothing for 25 s means the connection is lost: the app
   reconnects (`send_playlist_songs = false`) up to 5 times, then shows "Connection lost" and returns
   to the Connect screen. A failed send also reconnects once.
-- The address, auth code and addresses used before are saved. With auto-connect on, the Connect
-  screen connects to the saved address at launch.
+- The address, auth code and addresses used before are saved, and the name of the Clementine
+  connected to if it was picked from the network. With "Connect automatically" on (the default),
+  the Connect screen connects by itself when the last Clementine shows up on the network, found
+  by its name, so a new address doesn't matter, or else by its address. It does so only until
+  something else is connected to or the settings are opened: disconnecting doesn't reconnect.
 - In the background iOS suspends the app, and the connection with it. When the app is sent to the
   background it keeps the connection for as long as iOS allows, then disconnects quietly; on return
   it reconnects without asking for the playlists again. Downloads in progress ask iOS for extra
@@ -483,10 +486,11 @@ ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
 | | Playlist folder | off | `pref_dl_pl_save_own_dir` |
 | | Artist folder | on | `pref_dl_artist_dir` |
 | | Album folder (needs artist folder) | on | `pref_dl_album_dir` |
-| Connection | Connect automatically | off | `pref_autoconnect` |
+| Connection | Connect automatically | on | `pref_autoconnect` |
 | | Port | 5500 | `pref_port` |
 | Advanced | Keep the screen on | off | `pref_keep_screen_on` |
 | About | Version, Clementine's website, the source code, credits, licences | | |
 
-Saved state: last address (`save_clementine_ip`), addresses used (`known_ips`), last auth code
-(`last_auth_code`), the Clementine the library came from (`library_ip`), first launch (`first_call`).
+Saved state: last address (`save_clementine_ip`), its network name (`last_server_name`), addresses
+used (`known_ips`), last auth code (`last_auth_code`), the Clementine the library came from
+(`library_ip`), first launch (`first_call`).

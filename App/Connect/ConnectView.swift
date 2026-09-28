@@ -11,7 +11,6 @@ struct ConnectView: View {
     @State private var authCode = ""
     @State private var isSettingsPresented = false
     @State private var isWelcomePresented = false
-    @State private var triedAutoConnect = false
     @FocusState private var isHostFocused: Bool
 
     var body: some View {
@@ -46,13 +45,16 @@ struct ConnectView: View {
         .background(Palette.surface)
         .onAppear(perform: appeared)
         .onDisappear { browser.stop() }
+        .onChange(of: browser.servers) { _, servers in
+            autoConnect(among: servers)
+        }
         .onChange(of: scenePhase) { _, phase in
             // iOS may have stopped the search while the app was in the background.
             if phase == .active {
                 browser.start()
             }
         }
-        .sheet(isPresented: $isSettingsPresented, onDismiss: { triedAutoConnect = true }) {
+        .sheet(isPresented: $isSettingsPresented) {
             NavigationStack {
                 SettingsView()
                     .toolbar {
@@ -187,10 +189,22 @@ struct ConnectView: View {
         if model.settings.isFirstLaunch {
             model.settings.isFirstLaunch = false
             isWelcomePresented = true
-        } else if !triedAutoConnect, model.settings.autoConnect, !host.isEmpty, model.session.status == .disconnected {
-            model.connect(host: host)
         }
-        triedAutoConnect = true
+    }
+
+    /// With "Connect automatically" on, connects to the Clementine last connected to as soon as
+    /// it's found on the network: by its name, whatever its address is now, or else by its
+    /// address. Only until something else has been done since the app started.
+    private func autoConnect(among servers: [DiscoveredServer]) {
+        let settings = model.settings
+        guard settings.autoConnect, !model.isAutoConnectOver, model.session.status == .disconnected,
+              model.connectProblem == nil, !isWelcomePresented, !isHostFocused else { return }
+        let name = settings.lastServerName
+        let host = settings.lastHost
+        guard let server = servers.first(where: { !name.isEmpty && $0.name == name })
+                ?? servers.first(where: { !host.isEmpty && $0.host == host }) else { return }
+        self.host = server.host
+        model.connect(host: server.host, port: server.port, name: server.name)
     }
 
     private func connect() {
@@ -199,6 +213,7 @@ struct ConnectView: View {
     }
 
     private func showSettings() {
+        model.isAutoConnectOver = true
         isSettingsPresented = true
     }
 
