@@ -133,6 +133,12 @@ MAPPING = {
     "Loved on Last.fm": "track_loved",
     "Banned on Last.fm": "track_banned",
     "Folders": "pref_dl_cat_folders",
+    "Play on": "output_title",
+    "Switching…": "output_switching",
+    "Playing on %@": "output_playing_on",
+    "Choose where to play": "output_choose",
+    "%@ (this phone)": "output_this_phone",
+    "Let Clementine play on this phone": "pref_renderer",
 }
 
 # iOS plural string -> Android plurals name.

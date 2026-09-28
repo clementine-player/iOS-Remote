@@ -56,6 +56,9 @@ public enum RepeatMode: Sendable, CaseIterable, Equatable {
         case .repeatTrack: self = .track
         case .repeatAlbum: self = .album
         case .repeatPlaylist: self = .playlist
+        // Clementine's other modes stop after each song or play its start: the app shows them
+        // as not repeating.
+        case .repeatOneByOne, .repeatIntro: self = .off
         }
     }
 
@@ -180,4 +183,43 @@ public struct Endpoint: Sendable, Hashable, Codable {
         self.host = host
         self.port = port
     }
+}
+
+/// Somewhere Clementine can play: its own computer, or a renderer such as this phone (remote
+/// streaming).
+public struct Output: Sendable, Hashable, Identifiable {
+    public enum State: Sendable, Hashable {
+        /// Connected, and can be chosen.
+        case available
+        /// Playback is moving to it.
+        case activating
+        /// Where Clementine plays now.
+        case active
+    }
+
+    /// [Output.local] for Clementine's computer, otherwise the renderer's id.
+    public var id: String
+    public var name: String
+    public var state: State
+
+    /// The id of Clementine's own computer.
+    public static let local = "local"
+
+    public init(id: String, name: String, state: State) {
+        self.id = id
+        self.name = name
+        self.state = state
+    }
+
+    init(_ proto: Pb_Remote_Output) {
+        id = proto.outputID
+        name = proto.displayName
+        switch proto.state {
+        case .active: state = .active
+        case .activating: state = .activating
+        default: state = .available
+        }
+    }
+
+    public var isLocal: Bool { id == Output.local }
 }

@@ -23,6 +23,7 @@ public enum SettingKey {
     public static let port = "pref_port"
     // Advanced
     public static let keepScreenOn = "pref_keep_screen_on"
+    public static let renderer = "pref_renderer"
 
     // Saved state
     public static let lastHost = "save_clementine_ip"
@@ -31,6 +32,7 @@ public enum SettingKey {
     public static let lastAuthCode = "last_auth_code"
     public static let libraryHost = "library_ip"
     public static let firstLaunch = "first_call"
+    public static let rendererID = "renderer_id"
 }
 
 /// Reads the settings, with their defaults.
@@ -50,6 +52,7 @@ public struct Settings: Sendable {
         SettingKey.autoConnect: true,
         SettingKey.port: Int(RemoteProtocol.defaultPort),
         SettingKey.keepScreenOn: false,
+        SettingKey.renderer: true,
         SettingKey.firstLaunch: true,
     ] }
 
@@ -87,6 +90,19 @@ public struct Settings: Sendable {
         UInt16(exactly: store.integer(forKey: SettingKey.port)) ?? RemoteProtocol.defaultPort
     }
     public var keepScreenOn: Bool { store.bool(forKey: SettingKey.keepScreenOn) }
+    /// Whether Clementine may play on this phone (remote streaming).
+    public var renderer: Bool { store.bool(forKey: SettingKey.renderer) }
+
+    /// This install's renderer id, made the first time: stable, so Clementine recognises the
+    /// phone when it reconnects.
+    public var rendererID: String {
+        if let id = store.string(forKey: SettingKey.rendererID), !id.isEmpty {
+            return id
+        }
+        let id = UUID().uuidString.lowercased()
+        store.set(id, forKey: SettingKey.rendererID)
+        return id
+    }
 
     public var lastHost: String {
         get { store.string(forKey: SettingKey.lastHost) ?? "" }

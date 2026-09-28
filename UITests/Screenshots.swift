@@ -94,6 +94,13 @@ final class Screenshots: XCTestCase {
         try waitFor(item(startingWith: "Gymnopédie No."))
         pause(Self.settle)
         try screenshot("08_search")
+
+        // Where Clementine can play (remote streaming), from the mini player.
+        try waitFor(app.buttons["outputs"]).tap()
+        try waitFor(app.navigationBars["Play on"])
+        pause(Self.settle)
+        try screenshot("09_outputs")
+        try waitFor(app.navigationBars["Play on"].buttons["Done"]).tap()
     }
 
     // MARK: - Screens

@@ -12,7 +12,7 @@ final class AppModel {
         case queue, library, search, downloads
     }
 
-    let session = RemoteSession()
+    let session: RemoteSession
     let settings = Settings()
     let toasts = ToastCenter()
     let network = NetworkMonitor()
@@ -20,12 +20,17 @@ final class AppModel {
     @ObservationIgnored private(set) var library: LibraryModel!
     @ObservationIgnored private(set) var search: SearchModel!
     @ObservationIgnored private(set) var downloads: DownloadsModel!
+    /// This phone as somewhere Clementine can play (remote streaming).
+    let renderer: Renderer
+    @ObservationIgnored private var nowPlaying: NowPlaying?
+    @ObservationIgnored private var scenePhase = ScenePhase.active
 
     var selectedTab = Tab.queue
     /// The playlist picked in the queue, if any.
     var selectedPlaylistID: Int32?
     var isPlayerPresented = false
     var isConnectionSheetPresented = false
+    var isOutputSheetPresented = false
 
     /// Why connecting failed, to explain on the connect screen.
     var connectProblem: ConnectProblem?
@@ -39,9 +44,24 @@ final class AppModel {
     private var autoConnectName: String?
 
     init() {
+        let session = RemoteSession()
+        self.session = session
+        renderer = Renderer(playback: AVPlayback()) { session.send($0) }
         library = LibraryModel(model: self)
         search = SearchModel(model: self)
         downloads = DownloadsModel(model: self)
+        let nowPlaying = NowPlaying(model: self)
+        self.nowPlaying = nowPlaying
+        renderer.onUpdate = { nowPlaying.update() }
+        session.addObserver { [renderer] message in
+            renderer.handle(message)
+        }
+    }
+
+    /// What to offer Clementine when connecting, so it can play here; nil when that's turned off.
+    private var rendererCapabilities: RendererCapabilities? {
+        guard settings.renderer else { return nil }
+        return Renderer.capabilities(id: settings.rendererID, name: UIDevice.current.name)
     }
 
     /// Connects to [host], remembering it and [name], Clementine's name on the network if it was
@@ -52,7 +72,9 @@ final class AppModel {
         settings.remember(host: host, name: name)
         stopAutoConnecting()
         connectProblem = nil
-        session.connect(to: Endpoint(host: host, port: port ?? settings.port), name: name, authCode: settings.lastAuthCode)
+        session.connect(
+            to: Endpoint(host: host, port: port ?? settings.port), name: name, authCode: settings.lastAuthCode,
+            renderer: rendererCapabilities)
     }
 
     /// With "Connect automatically" on, connects to the Clementine last connected to, once per
@@ -95,7 +117,7 @@ final class AppModel {
         guard let endpoint = session.endpoint else { return }
         settings.lastAuthCode = authCode
         connectProblem = nil
-        session.connect(to: endpoint, name: session.hostName, authCode: authCode)
+        session.connect(to: endpoint, name: session.hostName, authCode: authCode, renderer: rendererCapabilities)
     }
 
     /// The session's status changed from [old].
@@ -103,6 +125,10 @@ final class AppModel {
         let status = session.status
         if status == .connected, old != .connected {
             network.start()
+        }
+        // Clementine drops a renderer whose connection goes, and plays on its computer again.
+        if status != .connected {
+            renderer.reset()
         }
         if status == .downloadingData || status == .connected {
             // Reached Clementine: no need to look for it by name.
@@ -136,17 +162,29 @@ final class AppModel {
         }
     }
 
-    /// Keeps the connection only while the app is in front.
+    /// Keeps the connection only while the app is in front, or while Clementine plays here:
+    /// Clementine sends the music over it.
     func scenePhaseChanged(to phase: ScenePhase) {
+        scenePhase = phase
         switch phase {
         case .background:
-            session.suspend()
+            if !session.isPlayingHere {
+                session.suspend()
+            }
         case .active:
             session.resume()
         default:
             break
         }
         updateIdleTimer()
+    }
+
+    /// Clementine started or stopped playing here. Once it stops, the app in the background lets
+    /// the connection go, as it does when not playing.
+    func playingHereChanged() {
+        if scenePhase == .background, !session.isPlayingHere {
+            session.suspend()
+        }
     }
 
     /// The playlist picked in the queue, else the one playing, else the first.

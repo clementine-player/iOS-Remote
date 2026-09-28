@@ -39,6 +39,11 @@ struct MainView: View {
                 .presentationDetents([.medium, .large])
                 .presentationBackground(Palette.surfaceContainerLow)
         }
+        .sheet(isPresented: $model.isOutputSheetPresented) {
+            OutputSheet()
+                .presentationDetents([.medium, .large])
+                .presentationBackground(Palette.surfaceContainerLow)
+        }
         .background {
             VolumeButtonsView(model: model)
         }
@@ -47,6 +52,7 @@ struct MainView: View {
 
 /// The now-playing strip above the tab bar; tapping it opens the player.
 struct MiniPlayer: View {
+    @Environment(AppModel.self) private var model
     @Environment(RemoteSession.self) private var session
     @Environment(\.tabViewBottomAccessoryPlacement) private var placement
     let open: () -> Void
@@ -77,6 +83,10 @@ struct MiniPlayer: View {
             .accessibilityLabel(song.map { "\($0.title), \($0.artist)" } ?? String(localized: "No song playing"))
             .accessibilityHint("Opens the player")
             .accessibilityIdentifier("miniPlayer")
+
+            if session.hasOtherOutputs, placement != .inline {
+                OutputButton(size: 32) { model.isOutputSheetPresented = true }
+            }
 
             Button(action: session.playPause) {
                 Image(systemName: session.playState == .playing ? "pause.fill" : "play.fill")

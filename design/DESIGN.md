@@ -129,8 +129,10 @@ From the Now playing board. Opened from the mini player; swipe down or the chevr
     the next mode and a toast names it ("Shuffle albums", "Repeat track"). Repeat track uses the
     repeat-one glyph.
 - Volume: Clementine's volume (not the phone's) between speaker glyphs. The phone's volume buttons
-  move it too.
-- Bottom row: Lyrics and details, Queue (closes the player and shows the Queue tab), Download.
+  move it too. While Clementine plays on this phone, it's the phone's volume (an `MPVolumeView`),
+  and the buttons change the phone's volume as usual.
+- Bottom row: Lyrics and details, Queue (closes the player and shows the Queue tab), the output
+  button when Clementine can play elsewhere (see [Remote streaming](#remote-streaming)), Download.
 - Download asks what to download: this song, its album, or the playlist. Streams can't be
   downloaded.
 - Landscape and iPad: artwork on the left at full height; song, seek bar and controls beside it.
@@ -222,8 +224,8 @@ From the Connection sheet board. Opened from the ConnectionChip.
 
 ### Mini player
 
-`.tabViewBottomAccessory`, shown while connected. Title and artist, a small cover (8 pt corners), a
-small play/pause and next. A thin `primary` progress line when the accessory is expanded. Tapping it
+`.tabViewBottomAccessory`, shown while connected. Title and artist, a small cover (8 pt corners), the
+output button when Clementine can play elsewhere, a small play/pause and next. A thin `primary` progress line when the accessory is expanded. Tapping it
 opens the player. With nothing playing it reads "No song playing".
 
 ### Settings
@@ -376,6 +378,35 @@ through a hidden `MPVolumeView`, so presses keep registering even at 0 % and 100
 Clementine's volume by the "Volume step" setting and shows "Volume 60%". The system volume HUD is
 hidden while the app is active.
 
+### Remote streaming
+
+Clementine 1.4 started with `--experimental-remote-streaming`, and *Allow playing on remote
+devices* on, can play on its remotes instead of its computer, as the Android remote does. The
+protocol is Clementine's: `RENDER_*` messages to a renderer, `RENDERER_*` back, `OUTPUTS` to every
+remote.
+
+- **Offering the phone:** unless the "Let Clementine play on this phone" setting is off, the
+  connect request carries the phone's renderer capabilities: a UUID kept in `renderer_id`, the
+  device's name, the formats AVFoundation plays (MP3, AAC/MP4, FLAC, WAV, AIFF; Clementine converts
+  Ogg to MP3), and gapless and Range support. Clementine without streaming ignores it.
+- **Choosing an output:** when Clementine's info lists `SERVER_FEATURE_RENDERING`, the app asks
+  for its outputs. With more than one, an output button (devices glyph, or the active device's
+  glyph in `primary` when not the computer) shows in the mini player and the player. It opens a
+  "Play on" sheet: Clementine's computer ("Clementine on studio-pc"), "iPhone (this phone)", and
+  other remotes as speakers, with a checkmark on the active one and "Switching…" while playback
+  moves. Picking one sends `SET_OUTPUT`.
+- **Playing here:** `Renderer` (ClementineKit) plays what Clementine sends with `AVPlayback`, an
+  `AVQueuePlayer`, and reports its state, with the position every second while playing. Clementine
+  stays in charge of what plays: the phone preloads the next track when told, and says when one
+  ends or fails (network failures as transient, so Clementine reloads).
+- **In the background:** the app has the `audio` background mode. While Clementine plays here the
+  connection stays open in the background; once it stops, the app lets it go as usual. iOS pauses
+  playback for calls, and Clementine shows it paused.
+- **Lock screen:** while playing here, Now Playing shows the song and the cover, and its buttons
+  control Clementine.
+- **Security:** the tracks come over plain HTTP from Clementine's computer, allowed by
+  `NSAllowsLocalNetworking` and `NSAllowsArbitraryLoadsForMedia`.
+
 ### Playlists
 
 - On opening the Queue, the app asks for the songs of every playlist it doesn't have yet
@@ -449,6 +480,7 @@ ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
 │  ├─ ClementineRemoteApp.swift      scene, dependencies
 │  ├─ Theme/                         colours, type, shapes, reusable views
 │  ├─ Connect/  Queue/  Player/  Library/  Search/  Downloads/  Connection/  Settings/
+│  ├─ Streaming/                     AVPlayback (AVQueuePlayer), NowPlaying (lock screen)
 │  └─ Resources/                     Assets.xcassets, Localizable.xcstrings
 ├─ Widget/                           widget extension
 └─ Packages/ClementineKit/           Swift package: everything testable without UI
@@ -460,7 +492,8 @@ ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
    ├─ Session/       RemoteSession (@MainActor @Observable): state and commands
    ├─ Browse/        SQLite wrapper, SongQuery, SongBrowser, LibraryStore, SearchStore
    ├─ Downloads/     DownloadManager, SongDownloader, DownloadStorage
-   └─ Settings/      Settings keys and defaults
+   ├─ Settings/      Settings keys and defaults
+   └─ Streaming/     Renderer: plays what Clementine sends, through a Playback
 ```
 
 - **Only dependency:** swift-protobuf. SQLite is the system library, through a small wrapper.
@@ -470,7 +503,8 @@ ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
   background actor.
 - **Testing:** Swift Testing in the package: framing and parsing, message builders, the connection
   against an in-process fake Clementine, song offers and chunking, `SongQuery` on a sample library,
-  and the session's state changes. UI tests cover connecting and the tabs against the fake server.
+  and the session's state changes, and the renderer against a fake player. UI tests cover
+  connecting and the tabs against the fake server.
   On pull requests, a UI test also screenshots every screen, light and dark, against a real
   Clementine, and posts them on the pull request (`.github/workflows/screenshots.yml`).
 
@@ -479,7 +513,7 @@ ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
 | Android | iOS |
 |---|---|
 | Foreground service keeps the connection in the background | Connection kept while iOS allows, then reconnected on return |
-| Media notification and lock screen controls | Not provided |
+| Media notification and lock screen controls | Lock screen controls while Clementine plays on the phone |
 | Lower volume during calls | Not provided |
 | Volume keys control Clementine | Kept (see [Volume buttons](#volume-buttons)) |
 | Wake lock | Not applicable |
@@ -507,10 +541,11 @@ ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
 | | Artist folder | on | `pref_dl_artist_dir` |
 | | Album folder (needs artist folder) | on | `pref_dl_album_dir` |
 | Connection | Connect automatically | on | `pref_autoconnect` |
+| | Let Clementine play on this phone | on | `pref_renderer` |
 | | Port | 5500 | `pref_port` |
 | Advanced | Keep the screen on | off | `pref_keep_screen_on` |
 | About | Version, Clementine's website, the source code, credits, licences | | |
 
 Saved state: last address (`save_clementine_ip`), its network name (`last_server_name`), addresses
 used (`known_ips`), last auth code (`last_auth_code`), the Clementine the library came from
-(`library_ip`), first launch (`first_call`).
+(`library_ip`), first launch (`first_call`), this install's renderer id (`renderer_id`).

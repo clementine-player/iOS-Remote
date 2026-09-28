@@ -3,7 +3,8 @@ import ClementineKit
 import MediaPlayer
 import SwiftUI
 
-/// Makes the phone's volume buttons change Clementine's volume, while the app is in front.
+/// Makes the phone's volume buttons change Clementine's volume, while the app is in front. While
+/// Clementine plays on the phone itself, they change the phone's volume as usual.
 ///
 /// iOS has no API for the buttons, so the app keeps an ambient audio session active (it plays
 /// nothing and interrupts nothing), watches the session's output volume, and after each press puts
@@ -57,9 +58,13 @@ final class VolumeButtonController {
     }
 
     private func stop() {
+        guard observation != nil else { return }
         observation?.invalidate()
         observation = nil
-        try? AVAudioSession.sharedInstance().setActive(false, options: [.notifyOthersOnDeactivation])
+        // While Clementine plays here, the session is the renderer's, playing.
+        if model.renderer.item == nil {
+            try? AVAudioSession.sharedInstance().setActive(false, options: [.notifyOthersOnDeactivation])
+        }
     }
 
     private func changed(to volume: Float) {
@@ -105,7 +110,8 @@ struct VolumeButtonsView: UIViewRepresentable {
     }
 
     func updateUIView(_ view: MPVolumeView, context: Context) {
-        context.coordinator.update(enabled: enabled && scenePhase == .active && model.session.status.isActive)
+        context.coordinator.update(
+            enabled: enabled && scenePhase == .active && model.session.status.isActive && !model.session.isPlayingHere)
     }
 
     static func dismantleUIView(_ view: MPVolumeView, coordinator: VolumeButtonController) {

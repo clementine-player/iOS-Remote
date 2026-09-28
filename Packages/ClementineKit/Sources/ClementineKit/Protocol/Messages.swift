@@ -81,12 +81,24 @@ public enum Framing {
 
 /// The messages the app sends Clementine.
 public enum Messages {
-    public static func connect(authCode: Int32, sendPlaylistSongs: Bool, downloader: Bool) -> RemoteMessage {
+    /// Connects; with [renderer], the phone offers itself as an output Clementine can play on.
+    /// Clementine without remote streaming ignores it.
+    public static func connect(
+        authCode: Int32, sendPlaylistSongs: Bool, downloader: Bool, renderer: RendererCapabilities? = nil
+    ) -> RemoteMessage {
         RemoteMessage(.connect) {
             $0.requestConnect.authCode = authCode
             $0.requestConnect.sendPlaylistSongs = sendPlaylistSongs
             $0.requestConnect.downloader = downloader
+            if let renderer {
+                $0.requestConnect.renderer = renderer
+            }
         }
+    }
+
+    /// Asks Clementine to play on another output: its computer ([Output.local]) or a renderer.
+    public static func setOutput(_ id: String) -> RemoteMessage {
+        RemoteMessage(.setOutput) { $0.requestSetOutput.outputID = id }
     }
 
     public static func volume(_ percent: Int) -> RemoteMessage {
