@@ -51,8 +51,9 @@ public struct SearchSections: Sendable, Equatable {
             let group = SearchMatcher.Field(groupArtist)
             let album = SearchMatcher.Field(item.album)
 
-            // Internet radio: a stream has a name but no artist or album.
-            if !candidate.isLocal, artist.isEmpty, group.isEmpty, album.isEmpty {
+            // Internet radio: a stream has no album. Radio-Browser.info gives the station's name as
+            // its artist too, so that isn't a sign.
+            if !candidate.isLocal, album.isEmpty {
                 stations.append((item, matcher.quality(title) ?? .spread))
                 continue
             }
@@ -123,6 +124,8 @@ public struct SearchSections: Sendable, Equatable {
         }
     }
 
+    /// By name, then the bigger group first, then where they came from, so the order is the same
+    /// every time.
     private static func inOrder(_ first: BrowseItem, _ second: BrowseItem) -> Bool {
         for (a, b) in [(first.value, second.value), (first.artist, second.artist), (first.album, second.album)] {
             let order = a.localizedStandardCompare(b)
@@ -130,6 +133,9 @@ public struct SearchSections: Sendable, Equatable {
                 return order == .orderedAscending
             }
         }
-        return false
+        if first.itemCount != second.itemCount {
+            return (first.itemCount ?? 0) > (second.itemCount ?? 0)
+        }
+        return first.selection.lexicographicallyPrecedes(second.selection)
     }
 }

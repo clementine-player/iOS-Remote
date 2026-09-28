@@ -139,6 +139,31 @@ struct SearchTests {
         #expect(found.top?.value == "Groove Salad")
     }
 
+    @Test func radioBrowserStationsAreStations() async throws {
+        // Radio-Browser.info gives a station's name as its artist too.
+        let found = try await sections(
+            "offsp", [Song(title: "Self Esteem", artist: "The Offspring", album: "Smash")],
+            stations: [Song(title: "The Offspring", artist: "The Offspring", isLocal: false)])
+        #expect(found.stations.map(\.value) == ["The Offspring"])
+        #expect(found.artists.map(\.selection) == [["Library", "The Offspring"]])
+        #expect(found.songs.isEmpty)
+        #expect(found.top == found.artists.first)
+    }
+
+    @Test func theBiggerOfTwoArtistsNamedAlikeComesFirst() async throws {
+        let store = SearchStore()
+        try await store.handle(status(1, .globalSearchStarted))
+        try await store.handle(result(1, provider: "Jamendo", query: "offspring", songs: [
+            Song(title: "One", artist: "The Offspring", album: "A", isLocal: false),
+        ]))
+        try await store.handle(result(1, provider: "Library", query: "offspring", songs: [
+            Song(title: "Two", artist: "The Offspring", album: "B"), Song(title: "Three", artist: "The Offspring", album: "C"),
+        ]))
+        let found = await store.sections()
+        #expect(found.artists.map(\.selection) == [["Library", "The Offspring"], ["Jamendo", "The Offspring"]])
+        #expect(found.top == found.artists.first)
+    }
+
     @Test func fieldNamesAreNotWords() async throws {
         let found = try await sections("artist:radiohead", okComputer)
         #expect(found.artists.map(\.value) == ["Radiohead"])

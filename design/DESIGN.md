@@ -189,7 +189,7 @@ From the Search board. Searches everything Clementine can search (library and in
   - **Artists:** album artists (else artists) that matched; "*n* albums".
   - **Albums:** album names that matched, or name and artist between them, so an artist's albums
     are listed too; each with its artist.
-  - **Stations:** internet radio (results with no artist or album), with the provider's icon.
+  - **Stations:** internet radio (results that aren't files and have no album), with the provider's icon.
   - **Other matches:** songs that matched some other way, such as by genre, so none is lost.
 - The first four of each section, the best first, with **See All** for the rest. Tapping a song or
   station adds it to the playlist playing; an artist opens to its albums, and an album to its
