@@ -17,7 +17,7 @@ final class LibraryModel {
         case ready
     }
 
-    private static let log = Logger(subsystem: "com.davidsansome.ClementineRemote", category: "Library")
+    private static let log = Logger(subsystem: "org.clementine-player.remote", category: "Library")
 
     private(set) var status = Status.unknown
     /// Bumped when the library changes, so screens load it again.
