@@ -15460,6 +15460,28 @@
           }
         }
       }
+    },
+    "%lld albums": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld album"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld albums"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "version": "1.0"

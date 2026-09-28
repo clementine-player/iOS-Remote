@@ -1,15 +1,21 @@
 import ClementineKit
 import SwiftUI
 
-/// Clementine's library, copied to the phone, browsed level by level.
+/// Clementine's library, copied to the phone, browsed level by level. Searching it shows the
+/// songs, artists and albums that match, as the Search tab does.
 struct LibraryView: View {
     @Environment(AppModel.self) private var model
+    @State private var query = ""
 
     var body: some View {
         NavigationStack {
-            LibraryLevelView(opened: nil)
+            LibraryLevelView(opened: nil, query: query)
+                .searchable(text: $query, prompt: "Search the library")
                 .navigationDestination(for: BrowseItem.self) { item in
                     LibraryLevelView(opened: item)
+                }
+                .navigationDestination(for: SearchPage.self) { page in
+                    SearchListView(page: page, results: model.library.search)
                 }
         }
         .task(id: model.session.endpoint) {
@@ -18,21 +24,60 @@ struct LibraryView: View {
     }
 }
 
-/// One level of the library: the top, or what's below an opened item.
+/// One level of the library: the top, or what's below an opened item. At the top, while
+/// searching, the results instead.
 private struct LibraryLevelView: View {
     let opened: BrowseItem?
+    var query = ""
 
     @Environment(AppModel.self) private var model
     @AppStorage(SettingKey.libraryGrouping) private var grouping = LibraryGrouping.artistAlbum.rawValue
     @AppStorage(SettingKey.librarySorting) private var sorting = LibrarySorting.ascending.rawValue
     @State private var level: BrowseLevel?
-    @State private var filter = ""
     @State private var selection = Set<Int>()
     @State private var editMode = EditMode.inactive
 
     private var library: LibraryModel { model.library }
 
+    private var isSearching: Bool {
+        !query.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+
     var body: some View {
+        Group {
+            if isSearching {
+                SearchSectionsList(results: library.search)
+            } else {
+                list
+            }
+        }
+        .overlay { placeholder }
+        .safeAreaInset(edge: .top, spacing: 0) { progress }
+        .navigationTitle(opened == nil ? String(localized: "Library") : "")
+        .navigationSubtitle(opened == nil && !isSearching && level != nil ? String(localized: "\(level?.items.count ?? 0) items") : "")
+        .navigationBarTitleDisplayMode(opened == nil ? .large : .inline)
+        .refreshable {
+            if opened == nil {
+                library.download()
+            }
+        }
+        .toolbar { toolbar }
+        .task(id: LoadKey(revision: library.revision, grouping: grouping, sorting: sorting, status: library.status)) {
+            level = await library.level(below: opened)
+            selection = []
+        }
+        .task(id: SearchKey(revision: library.revision, query: query, status: library.status)) {
+            guard opened == nil else { return }
+            if isSearching {
+                // Waits for a pause in typing.
+                try? await Task.sleep(for: .milliseconds(150))
+                guard !Task.isCancelled else { return }
+            }
+            await library.search.search(query)
+        }
+    }
+
+    private var list: some View {
         List(selection: editMode.isEditing ? $selection : nil) {
             if let opened, let level, !editMode.isEditing {
                 BrowseHeader(item: opened, count: level.items.count) { target in
@@ -54,29 +99,18 @@ private struct LibraryLevelView: View {
         .listSectionIndexVisibility(.visible)
         .surfaceBackground()
         .environment(\.editMode, $editMode)
-        .overlay { placeholder }
-        .safeAreaInset(edge: .top, spacing: 0) { progress }
-        .navigationTitle(opened == nil ? String(localized: "Library") : "")
-        .navigationSubtitle(opened == nil && level != nil ? String(localized: "\(level?.items.count ?? 0) items") : "")
-        .navigationBarTitleDisplayMode(opened == nil ? .large : .inline)
-        .searchable(text: $filter, prompt: "Search the library")
-        .refreshable {
-            if opened == nil {
-                library.download()
-            }
-        }
-        .toolbar { toolbar }
-        .task(id: LoadKey(revision: library.revision, filter: filter, grouping: grouping, sorting: sorting, status: library.status)) {
-            level = await library.level(below: opened, filter: filter)
-            selection = []
-        }
     }
 
     private struct LoadKey: Equatable {
         let revision: Int
-        let filter: String
         let grouping: String
         let sorting: String
+        let status: LibraryModel.Status
+    }
+
+    private struct SearchKey: Equatable {
+        let revision: Int
+        let query: String
         let status: LibraryModel.Status
     }
 
@@ -93,8 +127,8 @@ private struct LibraryLevelView: View {
                     .filledButtonTint()
                     .accessibilityIdentifier("downloadLibrary")
             }
-        } else if let level, level.items.isEmpty, !filter.isEmpty {
-            ContentUnavailableView.search(text: filter)
+        } else if isSearching, library.search.searchedFor != nil, library.search.sections.isEmpty {
+            ContentUnavailableView.search(text: query)
         }
     }
 
@@ -141,7 +175,7 @@ private struct LibraryLevelView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu("More options", systemImage: "ellipsis") {
                     Button("Select", systemImage: "checkmark.circle") { editMode = .active }
-                        .disabled(level?.items.isEmpty ?? true)
+                        .disabled(isSearching || level?.items.isEmpty ?? true)
                     Picker("Grouping", systemImage: "rectangle.3.group", selection: $grouping) {
                         ForEach(LibraryGrouping.allCases, id: \.rawValue) { grouping in
                             Text(grouping.title).tag(grouping.rawValue)
