@@ -37,8 +37,8 @@ final class Screenshots: XCTestCase {
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
 
         app = XCUIApplication()
-        // Skip the welcome message, and fill in Clementine's address.
-        app.launchArguments = ["-first_call", "NO", "-save_clementine_ip", host]
+        // Skip the welcome message, stay on the connect screen, and fill in Clementine's address.
+        app.launchArguments = ["-first_call", "NO", "-pref_autoconnect", "NO", "-save_clementine_ip", host]
         do {
             try takeScreenshots()
         } catch {
@@ -90,8 +90,8 @@ final class Screenshots: XCTestCase {
 
         try showTab("Search")
         try search("Gymnopédie")
-        let tracks = item(startingWith: "Gymnopédie No.")
-        try openSearchResults(until: tracks)
+        // Songs matched by title are listed straight away.
+        try waitFor(item(startingWith: "Gymnopédie No."))
         pause(Self.settle)
         try screenshot("08_search")
     }
@@ -212,29 +212,6 @@ final class Screenshots: XCTestCase {
         let field = try waitFor(app.searchFields.firstMatch)
         field.tap()
         field.typeText(text + "\n")
-    }
-
-    /// Search results are grouped by source, then artist and album: opens the entry at each level
-    /// down to the songs.
-    private func openSearchResults(until tracks: XCUIElement) throws {
-        for _ in 0..<4 {
-            if tracks.waitForExistence(timeout: 5) {
-                return
-            }
-            // The album, else the artist, else the first entry: the source. Each level below the
-            // top starts with a header naming what was opened, so rows are matched by name first.
-            let album = item("Gymnopédies")
-            let artist = item("Erik Satie")
-            if album.exists {
-                album.tap()
-            } else if artist.exists {
-                artist.tap()
-            } else {
-                try waitFor(app.cells.firstMatch).tap()
-            }
-            pause(Self.settle)
-        }
-        try waitFor(tracks)
     }
 
     // MARK: - Helpers

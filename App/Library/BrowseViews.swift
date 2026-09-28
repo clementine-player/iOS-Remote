@@ -7,7 +7,12 @@ struct BrowseRows: View {
     let level: BrowseLevel
     @Binding var selection: Set<Int>
     let isEditing: Bool
-    var icons: [String: UIImage] = [:]
+    /// A row's icon, when it has its own, such as a search provider's.
+    var icon: (BrowseItem) -> UIImage? = { _ in nil }
+    /// A row's second line, when not the usual.
+    var meta: (BrowseItem) -> String? = { _ in nil }
+    /// What a group opens, when not the level below it in the library.
+    var opens: ((BrowseItem) -> SearchPage)?
     /// Splits artists, albums and genres into sections by their first letter, with an index.
     var alphabetical = false
     var descending = false
@@ -60,18 +65,22 @@ struct BrowseRows: View {
                             selection.insert(index)
                         }
                     } label: {
-                        BrowseRow(item: item, icon: icons[item.value])
+                        BrowseRow(item: item, icon: icon(item), meta: meta(item))
                     }
                 } else if item.kind == .song {
                     Button {
                         addSong(item)
                     } label: {
-                        BrowseRow(item: item, icon: icons[item.value])
+                        BrowseRow(item: item, icon: icon(item), meta: meta(item))
                     }
                     .accessibilityHint("Adds it to the playlist")
+                } else if let opens {
+                    NavigationLink(value: opens(item)) {
+                        BrowseRow(item: item, icon: icon(item), meta: meta(item))
+                    }
                 } else {
                     NavigationLink(value: item) {
-                        BrowseRow(item: item, icon: icons[item.value])
+                        BrowseRow(item: item, icon: icon(item), meta: meta(item))
                     }
                 }
             }
@@ -86,14 +95,16 @@ struct BrowseRows: View {
 struct BrowseRow: View {
     let item: BrowseItem
     var icon: UIImage?
+    /// The second line, when not the usual.
+    var meta: String?
 
     var body: some View {
-        if item.kind == .song {
-            MediaRow(title: item.displayTitle, meta: item.songMeta) {
+        if item.kind == .song, icon == nil {
+            MediaRow(title: item.displayTitle, meta: meta ?? item.songMeta) {
                 SongThumbnail()
             }
         } else {
-            MediaRow(title: item.displayTitle, meta: item.itemCount.map { String(localized: "\($0) items") } ?? "") {
+            MediaRow(title: item.displayTitle, meta: meta ?? item.itemCount.map { String(localized: "\($0) items") } ?? "") {
                 if let icon {
                     Image(uiImage: icon)
                         .resizable()

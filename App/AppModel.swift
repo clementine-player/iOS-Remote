@@ -30,19 +30,64 @@ final class AppModel {
     /// Why connecting failed, to explain on the connect screen.
     var connectProblem: ConnectProblem?
 
+    /// Whether connecting automatically is over for this launch: tried already, or something else
+    /// done first.
+    private(set) var isAutoConnectOver = false
+
+    /// While connecting automatically, the network name of the Clementine being connected to, to
+    /// look for on the network if its saved address doesn't work.
+    private var autoConnectName: String?
+
     init() {
         library = LibraryModel(model: self)
         search = SearchModel(model: self)
         downloads = DownloadsModel(model: self)
     }
 
-    /// Connects to [host], remembering it.
+    /// Connects to [host], remembering it and [name], Clementine's name on the network if it was
+    /// found there.
     func connect(host: String, port: UInt16? = nil, name: String? = nil) {
         let host = host.trimmingCharacters(in: .whitespaces)
         guard !host.isEmpty else { return }
-        settings.remember(host: host)
+        settings.remember(host: host, name: name)
+        stopAutoConnecting()
         connectProblem = nil
         session.connect(to: Endpoint(host: host, port: port ?? settings.port), name: name, authCode: settings.lastAuthCode)
+    }
+
+    /// With "Connect automatically" on, connects to the Clementine last connected to, once per
+    /// launch: at its saved address straight away, as that's quickest when the address hasn't
+    /// changed. If it can't be reached there and it was picked from the network, it's looked for
+    /// there by name instead ([autoConnect(among:)]).
+    func autoConnect() {
+        guard settings.autoConnect, !isAutoConnectOver, !settings.lastHost.isEmpty,
+              session.status == .disconnected else { return }
+        let name = settings.lastServerName
+        connect(host: settings.lastHost, name: name.isEmpty ? nil : name)
+        autoConnectName = name.isEmpty ? nil : name
+    }
+
+    /// While connecting automatically, connects to the Clementine being connected to if it's
+    /// among [servers] at another address: once its saved address has failed, or straight away
+    /// rather than waiting for the saved address to time out.
+    func autoConnect(among servers: [DiscoveredServer]) {
+        guard let name = autoConnectName, let server = servers.first(where: { $0.name == name }) else { return }
+        switch session.status {
+        case .disconnected:
+            // Only when the saved address couldn't be reached: not, say, for a wrong auth code.
+            guard case .couldNotConnect? = session.closeReason else { return }
+        case .connecting where server.host != session.endpoint?.host:
+            break
+        default:
+            return
+        }
+        connect(host: server.host, port: server.port, name: server.name)
+    }
+
+    /// Stops connecting automatically for this launch.
+    func stopAutoConnecting() {
+        isAutoConnectOver = true
+        autoConnectName = nil
     }
 
     /// Connects again with a new auth code.
@@ -59,9 +104,18 @@ final class AppModel {
         if status == .connected, old != .connected {
             network.start()
         }
+        if status == .downloadingData || status == .connected {
+            // Reached Clementine: no need to look for it by name.
+            autoConnectName = nil
+        }
         guard status == .disconnected, old != .disconnected else { return }
         isPlayerPresented = false
         isConnectionSheetPresented = false
+        if autoConnectName != nil, case .couldNotConnect? = session.closeReason {
+            // Not at its saved address: wait for it to show up on the network instead.
+            return
+        }
+        autoConnectName = nil
         switch session.closeReason {
         case nil:
             break

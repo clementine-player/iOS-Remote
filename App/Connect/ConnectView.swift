@@ -11,7 +11,6 @@ struct ConnectView: View {
     @State private var authCode = ""
     @State private var isSettingsPresented = false
     @State private var isWelcomePresented = false
-    @State private var triedAutoConnect = false
     @FocusState private var isHostFocused: Bool
 
     var body: some View {
@@ -46,13 +45,21 @@ struct ConnectView: View {
         .background(Palette.surface)
         .onAppear(perform: appeared)
         .onDisappear { browser.stop() }
+        .onChange(of: browser.servers) { _, servers in
+            autoConnect(among: servers)
+        }
+        .onChange(of: model.session.status) { _, status in
+            if status == .disconnected {
+                autoConnect(among: browser.servers)
+            }
+        }
         .onChange(of: scenePhase) { _, phase in
             // iOS may have stopped the search while the app was in the background.
             if phase == .active {
                 browser.start()
             }
         }
-        .sheet(isPresented: $isSettingsPresented, onDismiss: { triedAutoConnect = true }) {
+        .sheet(isPresented: $isSettingsPresented) {
             NavigationStack {
                 SettingsView()
                     .toolbar {
@@ -162,6 +169,7 @@ struct ConnectView: View {
                 }
                 if connecting {
                     Connecting(status: session.status) {
+                        model.stopAutoConnecting()
                         model.session.disconnect()
                     }
                 }
@@ -187,10 +195,19 @@ struct ConnectView: View {
         if model.settings.isFirstLaunch {
             model.settings.isFirstLaunch = false
             isWelcomePresented = true
-        } else if !triedAutoConnect, model.settings.autoConnect, !host.isEmpty, model.session.status == .disconnected {
-            model.connect(host: host)
+        } else {
+            model.autoConnect()
         }
-        triedAutoConnect = true
+    }
+
+    /// While connecting automatically, connects to the last Clementine at its new address once
+    /// it's found on the network, unless an address is being typed.
+    private func autoConnect(among servers: [DiscoveredServer]) {
+        guard !isHostFocused else { return }
+        model.autoConnect(among: servers)
+        if let endpoint = model.session.endpoint, model.session.status.isConnecting {
+            host = endpoint.host
+        }
     }
 
     private func connect() {
@@ -199,6 +216,7 @@ struct ConnectView: View {
     }
 
     private func showSettings() {
+        model.stopAutoConnecting()
         isSettingsPresented = true
     }
 

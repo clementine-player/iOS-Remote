@@ -1,8 +1,10 @@
 import Foundation
 
 /// The app's settings and saved state, by their keys in UserDefaults. The keys are the Android
-/// app's.
+/// app's, except for settings the Android app doesn't have.
 public enum SettingKey {
+    // Appearance
+    public static let appearance = "pref_appearance"
     // Player
     public static let volumeButtons = "pref_volumekey"
     public static let volumeStep = "pref_volume_inc"
@@ -24,6 +26,7 @@ public enum SettingKey {
 
     // Saved state
     public static let lastHost = "save_clementine_ip"
+    public static let lastServerName = "last_server_name"
     public static let knownHosts = "known_ips"
     public static let lastAuthCode = "last_auth_code"
     public static let libraryHost = "library_ip"
@@ -33,6 +36,7 @@ public enum SettingKey {
 /// Reads the settings, with their defaults.
 public struct Settings: Sendable {
     public static var defaults: [String: Any] { [
+        SettingKey.appearance: Appearance.system.rawValue,
         SettingKey.volumeButtons: true,
         SettingKey.volumeStep: 10,
         SettingKey.showLastFM: true,
@@ -43,7 +47,7 @@ public struct Settings: Sendable {
         SettingKey.playlistFolder: false,
         SettingKey.artistFolder: true,
         SettingKey.albumFolder: true,
-        SettingKey.autoConnect: false,
+        SettingKey.autoConnect: true,
         SettingKey.port: Int(RemoteProtocol.defaultPort),
         SettingKey.keepScreenOn: false,
         SettingKey.firstLaunch: true,
@@ -61,6 +65,9 @@ public struct Settings: Sendable {
         storeName.flatMap(UserDefaults.init(suiteName:)) ?? .standard
     }
 
+    public var appearance: Appearance {
+        Appearance(rawValue: store.string(forKey: SettingKey.appearance) ?? "") ?? .system
+    }
     public var volumeButtons: Bool { store.bool(forKey: SettingKey.volumeButtons) }
     public var volumeStep: Int { max(1, min(20, store.integer(forKey: SettingKey.volumeStep))) }
     public var showLastFM: Bool { store.bool(forKey: SettingKey.showLastFM) }
@@ -85,6 +92,12 @@ public struct Settings: Sendable {
         get { store.string(forKey: SettingKey.lastHost) ?? "" }
         nonmutating set { store.set(newValue, forKey: SettingKey.lastHost) }
     }
+    /// The network name of the Clementine last connected to, empty if it was reached by its
+    /// address.
+    public var lastServerName: String {
+        get { store.string(forKey: SettingKey.lastServerName) ?? "" }
+        nonmutating set { store.set(newValue, forKey: SettingKey.lastServerName) }
+    }
     /// Addresses connected to before, most recent first.
     public var knownHosts: [String] {
         get { store.stringArray(forKey: SettingKey.knownHosts) ?? [] }
@@ -104,12 +117,21 @@ public struct Settings: Sendable {
         nonmutating set { store.set(newValue, forKey: SettingKey.firstLaunch) }
     }
 
-    /// Remembers an address connected to.
-    public func remember(host: String) {
+    /// Remembers an address connected to, and the Clementine's network name if it was found there.
+    public func remember(host: String, name: String? = nil) {
         guard !host.isEmpty else { return }
         lastHost = host
+        lastServerName = name ?? ""
         knownHosts = [host] + knownHosts.filter { $0 != host }
     }
+}
+
+/// Whether the app is light or dark.
+public enum Appearance: String, Sendable, CaseIterable {
+    /// Follows the system.
+    case system = "system"
+    case light = "light"
+    case dark = "dark"
 }
 
 /// How the library's levels group songs.

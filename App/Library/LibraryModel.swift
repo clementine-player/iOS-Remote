@@ -23,6 +23,9 @@ final class LibraryModel {
     /// Bumped when the library changes, so screens load it again.
     private(set) var revision = 0
 
+    /// Searching the library, as the Search tab searches Clementine.
+    let search: LibrarySearch
+
     private let store: LibraryStore
     private unowned let model: AppModel
     private var downloadTask: Task<Void, Never>?
@@ -31,6 +34,7 @@ final class LibraryModel {
         self.model = model
         let support = URL.applicationSupportDirectory
         store = LibraryStore(directory: support)
+        search = LibrarySearch(store: store, model: model)
     }
 
     /// Checks for the connected Clementine's library.
@@ -86,12 +90,11 @@ final class LibraryModel {
         }
     }
 
-    func level(below opened: BrowseItem?, filter: String) async -> BrowseLevel? {
+    func level(below opened: BrowseItem?) async -> BrowseLevel? {
         guard status == .ready else { return nil }
         let settings = model.settings
         do {
-            return try await store.level(
-                below: opened, filter: filter, grouping: settings.libraryGrouping, sorting: settings.librarySorting)
+            return try await store.level(below: opened, grouping: settings.libraryGrouping, sorting: settings.librarySorting)
         } catch {
             Self.log.error("Couldn't read the library: \(String(describing: error), privacy: .public)")
             return nil
@@ -113,6 +116,57 @@ final class LibraryModel {
     func songURLs(of items: [BrowseItem]) async -> [String] {
         let settings = model.settings
         return (try? await store.songURLs(of: items, grouping: settings.libraryGrouping, sorting: settings.librarySorting)) ?? []
+    }
+}
+
+/// Searching the library on the phone. It matches as Clementine's global search does, and its
+/// results are shown the same way, in sections.
+@MainActor
+@Observable
+final class LibrarySearch: SearchResults {
+    private(set) var sections = SearchSections()
+    /// What the results are for; nil before searching.
+    private(set) var searchedFor: String?
+    private(set) var revision = 0
+    let icons: [String: UIImage] = [:]
+
+    private let store: LibraryStore
+    private unowned let model: AppModel
+
+    init(store: LibraryStore, model: AppModel) {
+        self.store = store
+        self.model = model
+    }
+
+    func search(_ text: String) async {
+        let text = text.trimmingCharacters(in: .whitespaces)
+        let found = text.isEmpty ? SearchSections() : ((try? await store.search(text)) ?? SearchSections())
+        guard !Task.isCancelled else { return }
+        sections = found
+        searchedFor = text.isEmpty ? nil : text
+        revision += 1
+    }
+
+    func level(below opened: BrowseItem) async -> BrowseLevel? {
+        try? await store.searchLevel(below: opened, sorting: model.settings.librarySorting)
+    }
+
+    func add(_ items: [BrowseItem], to target: PlaylistTarget, playIfStopped: Bool) async {
+        let urls = await songURLs(of: items)
+        guard !urls.isEmpty, let playlist = await model.playlist(for: target) else { return }
+        model.session.add(urls: urls, to: playlist.id, playIfStopped: playIfStopped)
+        model.showAdded(urls.count, to: playlist)
+    }
+
+    var download: (([BrowseItem]) async -> Void)? {
+        { [weak self] items in
+            guard let self else { return }
+            model.downloads.download(urls: await songURLs(of: items))
+        }
+    }
+
+    private func songURLs(of items: [BrowseItem]) async -> [String] {
+        (try? await store.searchSongURLs(of: items, sorting: model.settings.librarySorting)) ?? []
     }
 }
 

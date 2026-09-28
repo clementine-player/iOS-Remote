@@ -9,8 +9,8 @@ iOS's own controls and patterns.
 
 - **Platform:** iOS 26 and later, iPhone and iPad. Swift 6, SwiftUI, Observation.
 - **Look:** Clementine's colours (orange and plum, with Material 3 roles generated from them), light
-  and dark following the system. SF Pro type at the design system's sizes. SF Symbols, with the
-  Android app's own player glyphs where SF Symbols has no match.
+  and dark following the system, or as chosen in Settings. SF Pro type at the design system's
+  sizes. SF Symbols, with the Android app's own player glyphs where SF Symbols has no match.
 
 ## Contents
 
@@ -155,7 +155,9 @@ From the Library and Album boards. Clementine's library, copied to the phone.
 
 - Large title "Library", subtitle "*n* items". Toolbar: ConnectionChip; a menu with Grouping (the
   seven groupings), Sort (ascending / descending) and Update library.
-- `.searchable` filters the level shown, using the library's full-text index.
+- `.searchable` (at the top level) searches the whole library as you type, matching as the
+  Search tab does, and shows the results as it does, in sections (see Search). An artist or album
+  found opens to its albums or songs, with Add to playlist and Download.
 - Rows: artists (round `secondary-container` tile, person glyph), albums and years (disc glyph),
   genres (note glyph), each with "*n* items"; songs as media rows with "artist / album".
 - Tapping a group pushes the level below. Its header: title, "*n* items", and **Add to playlist**
@@ -178,8 +180,21 @@ From the Search board. Searches everything Clementine can search (library and in
 
 - A search field at the top (`.searchable`, always shown), "Search Clementine". Submitting sends the
   search; a progress bar and "Searching for “…”" until Clementine finishes.
-- Results are grouped first by where they came from (with that provider's icon), then by the
-  library grouping, and browsed like the library: drill down, Add to playlist, select mode.
+- Results are in sections by what matched, as music apps show them, filling in as providers
+  answer. The Library tab's search shows the library's results the same way. Clementine doesn't say why a song matched, so the app works it out as Clementine's
+  library search matches: each word must start a word of some field (ignoring case and accents).
+  - **Top Result:** the best match, if an artist, album, song or station matched on its own:
+    exactly, then by its start, then by its words. As good, an artist beats an album beats a song.
+    Its second line says what it is ("Song · Radiohead").
+  - **Songs:** titles that matched, or title, artist and album between them ("beatles help").
+  - **Artists:** album artists (else artists) that matched; "*n* albums".
+  - **Albums:** album names that matched, or name and artist between them, so an artist's albums
+    are listed too; each with its artist.
+  - **Stations:** internet radio (results that aren't files and have no album), with the provider's icon.
+  - **Other matches:** songs that matched some other way, such as by genre, so none is lost.
+- The first four of each section, the best first, with **See All** for the rest. Tapping a song or
+  station adds it to the playlist playing, and plays it if Clementine isn't playing; an artist opens to its albums, and an album to its
+  songs, with Add to playlist and select mode as in the library. See All has select mode too.
 - "No results" and a first-run "Search your library and Clementine's internet services" message.
 
 ### Downloads (tab 4)
@@ -328,8 +343,14 @@ the String Catalog; the rest are English until translated.
 - Clementine sends `KEEP_ALIVE` regularly. Nothing for 25 s means the connection is lost: the app
   reconnects (`send_playlist_songs = false`) up to 5 times, then shows "Connection lost" and returns
   to the Connect screen. A failed send also reconnects once.
-- The address, auth code and addresses used before are saved. With auto-connect on, the Connect
-  screen connects to the saved address at launch.
+- The address, auth code and addresses used before are saved, and the name of the Clementine
+  connected to if it was picked from the network. With "Connect automatically" on (the default),
+  the Connect screen connects to the saved address at launch, which is quickest when it hasn't
+  changed. If Clementine can't be reached there and it was picked from the network, the screen
+  says nothing and waits for it to show up there by name, then connects to its new address; if
+  it shows up at a new address sooner, it connects there without waiting for the old one to time
+  out. This happens once per launch, and stops once something else is connected to, the settings
+  are opened or connecting is canceled: disconnecting doesn't reconnect.
 - In the background iOS suspends the app, and the connection with it. When the app is sent to the
   background it keeps the connection for as long as iOS allows, then disconnects quietly; on return
   it reconnects without asking for the playlists again. Downloads in progress ask iOS for extra
@@ -474,6 +495,7 @@ ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
 
 | Section | Setting | Default | Android key |
 |---|---|---|---|
+| | Appearance: System, Light or Dark | System | none (`pref_appearance`) |
 | Player | Volume buttons control Clementine | on | `pref_volumekey` |
 | | Volume step | 10 % (1–20 %) | `pref_volume_inc` |
 | | Show Last.fm buttons | on | `pref_show_lastfm` |
@@ -484,10 +506,11 @@ ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
 | | Playlist folder | off | `pref_dl_pl_save_own_dir` |
 | | Artist folder | on | `pref_dl_artist_dir` |
 | | Album folder (needs artist folder) | on | `pref_dl_album_dir` |
-| Connection | Connect automatically | off | `pref_autoconnect` |
+| Connection | Connect automatically | on | `pref_autoconnect` |
 | | Port | 5500 | `pref_port` |
 | Advanced | Keep the screen on | off | `pref_keep_screen_on` |
 | About | Version, Clementine's website, the source code, credits, licences | | |
 
-Saved state: last address (`save_clementine_ip`), addresses used (`known_ips`), last auth code
-(`last_auth_code`), the Clementine the library came from (`library_ip`), first launch (`first_call`).
+Saved state: last address (`save_clementine_ip`), its network name (`last_server_name`), addresses
+used (`known_ips`), last auth code (`last_auth_code`), the Clementine the library came from
+(`library_ip`), first launch (`first_call`).
