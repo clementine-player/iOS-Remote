@@ -89,7 +89,7 @@ struct SettingsView: View {
                 }
                 Toggle(isOn: $renderer) {
                     Text("Let Clementine play on this phone")
-                    Text("Clementine can send its music here, when it plays on other devices (experimental). Takes effect the next time the app connects.")
+                    Text("Clementine can send its music here, when it plays on other devices. Takes effect the next time the app connects.")
                 }
                 LabeledContent("Port") {
                     TextField("Port", value: $port, format: .number.grouping(.never))
