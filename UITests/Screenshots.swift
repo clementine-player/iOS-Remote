@@ -94,8 +94,8 @@ final class Screenshots: XCTestCase {
         try waitFor(app.descendants(matching: .any)["internetNode"])
         pause(Self.settle)
         try screenshot("10_internet")
-        // The radio streams saved in it (clementine-it/start-clementine.sh).
-        try waitFor(item(startingWith: "Your radio streams")).tap()
+        // The radio streams saved in it (clementine-it/start-clementine.sh), the last service.
+        try scrollTo(item(startingWith: "Your radio streams")).tap()
         try waitFor(item(startingWith: "Groove Salad"))
         pause(Self.settle)
         try screenshot("11_internet_radio")
@@ -154,6 +154,16 @@ final class Screenshots: XCTestCase {
             pause(1)
         }
         try waitFor(artist, timeout: Self.libraryTimeout)
+    }
+
+    /// Scrolls the list shown down until [element] is on screen, and returns it: a list only has
+    /// the rows in sight.
+    private func scrollTo(_ element: XCUIElement) throws -> XCUIElement {
+        // Other tabs' lists stay loaded, so the swipe is on the screen, not a list found.
+        for _ in 0..<15 where !(element.exists && element.isHittable) {
+            app.swipeUp()
+        }
+        return try waitFor(element)
     }
 
     private func showTab(_ name: String) throws {
