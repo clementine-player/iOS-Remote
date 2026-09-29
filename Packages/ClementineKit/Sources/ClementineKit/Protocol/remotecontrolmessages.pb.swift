@@ -136,6 +136,15 @@ public nonisolated enum Pb_Remote_MsgType: Int, SwiftProtobuf.Enum, Swift.CaseIt
   /// Server -> all clients
   case outputs = 340
 
+  /// Browsing the Internet sidebar.
+  /// Client -> server
+  case requestBrowse = 360
+  case requestBrowseAdd = 361
+
+  /// Server -> client
+  case browse = 370
+  case browseAddResult = 371
+
   public init() {
     self = .unknown
   }
@@ -225,6 +234,9 @@ public nonisolated enum Pb_Remote_ServerFeature: Int, SwiftProtobuf.Enum, Swift.
 
   /// The server can send playback to renderers (streaming is enabled).
   case rendering = 1
+
+  /// The server can be browsed like its Internet sidebar (REQUEST_BROWSE).
+  case browse = 2
 
   public init() {
     self = .unspecified
@@ -350,6 +362,130 @@ public nonisolated enum Pb_Remote_RendererErrorScope: Int, SwiftProtobuf.Enum, S
 
   /// The renderer can't continue. Fall back to local output.
   case renderer = 3
+
+  public init() {
+    self = .unspecified
+  }
+
+}
+
+/// What kind of node a BrowseNode is, for its icon and what a tap does.
+public nonisolated enum Pb_Remote_BrowseNodeKind: Int, SwiftProtobuf.Enum, Swift.CaseIterable {
+
+  /// Treat as BROWSE_NODE_KIND_FOLDER.
+  case unspecified = 0
+
+  /// A service's root: SomaFM, Plex, Google Drive...
+  case service = 1
+
+  /// Anything grouping others: an artist, album, playlist, genre, category.
+  case folder = 2
+
+  /// A song with a length.
+  case track = 3
+
+  /// A radio stream, or anything else that plays with no known length.
+  case stream = 4
+
+  /// A smart playlist, generated when added.
+  case smartPlaylist = 5
+
+  public init() {
+    self = .unspecified
+  }
+
+}
+
+/// Whether a node has children to browse into.
+public nonisolated enum Pb_Remote_BrowseChildren: Int, SwiftProtobuf.Enum, Swift.CaseIterable {
+
+  /// Treat as BROWSE_CHILDREN_NONE.
+  case unspecified = 0
+  case none = 1
+
+  /// It has children, or will load some when browsed.
+  case some = 2
+
+  public init() {
+    self = .unspecified
+  }
+
+}
+
+/// Whether a node can go on the playlist, as a drag from the sidebar can.
+public nonisolated enum Pb_Remote_BrowsePlayability: Int, SwiftProtobuf.Enum, Swift.CaseIterable {
+
+  /// Treat as BROWSE_PLAYABILITY_NONE.
+  case unspecified = 0
+  case none = 1
+
+  /// Adding it adds it, or everything under it (an album, a playlist).
+  case addable = 2
+
+  public init() {
+    self = .unspecified
+  }
+
+}
+
+/// Where a node's children stand.
+public nonisolated enum Pb_Remote_BrowseState: Int, SwiftProtobuf.Enum, Swift.CaseIterable {
+
+  /// Treat as BROWSE_STATE_READY.
+  case unspecified = 0
+  case ready = 1
+
+  /// Still loading. Another BROWSE for this node follows when they change.
+  case loading = 2
+
+  /// The service has to be set up on the computer first; message says how.
+  case needsSetup = 3
+
+  /// The node no longer exists: the client goes back up.
+  case gone = 4
+
+  public init() {
+    self = .unspecified
+  }
+
+}
+
+/// What adding nodes does to the playlist.
+public nonisolated enum Pb_Remote_BrowseAddAction: Int, SwiftProtobuf.Enum, Swift.CaseIterable {
+
+  /// Treat as BROWSE_ADD_ACTION_APPEND.
+  case unspecified = 0
+
+  /// Add to the end of the current playlist.
+  case append = 1
+
+  /// Add, and play the first one added.
+  case playNow = 2
+
+  /// Add, and queue it to play straight after the current song.
+  case playNext = 3
+
+  /// Clear the current playlist, add, and play.
+  case replace = 4
+
+  public init() {
+    self = .unspecified
+  }
+
+}
+
+/// How a RequestBrowseAdd went.
+public nonisolated enum Pb_Remote_BrowseAddResult: Int, SwiftProtobuf.Enum, Swift.CaseIterable {
+
+  /// Treat as BROWSE_ADD_RESULT_NOT_PLAYABLE.
+  case unspecified = 0
+  case added = 1
+
+  /// None of the nodes can go on the playlist.
+  case notPlayable = 2
+
+  /// A node no longer exists.
+  case gone = 3
 
   public init() {
     self = .unspecified
@@ -2486,6 +2622,260 @@ public nonisolated struct Pb_Remote_RendererError: Sendable {
   fileprivate var _scope: Pb_Remote_RendererErrorScope? = nil
 }
 
+/// One node of the tree the Internet sidebar shows.
+public nonisolated struct Pb_Remote_BrowseNode: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Opaque, issued by the server, valid on this connection until the node
+  /// goes away. Never a URL or a path.
+  public var nodeID: String {
+    get {_nodeID ?? String()}
+    set {_nodeID = newValue}
+  }
+  /// Returns true if `nodeID` has been explicitly set.
+  public var hasNodeID: Bool {self._nodeID != nil}
+  /// Clears the value of `nodeID`. Subsequent reads from it will return its default value.
+  public mutating func clearNodeID() {self._nodeID = nil}
+
+  public var title: String {
+    get {_title ?? String()}
+    set {_title = newValue}
+  }
+  /// Returns true if `title` has been explicitly set.
+  public var hasTitle: Bool {self._title != nil}
+  /// Clears the value of `title`. Subsequent reads from it will return its default value.
+  public mutating func clearTitle() {self._title = nil}
+
+  /// A second line where there is one, such as a track's artist.
+  public var subtitle: String {
+    get {_subtitle ?? String()}
+    set {_subtitle = newValue}
+  }
+  /// Returns true if `subtitle` has been explicitly set.
+  public var hasSubtitle: Bool {self._subtitle != nil}
+  /// Clears the value of `subtitle`. Subsequent reads from it will return its default value.
+  public mutating func clearSubtitle() {self._subtitle = nil}
+
+  public var kind: Pb_Remote_BrowseNodeKind {
+    get {_kind ?? .unspecified}
+    set {_kind = newValue}
+  }
+  /// Returns true if `kind` has been explicitly set.
+  public var hasKind: Bool {self._kind != nil}
+  /// Clears the value of `kind`. Subsequent reads from it will return its default value.
+  public mutating func clearKind() {self._kind = nil}
+
+  public var children: Pb_Remote_BrowseChildren {
+    get {_children ?? .unspecified}
+    set {_children = newValue}
+  }
+  /// Returns true if `children` has been explicitly set.
+  public var hasChildren: Bool {self._children != nil}
+  /// Clears the value of `children`. Subsequent reads from it will return its default value.
+  public mutating func clearChildren() {self._children = nil}
+
+  public var playability: Pb_Remote_BrowsePlayability {
+    get {_playability ?? .unspecified}
+    set {_playability = newValue}
+  }
+  /// Returns true if `playability` has been explicitly set.
+  public var hasPlayability: Bool {self._playability != nil}
+  /// Clears the value of `playability`. Subsequent reads from it will return its default value.
+  public mutating func clearPlayability() {self._playability = nil}
+
+  /// PNG, at most 48x48. Only on service nodes.
+  public var iconPng: Data {
+    get {_iconPng ?? Data()}
+    set {_iconPng = newValue}
+  }
+  /// Returns true if `iconPng` has been explicitly set.
+  public var hasIconPng: Bool {self._iconPng != nil}
+  /// Clears the value of `iconPng`. Subsequent reads from it will return its default value.
+  public mutating func clearIconPng() {self._iconPng = nil}
+
+  /// For tracks the server has metadata for: artist, album, length.
+  public var song: Pb_Remote_SongMetadata {
+    get {_song ?? Pb_Remote_SongMetadata()}
+    set {_song = newValue}
+  }
+  /// Returns true if `song` has been explicitly set.
+  public var hasSong: Bool {self._song != nil}
+  /// Clears the value of `song`. Subsequent reads from it will return its default value.
+  public mutating func clearSong() {self._song = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _nodeID: String? = nil
+  fileprivate var _title: String? = nil
+  fileprivate var _subtitle: String? = nil
+  fileprivate var _kind: Pb_Remote_BrowseNodeKind? = nil
+  fileprivate var _children: Pb_Remote_BrowseChildren? = nil
+  fileprivate var _playability: Pb_Remote_BrowsePlayability? = nil
+  fileprivate var _iconPng: Data? = nil
+  fileprivate var _song: Pb_Remote_SongMetadata? = nil
+}
+
+/// Asks for a node's children, or for the services when node_id is unset.
+public nonisolated struct Pb_Remote_RequestBrowse: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var nodeID: String {
+    get {_nodeID ?? String()}
+    set {_nodeID = newValue}
+  }
+  /// Returns true if `nodeID` has been explicitly set.
+  public var hasNodeID: Bool {self._nodeID != nil}
+  /// Clears the value of `nodeID`. Subsequent reads from it will return its default value.
+  public mutating func clearNodeID() {self._nodeID = nil}
+
+  /// A page of the children. Unset or 0 limit: the server's maximum (500).
+  public var offset: Int32 {
+    get {_offset ?? 0}
+    set {_offset = newValue}
+  }
+  /// Returns true if `offset` has been explicitly set.
+  public var hasOffset: Bool {self._offset != nil}
+  /// Clears the value of `offset`. Subsequent reads from it will return its default value.
+  public mutating func clearOffset() {self._offset = nil}
+
+  public var limit: Int32 {
+    get {_limit ?? 0}
+    set {_limit = newValue}
+  }
+  /// Returns true if `limit` has been explicitly set.
+  public var hasLimit: Bool {self._limit != nil}
+  /// Clears the value of `limit`. Subsequent reads from it will return its default value.
+  public mutating func clearLimit() {self._limit = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _nodeID: String? = nil
+  fileprivate var _offset: Int32? = nil
+  fileprivate var _limit: Int32? = nil
+}
+
+/// A node's children, sent for a RequestBrowse and again when they change
+/// while the client is looking at that node.
+public nonisolated struct Pb_Remote_ResponseBrowse: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var nodeID: String {
+    get {_nodeID ?? String()}
+    set {_nodeID = newValue}
+  }
+  /// Returns true if `nodeID` has been explicitly set.
+  public var hasNodeID: Bool {self._nodeID != nil}
+  /// Clears the value of `nodeID`. Subsequent reads from it will return its default value.
+  public mutating func clearNodeID() {self._nodeID = nil}
+
+  public var state: Pb_Remote_BrowseState {
+    get {_state ?? .unspecified}
+    set {_state = newValue}
+  }
+  /// Returns true if `state` has been explicitly set.
+  public var hasState: Bool {self._state != nil}
+  /// Clears the value of `state`. Subsequent reads from it will return its default value.
+  public mutating func clearState() {self._state = nil}
+
+  public var nodes: [Pb_Remote_BrowseNode] = []
+
+  /// Where this page starts, and how many children there are in all.
+  public var offset: Int32 {
+    get {_offset ?? 0}
+    set {_offset = newValue}
+  }
+  /// Returns true if `offset` has been explicitly set.
+  public var hasOffset: Bool {self._offset != nil}
+  /// Clears the value of `offset`. Subsequent reads from it will return its default value.
+  public mutating func clearOffset() {self._offset = nil}
+
+  public var totalCount: Int32 {
+    get {_totalCount ?? 0}
+    set {_totalCount = newValue}
+  }
+  /// Returns true if `totalCount` has been explicitly set.
+  public var hasTotalCount: Bool {self._totalCount != nil}
+  /// Clears the value of `totalCount`. Subsequent reads from it will return its default value.
+  public mutating func clearTotalCount() {self._totalCount = nil}
+
+  /// Shown to the user with BROWSE_STATE_NEEDS_SETUP, translated.
+  public var message: String {
+    get {_message ?? String()}
+    set {_message = newValue}
+  }
+  /// Returns true if `message` has been explicitly set.
+  public var hasMessage: Bool {self._message != nil}
+  /// Clears the value of `message`. Subsequent reads from it will return its default value.
+  public mutating func clearMessage() {self._message = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _nodeID: String? = nil
+  fileprivate var _state: Pb_Remote_BrowseState? = nil
+  fileprivate var _offset: Int32? = nil
+  fileprivate var _totalCount: Int32? = nil
+  fileprivate var _message: String? = nil
+}
+
+/// Puts nodes on the playlist, as dragging them from the sidebar does.
+public nonisolated struct Pb_Remote_RequestBrowseAdd: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var nodeIds: [String] = []
+
+  public var action: Pb_Remote_BrowseAddAction {
+    get {_action ?? .unspecified}
+    set {_action = newValue}
+  }
+  /// Returns true if `action` has been explicitly set.
+  public var hasAction: Bool {self._action != nil}
+  /// Clears the value of `action`. Subsequent reads from it will return its default value.
+  public mutating func clearAction() {self._action = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _action: Pb_Remote_BrowseAddAction? = nil
+}
+
+public nonisolated struct Pb_Remote_ResponseBrowseAdd: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var nodeIds: [String] = []
+
+  public var result: Pb_Remote_BrowseAddResult {
+    get {_result ?? .unspecified}
+    set {_result = newValue}
+  }
+  /// Returns true if `result` has been explicitly set.
+  public var hasResult: Bool {self._result != nil}
+  /// Clears the value of `result`. Subsequent reads from it will return its default value.
+  public mutating func clearResult() {self._result = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _result: Pb_Remote_BrowseAddResult? = nil
+}
+
 /// The message itself
 public nonisolated struct Pb_Remote_Message: @unchecked Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -2919,6 +3309,43 @@ public nonisolated struct Pb_Remote_Message: @unchecked Sendable {
   /// Clears the value of `rendererTrackEnded`. Subsequent reads from it will return its default value.
   public mutating func clearRendererTrackEnded() {_uniqueStorage()._rendererTrackEnded = nil}
 
+  /// Browsing the Internet sidebar
+  public var requestBrowse: Pb_Remote_RequestBrowse {
+    get {_storage._requestBrowse ?? Pb_Remote_RequestBrowse()}
+    set {_uniqueStorage()._requestBrowse = newValue}
+  }
+  /// Returns true if `requestBrowse` has been explicitly set.
+  public var hasRequestBrowse: Bool {_storage._requestBrowse != nil}
+  /// Clears the value of `requestBrowse`. Subsequent reads from it will return its default value.
+  public mutating func clearRequestBrowse() {_uniqueStorage()._requestBrowse = nil}
+
+  public var responseBrowse: Pb_Remote_ResponseBrowse {
+    get {_storage._responseBrowse ?? Pb_Remote_ResponseBrowse()}
+    set {_uniqueStorage()._responseBrowse = newValue}
+  }
+  /// Returns true if `responseBrowse` has been explicitly set.
+  public var hasResponseBrowse: Bool {_storage._responseBrowse != nil}
+  /// Clears the value of `responseBrowse`. Subsequent reads from it will return its default value.
+  public mutating func clearResponseBrowse() {_uniqueStorage()._responseBrowse = nil}
+
+  public var requestBrowseAdd: Pb_Remote_RequestBrowseAdd {
+    get {_storage._requestBrowseAdd ?? Pb_Remote_RequestBrowseAdd()}
+    set {_uniqueStorage()._requestBrowseAdd = newValue}
+  }
+  /// Returns true if `requestBrowseAdd` has been explicitly set.
+  public var hasRequestBrowseAdd: Bool {_storage._requestBrowseAdd != nil}
+  /// Clears the value of `requestBrowseAdd`. Subsequent reads from it will return its default value.
+  public mutating func clearRequestBrowseAdd() {_uniqueStorage()._requestBrowseAdd = nil}
+
+  public var responseBrowseAdd: Pb_Remote_ResponseBrowseAdd {
+    get {_storage._responseBrowseAdd ?? Pb_Remote_ResponseBrowseAdd()}
+    set {_uniqueStorage()._responseBrowseAdd = newValue}
+  }
+  /// Returns true if `responseBrowseAdd` has been explicitly set.
+  public var hasResponseBrowseAdd: Bool {_storage._responseBrowseAdd != nil}
+  /// Clears the value of `responseBrowseAdd`. Subsequent reads from it will return its default value.
+  public mutating func clearResponseBrowseAdd() {_uniqueStorage()._responseBrowseAdd = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -2931,7 +3358,7 @@ public nonisolated struct Pb_Remote_Message: @unchecked Sendable {
 fileprivate nonisolated let _protobuf_package = "pb.remote"
 
 nonisolated extension Pb_Remote_MsgType: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}CONNECT\0\u{1}DISCONNECT\0\u{1}REQUEST_PLAYLISTS\0\u{1}REQUEST_PLAYLIST_SONGS\0\u{1}CHANGE_SONG\0\u{1}SET_VOLUME\0\u{1}SET_TRACK_POSITION\0\u{1}INSERT_URLS\0\u{1}REMOVE_SONGS\0\u{1}OPEN_PLAYLIST\0\u{1}CLOSE_PLAYLIST\0\u{1}LOVE\0\u{1}BAN\0\u{1}GET_LYRICS\0\u{1}DOWNLOAD_SONGS\0\u{1}SONG_OFFER_RESPONSE\0\u{1}STOP_AFTER\0\u{1}GET_LIBRARY\0\u{1}RATE_SONG\0\u{1}PLAY\0\u{1}PLAYPAUSE\0\u{1}PAUSE\0\u{1}STOP\0\u{1}NEXT\0\u{1}PREVIOUS\0\u{1}SHUFFLE_PLAYLIST\0\u{1}REPEAT\0\u{1}SHUFFLE\0\u{2}\u{c}INFO\0\u{1}CURRENT_METAINFO\0\u{1}PLAYLISTS\0\u{1}PLAYLIST_SONGS\0\u{1}ENGINE_STATE_CHANGED\0\u{1}KEEP_ALIVE\0\u{1}UPDATE_TRACK_POSITION\0\u{1}ACTIVE_PLAYLIST_CHANGED\0\u{1}FIRST_DATA_SENT_COMPLETE\0\u{1}LYRICS\0\u{1}SONG_FILE_CHUNK\0\u{1}DOWNLOAD_QUEUE_EMPTY\0\u{1}LIBRARY_CHUNK\0\u{1}DOWNLOAD_TOTAL_SIZE\0\u{1}GLOBAL_SEARCH_RESULT\0\u{1}TRANSCODING_FILES\0\u{1}GLOBAL_SEARCH_STATUS\0\u{2}\u{4}UPDATE_PLAYLIST\0\u{2}(GLOBAL_SEARCH\0\u{2}\u{a}REQUEST_SAVED_RADIOS\0\u{2}Z\u{1}REQUEST_FILES\0\u{1}APPEND_FILES\0\u{1}LIST_FILES\0\u{2}d\u{1}RENDERER_STATUS\0\u{1}RENDERER_TRACK_ENDED\0\u{1}RENDERER_ERROR\0\u{1}REQUEST_OUTPUTS\0\u{1}SET_OUTPUT\0\u{2}\u{e}RENDER_LOAD\0\u{1}RENDER_PRELOAD\0\u{1}RENDER_PLAY\0\u{1}RENDER_PAUSE\0\u{1}RENDER_STOP\0\u{1}RENDER_SEEK\0\u{1}RENDER_SET_VOLUME\0\u{2}\u{e}OUTPUTS\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}CONNECT\0\u{1}DISCONNECT\0\u{1}REQUEST_PLAYLISTS\0\u{1}REQUEST_PLAYLIST_SONGS\0\u{1}CHANGE_SONG\0\u{1}SET_VOLUME\0\u{1}SET_TRACK_POSITION\0\u{1}INSERT_URLS\0\u{1}REMOVE_SONGS\0\u{1}OPEN_PLAYLIST\0\u{1}CLOSE_PLAYLIST\0\u{1}LOVE\0\u{1}BAN\0\u{1}GET_LYRICS\0\u{1}DOWNLOAD_SONGS\0\u{1}SONG_OFFER_RESPONSE\0\u{1}STOP_AFTER\0\u{1}GET_LIBRARY\0\u{1}RATE_SONG\0\u{1}PLAY\0\u{1}PLAYPAUSE\0\u{1}PAUSE\0\u{1}STOP\0\u{1}NEXT\0\u{1}PREVIOUS\0\u{1}SHUFFLE_PLAYLIST\0\u{1}REPEAT\0\u{1}SHUFFLE\0\u{2}\u{c}INFO\0\u{1}CURRENT_METAINFO\0\u{1}PLAYLISTS\0\u{1}PLAYLIST_SONGS\0\u{1}ENGINE_STATE_CHANGED\0\u{1}KEEP_ALIVE\0\u{1}UPDATE_TRACK_POSITION\0\u{1}ACTIVE_PLAYLIST_CHANGED\0\u{1}FIRST_DATA_SENT_COMPLETE\0\u{1}LYRICS\0\u{1}SONG_FILE_CHUNK\0\u{1}DOWNLOAD_QUEUE_EMPTY\0\u{1}LIBRARY_CHUNK\0\u{1}DOWNLOAD_TOTAL_SIZE\0\u{1}GLOBAL_SEARCH_RESULT\0\u{1}TRANSCODING_FILES\0\u{1}GLOBAL_SEARCH_STATUS\0\u{2}\u{4}UPDATE_PLAYLIST\0\u{2}(GLOBAL_SEARCH\0\u{2}\u{a}REQUEST_SAVED_RADIOS\0\u{2}Z\u{1}REQUEST_FILES\0\u{1}APPEND_FILES\0\u{1}LIST_FILES\0\u{2}d\u{1}RENDERER_STATUS\0\u{1}RENDERER_TRACK_ENDED\0\u{1}RENDERER_ERROR\0\u{1}REQUEST_OUTPUTS\0\u{1}SET_OUTPUT\0\u{2}\u{e}RENDER_LOAD\0\u{1}RENDER_PRELOAD\0\u{1}RENDER_PLAY\0\u{1}RENDER_PAUSE\0\u{1}RENDER_STOP\0\u{1}RENDER_SEEK\0\u{1}RENDER_SET_VOLUME\0\u{2}\u{e}OUTPUTS\0\u{2}\u{14}REQUEST_BROWSE\0\u{1}REQUEST_BROWSE_ADD\0\u{2}\u{9}BROWSE\0\u{1}BROWSE_ADD_RESULT\0")
 }
 
 nonisolated extension Pb_Remote_EngineState: SwiftProtobuf._ProtoNameProviding {
@@ -2959,7 +3386,7 @@ nonisolated extension Pb_Remote_GlobalSearchStatus: SwiftProtobuf._ProtoNameProv
 }
 
 nonisolated extension Pb_Remote_ServerFeature: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0SERVER_FEATURE_UNSPECIFIED\0\u{1}SERVER_FEATURE_RENDERING\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0SERVER_FEATURE_UNSPECIFIED\0\u{1}SERVER_FEATURE_RENDERING\0\u{1}SERVER_FEATURE_BROWSE\0")
 }
 
 nonisolated extension Pb_Remote_RendererFeature: SwiftProtobuf._ProtoNameProviding {
@@ -2988,6 +3415,30 @@ nonisolated extension Pb_Remote_RendererState: SwiftProtobuf._ProtoNameProviding
 
 nonisolated extension Pb_Remote_RendererErrorScope: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0RENDERER_ERROR_SCOPE_UNSPECIFIED\0\u{1}RENDERER_ERROR_SCOPE_ITEM\0\u{1}RENDERER_ERROR_SCOPE_TRANSIENT\0\u{1}RENDERER_ERROR_SCOPE_RENDERER\0")
+}
+
+nonisolated extension Pb_Remote_BrowseNodeKind: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0BROWSE_NODE_KIND_UNSPECIFIED\0\u{1}BROWSE_NODE_KIND_SERVICE\0\u{1}BROWSE_NODE_KIND_FOLDER\0\u{1}BROWSE_NODE_KIND_TRACK\0\u{1}BROWSE_NODE_KIND_STREAM\0\u{1}BROWSE_NODE_KIND_SMART_PLAYLIST\0")
+}
+
+nonisolated extension Pb_Remote_BrowseChildren: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0BROWSE_CHILDREN_UNSPECIFIED\0\u{1}BROWSE_CHILDREN_NONE\0\u{1}BROWSE_CHILDREN_SOME\0")
+}
+
+nonisolated extension Pb_Remote_BrowsePlayability: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0BROWSE_PLAYABILITY_UNSPECIFIED\0\u{1}BROWSE_PLAYABILITY_NONE\0\u{1}BROWSE_PLAYABILITY_ADDABLE\0")
+}
+
+nonisolated extension Pb_Remote_BrowseState: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0BROWSE_STATE_UNSPECIFIED\0\u{1}BROWSE_STATE_READY\0\u{1}BROWSE_STATE_LOADING\0\u{1}BROWSE_STATE_NEEDS_SETUP\0\u{1}BROWSE_STATE_GONE\0")
+}
+
+nonisolated extension Pb_Remote_BrowseAddAction: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0BROWSE_ADD_ACTION_UNSPECIFIED\0\u{1}BROWSE_ADD_ACTION_APPEND\0\u{1}BROWSE_ADD_ACTION_PLAY_NOW\0\u{1}BROWSE_ADD_ACTION_PLAY_NEXT\0\u{1}BROWSE_ADD_ACTION_REPLACE\0")
+}
+
+nonisolated extension Pb_Remote_BrowseAddResult: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0BROWSE_ADD_RESULT_UNSPECIFIED\0\u{1}BROWSE_ADD_RESULT_ADDED\0\u{1}BROWSE_ADD_RESULT_NOT_PLAYABLE\0\u{1}BROWSE_ADD_RESULT_GONE\0")
 }
 
 nonisolated extension Pb_Remote_SongMetadata: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
@@ -5425,9 +5876,259 @@ nonisolated extension Pb_Remote_RendererError: SwiftProtobuf.Message, SwiftProto
   }
 }
 
+nonisolated extension Pb_Remote_BrowseNode: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".BrowseNode"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}node_id\0\u{1}title\0\u{1}subtitle\0\u{1}kind\0\u{1}children\0\u{1}playability\0\u{3}icon_png\0\u{1}song\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self._nodeID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self._title) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self._subtitle) }()
+      case 4: try { try decoder.decodeSingularEnumField(value: &self._kind) }()
+      case 5: try { try decoder.decodeSingularEnumField(value: &self._children) }()
+      case 6: try { try decoder.decodeSingularEnumField(value: &self._playability) }()
+      case 7: try { try decoder.decodeSingularBytesField(value: &self._iconPng) }()
+      case 8: try { try decoder.decodeSingularMessageField(value: &self._song) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._nodeID {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._title {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 2)
+    } }()
+    try { if let v = self._subtitle {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 3)
+    } }()
+    try { if let v = self._kind {
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 4)
+    } }()
+    try { if let v = self._children {
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 5)
+    } }()
+    try { if let v = self._playability {
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 6)
+    } }()
+    try { if let v = self._iconPng {
+      try visitor.visitSingularBytesField(value: v, fieldNumber: 7)
+    } }()
+    try { if let v = self._song {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Pb_Remote_BrowseNode, rhs: Pb_Remote_BrowseNode) -> Bool {
+    if lhs._nodeID != rhs._nodeID {return false}
+    if lhs._title != rhs._title {return false}
+    if lhs._subtitle != rhs._subtitle {return false}
+    if lhs._kind != rhs._kind {return false}
+    if lhs._children != rhs._children {return false}
+    if lhs._playability != rhs._playability {return false}
+    if lhs._iconPng != rhs._iconPng {return false}
+    if lhs._song != rhs._song {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+nonisolated extension Pb_Remote_RequestBrowse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".RequestBrowse"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}node_id\0\u{1}offset\0\u{1}limit\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self._nodeID) }()
+      case 2: try { try decoder.decodeSingularInt32Field(value: &self._offset) }()
+      case 3: try { try decoder.decodeSingularInt32Field(value: &self._limit) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._nodeID {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._offset {
+      try visitor.visitSingularInt32Field(value: v, fieldNumber: 2)
+    } }()
+    try { if let v = self._limit {
+      try visitor.visitSingularInt32Field(value: v, fieldNumber: 3)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Pb_Remote_RequestBrowse, rhs: Pb_Remote_RequestBrowse) -> Bool {
+    if lhs._nodeID != rhs._nodeID {return false}
+    if lhs._offset != rhs._offset {return false}
+    if lhs._limit != rhs._limit {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+nonisolated extension Pb_Remote_ResponseBrowse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ResponseBrowse"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}node_id\0\u{1}state\0\u{1}nodes\0\u{1}offset\0\u{3}total_count\0\u{1}message\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self._nodeID) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self._state) }()
+      case 3: try { try decoder.decodeRepeatedMessageField(value: &self.nodes) }()
+      case 4: try { try decoder.decodeSingularInt32Field(value: &self._offset) }()
+      case 5: try { try decoder.decodeSingularInt32Field(value: &self._totalCount) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self._message) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._nodeID {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._state {
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 2)
+    } }()
+    if !self.nodes.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.nodes, fieldNumber: 3)
+    }
+    try { if let v = self._offset {
+      try visitor.visitSingularInt32Field(value: v, fieldNumber: 4)
+    } }()
+    try { if let v = self._totalCount {
+      try visitor.visitSingularInt32Field(value: v, fieldNumber: 5)
+    } }()
+    try { if let v = self._message {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 6)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Pb_Remote_ResponseBrowse, rhs: Pb_Remote_ResponseBrowse) -> Bool {
+    if lhs._nodeID != rhs._nodeID {return false}
+    if lhs._state != rhs._state {return false}
+    if lhs.nodes != rhs.nodes {return false}
+    if lhs._offset != rhs._offset {return false}
+    if lhs._totalCount != rhs._totalCount {return false}
+    if lhs._message != rhs._message {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+nonisolated extension Pb_Remote_RequestBrowseAdd: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".RequestBrowseAdd"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}node_ids\0\u{1}action\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedStringField(value: &self.nodeIds) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self._action) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.nodeIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.nodeIds, fieldNumber: 1)
+    }
+    try { if let v = self._action {
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 2)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Pb_Remote_RequestBrowseAdd, rhs: Pb_Remote_RequestBrowseAdd) -> Bool {
+    if lhs.nodeIds != rhs.nodeIds {return false}
+    if lhs._action != rhs._action {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+nonisolated extension Pb_Remote_ResponseBrowseAdd: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ResponseBrowseAdd"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}node_ids\0\u{1}result\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedStringField(value: &self.nodeIds) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self._result) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.nodeIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.nodeIds, fieldNumber: 1)
+    }
+    try { if let v = self._result {
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 2)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Pb_Remote_ResponseBrowseAdd, rhs: Pb_Remote_ResponseBrowseAdd) -> Bool {
+    if lhs.nodeIds != rhs.nodeIds {return false}
+    if lhs._result != rhs._result {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 nonisolated extension Pb_Remote_Message: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Message"
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}version\0\u{1}type\0\u{4}\u{8}request_playlist_songs\0\u{3}request_change_song\0\u{3}request_set_volume\0\u{1}repeat\0\u{1}shuffle\0\u{3}response_clementine_info\0\u{3}response_current_metadata\0\u{3}response_playlists\0\u{3}response_playlist_songs\0\u{3}response_engine_state_changed\0\u{3}response_update_track_position\0\u{3}request_connect\0\u{3}response_disconnect\0\u{3}request_set_track_position\0\u{3}response_active_changed\0\u{3}request_insert_urls\0\u{3}request_remove_songs\0\u{3}request_playlists\0\u{3}request_open_playlist\0\u{3}request_close_playlist\0\u{3}response_lyrics\0\u{3}request_download_songs\0\u{3}response_song_file_chunk\0\u{3}response_song_offer\0\u{3}response_library_chunk\0\u{3}request_rate_song\0\u{3}response_download_total_size\0\u{3}request_global_search\0\u{3}response_global_search\0\u{3}response_transcoder_status\0\u{3}response_global_search_status\0\u{4}\u{a}request_list_files\0\u{3}request_append_files\0\u{3}response_list_files\0\u{3}request_update_playlist\0\u{3}response_saved_radios\0\u{4}\u{7}response_outputs\0\u{3}request_set_output\0\u{3}request_render_load\0\u{3}request_render_preload\0\u{3}request_render_seek\0\u{3}request_render_volume\0\u{3}renderer_status\0\u{3}renderer_error\0\u{3}renderer_track_ended\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}version\0\u{1}type\0\u{4}\u{8}request_playlist_songs\0\u{3}request_change_song\0\u{3}request_set_volume\0\u{1}repeat\0\u{1}shuffle\0\u{3}response_clementine_info\0\u{3}response_current_metadata\0\u{3}response_playlists\0\u{3}response_playlist_songs\0\u{3}response_engine_state_changed\0\u{3}response_update_track_position\0\u{3}request_connect\0\u{3}response_disconnect\0\u{3}request_set_track_position\0\u{3}response_active_changed\0\u{3}request_insert_urls\0\u{3}request_remove_songs\0\u{3}request_playlists\0\u{3}request_open_playlist\0\u{3}request_close_playlist\0\u{3}response_lyrics\0\u{3}request_download_songs\0\u{3}response_song_file_chunk\0\u{3}response_song_offer\0\u{3}response_library_chunk\0\u{3}request_rate_song\0\u{3}response_download_total_size\0\u{3}request_global_search\0\u{3}response_global_search\0\u{3}response_transcoder_status\0\u{3}response_global_search_status\0\u{4}\u{a}request_list_files\0\u{3}request_append_files\0\u{3}response_list_files\0\u{3}request_update_playlist\0\u{3}response_saved_radios\0\u{4}\u{7}response_outputs\0\u{3}request_set_output\0\u{3}request_render_load\0\u{3}request_render_preload\0\u{3}request_render_seek\0\u{3}request_render_volume\0\u{3}renderer_status\0\u{3}renderer_error\0\u{3}renderer_track_ended\0\u{3}request_browse\0\u{3}response_browse\0\u{3}request_browse_add\0\u{3}response_browse_add\0")
 
   fileprivate class _StorageClass {
     var _version: Int32? = nil
@@ -5477,6 +6178,10 @@ nonisolated extension Pb_Remote_Message: SwiftProtobuf.Message, SwiftProtobuf._M
     var _rendererStatus: Pb_Remote_RendererStatus? = nil
     var _rendererError: Pb_Remote_RendererError? = nil
     var _rendererTrackEnded: Pb_Remote_RendererTrackEnded? = nil
+    var _requestBrowse: Pb_Remote_RequestBrowse? = nil
+    var _responseBrowse: Pb_Remote_ResponseBrowse? = nil
+    var _requestBrowseAdd: Pb_Remote_RequestBrowseAdd? = nil
+    var _responseBrowseAdd: Pb_Remote_ResponseBrowseAdd? = nil
 
       // This property is used as the initial default value for new instances of the type.
       // The type itself is protecting the reference to its storage via CoW semantics.
@@ -5534,6 +6239,10 @@ nonisolated extension Pb_Remote_Message: SwiftProtobuf.Message, SwiftProtobuf._M
       _rendererStatus = source._rendererStatus
       _rendererError = source._rendererError
       _rendererTrackEnded = source._rendererTrackEnded
+      _requestBrowse = source._requestBrowse
+      _responseBrowse = source._responseBrowse
+      _requestBrowseAdd = source._requestBrowseAdd
+      _responseBrowseAdd = source._responseBrowseAdd
     }
   }
 
@@ -5599,6 +6308,10 @@ nonisolated extension Pb_Remote_Message: SwiftProtobuf.Message, SwiftProtobuf._M
         case 67: try { try decoder.decodeSingularMessageField(value: &_storage._rendererStatus) }()
         case 68: try { try decoder.decodeSingularMessageField(value: &_storage._rendererError) }()
         case 69: try { try decoder.decodeSingularMessageField(value: &_storage._rendererTrackEnded) }()
+        case 70: try { try decoder.decodeSingularMessageField(value: &_storage._requestBrowse) }()
+        case 71: try { try decoder.decodeSingularMessageField(value: &_storage._responseBrowse) }()
+        case 72: try { try decoder.decodeSingularMessageField(value: &_storage._requestBrowseAdd) }()
+        case 73: try { try decoder.decodeSingularMessageField(value: &_storage._responseBrowseAdd) }()
         default: break
         }
       }
@@ -5752,6 +6465,18 @@ nonisolated extension Pb_Remote_Message: SwiftProtobuf.Message, SwiftProtobuf._M
       try { if let v = _storage._rendererTrackEnded {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 69)
       } }()
+      try { if let v = _storage._requestBrowse {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 70)
+      } }()
+      try { if let v = _storage._responseBrowse {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 71)
+      } }()
+      try { if let v = _storage._requestBrowseAdd {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 72)
+      } }()
+      try { if let v = _storage._responseBrowseAdd {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 73)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -5808,6 +6533,10 @@ nonisolated extension Pb_Remote_Message: SwiftProtobuf.Message, SwiftProtobuf._M
         if _storage._rendererStatus != rhs_storage._rendererStatus {return false}
         if _storage._rendererError != rhs_storage._rendererError {return false}
         if _storage._rendererTrackEnded != rhs_storage._rendererTrackEnded {return false}
+        if _storage._requestBrowse != rhs_storage._requestBrowse {return false}
+        if _storage._responseBrowse != rhs_storage._responseBrowse {return false}
+        if _storage._requestBrowseAdd != rhs_storage._requestBrowseAdd {return false}
+        if _storage._responseBrowseAdd != rhs_storage._responseBrowseAdd {return false}
         return true
       }
       if !storagesAreEqual {return false}

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		015B3D7098D15696CE753DCA /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4806AC63E537A5050C1E6BD /* LibraryView.swift */; };
+		02B054CAB79B78B9185BBFC3 /* InternetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46866E6F5E51462F605F0CA /* InternetView.swift */; };
 		198DA2CE0EAEC3C225F8AC81 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 761E362C08E663B70599A6DD /* SwiftUI.framework */; };
 		1B87E42072E67CED101AEDC9 /* ClementineRemoteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9202E1E8FCA97103ED358B /* ClementineRemoteApp.swift */; };
 		1DBC787744D19CBA495822CC /* CommandIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD37699892851B35F20411F /* CommandIntents.swift */; };
@@ -120,6 +121,7 @@
 		C636902427E849DF54E5B07F /* AVPlayback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVPlayback.swift; sourceTree = "<group>"; };
 		CD9202E1E8FCA97103ED358B /* ClementineRemoteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClementineRemoteApp.swift; sourceTree = "<group>"; };
 		CFC7AB47D2CE0823058DA1A6 /* NowPlaying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlaying.swift; sourceTree = "<group>"; };
+		D46866E6F5E51462F605F0CA /* InternetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternetView.swift; sourceTree = "<group>"; };
 		D4806AC63E537A5050C1E6BD /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		D8B11B3C0886EBF71B26160B /* LibraryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryModel.swift; sourceTree = "<group>"; };
 		E08CA8859F2B5F40175519D8 /* DownloadsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsView.swift; sourceTree = "<group>"; };
@@ -151,6 +153,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		06B7950B1505D083C77CD065 /* Internet */ = {
+			isa = PBXGroup;
+			children = (
+				D46866E6F5E51462F605F0CA /* InternetView.swift */,
+			);
+			path = Internet;
+			sourceTree = "<group>";
+		};
 		21619A064D78FFF7022E0CAD /* Queue */ = {
 			isa = PBXGroup;
 			children = (
@@ -282,6 +292,7 @@
 				C29638AE1C4D87CD5F503A3C /* Connection */,
 				34B9B7135F563F9C0F195796 /* Downloads */,
 				3BD8BD833ADD0CB0AEFC36B2 /* Intents */,
+				06B7950B1505D083C77CD065 /* Internet */,
 				2AC6FAA5E7DBA023F4A9CDF9 /* Library */,
 				56F26C6A8DE02190C5639C9A /* Player */,
 				21619A064D78FFF7022E0CAD /* Queue */,
@@ -555,6 +566,7 @@
 				5519998FF94C9CDB9C36CA95 /* ConnectionSheet.swift in Sources */,
 				761C4231EA060F078910BF81 /* DownloadsModel.swift in Sources */,
 				AF5B4FBB88A0EB985218B5A6 /* DownloadsView.swift in Sources */,
+				02B054CAB79B78B9185BBFC3 /* InternetView.swift in Sources */,
 				A83B1DAF857B6BC5EB001422 /* LibraryModel.swift in Sources */,
 				015B3D7098D15696CE753DCA /* LibraryView.swift in Sources */,
 				2E89727B527288C7A3667C8D /* MainView.swift in Sources */,

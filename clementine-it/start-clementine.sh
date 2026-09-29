@@ -3,8 +3,9 @@
 # library and its playlist, for the screenshots (.github/workflows/screenshots.yml). Clementine
 # runs in the background, logging to <log>; this returns once it's ready.
 #
-# Remote streaming is on (--experimental-remote-streaming and "Allow playing on remote devices"),
-# so the app can offer to play on the phone, and the screenshots show where Clementine can play.
+# Remote streaming is on ("Allow playing on remote devices", and --experimental-remote-streaming for
+# releases before 1.4.1-238, which need it), so the app can offer to play on the phone, and the
+# screenshots show where Clementine can play.
 #
 #   start-clementine.sh <Clementine.app> <music dir> <log>
 #
@@ -54,7 +55,12 @@ defaults write "$domain" NetworkRemote.allow_streaming -bool true
 # The remote's CHANGE_SONG plays the song rather than queueing it.
 defaults write "$domain" MainWindow.doubleclick_playlist_addmode -int 1
 
-nohup "$binary" --verbose --experimental-remote-streaming > "$log" 2>&1 &
+# Later releases don't know the flag, and exit on options they don't know.
+streaming=()
+if grep -q -a experimental-remote-streaming "$binary"; then
+  streaming=(--experimental-remote-streaming)
+fi
+nohup "$binary" --verbose ${streaming[@]+"${streaming[@]}"} > "$log" 2>&1 &
 pid=$!
 echo "$pid" > "$log.pid"
 if ! wait_for "the network remote" "nc -z localhost 5500"; then

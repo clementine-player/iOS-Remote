@@ -101,6 +101,13 @@ final class Screenshots: XCTestCase {
         pause(Self.settle)
         try screenshot("09_outputs")
         try waitFor(app.navigationBars["Play on"].buttons["Done"]).tap()
+
+        // Clementine's internet services.
+        try showTab("Internet")
+        try waitFor(app.navigationBars["Internet"])
+        try waitFor(app.descendants(matching: .any)["internetNode"])
+        pause(Self.settle)
+        try screenshot("10_internet")
     }
 
     // MARK: - Screens
