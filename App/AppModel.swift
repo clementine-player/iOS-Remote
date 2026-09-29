@@ -9,7 +9,7 @@ final class AppModel {
     static weak var shared: AppModel?
 
     enum Tab: Hashable {
-        case queue, library, search, downloads
+        case queue, library, internet, search, downloads
     }
 
     let session: RemoteSession
@@ -22,6 +22,8 @@ final class AppModel {
     @ObservationIgnored private(set) var downloads: DownloadsModel!
     /// This phone as somewhere Clementine can play (remote streaming).
     let renderer: Renderer
+    /// Clementine's internet services.
+    let internet: InternetBrowser
     @ObservationIgnored private var nowPlaying: NowPlaying?
     @ObservationIgnored private var scenePhase = ScenePhase.active
 
@@ -47,14 +49,38 @@ final class AppModel {
         let session = RemoteSession()
         self.session = session
         renderer = Renderer(playback: AVPlayback()) { session.send($0) }
+        internet = InternetBrowser { session.send($0) }
         library = LibraryModel(model: self)
         search = SearchModel(model: self)
         downloads = DownloadsModel(model: self)
         let nowPlaying = NowPlaying(model: self)
         self.nowPlaying = nowPlaying
         renderer.onUpdate = { nowPlaying.update() }
-        session.addObserver { [renderer] message in
+        session.addObserver { [renderer, internet] message in
             renderer.handle(message)
+            internet.handle(message)
+        }
+        internet.onAdded = { [weak self] action, result in
+            self?.showAdded(action, result: result)
+        }
+    }
+
+    /// Says how putting internet service nodes on the playlist went, where the player doesn't show it.
+    private func showAdded(_ action: BrowseAddAction, result: BrowseAddResult) {
+        switch result {
+        case .added:
+            switch action {
+            case .append, .unspecified:
+                toasts.show("Added to the playlist")
+            case .playNext:
+                toasts.show("Playing next")
+            case .playNow, .replace:
+                break
+            }
+        case .gone:
+            toasts.show("That's no longer in Clementine")
+        case .notPlayable, .unspecified:
+            toasts.show("Clementine can't add that to the playlist")
         }
     }
 

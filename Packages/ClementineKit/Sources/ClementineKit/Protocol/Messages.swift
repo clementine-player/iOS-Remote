@@ -101,6 +101,27 @@ public enum Messages {
         RemoteMessage(.setOutput) { $0.requestSetOutput.outputID = id }
     }
 
+    /// Lists [nodeID]'s children in Clementine's internet services, or the services when it's nil,
+    /// from [offset]; Clementine then sends updates of that page while it's the last one asked for.
+    public static func browse(_ nodeID: String?, offset: Int = 0) -> RemoteMessage {
+        RemoteMessage(.requestBrowse) {
+            if let nodeID {
+                $0.requestBrowse.nodeID = nodeID
+            }
+            if offset > 0 {
+                $0.requestBrowse.offset = Int32(offset)
+            }
+        }
+    }
+
+    /// Puts internet service nodes on the current playlist, as dragging them from the sidebar does.
+    public static func browseAdd(_ nodeIDs: [String], action: BrowseAddAction) -> RemoteMessage {
+        RemoteMessage(.requestBrowseAdd) {
+            $0.requestBrowseAdd.nodeIds = nodeIDs
+            $0.requestBrowseAdd.action = action
+        }
+    }
+
     public static func volume(_ percent: Int) -> RemoteMessage {
         RemoteMessage(.setVolume) { $0.requestSetVolume.volume = Int32(percent) }
     }

@@ -4,6 +4,7 @@ import SwiftUI
 /// Clementine's tabs, with the mini player above them.
 struct MainView: View {
     @Environment(AppModel.self) private var model
+    @Environment(RemoteSession.self) private var session
     @Namespace private var playerTransition
 
     var body: some View {
@@ -14,6 +15,12 @@ struct MainView: View {
             }
             Tab("Library", systemImage: "square.stack", value: AppModel.Tab.library) {
                 LibraryView()
+            }
+            // Only Clementine that can be browsed has it.
+            if session.canBrowse {
+                Tab("Internet", systemImage: "globe", value: AppModel.Tab.internet) {
+                    InternetView()
+                }
             }
             Tab("Search", systemImage: "magnifyingglass", value: AppModel.Tab.search, role: .search) {
                 SearchView()
@@ -27,6 +34,11 @@ struct MainView: View {
                 model.isPlayerPresented = true
             }
             .matchedTransitionSource(id: "player", in: playerTransition)
+        }
+        .onChange(of: session.canBrowse) { _, canBrowse in
+            if !canBrowse, model.selectedTab == .internet {
+                model.selectedTab = .queue
+            }
         }
         .tabViewStyle(.sidebarAdaptable)
         .tabBarMinimizeBehavior(.onScrollDown)

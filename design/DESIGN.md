@@ -32,7 +32,7 @@ iOS's own controls and patterns.
                            ▼
  ┌──────────────────────────────────────────────────────────────┐
  │ TabView                                                      │
- │  Queue │ Library │ Search │ Downloads                        │
+ │  Queue │ Library │ Internet │ Search │ Downloads             │
  │                                                              │
  │  every tab: toolbar ConnectionChip ──▶ Connection sheet      │
  │                                          ├─ Switch Clementine│
@@ -47,7 +47,7 @@ iOS's own controls and patterns.
 
 | Android (today) | Redesign | iOS |
 |---|---|---|
-| Drawer: Search, Player, Playlists, Library, Downloads, Settings, Quit | Bottom navigation: Queue, Library, Search, Downloads | `TabView` with four `Tab`s |
+| Drawer: Search, Player, Playlists, Library, Downloads, Settings, Quit | Bottom navigation: Queue, Library, Internet, Search, Downloads | `TabView` with five `Tab`s (Internet only when Clementine can be browsed) |
 | Player tab with pages Player, Song details, Clementine | Mini player above the navigation, full-screen player sheet | `.tabViewBottomAccessory` mini player; `.fullScreenCover` player with a zoom transition from it |
 | Song details page | Details and lyrics bottom sheet | `.sheet` with medium and large detents; Details / Lyrics segmented control |
 | Connection page, Settings and Quit in the drawer | Connection chip at the top right, opening the connection sheet | Toolbar button on every tab root; `.sheet` |
@@ -176,7 +176,30 @@ From the Library and Album boards. Clementine's library, copied to the phone.
   indeterminate bar and "Preparing the library…".
 - The library is kept per Clementine: connecting to another Clementine deletes it.
 
-### Search (tab 3)
+### Internet (tab 3)
+
+Clementine's internet services, browsed as its Internet sidebar shows them. Only there when the
+Clementine connected to can be browsed (1.4.1-242 or later); the Android remote has the same screens.
+
+- Large title "Internet": the services (SomaFM, Radio Browser, Jamendo, Subsonic, Plex, your radio
+  streams…), each with its own icon on a round `secondary-container` tile. Toolbar: ConnectionChip.
+- Tapping a node with children pushes the level below, titled with it. Rows have the node's title,
+  and its subtitle (a track's artist) as the second line; nodes without their own icon have one for
+  their kind (see Icons).
+- Tapping a track or stream plays it if Clementine isn't playing, or else adds it to the playlist,
+  as tapping a song in the library does. Touched and held, anything that can go on the playlist
+  (albums and playlists too) has **Play now**, **Play next**, **Add to playlist** and **Replace
+  playlist**. An opened node that can go on the playlist has a header: its title, "*n* items", and
+  **Play** (filled) and **Add to playlist** buttons.
+- "Loading…" with a spinner until the first answer, or while a service is still loading with
+  nothing to show; an indeterminate bar at the top while it loads more. A service that has to be
+  set up first: "Set up in Clementine", with Clementine's message saying where. An empty node:
+  "Nothing here". Pull to refresh asks again.
+- After adding: "Added to the playlist", or "Playing next"; nothing for Play now and Replace
+  playlist, which the player shows. "Clementine can't add that to the playlist" and "That's no
+  longer in Clementine" when it didn't work.
+
+### Search (tab 4)
 
 From the Search board. Searches everything Clementine can search (library and internet services).
 
@@ -199,7 +222,7 @@ From the Search board. Searches everything Clementine can search (library and in
   songs, with Add to playlist and select mode as in the library. See All has select mode too.
 - "No results" and a first-run "Search your library and Clementine's internet services" message.
 
-### Downloads (tab 4)
+### Downloads (tab 5)
 
 From the Downloads board.
 
@@ -313,7 +336,9 @@ SF Symbols, filled, in the colour of their control:
 | Play / pause | `play.fill` / `pause.fill` |
 | Previous / next | `backward.end.fill` / `forward.end.fill` |
 | Shuffle / repeat / repeat track | `shuffle` / `repeat` / `repeat.1` |
-| Queue / Library / Search / Downloads | `list.bullet` / `square.stack` / `magnifyingglass` / `arrow.down.circle` |
+| Queue / Library / Internet / Search / Downloads | `list.bullet` / `square.stack` / `globe` / `magnifyingglass` / `arrow.down.circle` |
+| Internet folder / track / stream / smart playlist | `folder` / `music.note` / `dot.radiowaves.left.and.right` / `wand.and.stars` |
+| Play next / Replace playlist | `text.line.first.and.arrowtriangle.forward` / `arrow.triangle.2.circlepath` |
 | Computer (host) | `desktopcomputer` |
 | Playing | `waveform` (animated only when Reduce Motion is off) |
 | Song / album / artist | `music.note` / `opticaldisc` / `person.fill` |
@@ -380,8 +405,8 @@ hidden while the app is active.
 
 ### Remote streaming
 
-Clementine 1.4 started with `--experimental-remote-streaming`, and *Allow playing on remote
-devices* on, can play on its remotes instead of its computer, as the Android remote does. The
+Clementine 1.4 with *Allow playing on remote devices* on (and, before 1.4.1-238, started with
+`--experimental-remote-streaming`) can play on its remotes instead of its computer, as the Android remote does. The
 protocol is Clementine's: `RENDER_*` messages to a renderer, `RENDERER_*` back, `OUTPUTS` to every
 remote.
 
@@ -435,6 +460,26 @@ remote.
 - Groupings: Artist; Artist / Album (default); Album artist / Album; Artist / Year; Album;
   Genre / Album; Genre / Artist / Album. Sorting: ascending (default) or descending.
 
+### Internet
+
+The protocol is Clementine's (clementine-player/Clementine#7530), which the Android remote speaks too.
+
+- Clementine that can be browsed lists `SERVER_FEATURE_BROWSE` in its info; only then is the tab
+  shown. If it goes while shown, the app goes to the Queue.
+- `REQUEST_BROWSE` with a node id lists that node's children, or the services without one, 500 at
+  most from an offset. Clementine answers `BROWSE`: the page, the number of children in all, and a
+  state: ready, loading (more follows), needs setup (with a message to show) or gone (the level
+  goes back up). It sends the node again whenever its children change, for as long as it's the
+  node last asked for, so a level is asked for again whenever it's shown (going back up, or coming
+  back to the tab).
+- Reaching the last row asks for the next page, if there are more; a page replaces the rows from
+  its offset, and the list is cut to the number there are.
+- Node ids last as long as the connection: a new connection's `INFO` forgets them all, and the tab
+  goes back to the services.
+- `REQUEST_BROWSE_ADD` puts nodes on Clementine's current playlist, as a drag from its sidebar does:
+  append, play now, play next or replace. `BROWSE_ADD_RESULT` says whether it worked; if a node has
+  gone, the level is asked for again.
+
 ### Search
 
 - `GLOBAL_SEARCH` with the query. `GLOBAL_SEARCH_STATUS` *started* gives the search's id; results
@@ -479,7 +524,7 @@ ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
 ├─ App/                              SwiftUI app
 │  ├─ ClementineRemoteApp.swift      scene, dependencies
 │  ├─ Theme/                         colours, type, shapes, reusable views
-│  ├─ Connect/  Queue/  Player/  Library/  Search/  Downloads/  Connection/  Settings/
+│  ├─ Connect/  Queue/  Player/  Library/  Internet/  Search/  Downloads/  Connection/  Settings/
 │  ├─ Streaming/                     AVPlayback (AVQueuePlayer), NowPlaying (lock screen)
 │  └─ Resources/                     Assets.xcassets, Localizable.xcstrings
 ├─ Widget/                           widget extension
@@ -491,6 +536,7 @@ ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
    ├─ Model/         Song, Playlist, modes, LyricsProvider
    ├─ Session/       RemoteSession (@MainActor @Observable): state and commands
    ├─ Browse/        SQLite wrapper, SongQuery, SongBrowser, LibraryStore, SearchStore
+   ├─ Internet/      InternetBrowser: Clementine's internet services, level by level
    ├─ Downloads/     DownloadManager, SongDownloader, DownloadStorage
    ├─ Settings/      Settings keys and defaults
    └─ Streaming/     Renderer: plays what Clementine sends, through a Playback
@@ -503,7 +549,8 @@ ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
   background actor.
 - **Testing:** Swift Testing in the package: framing and parsing, message builders, the connection
   against an in-process fake Clementine, song offers and chunking, `SongQuery` on a sample library,
-  and the session's state changes, and the renderer against a fake player. UI tests cover
+  and the session's state changes, the renderer against a fake player, and the internet browser's
+  paging and updates. UI tests cover
   connecting and the tabs against the fake server.
   On pull requests, a UI test also screenshots every screen, light and dark, against a real
   Clementine, and posts them on the pull request (`.github/workflows/screenshots.yml`).

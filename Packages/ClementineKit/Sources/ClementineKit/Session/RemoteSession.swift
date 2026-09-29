@@ -67,6 +67,11 @@ public final class RemoteSession {
         return activeOutput.id == renderer.rendererID
     }
 
+    // MARK: Internet
+
+    /// Whether this Clementine can be browsed like its Internet sidebar, for its internet services.
+    public private(set) var canBrowse = false
+
     // MARK: Playing
 
     public private(set) var song: Song?
@@ -214,6 +219,7 @@ public final class RemoteSession {
         refreshPlaylistsWhenReady = false
         canChooseOutput = false
         outputs = []
+        canBrowse = false
     }
 
     private func handle(_ event: ClementineConnection.Event, from source: ClementineConnection) {
@@ -253,6 +259,7 @@ public final class RemoteSession {
                 status = .downloadingData
             }
             canChooseOutput = info.features.contains(.rendering)
+            canBrowse = info.features.contains(.browse)
             if canChooseOutput {
                 send(RemoteMessage(.requestOutputs))
             }
