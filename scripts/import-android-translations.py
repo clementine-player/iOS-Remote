@@ -139,6 +139,17 @@ MAPPING = {
     "Choose where to play": "output_choose",
     "%@ (this phone)": "output_this_phone",
     "Let Clementine play on this phone": "pref_renderer",
+    "Internet": "internet_title",
+    "Loading…": "internet_loading",
+    "Set up in Clementine": "internet_needs_setup",
+    "Nothing here": "internet_empty",
+    "Play now": "internet_play_now",
+    "Play next": "internet_play_next",
+    "Replace playlist": "internet_replace_playlist",
+    "Added to the playlist": "internet_added",
+    "Playing next": "internet_playing_next",
+    "Clementine can't add that to the playlist": "internet_not_playable",
+    "That's no longer in Clementine": "internet_gone",
 }
 
 # iOS plural string -> Android plurals name.
