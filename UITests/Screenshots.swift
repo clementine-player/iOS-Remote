@@ -94,6 +94,11 @@ final class Screenshots: XCTestCase {
         try waitFor(app.descendants(matching: .any)["internetNode"])
         pause(Self.settle)
         try screenshot("10_internet")
+        // The radio streams saved in it (clementine-it/start-clementine.sh).
+        try waitFor(item(startingWith: "Your radio streams")).tap()
+        try waitFor(item(startingWith: "Groove Salad"))
+        pause(Self.settle)
+        try screenshot("11_internet_radio")
 
         try showTab("Search")
         try search("Gymnopédie")
