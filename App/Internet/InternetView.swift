@@ -43,7 +43,9 @@ private struct InternetLevelView: View {
         let listing = browser.listing(of: node)
         List {
             if let node, node.isAddable {
-                InternetHeader(node: node, count: listing.totalCount) { add([node], $0) }
+                // How many isn't known until Clementine first answers.
+                let answered = listing.state != .loading || !listing.nodes.isEmpty
+                InternetHeader(node: node, count: answered ? listing.totalCount : nil) { add([node], $0) }
             }
             ForEach(listing.nodes, id: \.nodeID) { child in
                 row(child)
@@ -175,7 +177,7 @@ struct InternetRow: View {
 /// items, and playing or adding all of it.
 private struct InternetHeader: View {
     let node: BrowseNode
-    let count: Int
+    let count: Int?
     let add: (BrowseAddAction) -> Void
 
     var body: some View {
@@ -186,9 +188,11 @@ private struct InternetHeader: View {
                     .foregroundStyle(Palette.onSurface)
                     .lineLimit(2)
                     .accessibilityAddTraits(.isHeader)
-                Text("\(count) items")
-                    .textStyle(.bodyMedium)
-                    .foregroundStyle(Palette.onSurfaceVariant)
+                if let count {
+                    Text("\(count) items")
+                        .textStyle(.bodyMedium)
+                        .foregroundStyle(Palette.onSurfaceVariant)
+                }
             }
             HStack(spacing: Metrics.space2) {
                 Button("Play", systemImage: "play.fill") { add(.playNow) }
