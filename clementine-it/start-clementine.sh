@@ -54,6 +54,14 @@ defaults write "$domain" NetworkRemote.convert_lossless -bool false
 defaults write "$domain" NetworkRemote.allow_streaming -bool true
 # The remote's CHANGE_SONG plays the song rather than queueing it.
 defaults write "$domain" MainWindow.doubleclick_playlist_addmode -int 1
+# Radio streams of its own, for browsing its internet services ("Your radio streams").
+defaults write "$domain" SavedRadio.streams.1.name -string "Groove Salad"
+defaults write "$domain" SavedRadio.streams.1.url -string http://ice1.somafm.com/groovesalad-128-mp3
+defaults write "$domain" SavedRadio.streams.2.name -string "Drone Zone"
+defaults write "$domain" SavedRadio.streams.2.url -string http://ice1.somafm.com/dronezone-128-mp3
+defaults write "$domain" SavedRadio.streams.3.name -string "Secret Agent"
+defaults write "$domain" SavedRadio.streams.3.url -string http://ice1.somafm.com/secretagent-128-mp3
+defaults write "$domain" SavedRadio.streams.size -int 3
 
 # Later releases don't know the flag, and exit on options they don't know.
 streaming=()
