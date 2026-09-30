@@ -48,7 +48,7 @@ struct SongDetailsView: View {
                     isCoverZoomed = true
                 }
             } label: {
-                Artwork(artData: session.song?.artData, cornerRadius: Metrics.shapeLarge)
+                Artwork(song: session.song, cornerRadius: Metrics.shapeLarge)
                     .frame(width: 72, height: 72)
             }
             .buttonStyle(.plain)

@@ -16,24 +16,32 @@ struct IconTile: View {
     }
 }
 
-/// A song's cover art, square with rounded corners; the Clementine mark stands in when there's
-/// none. Covers crossfade when the song changes.
+/// A song's cover art, square with rounded corners. A song without a cover shows a music note, as
+/// the Android remote does; the Clementine mark stands in when nothing's playing. Covers crossfade
+/// when the song changes.
 struct Artwork: View {
-    let artData: Data?
+    let song: Song?
     var cornerRadius: CGFloat = Metrics.radiusXL
-    /// How far the mark is inset, as a fraction of the size, when there's no cover.
+    /// How far the mark is inset, as a fraction of the size, when nothing's playing.
     var markInset: CGFloat = 0.1
 
     var body: some View {
         GeometryReader { geometry in
             ZStack {
                 Palette.surfaceContainerHighest
-                if let image = ArtCache.shared.image(for: artData) {
+                if let image = ArtCache.shared.image(for: song?.artData) {
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFill()
                         .transition(.opacity)
-                        .id(artData)
+                        .id(song?.artData)
+                } else if song != nil {
+                    Image(systemName: "music.note")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundStyle(Palette.onSurfaceVariant)
+                        .frame(width: geometry.size.width * 0.4, height: geometry.size.height * 0.4)
+                        .transition(.opacity)
                 } else {
                     Image("ClementineMark")
                         .resizable()
@@ -42,7 +50,9 @@ struct Artwork: View {
                         .transition(.opacity)
                 }
             }
-            .animation(.easeInOut(duration: 0.75), value: artData)
+            .frame(width: geometry.size.width, height: geometry.size.height)
+            .animation(.easeInOut(duration: 0.75), value: song?.artData)
+            .animation(.easeInOut(duration: 0.75), value: song == nil)
         }
         .aspectRatio(1, contentMode: .fit)
         .clipShape(.rect(cornerRadius: cornerRadius))

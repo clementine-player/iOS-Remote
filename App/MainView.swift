@@ -74,7 +74,7 @@ struct MiniPlayer: View {
         HStack(spacing: Metrics.space3) {
             Button(action: open) {
                 HStack(spacing: Metrics.space3) {
-                    Artwork(artData: song?.artData, cornerRadius: Metrics.shapeSmall, markInset: 0.15)
+                    Artwork(song: song, cornerRadius: Metrics.shapeSmall, markInset: 0.15)
                         .frame(width: 32, height: 32)
                     VStack(alignment: .leading, spacing: 0) {
                         Text(song?.title ?? String(localized: "No song playing"))

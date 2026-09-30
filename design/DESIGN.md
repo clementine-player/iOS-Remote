@@ -113,8 +113,9 @@ From the Now playing board. Opened from the mini player; swipe down or the chevr
 - Top row: chevron-down (close), "Playing from" / the playlist's name, centred, and a menu (Stop,
   Download…).
 - Artwork: square, full width with 24 pt gutters, 28 pt corners, on `surface-container-highest`.
-  With no cover, the Clementine mark inset 32 pt. Tapping it shows the lyrics. Covers crossfade over
-  0.75 s.
+  A song without a cover shows a `music.note` in `on-surface-variant`, 40% of the size, as the
+  Android remote does; with nothing playing, the Clementine mark inset 32 pt. Tapping it shows the
+  lyrics. Covers crossfade over 0.75 s.
 - Song info, start-aligned: title (28 pt), artist in `primary` (16 pt medium), album in
   `on-surface-variant`, then "genre · year". One line each. A Love button (heart) beside it when
   Last.fm buttons are on.
@@ -248,7 +249,8 @@ From the Connection sheet board. Opened from the ConnectionChip.
 ### Mini player
 
 `.tabViewBottomAccessory`, shown while connected. Title and artist, a small cover (8 pt corners), the
-output button when Clementine can play elsewhere, a small play/pause and next. A thin `primary` progress line when the accessory is expanded. Tapping it
+output button when Clementine can play elsewhere, a small play/pause and next. The small cover
+shows a music note for a song without one, as the player does. A thin `primary` progress line when the accessory is expanded. Tapping it
 opens the player. With nothing playing it reads "No song playing".
 
 ### Settings
@@ -347,7 +349,10 @@ SF Symbols, filled, in the colour of their control:
 | Stars | `star.fill` / `star.leadinghalf.filled` / `star` |
 
 The Clementine mark (from the desktop repo's `data/icon.svg`) is the app icon, the Connect hero and
-the missing-cover image.
+the cover when nothing's playing. A song without a cover has a music note instead: Clementine sends
+its "no cover" picture (a jewel case, not square) for such a song, which the app recognises by its
+empty `art_automatic` and `art_manual` (or an `art_manual` of `(unset)`) and doesn't show, as the
+Android remote does.
 
 ### Copy
 

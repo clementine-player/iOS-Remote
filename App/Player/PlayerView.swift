@@ -103,7 +103,7 @@ struct PlayerView: View {
         Button {
             showLyrics()
         } label: {
-            Artwork(artData: session.song?.artData)
+            Artwork(song: session.song)
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Cover art")

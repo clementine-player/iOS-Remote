@@ -100,7 +100,8 @@ public struct Song: Sendable, Hashable {
     /// From 0 to 1.
     public var rating: Float
     public var url: String
-    /// The cover as Clementine sent it (compressed), if any.
+    /// The cover as Clementine sent it (compressed), if the song has one. Not Clementine's "no
+    /// cover" picture, which it sends for a song without one.
     public var artData: Data?
     /// The whole description, for adding the song to a playlist.
     public var metadata: SongMetadata
@@ -124,10 +125,24 @@ public struct Song: Sendable, Hashable {
         isLocal = metadata.isLocal
         rating = metadata.rating
         url = metadata.url
-        artData = metadata.hasArt && !metadata.art.isEmpty ? metadata.art : nil
+        artData = metadata.hasArt && !metadata.art.isEmpty && Self.hasCover(metadata) ? metadata.art : nil
         var withoutArt = metadata
         withoutArt.clearArt()
         self.metadata = withoutArt
+    }
+
+    /// Clementine's art_manual for a cover the user removed.
+    static let manuallyUnsetCover = "(unset)"
+
+    /// Whether the song has a cover of its own, as its art fields say: Clementine sends its "no
+    /// cover" picture as the art of a song with neither an automatic nor a manual cover. Clementine
+    /// that doesn't send the fields is taken at its word.
+    static func hasCover(_ metadata: SongMetadata) -> Bool {
+        guard metadata.hasArtAutomatic || metadata.hasArtManual else { return true }
+        if metadata.artManual == manuallyUnsetCover {
+            return false
+        }
+        return !metadata.artManual.isEmpty || !metadata.artAutomatic.isEmpty
     }
 
     /// Matches a filter in the title, artist or album, ignoring case.

@@ -88,3 +88,33 @@ struct MessagesTests {
         #expect(Lyrics.best(of: []) == nil)
     }
 }
+
+struct SongArtTests {
+    static func metadata(automatic: String? = nil, manual: String? = nil) -> SongMetadata {
+        var metadata = SongMetadata()
+        metadata.title = "Clair de lune"
+        metadata.art = Data([0x89, 0x50, 0x4E, 0x47])
+        if let automatic {
+            metadata.artAutomatic = automatic
+        }
+        if let manual {
+            metadata.artManual = manual
+        }
+        return metadata
+    }
+
+    @Test func keepsACover() {
+        #expect(Song(Self.metadata(automatic: "/music/cover.jpg", manual: "")).artData != nil)
+        #expect(Song(Self.metadata(automatic: "", manual: "/covers/mine.png")).artData != nil)
+    }
+
+    @Test func dropsTheNoCoverPicture() {
+        // Clementine's "no cover" picture comes with neither an automatic nor a manual cover.
+        #expect(Song(Self.metadata(automatic: "", manual: "")).artData == nil)
+        #expect(Song(Self.metadata(automatic: "/music/cover.jpg", manual: "(unset)")).artData == nil)
+    }
+
+    @Test func trustsClementineThatDoesNotSay() {
+        #expect(Song(Self.metadata()).artData != nil)
+    }
+}
