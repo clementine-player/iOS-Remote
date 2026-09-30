@@ -3,9 +3,8 @@
 # library and its playlist, for the screenshots (.github/workflows/screenshots.yml). Clementine
 # runs in the background, logging to <log>; this returns once it's ready.
 #
-# Remote streaming is on ("Allow playing on remote devices", and --experimental-remote-streaming for
-# releases before 1.4.1-238, which need it), so the app can offer to play on the phone, and the
-# screenshots show where Clementine can play.
+# Remote streaming is on ("Allow playing on remote devices"), so the app can offer to play on the
+# phone, and the screenshots show where Clementine can play.
 #
 #   start-clementine.sh <Clementine.app> <music dir> <log>
 #
@@ -63,12 +62,7 @@ defaults write "$domain" SavedRadio.streams.3.name -string "Secret Agent"
 defaults write "$domain" SavedRadio.streams.3.url -string http://ice1.somafm.com/secretagent-128-mp3
 defaults write "$domain" SavedRadio.streams.size -int 3
 
-# Later releases don't know the flag, and exit on options they don't know.
-streaming=()
-if grep -q -a experimental-remote-streaming "$binary"; then
-  streaming=(--experimental-remote-streaming)
-fi
-nohup "$binary" --verbose ${streaming[@]+"${streaming[@]}"} > "$log" 2>&1 &
+nohup "$binary" --verbose > "$log" 2>&1 &
 pid=$!
 echo "$pid" > "$log.pid"
 if ! wait_for "the network remote" "nc -z localhost 5500"; then

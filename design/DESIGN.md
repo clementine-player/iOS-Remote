@@ -410,8 +410,8 @@ hidden while the app is active.
 
 ### Remote streaming
 
-Clementine 1.4 with *Allow playing on remote devices* on (and, before 1.4.1-238, started with
-`--experimental-remote-streaming`) can play on its remotes instead of its computer, as the Android remote does. The
+Clementine 1.4 with *Allow playing on remote devices* on can play on its remotes instead of its
+computer, as the Android remote does. The
 protocol is Clementine's: `RENDER_*` messages to a renderer, `RENDERER_*` back, `OUTPUTS` to every
 remote.
 
