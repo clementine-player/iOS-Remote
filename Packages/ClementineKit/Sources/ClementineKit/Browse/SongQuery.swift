@@ -77,11 +77,13 @@ struct SongQuery {
         }
         sql += ", CAST(filename AS TEXT), artist, album FROM \(table)"
         sql += whereClause(selection)
-        // Names in order for the phone's language, whatever their case or accents (Database).
+        // Names in order for the phone's language, whatever their case or accents (Database), then
+        // by their bytes, so names differing only in case are always in the same order.
+        let field = fields[level]
         if isSongLevel {
-            sql += " ORDER BY album COLLATE LOCALIZED, disc, track \(sorting.rawValue)"
+            sql += " ORDER BY album COLLATE LOCALIZED, album, disc, track \(sorting.rawValue)"
         } else {
-            sql += " GROUP BY \(fields[level]) ORDER BY \(fields[level]) COLLATE LOCALIZED \(sorting.rawValue)"
+            sql += " GROUP BY \(field) ORDER BY \(field) COLLATE LOCALIZED \(sorting.rawValue), \(field) \(sorting.rawValue)"
         }
 
         return try database.query(sql, selection).map { row in

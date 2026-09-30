@@ -84,7 +84,9 @@ struct LibraryTests {
         let songs: [(String, String, String, Int64)] = [
             ("ZZ Top", "Eliminator", "Song", 1), ("abba", "arrival", "Song", 1),
             ("Érik Satie", "Gymnopédies", "Song", 1), ("Blondie", "Parallel Lines", "Song", 1),
-            ("Various", "zebra", "Song", 1), ("Various", "Apple", "Song", 1), ("Various", "apple", "Song", 1),
+            // Names differing only in case, the lower-case one first, so their order doesn't come
+            // from the rows'.
+            ("Various", "zebra", "Song", 1), ("Various", "apple", "Song", 1), ("Various", "Apple", "Song", 1),
             ("Various", "Été", "Song", 3), ("Various", "Été", "b second", 2), ("Various", "Été", "A first", 1),
         ]
         for song in songs {
@@ -99,10 +101,9 @@ struct LibraryTests {
         let query = SongQuery(fields: ["artist", "album", "title"], sorting: .ascending, table: "songs")
         #expect(try query.items(in: database, level: 0, selection: []).map(\.value)
             == ["abba", "Blondie", "Érik Satie", "Various", "ZZ Top"])
-        // Names differing only in case are side by side, in whichever order the language puts them.
-        let albums = try query.items(in: database, level: 1, selection: ["Various"]).map(\.value)
-        #expect(Set(albums.prefix(2)) == ["Apple", "apple"])
-        #expect(albums.dropFirst(2) == ["Été", "zebra"])
+        // Names differing only in case in a fixed order, the same as on Android.
+        #expect(try query.items(in: database, level: 1, selection: ["Various"]).map(\.value)
+            == ["Apple", "apple", "Été", "zebra"])
         // An album's songs stay in track order.
         #expect(try query.items(in: database, level: 2, selection: ["Various", "Été"]).map(\.value)
             == ["A first", "b second", "Song"])
@@ -110,6 +111,8 @@ struct LibraryTests {
         let descending = SongQuery(fields: ["artist", "album", "title"], sorting: .descending, table: "songs")
         #expect(try descending.items(in: database, level: 0, selection: []).map(\.value)
             == ["ZZ Top", "Various", "Érik Satie", "Blondie", "abba"])
+        #expect(try descending.items(in: database, level: 1, selection: ["Various"]).map(\.value)
+            == ["zebra", "Été", "apple", "Apple"])
     }
 
     @Test func groupsByYear() async throws {
