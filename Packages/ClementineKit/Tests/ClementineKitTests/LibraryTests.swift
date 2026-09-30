@@ -99,8 +99,10 @@ struct LibraryTests {
         let query = SongQuery(fields: ["artist", "album", "title"], sorting: .ascending, table: "songs")
         #expect(try query.items(in: database, level: 0, selection: []).map(\.value)
             == ["abba", "Blondie", "Érik Satie", "Various", "ZZ Top"])
-        #expect(try query.items(in: database, level: 1, selection: ["Various"]).map(\.value)
-            == ["Apple", "apple", "Été", "zebra"])
+        // Names differing only in case are side by side, in whichever order the language puts them.
+        let albums = try query.items(in: database, level: 1, selection: ["Various"]).map(\.value)
+        #expect(Set(albums.prefix(2)) == ["Apple", "apple"])
+        #expect(albums.dropFirst(2) == ["Été", "zebra"])
         // An album's songs stay in track order.
         #expect(try query.items(in: database, level: 2, selection: ["Various", "Été"]).map(\.value)
             == ["A first", "b second", "Song"])
