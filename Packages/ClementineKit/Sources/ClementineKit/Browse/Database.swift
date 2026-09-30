@@ -20,6 +20,19 @@ final class Database {
             handle = nil
             throw DatabaseError(message: message)
         }
+        // Text in order for the phone's language, whatever its case or accents, as search results
+        // are: SQLite's own collation orders text by its bytes, putting "abba" after "ZZ Top", and
+        // "Émile" after both. Named as the one Android's SQLite has, so both clients' SQL is the
+        // same. Names equal but for case keep an order of their own, so the order is always the same.
+        sqlite3_create_collation_v2(handle, "LOCALIZED", SQLITE_UTF8, nil, { _, length1, text1, length2, text2 in
+            let first = String(decoding: UnsafeRawBufferPointer(start: text1, count: Int(length1)), as: UTF8.self)
+            let second = String(decoding: UnsafeRawBufferPointer(start: text2, count: Int(length2)), as: UTF8.self)
+            switch first.localizedStandardCompare(second) {
+            case .orderedAscending: return -1
+            case .orderedDescending: return 1
+            case .orderedSame: return first == second ? 0 : (first < second ? -1 : 1)
+            }
+        }, nil)
     }
 
     deinit {

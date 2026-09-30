@@ -77,6 +77,39 @@ struct LibraryTests {
         #expect(albums.items.map(\.value) == ["Suite bergamasque", "Gymnopédies", ""])
     }
 
+    /// Names whose case and accents differ, and an album's songs whose names aren't in track order.
+    private func unsortedLibrary() throws -> Database {
+        let database = try Database(path: nil)
+        try database.execute("CREATE TABLE songs (artist TEXT, album TEXT, title TEXT, filename TEXT, disc INTEGER, track INTEGER)")
+        let songs: [(String, String, String, Int64)] = [
+            ("ZZ Top", "Eliminator", "Song", 1), ("abba", "arrival", "Song", 1),
+            ("Érik Satie", "Gymnopédies", "Song", 1), ("Blondie", "Parallel Lines", "Song", 1),
+            ("Various", "zebra", "Song", 1), ("Various", "Apple", "Song", 1), ("Various", "apple", "Song", 1),
+            ("Various", "Été", "Song", 3), ("Various", "Été", "b second", 2), ("Various", "Été", "A first", 1),
+        ]
+        for song in songs {
+            try database.run("INSERT INTO songs VALUES (?, ?, ?, 'file:///song', 1, ?)",
+                             [.text(song.0), .text(song.1), .text(song.2), .integer(song.3)])
+        }
+        return database
+    }
+
+    @Test func sortsIgnoringCaseAndAccents() throws {
+        let database = try unsortedLibrary()
+        let query = SongQuery(fields: ["artist", "album", "title"], sorting: .ascending, table: "songs")
+        #expect(try query.items(in: database, level: 0, selection: []).map(\.value)
+            == ["abba", "Blondie", "Érik Satie", "Various", "ZZ Top"])
+        #expect(try query.items(in: database, level: 1, selection: ["Various"]).map(\.value)
+            == ["Apple", "apple", "Été", "zebra"])
+        // An album's songs stay in track order.
+        #expect(try query.items(in: database, level: 2, selection: ["Various", "Été"]).map(\.value)
+            == ["A first", "b second", "Song"])
+
+        let descending = SongQuery(fields: ["artist", "album", "title"], sorting: .descending, table: "songs")
+        #expect(try descending.items(in: database, level: 0, selection: []).map(\.value)
+            == ["ZZ Top", "Various", "Érik Satie", "Blondie", "abba"])
+    }
+
     @Test func groupsByYear() async throws {
         let library = try await SampleLibrary().store()
         let debussy = try await library.level(below: nil, grouping: .artistYear, sorting: .ascending).items[1]
