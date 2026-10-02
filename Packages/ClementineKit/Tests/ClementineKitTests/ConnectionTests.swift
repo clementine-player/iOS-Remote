@@ -174,12 +174,20 @@ struct ConnectionTests {
         configuration.reconnectDelay = .milliseconds(10)
         let connection = ClementineConnection(endpoint: clementine.endpoint, authCode: 0, configuration: configuration)
         await connection.start()
-        try await clementine.waitUntil { $0.clientCount == 1 }
-        clementine.stop()
 
         var reason: ClementineConnection.CloseReason?
+        var stopped = false
         for await event in connection.events {
-            if case .closed(let why) = event { reason = why }
+            switch event {
+            case .message where !stopped:
+                // Once Clementine has answered: until then, it never took the connection.
+                clementine.stop()
+                stopped = true
+            case .closed(let why):
+                reason = why
+            default:
+                break
+            }
         }
         #expect(reason == .lost)
     }
@@ -208,16 +216,23 @@ struct ConnectionTests {
         configuration.reconnectDelay = .milliseconds(10)
         let connection = ClementineConnection(endpoint: clementine.endpoint, authCode: 0, configuration: configuration)
         await connection.start()
-        try await clementine.waitUntil { $0.received.contains { $0.type == .connect } }
-        try await Task.sleep(for: .milliseconds(200))
-        clementine.respond { message, client in
-            if message.type == .connect { client.cancel() }
-        }
-        clementine.dropClients()
 
         var reason: ClementineConnection.CloseReason?
+        var hangingUp = false
         for await event in connection.events {
-            if case .closed(let why) = event { reason = why }
+            switch event {
+            case .message where !hangingUp:
+                // Once Clementine has answered: until then, it never took the connection.
+                clementine.respond { message, client in
+                    if message.type == .connect { client.cancel() }
+                }
+                clementine.dropClients()
+                hangingUp = true
+            case .closed(let why):
+                reason = why
+            default:
+                break
+            }
         }
         #expect(reason == .lost)
         #expect(clementine.clientCount <= 2 + configuration.maxReconnects)
