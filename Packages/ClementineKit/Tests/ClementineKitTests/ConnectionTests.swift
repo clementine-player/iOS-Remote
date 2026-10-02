@@ -184,6 +184,45 @@ struct ConnectionTests {
         #expect(reason == .lost)
     }
 
+    @Test func givesUpWhenClementineHangsUpStraightAway() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        // As Clementine does for an address that isn't local, with "Use only local IP addresses".
+        clementine.respond { message, client in
+            if message.type == .connect { client.cancel() }
+        }
+
+        let session = RemoteSession()
+        session.connect(to: clementine.endpoint, authCode: 0)
+        try await eventually { session.status == .disconnected }
+        #expect(session.closeReason == .couldNotConnect)
+        #expect(clementine.clientCount == 1)
+    }
+
+    @Test func givesUpWhenClementineKeepsHangingUp() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        clementine.respondLikeClementine()
+
+        var configuration = ClementineConnection.Configuration()
+        configuration.reconnectDelay = .milliseconds(10)
+        let connection = ClementineConnection(endpoint: clementine.endpoint, authCode: 0, configuration: configuration)
+        await connection.start()
+        try await clementine.waitUntil { $0.received.contains { $0.type == .connect } }
+        try await Task.sleep(for: .milliseconds(200))
+        clementine.respond { message, client in
+            if message.type == .connect { client.cancel() }
+        }
+        clementine.dropClients()
+
+        var reason: ClementineConnection.CloseReason?
+        for await event in connection.events {
+            if case .closed(let why) = event { reason = why }
+        }
+        #expect(reason == .lost)
+        #expect(clementine.clientCount <= 2 + configuration.maxReconnects)
+    }
+
     @Test func createsAPlaylistAndAddsToIt() async throws {
         let clementine = try await FakeClementine()
         defer { clementine.stop() }

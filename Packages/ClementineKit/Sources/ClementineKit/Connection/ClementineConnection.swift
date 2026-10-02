@@ -52,6 +52,11 @@ public actor ClementineConnection {
     private let eventsContinuation: AsyncStream<Event>.Continuation
     private var channel: MessageChannel?
     private var lastHeard = ContinuousClock.now
+    /// Whether Clementine has sent anything on this connection yet.
+    private var hasHeard = false
+    /// Reconnections since Clementine last sent anything: one that accepts the connection and
+    /// closes it straight away would otherwise be reconnected to forever.
+    private var reconnectsUnheard = 0
     private var closed = false
     private var runTask: Task<Void, Never>?
     private var watchdogTask: Task<Void, Never>?
@@ -115,6 +120,8 @@ public actor ClementineConnection {
             do {
                 let message = try await channel.receive()
                 lastHeard = .now
+                hasHeard = true
+                reconnectsUnheard = 0
                 if message.type == .disconnect {
                     let response = message.responseDisconnect
                     finish(.disconnected(response.hasReasonDisconnect ? response.reasonDisconnect : nil))
@@ -133,7 +140,13 @@ public actor ClementineConnection {
                 if closed {
                     return
                 }
-                guard let restored = await reconnect() else {
+                if !hasHeard {
+                    // Clementine closed the connection without a word: it won't take this one.
+                    finish(.couldNotConnect)
+                    return
+                }
+                reconnectsUnheard += 1
+                guard reconnectsUnheard <= configuration.maxReconnects, let restored = await reconnect() else {
                     finish(.lost)
                     return
                 }
