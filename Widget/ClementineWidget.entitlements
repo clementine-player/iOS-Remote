@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.org.clementine-player.remote</string>
+		<string>$(APP_GROUP)</string>
 	</array>
 </dict>
 </plist>

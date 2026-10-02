@@ -109,6 +109,7 @@
 		8231CF7038EDE553E2AC1660 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		894F103FAB5D80B7A03AAE5D /* ClementineWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ClementineWidget.entitlements; sourceTree = "<group>"; };
 		9DD37699892851B35F20411F /* CommandIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandIntents.swift; sourceTree = "<group>"; };
+		9E9671E6914D5F1A315A8D84 /* Signing.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.xcconfig; sourceTree = "<group>"; };
 		A27CF1AC8998F6F615C91C80 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		A5B044E45F9BBD1D9AA21079 /* SharedState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedState.swift; sourceTree = "<group>"; };
 		AAE9D27E1EDA6F353DEF40CB /* PlaylistPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistPicker.swift; sourceTree = "<group>"; };
@@ -262,6 +263,14 @@
 			path = Widget;
 			sourceTree = "<group>";
 		};
+		8591A6BECAF128A402007A7D /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				9E9671E6914D5F1A315A8D84 /* Signing.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 		88FE4D9DD28CB9D79CAE438C /* Support */ = {
 			isa = PBXGroup;
 			children = (
@@ -328,6 +337,7 @@
 			isa = PBXGroup;
 			children = (
 				A107A0264CBD3F0285DF1B50 /* App */,
+				8591A6BECAF128A402007A7D /* Config */,
 				38787F3E609D6D2A758E7A85 /* Packages */,
 				6D2DBDA6FEACF04185D996F4 /* Shared */,
 				E30F36A8A2A2CAEAABD049F3 /* UITests */,
@@ -615,7 +625,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.remote.widget";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(WIDGET_BUNDLE_ID)";
 				PRODUCT_NAME = ClementineWidget;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -634,7 +644,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.remote.widget";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(WIDGET_BUNDLE_ID)";
 				PRODUCT_NAME = ClementineWidget;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -652,7 +662,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.remote.uitests";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID).uitests";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = ClementineRemote;
@@ -661,6 +671,7 @@
 		};
 		7CF09DB1C5A30532C2943B39 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9E9671E6914D5F1A315A8D84 /* Signing.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -696,7 +707,6 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 7B2GP77Y4A;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -736,7 +746,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.remote";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID)";
 				PRODUCT_NAME = "Clementine Remote";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -753,7 +763,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.remote.uitests";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID).uitests";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = ClementineRemote;
@@ -762,6 +772,7 @@
 		};
 		C985393B3654A53F8016975E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9E9671E6914D5F1A315A8D84 /* Signing.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -797,7 +808,6 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 7B2GP77Y4A;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -844,7 +854,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.clementine-player.remote";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID)";
 				PRODUCT_NAME = "Clementine Remote";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

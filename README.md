@@ -24,6 +24,14 @@ The Xcode project is generated from `project.yml`; after changing that file, run
 `xcodegen generate`. `ClementineKit` (in `Packages/`) holds everything that doesn't need a screen,
 and its tests also run with `swift test`.
 
+To build to your own iPhone without being on the project's team, copy
+`Config/Local.xcconfig.example` to `Config/Local.xcconfig` and set your team, bundle identifier
+and app group there. It overrides `Config/Signing.xcconfig` and isn't committed. Then:
+
+```sh
+DESTINATION="id=<your device's UDID>" scripts/build.sh -allowProvisioningUpdates build
+```
+
 ## Screenshots
 
 On pull requests that change the app, `.github/workflows/screenshots.yml` takes screenshots of
