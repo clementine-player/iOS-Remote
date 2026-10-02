@@ -27,6 +27,9 @@ public final class ServiceBrowser {
 
     /// The Clementines found so far, by name.
     public private(set) var servers: [DiscoveredServer] = []
+    /// Whether iOS has refused the local network permission, so no Clementine can be found.
+    /// Connecting to an address still works.
+    public private(set) var isLocalNetworkDenied = false
 
     private var browser: NWBrowser?
     private var resolvers: [String: Resolver] = [:]
@@ -52,16 +55,46 @@ public final class ServiceBrowser {
         }
         browser.stateUpdateHandler = { [weak self] state in
             switch state {
+            case .waiting(let error) where Self.isLocalNetworkDenied(error):
+                // Looking again won't help until it's allowed in Settings, and the app looks again
+                // when it comes back from there.
+                Task { @MainActor in self?.denied(browser) }
             case .failed, .waiting:
-                // Failed, or waiting for the network or the local network permission: look again
-                // shortly, as a browser doesn't always recover by itself.
+                // Failed, or waiting for the network: look again shortly, as a browser doesn't
+                // always recover by itself.
                 Task { @MainActor in self?.retry(browser) }
+            case .ready:
+                Task { @MainActor in self?.ready(browser) }
             default:
                 break
             }
         }
         browser.start(queue: .main)
         self.browser = browser
+    }
+
+    /// Whether [error] means iOS refused the local network permission.
+    nonisolated static func isLocalNetworkDenied(_ error: NWError) -> Bool {
+        if case .dns(let code) = error {
+            return code == DNSServiceErrorType(kDNSServiceErr_PolicyDenied)
+        }
+        return false
+    }
+
+    private func denied(_ browser: NWBrowser) {
+        guard self.browser === browser else { return }
+        isLocalNetworkDenied = true
+    }
+
+    /// A browser is ready just before it's refused the permission, so it's allowed only if it's
+    /// still ready a moment later.
+    private func ready(_ browser: NWBrowser) {
+        guard isLocalNetworkDenied else { return }
+        Task { [weak self] in
+            try? await Task.sleep(for: Self.retryDelay)
+            guard let self, self.browser === browser, case .ready = browser.state else { return }
+            self.isLocalNetworkDenied = false
+        }
     }
 
     private func retry(_ failed: NWBrowser) {
@@ -81,10 +114,15 @@ public final class ServiceBrowser {
         browser = nil
         resolvers.values.forEach { $0.cancel() }
         resolvers = [:]
-        servers = []
+        if !servers.isEmpty {
+            servers = []
+        }
     }
 
     private func update(names: Set<String>) {
+        if !names.isEmpty {
+            isLocalNetworkDenied = false
+        }
         servers.removeAll { !names.contains($0.name) }
         for (name, resolver) in resolvers where !names.contains(name) {
             resolver.cancel()

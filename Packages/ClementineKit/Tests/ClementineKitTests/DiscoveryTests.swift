@@ -1,3 +1,4 @@
+import dnssd
 import Foundation
 import Network
 import Testing
@@ -24,5 +25,11 @@ struct DiscoveryTests {
         let server = try #require(browser.servers.first { $0.name == name })
         #expect(server.port == listener.port?.rawValue)
         #expect(IPv4Address(server.host) != nil)
+    }
+
+    @Test func recognisesARefusedLocalNetworkPermission() {
+        #expect(ServiceBrowser.isLocalNetworkDenied(.dns(DNSServiceErrorType(kDNSServiceErr_PolicyDenied))))
+        #expect(!ServiceBrowser.isLocalNetworkDenied(.dns(DNSServiceErrorType(kDNSServiceErr_DefunctConnection))))
+        #expect(!ServiceBrowser.isLocalNetworkDenied(.posix(.ENETDOWN)))
     }
 }
