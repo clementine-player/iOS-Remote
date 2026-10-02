@@ -15,30 +15,52 @@ struct ConnectView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let landscape = geometry.size.width > geometry.size.height
-            Group {
-                if landscape {
-                    HStack(spacing: 0) {
-                        Header(iconSize: 168, fill: true, topInset: geometry.safeAreaInsets.top, onSettings: showSettings)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            // The height with the space the keyboard takes too, so the layout stays put when it
+            // opens: switching layouts would take the focus from the address, which closes the
+            // keyboard again.
+            let height = geometry.size.height + geometry.safeAreaInsets.bottom
+            let landscape = geometry.size.width > height
+            ScrollViewReader { scroller in
+                Group {
+                    if landscape {
+                        HStack(spacing: 0) {
+                            Header(iconSize: 168, fill: true, topInset: geometry.safeAreaInsets.top, onSettings: showSettings)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            ScrollView {
+                                content
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
+                    } else {
                         ScrollView {
-                            content
+                            VStack(spacing: 0) {
+                                Header(
+                                    iconSize: min(168, max(96, height - 634)),
+                                    fill: false,
+                                    topInset: geometry.safeAreaInsets.top,
+                                    onSettings: showSettings)
+                                content
+                            }
                         }
-                        .frame(maxWidth: .infinity)
-                    }
-                } else {
-                    ScrollView {
-                        VStack(spacing: 0) {
-                            Header(
-                                iconSize: min(168, max(96, geometry.size.height - 600)),
-                                fill: false,
-                                topInset: geometry.safeAreaInsets.top,
-                                onSettings: showSettings)
-                            content
+                        .ignoresSafeArea(edges: .top)
+                        .scrollBounceBehavior(.basedOnSize)
+                        .overlay(alignment: .top) {
+                            // Behind the status bar, so the header doesn't scroll under the time.
+                            Palette.brandGradient
+                                .frame(height: geometry.safeAreaInsets.top)
+                                .ignoresSafeArea(edges: .top)
+                                .allowsHitTesting(false)
+                                .accessibilityHidden(true)
                         }
                     }
-                    .ignoresSafeArea(edges: .top)
-                    .scrollBounceBehavior(.basedOnSize)
+                }
+                .onChange(of: isHostFocused) { _, focused in
+                    // Above the keyboard, which can cover it otherwise.
+                    if focused {
+                        withAnimation {
+                            scroller.scrollTo(Self.addressID, anchor: .bottom)
+                        }
+                    }
                 }
             }
         }
@@ -96,6 +118,7 @@ struct ConnectView: View {
     }
 
     static let clementineVersion = "1.3"
+    private static let addressID = "address"
 
     private var content: some View {
         let session = model.session
@@ -162,6 +185,7 @@ struct ConnectView: View {
                         .disabled(host.trimmingCharacters(in: .whitespaces).isEmpty || connecting)
                         .accessibilityIdentifier("connect")
                 }
+                .id(Self.addressID)
                 if isHostFocused, !connecting {
                     Suggestions(host: host, known: model.settings.knownHosts) { suggestion in
                         host = suggestion
