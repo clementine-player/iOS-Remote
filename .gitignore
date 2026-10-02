@@ -8,3 +8,6 @@ DerivedData/
 
 # Worktrees of Claude Code sessions working alongside each other
 .claude/worktrees/
+
+# Signing for building with your own team
+/Config/Local.xcconfig

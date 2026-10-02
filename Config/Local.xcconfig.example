@@ -1,0 +1,6 @@
+// Your own team and identifiers, overriding those in Signing.xcconfig. The app group has to be
+// one your team can use. The widget is signed as APP_BUNDLE_ID.widget unless you set
+// WIDGET_BUNDLE_ID too.
+DEVELOPMENT_TEAM = ABCDE12345
+APP_BUNDLE_ID = com.example.ClementineRemote
+APP_GROUP = group.com.example.ClementineRemote

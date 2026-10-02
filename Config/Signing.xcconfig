@@ -1,0 +1,9 @@
+// The team that signs the app, and the identifiers registered to it. To build with another team,
+// say to your own phone, copy Local.xcconfig.example to Local.xcconfig and set yours there: it
+// isn't committed.
+DEVELOPMENT_TEAM = 7B2GP77Y4A
+APP_BUNDLE_ID = org.clementine-player.remote
+APP_GROUP = group.org.clementine-player.remote
+WIDGET_BUNDLE_ID = $(APP_BUNDLE_ID).widget
+
+#include? "Local.xcconfig"
