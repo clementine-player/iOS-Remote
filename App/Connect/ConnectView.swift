@@ -6,6 +6,7 @@ import SwiftUI
 struct ConnectView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.openURL) private var openURL
     @State private var browser = ServiceBrowser()
     @State private var host = ""
     @State private var authCode = ""
@@ -109,6 +110,9 @@ struct ConnectView: View {
                         model.toasts.show("That isn't a valid code")
                     }
                 }
+            } else if problem == .localNetworkDenied {
+                Button("Cancel", role: .cancel) {}
+                Button("Open Settings", action: openSettings)
             } else {
                 Button("OK") {}
             }
@@ -144,7 +148,9 @@ struct ConnectView: View {
                 .padding(.leading, Metrics.space2)
 
                 VStack(spacing: 0) {
-                    if browser.servers.isEmpty {
+                    if browser.servers.isEmpty, browser.isLocalNetworkDenied {
+                        NotSearching()
+                    } else if browser.servers.isEmpty {
                         Searching()
                     } else {
                         ForEach(browser.servers) { server in
@@ -239,6 +245,12 @@ struct ConnectView: View {
         model.connect(host: host)
     }
 
+    private func openSettings() {
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+            openURL(url)
+        }
+    }
+
     private func showSettings() {
         model.stopAutoConnecting()
         isSettingsPresented = true
@@ -260,6 +272,7 @@ struct ConnectView: View {
         case .oldClementine: "Clementine is too old"
         case .lost: "Lost the connection to Clementine"
         case .unreachable, nil: "Couldn't reach Clementine"
+        case .localNetworkDenied: "Local Network is off"
         }
     }
 
@@ -277,6 +290,8 @@ struct ConnectView: View {
             "This phone doesn't have a local network address. Try turning off \"Use only local IP addresses\" in Clementine's settings."
         case .unreachable(nil):
             "Is Clementine running? Is it version \(Self.clementineVersion) or later, with the network remote turned on in its settings? Is the address right?"
+        case .localNetworkDenied:
+            "That address is on your network, and Clementine Remote needs Local Network access to reach it. Turn on Local Network in Settings."
         }
     }
 }
@@ -384,6 +399,36 @@ private struct Searching: View {
         .padding(Metrics.space4)
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityIdentifier("searching")
+    }
+}
+
+/// Shown instead of [Searching] when the local network permission was refused.
+private struct NotSearching: View {
+    @Environment(\.openURL) private var openURL
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Metrics.space1) {
+            HStack(spacing: Metrics.space3) {
+                Image(systemName: "wifi.slash")
+                    .foregroundStyle(Palette.onSurfaceVariant)
+                    .accessibilityHidden(true)
+                Text("Not looking on this network")
+                    .textStyle(.bodyLarge)
+                    .foregroundStyle(Palette.onSurface)
+            }
+            Text("Without Local Network access, Clementine Remote can't find Clementine on your network. Enter its address below, or turn on Local Network in Settings.")
+                .textStyle(.bodyMedium)
+                .foregroundStyle(Palette.onSurfaceVariant)
+            Button("Open Settings") {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    openURL(url)
+                }
+            }
+            .frame(minHeight: 44)
+        }
+        .padding(Metrics.space4)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityIdentifier("not-searching")
     }
 }
 

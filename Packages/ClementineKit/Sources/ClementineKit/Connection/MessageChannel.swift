@@ -5,6 +5,8 @@ import Synchronization
 public enum ChannelError: Error, Sendable {
     /// Couldn't connect in time, or at all.
     case couldNotConnect
+    /// iOS refused the local network permission, which connecting to this address needs.
+    case localNetworkDenied
     /// The other side closed the connection, or it was cancelled.
     case closed
 }
@@ -59,7 +61,8 @@ public final class MessageChannel: Sendable {
                         resume(ChannelError.couldNotConnect)
                     case .waiting:
                         // Refused or unreachable: Network would keep retrying.
-                        resume(ChannelError.couldNotConnect)
+                        let denied = connection.currentPath?.unsatisfiedReason == .localNetworkDenied
+                        resume(denied ? ChannelError.localNetworkDenied : ChannelError.couldNotConnect)
                         connection.cancel()
                     default:
                         break

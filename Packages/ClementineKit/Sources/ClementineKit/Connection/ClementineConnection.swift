@@ -22,6 +22,8 @@ public actor ClementineConnection {
         case requested
         /// Couldn't connect at all.
         case couldNotConnect
+        /// iOS refused the local network permission, which connecting to this address needs.
+        case localNetworkDenied
         /// Clementine closed the connection, for this reason if it gave one.
         case disconnected(DisconnectReason?)
         /// The connection was lost and couldn't be restored.
@@ -108,7 +110,13 @@ public actor ClementineConnection {
     }
 
     private func run(sendPlaylistSongs: Bool) async {
-        guard var channel = await open(sendPlaylistSongs: sendPlaylistSongs) else {
+        var channel: MessageChannel
+        do {
+            channel = try await open(sendPlaylistSongs: sendPlaylistSongs)
+        } catch ChannelError.localNetworkDenied {
+            finish(.localNetworkDenied)
+            return
+        } catch {
             finish(.couldNotConnect)
             return
         }
@@ -165,7 +173,7 @@ public actor ClementineConnection {
             if closed {
                 return nil
             }
-            if let channel = await open(sendPlaylistSongs: false) {
+            if let channel = try? await open(sendPlaylistSongs: false) {
                 use(channel)
                 eventsContinuation.yield(.reconnected)
                 return channel
@@ -174,7 +182,7 @@ public actor ClementineConnection {
         return nil
     }
 
-    private func open(sendPlaylistSongs: Bool) async -> MessageChannel? {
+    private func open(sendPlaylistSongs: Bool) async throws -> MessageChannel {
         let channel = MessageChannel(endpoint: endpoint)
         do {
             try await channel.open(timeout: configuration.connectTimeout)
@@ -183,7 +191,7 @@ public actor ClementineConnection {
             return channel
         } catch {
             channel.cancel()
-            return nil
+            throw error
         }
     }
 

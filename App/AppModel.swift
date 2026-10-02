@@ -183,6 +183,8 @@ final class AppModel {
             connectProblem = .lost
         case .couldNotConnect, .lost, .invalidData:
             connectProblem = .unreachable(network.problem)
+        case .localNetworkDenied:
+            connectProblem = .localNetworkDenied
         case .requested:
             break
         }
@@ -235,6 +237,8 @@ enum ConnectProblem: Equatable, Identifiable {
     case oldClementine
     case lost
     case unreachable(NetworkMonitor.Problem?)
+    /// The address is on this network, and the local network permission was refused.
+    case localNetworkDenied
 
     var id: String { String(describing: self) }
 }
