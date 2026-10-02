@@ -173,6 +173,8 @@ final class AppModel {
             break
         case .disconnected(.wrongAuthCode), .disconnected(.notAuthenticated):
             connectProblem = .authCode
+        case .disconnected(.notLocalNetwork):
+            connectProblem = .notLocalNetwork
         case .oldProtocol:
             connectProblem = .oldClementine
         case .disconnected:
@@ -239,6 +241,8 @@ enum ConnectProblem: Equatable, Identifiable {
     case unreachable(NetworkMonitor.Problem?)
     /// The address is on this network, and the local network permission was refused.
     case localNetworkDenied
+    /// Clementine only accepts connections from its local network, and this phone isn't on it.
+    case notLocalNetwork
 
     var id: String { String(describing: self) }
 }

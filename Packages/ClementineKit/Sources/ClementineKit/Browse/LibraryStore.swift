@@ -11,6 +11,8 @@ public enum DownloadFailure: Error, Sendable, Equatable {
     case forbidden
     /// Clementine didn't accept the auth code.
     case wrongAuthCode
+    /// Clementine only accepts connections from its local network, and this phone isn't on it.
+    case notLocalNetwork
     /// Not enough space on the phone.
     case insufficientSpace
     /// Couldn't write the file.
@@ -28,6 +30,7 @@ public enum DownloadFailure: Error, Sendable, Equatable {
         switch reason {
         case .downloadForbidden: self = .forbidden
         case .wrongAuthCode, .notAuthenticated: self = .wrongAuthCode
+        case .notLocalNetwork: self = .notLocalNetwork
         case .serverShutdown, nil: self = .connection
         }
     }

@@ -199,6 +199,10 @@ public nonisolated enum Pb_Remote_ReasonDisconnect: Int, SwiftProtobuf.Enum, Swi
   case notAuthenticated = 3
   case downloadForbidden = 4
 
+  /// Clementine only accepts connections from its local network, and the
+  /// client isn't on it. Older clients read this as Server_Shutdown.
+  case notLocalNetwork = 5
+
   public init() {
     self = .serverShutdown
   }
@@ -3374,7 +3378,7 @@ nonisolated extension Pb_Remote_ShuffleMode: SwiftProtobuf._ProtoNameProviding {
 }
 
 nonisolated extension Pb_Remote_ReasonDisconnect: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}Server_Shutdown\0\u{1}Wrong_Auth_Code\0\u{1}Not_Authenticated\0\u{1}Download_Forbidden\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}Server_Shutdown\0\u{1}Wrong_Auth_Code\0\u{1}Not_Authenticated\0\u{1}Download_Forbidden\0\u{1}Not_Local_Network\0")
 }
 
 nonisolated extension Pb_Remote_DownloadItem: SwiftProtobuf._ProtoNameProviding {

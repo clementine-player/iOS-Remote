@@ -273,6 +273,7 @@ struct ConnectView: View {
         case .lost: "Lost the connection to Clementine"
         case .unreachable, nil: "Couldn't reach Clementine"
         case .localNetworkDenied: "Local Network is off"
+        case .notLocalNetwork: "Clementine refused the connection"
         }
     }
 
@@ -292,6 +293,8 @@ struct ConnectView: View {
             "Is Clementine running? Is it version \(Self.clementineVersion) or later, with the network remote turned on in its settings? Is the address right?"
         case .localNetworkDenied:
             "That address is on your network, and Clementine Remote needs Local Network access to reach it. Turn on Local Network in Settings."
+        case .notLocalNetwork:
+            "Clementine only accepts connections from its local network. To connect from elsewhere, turn off \"Only allow connections from the local network\" in its Network Remote settings."
         }
     }
 }
