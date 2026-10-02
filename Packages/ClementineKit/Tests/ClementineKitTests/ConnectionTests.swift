@@ -207,6 +207,24 @@ struct ConnectionTests {
         #expect(clementine.clientCount == 1)
     }
 
+    @Test func refusedForNotBeingOnTheLocalNetwork() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        clementine.respond { message, client in
+            guard message.type == .connect else { return }
+            try? await client.send(RemoteMessage(.disconnect) {
+                $0.responseDisconnect.reasonDisconnect = .notLocalNetwork
+            })
+            client.cancel()
+        }
+
+        let session = RemoteSession()
+        session.connect(to: clementine.endpoint, authCode: 0)
+        try await eventually { session.status == .disconnected }
+        #expect(session.closeReason == .disconnected(.notLocalNetwork))
+        #expect(clementine.clientCount == 1)
+    }
+
     @Test func givesUpWhenClementineKeepsHangingUp() async throws {
         let clementine = try await FakeClementine()
         defer { clementine.stop() }
