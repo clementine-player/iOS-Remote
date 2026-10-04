@@ -258,6 +258,11 @@ public nonisolated enum Pb_Remote_RendererFeature: Int, SwiftProtobuf.Enum, Swif
   /// Sends HTTP Range requests, so it can seek in Direct streams itself.
   case httpRange = 2
 
+  /// Resolves a relative render URL against the host and port it connected
+  /// to. Without it, the server sends URLs with its own address, which a
+  /// renderer can't reach through NAT or a port forward.
+  case relativeUrls = 3
+
   public init() {
     self = .unspecified
   }
@@ -2308,7 +2313,11 @@ public nonisolated struct Pb_Remote_RenderItem: Sendable {
   /// Clears the value of `itemID`. Subsequent reads from it will return its default value.
   public mutating func clearItemID() {self._itemID = nil}
 
-  /// http://host:port/s/<token>/<item_id>
+  /// Where to fetch the item. To renderers with RENDERER_FEATURE_RELATIVE_URLS
+  /// it's usually a path, /s/<token>/<item_id>, on the host and port the
+  /// renderer connected to: resolve it against http://<host>:<port>/ as a
+  /// relative URL (RFC 3986). A URL with a scheme and host is fetched from
+  /// exactly there. Other renderers get http://<host>:<port>/s/<token>/<item_id>.
   public var url: String {
     get {_url ?? String()}
     set {_url = newValue}
@@ -2468,7 +2477,8 @@ public nonisolated struct Pb_Remote_RequestRenderSeek: Sendable {
   /// Clears the value of `positionMs`. Subsequent reads from it will return its default value.
   public mutating func clearPositionMs() {self._positionMs = nil}
 
-  /// Set when the item's seek_method is SEEK_METHOD_NEW_URL.
+  /// Set when the item's seek_method is SEEK_METHOD_NEW_URL. Resolved like
+  /// RenderItem.url.
   public var url: String {
     get {_url ?? String()}
     set {_url = newValue}
@@ -3394,7 +3404,7 @@ nonisolated extension Pb_Remote_ServerFeature: SwiftProtobuf._ProtoNameProviding
 }
 
 nonisolated extension Pb_Remote_RendererFeature: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0RENDERER_FEATURE_UNSPECIFIED\0\u{1}RENDERER_FEATURE_GAPLESS\0\u{1}RENDERER_FEATURE_HTTP_RANGE\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0RENDERER_FEATURE_UNSPECIFIED\0\u{1}RENDERER_FEATURE_GAPLESS\0\u{1}RENDERER_FEATURE_HTTP_RANGE\0\u{1}RENDERER_FEATURE_RELATIVE_URLS\0")
 }
 
 nonisolated extension Pb_Remote_OutputState: SwiftProtobuf._ProtoNameProviding {

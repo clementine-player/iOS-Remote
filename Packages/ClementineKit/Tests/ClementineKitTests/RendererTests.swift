@@ -52,8 +52,13 @@ struct RendererTests {
     init() {
         let sent = Sent()
         self.sent = sent
-        renderer = Renderer(playback: playback, statusInterval: .milliseconds(50)) { sent.messages.append($0) }
+        renderer = Renderer(playback: playback, server: { Self.server }, statusInterval: .milliseconds(50)) {
+            sent.messages.append($0)
+        }
     }
+
+    /// Where the renderer connected to Clementine.
+    static let server = Endpoint(host: "studio", port: 5501)
 
     static func item(_ id: Int32, seek: Pb_Remote_SeekMethod = .byteRange, lengthMs: Int64 = 300_000) -> RenderItem {
         var item = RenderItem()
@@ -220,6 +225,86 @@ struct RendererTests {
         #expect(capabilities.displayName == "iPhone")
         #expect(capabilities.formats.map(\.mimeType).contains("audio/mpeg"))
         #expect(!capabilities.formats.map(\.mimeType).contains { $0.hasPrefix("audio/ogg") })
-        #expect(capabilities.features == [.gapless, .httpRange])
+        #expect(capabilities.features == [.gapless, .httpRange, .relativeUrls])
+    }
+
+    // MARK: Where tracks come from
+
+    @Test func fetchesAPathFromWhereItConnected() {
+        var item = Self.item(1, seek: .newURL)
+        item.url = "/s/token/1"
+        renderer.handle(Self.load(item))
+        #expect(playback.calls == [.load("http://studio:5501/s/token/1", startMs: 0, playing: true)])
+
+        renderer.handle(RemoteMessage(.renderSeek) {
+            $0.requestRenderSeek.itemID = 1
+            $0.requestRenderSeek.positionMs = 90_000
+            $0.requestRenderSeek.url = "/s/token/1?t=90000"
+        })
+        #expect(playback.calls.suffix(2) == [
+            .load("http://studio:5501/s/token/1?t=90000", startMs: 0, playing: true),
+            .queue(nil),
+        ])
+    }
+
+    @Test func queuesAPathFromWhereItConnected() {
+        renderer.handle(Self.load(Self.item(1)))
+        var next = Self.item(2)
+        next.url = "/s/token/2"
+        renderer.handle(RemoteMessage(.renderPreload) { $0.requestRenderPreload.item = next })
+        #expect(playback.calls.last == .queue("http://studio:5501/s/token/2"))
+    }
+
+    @Test func resolvesURLsAsClementineMeansThem() {
+        let server = Endpoint(host: "203.0.113.7", port: 5500)
+        // A full URL is fetched from exactly there.
+        #expect(Renderer.resolve("http://radio.example/stream", on: server)?.absoluteString == "http://radio.example/stream")
+        #expect(Renderer.resolve("/s/t/1?t=5", on: server)?.absoluteString == "http://203.0.113.7:5500/s/t/1?t=5")
+        #expect(Renderer.resolve("/s/t/1", on: Endpoint(host: "clementine.example.org", port: 443))?.absoluteString
+            == "http://clementine.example.org:443/s/t/1")
+        #expect(Renderer.resolve("/s/t/1", on: Endpoint(host: "2001:db8::1"))?.absoluteString
+            == "http://[2001:db8::1]:5500/s/t/1")
+        #expect(Renderer.resolve("/s/t/1", on: Endpoint(host: "fe80::1%en0"))?.absoluteString
+            == "http://[fe80::1%25en0]:5500/s/t/1")
+        // Not connected anywhere: nowhere to fetch a path from.
+        #expect(Renderer.resolve("/s/t/1", on: nil) == nil)
+    }
+
+    @Test func reportsAPathItCantPlaceAsAnError() {
+        let renderer = Renderer(playback: playback, server: { nil }) { sent.messages.append($0) }
+        var item = Self.item(1)
+        item.url = "/s/token/1"
+        renderer.handle(Self.load(item))
+        #expect(playback.calls.isEmpty)
+        let error = sent.messages.last { $0.type == .rendererError }?.rendererError
+        #expect(error?.itemID == 1)
+        #expect(error?.scope == .item)
+    }
+
+    /// Through NAT or a port forward, Clementine doesn't know the address the phone reached it at, so
+    /// it sends a path, which the phone fetches from where it connected.
+    @Test func playsAPathFromTheClementineItConnectedTo() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        clementine.respondLikeClementine(extra: OutputTests.streamingClementine(active: OutputTests.phone))
+
+        let session = RemoteSession()
+        let renderer = Renderer(playback: playback, server: { session.endpoint }) { session.send($0) }
+        session.addObserver { _ = renderer.handle($0) }
+        session.connect(to: clementine.endpoint, authCode: 0,
+                        renderer: Renderer.capabilities(id: OutputTests.phone, name: "iPhone"))
+        try await eventually { session.isPlayingHere }
+        let connect = try #require(clementine.received.first)
+        #expect(connect.requestConnect.renderer.features.contains(.relativeUrls))
+
+        var item = Self.item(7, seek: .newURL)
+        item.url = "/s/token/7?t=1500"
+        await clementine.broadcast(Self.load(item, at: 1_500))
+        try await eventually { !playback.calls.isEmpty }
+        let port = clementine.endpoint.port
+        #expect(playback.calls == [.load("http://127.0.0.1:\(port)/s/token/7?t=1500", startMs: 0, playing: true)])
+        try await clementine.waitUntil {
+            $0.received.contains { $0.type == .rendererStatus && $0.rendererStatus.itemID == 7 }
+        }
     }
 }

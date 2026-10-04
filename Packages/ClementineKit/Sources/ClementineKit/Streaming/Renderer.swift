@@ -83,6 +83,7 @@ public final class Renderer {
     @ObservationIgnored public var onUpdate: (@MainActor () -> Void)?
 
     @ObservationIgnored private let playback: Playback
+    @ObservationIgnored private let server: @MainActor () -> Endpoint?
     @ObservationIgnored private let send: @MainActor (RemoteMessage) -> Void
     @ObservationIgnored private let statusInterval: Duration
     /// Queued to follow [item].
@@ -94,9 +95,14 @@ public final class Renderer {
     @ObservationIgnored private var statusTask: Task<Void, Never>?
 
     /// Plays with [playback], and sends Clementine messages with [send]. While playing, it
-    /// reports the position every [statusInterval], as Clementine expects.
-    public init(playback: Playback, statusInterval: Duration = .seconds(1), send: @escaping @MainActor (RemoteMessage) -> Void) {
+    /// reports the position every [statusInterval], as Clementine expects. [server] is where this
+    /// device connected to Clementine, which serves the tracks on the same host and port.
+    public init(
+        playback: Playback, server: @escaping @MainActor () -> Endpoint?, statusInterval: Duration = .seconds(1),
+        send: @escaping @MainActor (RemoteMessage) -> Void
+    ) {
         self.playback = playback
+        self.server = server
         self.statusInterval = statusInterval
         self.send = send
         playback.listener = self
@@ -113,7 +119,7 @@ public final class Renderer {
         case .renderPreload:
             next = message.requestRenderPreload.item
             if item != nil {
-                playback.queue(next.flatMap(Self.source))
+                playback.queue(next.flatMap(source))
             }
         case .renderPlay:
             guard item != nil else { return true }
@@ -163,7 +169,7 @@ public final class Renderer {
         self.item = item
         next = nil
         reported = nil
-        guard let source = Self.source(item) else {
+        guard let source = self.source(item) else {
             playbackFailed("Not a URL: \(item.url)", transient: false)
             return
         }
@@ -186,10 +192,10 @@ public final class Renderer {
     private func seek(item itemID: Int32, to positionMs: Int64, url: String) {
         // A seek meant for an item that has since changed.
         guard let item, item.itemID == itemID else { return }
-        if !url.isEmpty, let target = URL(string: url) {
+        if !url.isEmpty, let target = Self.resolve(url, on: server()) {
             offsetMs = positionMs
             playback.load(PlaybackSource(url: target, mimeType: item.mimeType), startMs: 0, playing: isPlaying)
-            playback.queue(next.flatMap(Self.source))
+            playback.queue(next.flatMap(source))
         } else if item.seekMethod == .byteRange {
             offsetMs = 0
             playback.seek(toMs: positionMs)
@@ -199,8 +205,24 @@ public final class Renderer {
         sendStatus()
     }
 
-    private static func source(_ item: RenderItem) -> PlaybackSource? {
-        URL(string: item.url).map { PlaybackSource(url: $0, mimeType: item.mimeType) }
+    private func source(_ item: RenderItem) -> PlaybackSource? {
+        Self.resolve(item.url, on: server()).map { PlaybackSource(url: $0, mimeType: item.mimeType) }
+    }
+
+    /// Where to fetch [url], as Clementine sent it: a URL with a scheme from exactly there, and
+    /// anything else, usually a path, relative to [server]'s host and port. Through NAT or a port
+    /// forward, Clementine doesn't know the address this device reached it at, so it sends paths.
+    static func resolve(_ url: String, on server: Endpoint?) -> URL? {
+        guard let parsed = URL(string: url) else { return nil }
+        if parsed.scheme != nil { return parsed }
+        guard let server else { return nil }
+        var host = server.host
+        if host.contains(":"), !host.hasPrefix("[") {
+            // An IPv6 address, whose zone, if any, is escaped in a URL.
+            host = "[\(host.replacingOccurrences(of: "%", with: "%25"))]"
+        }
+        guard let base = URL(string: "http://\(host):\(server.port)/") else { return nil }
+        return URL(string: url, relativeTo: base)?.absoluteURL
     }
 
     private var state: Pb_Remote_RendererState {
@@ -299,8 +321,9 @@ extension Renderer {
             format.mimeType = type
             return format
         }
-        // AVQueuePlayer starts a queued item without a gap, and seeks with Range requests.
-        capabilities.features = [.gapless, .httpRange]
+        // AVQueuePlayer starts a queued item without a gap, and seeks with Range requests. Tracks
+        // can come as paths on the address the phone connected to.
+        capabilities.features = [.gapless, .httpRange, .relativeUrls]
         return capabilities
     }
 

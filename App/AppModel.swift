@@ -48,7 +48,7 @@ final class AppModel {
     init() {
         let session = RemoteSession()
         self.session = session
-        renderer = Renderer(playback: AVPlayback()) { session.send($0) }
+        renderer = Renderer(playback: AVPlayback(), server: { session.endpoint }) { session.send($0) }
         internet = InternetBrowser { session.send($0) }
         library = LibraryModel(model: self)
         search = SearchModel(model: self)
