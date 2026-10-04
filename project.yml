@@ -50,6 +50,8 @@ targets:
       path: App/Info.plist
       properties:
         CFBundleDisplayName: Clementine Remote
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         AppGroup: $(APP_GROUP)
         UILaunchScreen:
           UIColorName: Surface
@@ -96,6 +98,8 @@ targets:
       path: Widget/Info.plist
       properties:
         CFBundleDisplayName: Clementine Remote
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         AppGroup: $(APP_GROUP)
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
