@@ -166,8 +166,10 @@ final class Screenshots: XCTestCase {
         return try waitFor(element)
     }
 
+    /// A tab, in the tab bar, or on an iPad in the bar at the top, whose tabs aren't in a tab bar.
     private func showTab(_ name: String) throws {
-        try waitFor(app.tabBars.buttons[name]).tap()
+        let tab = app.tabBars.buttons[name]
+        try waitFor(tab.exists ? tab : app.buttons.matching(NSPredicate(format: "label == %@", name)).firstMatch).tap()
         pause(Self.settle)
     }
 
