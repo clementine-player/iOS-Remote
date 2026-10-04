@@ -44,3 +44,11 @@ When you're asked to add a feature or change how something behaves, and the user
 only for this client, ask them whether they want it in both clients before you start. If they do and
 the other client's repository isn't in the session, ask them to add it (for example with
 `/add-dir`), so both changes are made together.
+
+## Release notes
+
+A commit that changes something users notice ends with a `Release-note:` trailer: one line,
+written for users (what's new, not how it was done). App Store releases collect them as their
+"What's New" (see [RELEASING.md](RELEASING.md)). Commits that don't change what users see
+(refactoring, tests, CI, docs) have none. When a change goes into both clients, give it the
+same note in both.
