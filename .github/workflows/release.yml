@@ -1,0 +1,228 @@
+# Releases the app on the App Store, when run by hand: Actions → release → Run workflow, on main.
+#
+# Commits that change something users notice carry a "Release-note:" trailer: one line for
+# users, as in the Android remote. A release is of main as it is, and its notes are those of
+# every commit since the last release (scripts/plan_release.sh), or "Fixes and improvements."
+# when none has one. It:
+#   - builds the app (scripts/archive.sh), uploads it, and pushes the tag v<version>
+#   - meanwhile, takes the App Store screenshots: screenshots.yml, light, on the devices the App
+#     Store wants (a 6.9" iPhone and a 13" iPad)
+#   - submits the build for App Review with the listing in fastlane/metadata, the screenshots
+#     and the notes. Once Apple approves it, it's released.
+#   - publishes a GitHub release with the notes
+#
+# Run it with a tag to publish an existing release again after a failure: it uploads the build
+# only if it isn't there yet.
+#
+# As in testflight.yml, there's no certificate here: the build is signed by Xcode's cloud
+# signing, signed in with the App Store Connect API key in the secrets ASC_KEY_ID,
+# ASC_ISSUER_ID and ASC_PRIVATE_KEY. Until they're set, nothing is released. See RELEASING.md.
+name: release
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Publish this existing release again (such as v1.1), instead of a new one"
+        required: false
+
+# One release at a time; a second waits.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: write # for the tag and the GitHub release
+
+jobs:
+  plan:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      release: ${{ steps.plan.outputs.release }}
+      name: ${{ steps.plan.outputs.name }}
+      build: ${{ steps.plan.outputs.build }}
+      commit: ${{ steps.plan.outputs.commit }}
+      first: ${{ steps.plan.outputs.first }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # All of main's history and tags: the notes and version come from them.
+          fetch-depth: 0
+
+      - name: Plan the release
+        id: plan
+        env:
+          TAG: ${{ inputs.tag }}
+          HAS_ASC_KEY: ${{ secrets.ASC_KEY_ID != '' }}
+        run: |
+          if [ "$HAS_ASC_KEY" != true ]; then
+            echo "::warning::Releases aren't set up yet, so nothing was released: the App Store Connect API key isn't set (see RELEASING.md)."
+            echo "release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          scripts/plan_release.sh "$RUNNER_TEMP/notes" | tee -a "$GITHUB_OUTPUT"
+          if grep -qx release=false "$GITHUB_OUTPUT"; then
+            echo "::notice::Nothing has changed since the last release, so there's nothing to release."
+          fi
+
+      - uses: actions/upload-artifact@v5
+        if: steps.plan.outputs.release == 'true'
+        with:
+          name: release-notes
+          path: ${{ runner.temp }}/notes/
+
+  screenshots:
+    needs: plan
+    if: needs.plan.outputs.release == 'true'
+    strategy:
+      matrix:
+        include:
+          - device: iPhone 17 Pro Max
+            artifact: store-screenshots-iphone
+          - device: iPad Pro 13-inch (M4)
+            artifact: store-screenshots-ipad
+    uses: ./.github/workflows/screenshots.yml
+    permissions:
+      contents: read
+      pull-requests: write # what screenshots.yml asks for; called, it doesn't comment
+    with:
+      device: ${{ matrix.device }}
+      appearances: light
+      ref: ${{ needs.plan.outputs.commit }}
+      artifact: ${{ matrix.artifact }}
+
+  build:
+    needs: plan
+    if: needs.plan.outputs.release == 'true'
+    runs-on: macos-26
+    timeout-minutes: 60
+    env:
+      NAME: ${{ needs.plan.outputs.name }}
+      BUILD: ${{ needs.plan.outputs.build }}
+      COMMIT: ${{ needs.plan.outputs.commit }}
+      TAG: v${{ needs.plan.outputs.name }}
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      FASTLANE_SKIP_UPDATE_CHECK: "1"
+      FASTLANE_OPT_OUT_USAGE: "1"
+      FASTLANE_HIDE_CHANGELOG: "1"
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.plan.outputs.commit }}
+
+      - name: The App Store Connect key
+        env:
+          ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+        run: |
+          key="$RUNNER_TEMP/AuthKey.p8"
+          printf '%s\n' "$ASC_PRIVATE_KEY" > "$key"
+          echo "ASC_KEY_PATH=$key" >> "$GITHUB_ENV"
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Build
+        run: scripts/archive.sh "$NAME" "$BUILD" build/release
+
+      - uses: actions/upload-artifact@v5
+        with:
+          name: release
+          path: |
+            build/release/ClementineRemote.ipa
+            build/release/ClementineRemote.xcarchive/dSYMs/
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+
+      # Straight away, while the screenshots are taken: once a TestFlight build of a later commit
+      # (testflight.yml) is uploaded, App Store Connect takes no lower build number of the version.
+      - name: Upload to App Store Connect
+        run: bundle exec fastlane upload ipa:"$PWD/build/release/ClementineRemote.ipa" version:"$NAME" build:"$BUILD"
+
+      # Once the build is uploaded: a failure before here leaves no trace, and after it, running
+      # the workflow again with the tag finishes the release.
+      - name: Push the tag
+        if: inputs.tag == ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" "$COMMIT" -m "Clementine Remote $NAME"
+          git push origin "$TAG"
+
+  submit:
+    needs: [plan, build, screenshots]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      NAME: ${{ needs.plan.outputs.name }}
+      BUILD: ${{ needs.plan.outputs.build }}
+      TAG: v${{ needs.plan.outputs.name }}
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      FASTLANE_SKIP_UPDATE_CHECK: "1"
+      FASTLANE_OPT_OUT_USAGE: "1"
+      FASTLANE_HIDE_CHANGELOG: "1"
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.plan.outputs.commit }}
+
+      - name: The App Store Connect key
+        env:
+          ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+        run: |
+          key="$RUNNER_TEMP/AuthKey.p8"
+          printf '%s\n' "$ASC_PRIVATE_KEY" > "$key"
+          echo "ASC_KEY_PATH=$key" >> "$GITHUB_ENV"
+
+      - uses: actions/download-artifact@v5
+        with:
+          name: release-notes
+          path: ${{ runner.temp }}/notes
+
+      - uses: actions/download-artifact@v5
+        with:
+          pattern: store-screenshots-*
+          path: ${{ runner.temp }}/store-screenshots
+
+      # The App Store shows up to 10 per device, in the order of their names; the settings
+      # screen is left out. It tells the devices apart by the screenshots' size.
+      - name: Choose the screenshots
+        run: |
+          order="03_player 02_queue 06_library 07_library_album 08_search 10_internet
+            11_internet_radio 09_outputs 04_connection 01_connect"
+          out="$RUNNER_TEMP/screenshots/en-US"
+          mkdir -p "$out"
+          for device in iphone ipad; do
+            i=0
+            for shot in $order; do
+              i=$((i + 1))
+              cp "$RUNNER_TEMP/store-screenshots/store-screenshots-$device/screenshots/$shot.png" \
+                "$out/$device-$(printf %02d $i)-$shot.png"
+            done
+          done
+          ls -l "$out"
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+
+      - name: Submit for App Review
+        env:
+          # App Store Connect takes no release notes for an app's first version.
+          NOTES: ${{ needs.plan.outputs.first != 'true' && format('{0}/notes/release_notes.txt', runner.temp) || '' }}
+        run: >
+          bundle exec fastlane submit version:"$NAME" build:"$BUILD"
+          screenshots:"$RUNNER_TEMP/screenshots" ${NOTES:+release_notes:"$NOTES"}
+
+      - name: Publish the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view "$TAG" > /dev/null 2>&1 ||
+            gh release create "$TAG" --verify-tag --title "Clementine Remote $NAME" \
+              --notes-file "$RUNNER_TEMP/notes/notes.md"

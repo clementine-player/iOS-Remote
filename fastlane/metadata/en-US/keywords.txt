@@ -1,0 +1,1 @@
+clementine,remote,music,player,control,library,playlist,lyrics,desktop,mac,linux,windows,wifi

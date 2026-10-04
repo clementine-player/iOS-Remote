@@ -1,0 +1,89 @@
+# Talks to App Store Connect for .github/workflows/testflight.yml and release.yml: uploads the
+# builds scripts/archive.sh makes, and the App Store listing in fastlane/metadata. It signs in
+# with the App Store Connect API key in ASC_KEY_ID, ASC_ISSUER_ID and ASC_KEY_PATH. See
+# RELEASING.md.
+#
+# Give lanes absolute paths: actions run in the repository, but this file's own code in fastlane/.
+default_platform(:ios)
+
+APP_ID = "org.clementine-player.remote"
+
+platform :ios do
+  before_all do
+    app_store_connect_api_key(
+      key_id: ENV.fetch("ASC_KEY_ID"),
+      issuer_id: ENV.fetch("ASC_ISSUER_ID"),
+      key_filepath: ENV.fetch("ASC_KEY_PATH"),
+    )
+  end
+
+  # A TestFlight build: uploads it, waits for Apple to process it, and gives it its changelog
+  # ("What to Test"). Internal testers get every build. External groups, named in
+  # TESTFLIGHT_GROUPS (comma separated), get it too once Apple's beta review passes it.
+  #
+  #   fastlane beta ipa:<.ipa> changelog:<file>
+  lane :beta do |options|
+    groups = ENV.fetch("TESTFLIGHT_GROUPS", "").split(",").map(&:strip).reject(&:empty?)
+    upload_to_testflight(
+      app_identifier: APP_ID,
+      ipa: options.fetch(:ipa),
+      changelog: File.read(options.fetch(:changelog)),
+      distribute_external: !groups.empty?,
+      groups: groups.empty? ? nil : groups,
+    )
+  end
+
+  # An App Store release's build: uploads it, unless it's there already (publishing a release
+  # again), and waits for Apple to process it.
+  #
+  #   fastlane upload ipa:<.ipa> version:<version> build:<build number>
+  lane :upload do |options|
+    version = options.fetch(:version)
+    build = options.fetch(:build).to_s
+    app = Spaceship::ConnectAPI::App.find(APP_ID)
+    if app && Spaceship::ConnectAPI::Build.all(app_id: app.id, version: version, build_number: build).any?
+      UI.message("Build #{build} of #{version} is uploaded already")
+      next
+    end
+    upload_to_testflight(
+      app_identifier: APP_ID,
+      ipa: options.fetch(:ipa),
+      # Only internal testers: the release goes to everyone through the App Store.
+      skip_submission: true,
+    )
+  end
+
+  # Submits an uploaded build for App Review, with the listing (fastlane/metadata), the
+  # screenshots and the release notes. Once approved, it's released at once.
+  #
+  #   fastlane submit version:<version> build:<build number> screenshots:<dir>
+  #     [release_notes:<file>]
+  #
+  # The screenshots directory has a folder per language (en-US), and the App Store tells the
+  # devices apart by their size. The first release has no release notes: App Store Connect
+  # takes none.
+  lane :submit do |options|
+    notes = options[:release_notes]
+    upload_to_app_store(
+      app_identifier: APP_ID,
+      app_version: options.fetch(:version),
+      build_number: options.fetch(:build).to_s,
+      skip_binary_upload: true,
+      screenshots_path: options.fetch(:screenshots),
+      overwrite_screenshots: true,
+      release_notes: notes ? { "default" => File.read(notes) } : nil,
+      submit_for_review: true,
+      automatic_release: true,
+      # A submission still waiting for review is replaced by this one.
+      reject_if_possible: true,
+      # No HTML preview to confirm: nobody's there to look.
+      force: true,
+      # Can't be checked with an API key; the app has none.
+      precheck_include_in_app_purchases: false,
+      submission_information: {
+        add_id_info_uses_idfa: false,
+        content_rights_contains_third_party_content: false,
+      },
+    )
+  end
+end

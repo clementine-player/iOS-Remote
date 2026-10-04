@@ -52,6 +52,12 @@ dark`) and `TEST_RUNNER_SCREENSHOTS_PREFIX=dark_`.
 The comment needs a Cloudflare R2 bucket to host the images: the workflow's header says which
 secrets and variables to set. Without them, the screenshots are only the run's artifact.
 
+## Releasing
+
+Every change to the app on `main` goes to TestFlight, and App Store releases are made by running
+the release workflow, which also takes the App Store's screenshots. See
+[RELEASING.md](RELEASING.md).
+
 ## Scripts
 
 `scripts/generate-proto.sh` regenerates the protocol code from
