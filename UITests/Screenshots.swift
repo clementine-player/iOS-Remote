@@ -239,7 +239,12 @@ final class Screenshots: XCTestCase {
         throw Failure("Could not play \(title)")
     }
 
+    /// On an iPad the search field starts folded into a button in the navigation bar.
     private func search(_ text: String) throws {
+        let reveal = app.navigationBars["Search"].buttons["Search"]
+        if !app.searchFields.firstMatch.waitForExistence(timeout: Self.settle), reveal.exists {
+            reveal.tap()
+        }
         let field = try waitFor(app.searchFields.firstMatch)
         field.tap()
         field.typeText(text + "\n")
