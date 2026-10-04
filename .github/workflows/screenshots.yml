@@ -11,6 +11,9 @@
 #   variables R2_BUCKET, R2_PUBLIC_URL (the bucket's public address).
 # The Android remote's bucket can hold them too: this app's are under ios/. Without them, and on
 # pull requests from forks (which get no secrets), the screenshots are only the run's artifact.
+#
+# release.yml calls it for the App Store's screenshots, on the devices the App Store wants, and
+# light only. Run by hand with a device, or called, it only makes the artifact.
 name: screenshots
 on:
   pull_request:
@@ -41,9 +44,38 @@ on:
       clementine:
         description: The Clementine release tag to use; the latest when empty.
         required: false
+      device:
+        description: The simulator's device type, such as "iPad Pro 13-inch (M4)"; an iPhone Pro when empty.
+        required: false
+      appearances:
+        description: Light, dark, or both.
+        default: light dark
+  workflow_call:
+    inputs:
+      device:
+        description: The simulator's device type, such as "iPhone 17 Pro Max"; made if there's none.
+        type: string
+        required: true
+      clementine:
+        description: The Clementine release tag to use; the latest when empty.
+        type: string
+        required: false
+      appearances:
+        description: Light, dark, or both ("light dark").
+        type: string
+        default: light dark
+      ref:
+        description: The commit to take the screenshots of.
+        type: string
+        required: false
+      artifact:
+        description: The name of the artifact with the screenshots.
+        type: string
+        default: screenshots
 
+# Called, it's the calling workflow's name and ref: one run per device.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: screenshots-${{ github.ref }}-${{ inputs.device }}
   cancel-in-progress: true
 
 permissions:
@@ -62,6 +94,8 @@ jobs:
       HAS_R2_TOKEN: ${{ secrets.R2_ACCESS_KEY_ID != '' }}
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.ref }}
 
       - name: Install XcodeGen and ffmpeg
         run: brew install xcodegen ffmpeg
@@ -87,16 +121,28 @@ jobs:
 
       # With a clean status bar, as on Apple's own screenshots.
       - name: Boot a simulator
+        env:
+          DEVICE: ${{ inputs.device }}
         run: |
           id=$(xcrun simctl list devices available --json | python3 -c '
-          import json, sys
+          import json, os, sys
           runtimes = json.load(sys.stdin)["devices"]
-          iphones = [device
+          devices = [device
                      for runtime in sorted(runtimes, reverse=True) if "iOS-2" in runtime
-                     for device in runtimes[runtime] if device["name"].startswith("iPhone")]
-          pro = [device for device in iphones if device["name"].endswith(" Pro")]
-          print((pro or iphones)[0]["udid"])
+                     for device in runtimes[runtime]]
+          wanted = os.environ["DEVICE"]
+          if wanted:
+              devices = [device for device in devices if device["name"] == wanted]
+          else:
+              devices = [device for device in devices if device["name"].startswith("iPhone")]
+              devices = [device for device in devices if device["name"].endswith(" Pro")] or devices
+          print(devices[0]["udid"] if devices else "")
           ')
+          if [ -z "$id" ]; then
+            runtime=$(xcrun simctl list runtimes available -j |
+              jq -r '[.runtimes[] | select(.platform == "iOS")] | sort_by(.version | split(".") | map(tonumber)) | last | .identifier')
+            id=$(xcrun simctl create "$DEVICE" "$DEVICE" "$runtime")
+          fi
           echo "Using simulator $id"
           echo "SIMULATOR=$id" >> "$GITHUB_ENV"
           echo "DESTINATION=id=$id" >> "$GITHUB_ENV"
@@ -110,11 +156,12 @@ jobs:
       # twice, with the simulator light then dark: set from the test itself, the app stayed light.
       - name: Take the screenshots
         env:
+          APPEARANCES: ${{ inputs.appearances || 'light dark' }}
           TEST_RUNNER_CLEMENTINE_HOST: 127.0.0.1
           TEST_RUNNER_SCREENSHOTS_DIR: ${{ github.workspace }}/screenshots
         run: |
           status=0
-          for appearance in light dark; do
+          for appearance in $APPEARANCES; do
             echo "::group::The screenshots, $appearance"
             xcrun simctl ui "$SIMULATOR" appearance "$appearance"
             prefix=$([ "$appearance" = dark ] && echo dark_ || true)
@@ -134,7 +181,7 @@ jobs:
       - uses: actions/upload-artifact@v5
         if: always()
         with:
-          name: screenshots
+          name: ${{ inputs.artifact || 'screenshots' }}
           path: |
             screenshots/
             build/Screenshots-*.xcresult
@@ -142,7 +189,7 @@ jobs:
 
       - name: Post the screenshots
         if: >
-          always() && env.HAS_R2_TOKEN == 'true'
+          always() && env.HAS_R2_TOKEN == 'true' && !inputs.device
           && (github.event_name == 'pull_request' || github.ref == 'refs/heads/main')
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
