@@ -11,3 +11,7 @@ DerivedData/
 
 # Signing for building with your own team
 /Config/Local.xcconfig
+
+# What fastlane writes when it runs
+/fastlane/README.md
+/fastlane/report.xml

@@ -1,0 +1,115 @@
+# Publishes every change to the app on main as a TestFlight build, for the App Store Connect
+# team's internal testers (and the external groups in the TESTFLIGHT_GROUPS variable, if any).
+# Its "What to Test" is the last 5 commits' titles. Changes that don't reach the app (tests,
+# docs, CI, the store listing) don't make one. The Android remote's dev.yml does the same for
+# Google Play's internal testing track.
+#
+# The version is the next App Store release's, and the build number twice main's commit count
+# (scripts/version.sh): App Store releases (release.yml) take the odd number after it.
+#
+# The build is signed by Xcode's cloud signing, so there's no certificate here
+# (scripts/archive.sh). It signs in to App Store Connect with an API key, in the secrets
+# ASC_KEY_ID, ASC_ISSUER_ID and ASC_PRIVATE_KEY (the .p8 file's contents). Until they're set,
+# nothing is built or uploaded. See RELEASING.md.
+name: testflight
+on:
+  push:
+    branches: [main]
+    # What goes into the app.
+    paths:
+      - App/**
+      - Shared/**
+      - Widget/**
+      - Packages/ClementineKit/Package.swift
+      - Packages/ClementineKit/Package.resolved
+      - Packages/ClementineKit/Sources/**
+      - Packages/ClementineKit/Proto/**
+      - Config/**
+      - project.yml
+      - .github/workflows/testflight.yml
+      - scripts/archive.sh
+      - scripts/version.sh
+  workflow_dispatch:
+
+# One upload at a time, in order. Not shared with release.yml, so a push while a release waits
+# doesn't cancel it: a GitHub concurrency group keeps only the newest waiting run.
+concurrency:
+  group: testflight
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  testflight:
+    if: github.ref == 'refs/heads/main'
+    runs-on: macos-26
+    timeout-minutes: 60
+    env:
+      # A step's condition can't read secrets, so this says whether the API key is set.
+      HAS_ASC_KEY: ${{ secrets.ASC_KEY_ID != '' }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # The build number comes from the number of commits, and the version from the tags.
+          fetch-depth: 0
+
+      - name: Check the App Store Connect key
+        if: env.HAS_ASC_KEY != 'true'
+        run: |
+          echo "::notice::Not uploading to TestFlight: the App Store Connect API key isn't set yet (see RELEASING.md)."
+
+      - name: Version
+        if: env.HAS_ASC_KEY == 'true'
+        id: version
+        run: |
+          scripts/version.sh | tee -a "$GITHUB_OUTPUT"
+          git log -5 --no-merges --format='- %s' > "$RUNNER_TEMP/changelog.txt"
+          cat "$RUNNER_TEMP/changelog.txt"
+
+      - name: The App Store Connect key
+        if: env.HAS_ASC_KEY == 'true'
+        env:
+          ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+        run: |
+          key="$RUNNER_TEMP/AuthKey.p8"
+          printf '%s\n' "$ASC_PRIVATE_KEY" > "$key"
+          echo "ASC_KEY_PATH=$key" >> "$GITHUB_ENV"
+
+      - name: Install XcodeGen
+        if: env.HAS_ASC_KEY == 'true'
+        run: brew install xcodegen
+
+      - name: Build
+        if: env.HAS_ASC_KEY == 'true'
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: scripts/archive.sh "${{ steps.version.outputs.name }}" "${{ steps.version.outputs.build }}" build/release
+
+      - uses: actions/upload-artifact@v5
+        if: env.HAS_ASC_KEY == 'true'
+        with:
+          name: testflight
+          path: |
+            build/release/ClementineRemote.ipa
+            build/release/ClementineRemote.xcarchive/dSYMs/
+
+      - uses: ruby/setup-ruby@v1
+        if: env.HAS_ASC_KEY == 'true'
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+
+      - name: Upload to TestFlight
+        if: env.HAS_ASC_KEY == 'true'
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          TESTFLIGHT_GROUPS: ${{ vars.TESTFLIGHT_GROUPS }}
+          FASTLANE_SKIP_UPDATE_CHECK: "1"
+          FASTLANE_OPT_OUT_USAGE: "1"
+          FASTLANE_HIDE_CHANGELOG: "1"
+        run: >
+          bundle exec fastlane beta ipa:"$PWD/build/release/ClementineRemote.ipa"
+          changelog:"$RUNNER_TEMP/changelog.txt"
