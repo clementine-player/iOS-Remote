@@ -240,7 +240,7 @@ struct ConnectionChip: View {
             HStack(spacing: 6) {
                 Image(systemName: online ? "desktopcomputer" : "wifi.exclamationmark")
                     .foregroundStyle(online ? Palette.primary : Palette.onErrorContainer)
-                Text(online ? session.hostName : String(localized: "Reconnecting…"))
+                Text(online ? session.computerName : String(localized: "Reconnecting…"))
                     .font(.subheadline.weight(.medium))
                     .lineLimit(1)
                     .frame(maxWidth: 160)
@@ -250,7 +250,7 @@ struct ConnectionChip: View {
             .foregroundStyle(online ? Palette.onSurface : Palette.onErrorContainer)
         }
         .tint(online ? nil : Palette.errorContainer)
-        .accessibilityLabel(online ? "Clementine on \(session.hostName)" : "Reconnecting to Clementine")
+        .accessibilityLabel(online ? "Clementine on \(session.computerName)" : "Reconnecting to Clementine")
         .accessibilityIdentifier("connectionChip")
     }
 }

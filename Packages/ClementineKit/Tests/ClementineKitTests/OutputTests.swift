@@ -45,6 +45,7 @@ struct OutputTests {
         #expect(session.hasOtherOutputs)
         #expect(session.activeOutput?.isLocal == true)
         #expect(!session.isPlayingHere)
+        #expect(session.computerName == "studio-pc")
 
         session.setOutput(Self.phone)
         #expect(session.outputs.first { $0.id == Self.phone }?.state == .activating)
@@ -67,6 +68,7 @@ struct OutputTests {
         #expect(!session.canChooseOutput)
         #expect(!session.hasOtherOutputs)
         #expect(!clementine.received.contains { $0.type == .requestOutputs })
+        #expect(session.computerName == session.hostName)
     }
 
     @Test func connectsWithoutOfferingThePhone() async throws {

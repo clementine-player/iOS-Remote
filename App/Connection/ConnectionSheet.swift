@@ -16,7 +16,7 @@ struct ConnectionSheet: View {
                     HStack(spacing: Metrics.space4) {
                         IconTile(systemImage: "desktopcomputer", size: 56)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Clementine on \(session.hostName)")
+                            Text("Clementine on \(session.computerName)")
                                 .textStyle(.titleLarge)
                                 .foregroundStyle(Palette.onSurface)
                                 .lineLimit(2)
