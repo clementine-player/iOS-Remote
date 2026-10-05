@@ -11,9 +11,17 @@ Every push to `main` that changes the app (not only its tests, docs, CI or store
 uploads a build to TestFlight (`.github/workflows/testflight.yml`). The internal testers get it
 at once, with no review. Its *What to Test* is the titles of the last 5 commits.
 
-To send builds to external testers as well, create their group in App Store Connect and set the
-repository variable `TESTFLIGHT_GROUPS` to its name (or several, separated by commas). Apple
-reviews the first build an external group gets.
+External testers get them too: the group named in the repository variable `TESTFLIGHT_GROUPS`
+(*External testers*; several are separated by commas). Their builds go through Apple's Beta App
+Review first: the first build of each version gets a full review, which can take a day or so, and
+later ones are usually quicker. With each build, the workflow sets:
+
+- the description testers see, from `fastlane/testflight/beta_app_description.txt`
+- the notes for Beta App Review: the same as App Review's, with the demo Clementine's address
+  and the `DEMO_AUTH_CODE` auth code (see *App Store releases*)
+
+The feedback email and the reviewers' contact are set once in App Store Connect, under
+*TestFlight → Test Information*, and left as they are.
 
 ## App Store releases
 

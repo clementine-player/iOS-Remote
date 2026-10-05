@@ -10,6 +10,16 @@ APP_ID = "org.clementine-player.remote"
 # The Clementine App Review connects to: see the Android remote's RELEASING.md.
 DEMO_HOST = "demo.clementine-player.org"
 
+# The notes for Apple's reviewers, App Review's and Beta App Review's alike: how to try the app,
+# then the demo Clementine's address and its auth code, from DEMO_AUTH_CODE, which is kept out of
+# the repository.
+def review_notes
+  auth_code = ENV.fetch("DEMO_AUTH_CODE", "")
+  UI.user_error!("DEMO_AUTH_CODE isn't set: Apple's reviewers need it to connect") if auth_code.empty?
+  File.read("metadata/review_information/notes.txt").strip +
+    "\n\nAddress: #{DEMO_HOST}\nAuth code: #{auth_code}"
+end
+
 platform :ios do
   before_all do
     app_store_connect_api_key(
@@ -21,17 +31,23 @@ platform :ios do
 
   # A TestFlight build: uploads it, waits for Apple to process it, and gives it its changelog
   # ("What to Test"). Internal testers get every build. External groups, named in
-  # TESTFLIGHT_GROUPS (comma separated), get it too once Apple's beta review passes it.
+  # TESTFLIGHT_GROUPS (comma separated), get it too once Apple's Beta App Review passes it: then
+  # it also sets the description testers see (testflight/beta_app_description.txt) and the
+  # reviewers' notes. The feedback email and the reviewers' contact are set in App Store Connect,
+  # and left as they are.
   #
   #   fastlane beta ipa:<.ipa> changelog:<file>
   lane :beta do |options|
     groups = ENV.fetch("TESTFLIGHT_GROUPS", "").split(",").map(&:strip).reject(&:empty?)
+    external = !groups.empty?
     upload_to_testflight(
       app_identifier: APP_ID,
       ipa: options.fetch(:ipa),
       changelog: File.read(options.fetch(:changelog)),
-      distribute_external: !groups.empty?,
-      groups: groups.empty? ? nil : groups,
+      distribute_external: external,
+      groups: external ? groups : nil,
+      beta_app_description: external ? File.read("testflight/beta_app_description.txt").strip : nil,
+      beta_app_review_info: external ? { notes: review_notes } : nil,
     )
   end
 
@@ -64,15 +80,8 @@ platform :ios do
   # The screenshots directory has a folder per language (en-US), and the App Store tells the
   # devices apart by their size. The first release has no release notes: App Store Connect
   # takes none.
-  #
-  # The notes for App Review get the demo Clementine's address and its auth code, from
-  # DEMO_AUTH_CODE: it's kept out of the repository.
   lane :submit do |options|
     notes = options[:release_notes]
-    auth_code = ENV.fetch("DEMO_AUTH_CODE", "")
-    UI.user_error!("DEMO_AUTH_CODE isn't set: App Review needs it to connect") if auth_code.empty?
-    review_notes = File.read("metadata/review_information/notes.txt").strip +
-      "\n\nAddress: #{DEMO_HOST}\nAuth code: #{auth_code}"
     upload_to_app_store(
       app_identifier: APP_ID,
       app_version: options.fetch(:version),
