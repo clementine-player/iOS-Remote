@@ -166,8 +166,10 @@ final class Screenshots: XCTestCase {
         return try waitFor(element)
     }
 
+    /// A tab, in the tab bar, or on an iPad in the bar at the top, whose tabs aren't in a tab bar.
     private func showTab(_ name: String) throws {
-        try waitFor(app.tabBars.buttons[name]).tap()
+        let tab = app.tabBars.buttons[name]
+        try waitFor(tab.exists ? tab : app.buttons.matching(NSPredicate(format: "label == %@", name)).firstMatch).tap()
         pause(Self.settle)
     }
 
@@ -237,7 +239,12 @@ final class Screenshots: XCTestCase {
         throw Failure("Could not play \(title)")
     }
 
+    /// On an iPad the search field starts folded into a button in the navigation bar.
     private func search(_ text: String) throws {
+        let reveal = app.navigationBars["Search"].buttons["Search"]
+        if !app.searchFields.firstMatch.waitForExistence(timeout: Self.settle), reveal.exists {
+            reveal.tap()
+        }
         let field = try waitFor(app.searchFields.firstMatch)
         field.tap()
         field.typeText(text + "\n")
