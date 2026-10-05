@@ -37,8 +37,8 @@ final class Screenshots: XCTestCase {
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
 
         app = XCUIApplication()
-        // Skip the welcome message, stay on the connect screen, and fill in Clementine's address.
-        app.launchArguments = ["-first_call", "NO", "-pref_autoconnect", "NO", "-save_clementine_ip", host]
+        // Stay on the connect screen, and fill in Clementine's address.
+        app.launchArguments = ["-pref_autoconnect", "NO", "-save_clementine_ip", host]
         do {
             try takeScreenshots()
         } catch {
