@@ -8,6 +8,7 @@ struct ConnectionSheet: View {
     @Environment(RemoteSession.self) private var session
     @Environment(\.dismiss) private var dismiss
     @State private var traffic = ""
+    @State private var rate = TrafficRate()
 
     var body: some View {
         NavigationStack {
@@ -85,8 +86,12 @@ struct ConnectionSheet: View {
 
     private func updateTraffic() {
         let bytes = session.byteCounts()
-        let seconds = max(1, Int(Date.now.timeIntervalSince(session.connectedSince ?? .now)))
-        let rate = Int64(bytes.sent + bytes.received) / Int64(seconds)
-        traffic = "\(formatBytes(Int64(bytes.sent))) / \(formatBytes(Int64(bytes.received))) (\(formatBytes(rate))/s)"
+        let totals = "\(formatBytes(Int64(bytes.sent))) / \(formatBytes(Int64(bytes.received)))"
+        // Over the last few seconds, so it settles soon after streaming stops.
+        if let perSecond = rate.add(bytes.sent + bytes.received) {
+            traffic = "\(totals) (\(formatBytes(Int64(perSecond)))/s)"
+        } else {
+            traffic = totals
+        }
     }
 }
