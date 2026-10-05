@@ -90,11 +90,11 @@ struct OutputRow: View {
         .accessibilityIdentifier("output-\(output.id)")
     }
 
-    /// Clementine's computer by its name, this device marked as such, and others as Clementine
-    /// names them.
+    /// Clementine's computer by the name Clementine gives it, or "Clementine" when it doesn't say;
+    /// this device marked as such, and others as Clementine names them.
     static func name(of output: Output, session: RemoteSession) -> String {
         if output.isLocal {
-            return String(localized: "Clementine on \(session.hostName)")
+            return output.name.isEmpty ? "Clementine" : output.name
         }
         if isThisDevice(output, session: session) {
             return UIDevice.current.userInterfaceIdiom == .pad
