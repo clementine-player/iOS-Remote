@@ -12,9 +12,13 @@ final class FakeClementine: Sendable {
     private let queue = DispatchQueue(label: "fake-clementine")
     private let state = Mutex((received: [RemoteMessage](), clients: [MessageChannel](), responder: Responder?.none))
 
-    /// Listens on a free port.
+    /// Listens on a free port of 127.0.0.1, the address [endpoint] gives, rather than on any
+    /// address, which may be IPv6: with the tests running in parallel, a download test's
+    /// connection to 127.0.0.1 was once refused.
     init() async throws {
-        listener = try NWListener(using: .tcp, on: .any)
+        let parameters = NWParameters.tcp
+        parameters.requiredLocalEndpoint = .hostPort(host: .ipv4(.loopback), port: .any)
+        listener = try NWListener(using: parameters)
         let ready = AsyncStream<Void>.makeStream()
         listener.stateUpdateHandler = { state in
             if case .ready = state { ready.continuation.yield() }
