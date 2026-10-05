@@ -41,6 +41,8 @@ public final class RemoteSession {
     public private(set) var closeReason: ClementineConnection.CloseReason?
     public private(set) var clementineVersion = ""
     public private(set) var connectedSince: Date?
+    /// The app's [Traffic] when it started connecting.
+    private var trafficAtConnect = (sent: 0, received: 0)
     /// What this device offered Clementine when connecting, if it offered to play.
     public private(set) var renderer: RendererCapabilities?
 
@@ -129,6 +131,7 @@ public final class RemoteSession {
         self.renderer = renderer
         closeReason = nil
         connectedSince = nil
+        trafficAtConnect = Traffic.byteCounts
         status = .connecting
         open(sendPlaylistSongs: true)
     }
@@ -160,9 +163,12 @@ public final class RemoteSession {
         open(sendPlaylistSongs: false)
     }
 
-    /// Sent and received since connecting.
-    public func byteCounts() async -> (sent: Int, received: Int) {
-        await connection?.byteCounts ?? (sent: 0, received: 0)
+    /// Everything the app has sent and received since connecting: to Clementine, and audio streamed
+    /// from it.
+    public func byteCounts() -> (sent: Int, received: Int) {
+        guard connectedSince != nil else { return (sent: 0, received: 0) }
+        let now = Traffic.byteCounts
+        return (sent: now.sent - trafficAtConnect.sent, received: now.received - trafficAtConnect.received)
     }
 
     /// Hears every message from Clementine, after the session has applied it. Returns a token for

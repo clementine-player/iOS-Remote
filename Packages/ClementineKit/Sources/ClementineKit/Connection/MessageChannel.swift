@@ -18,6 +18,8 @@ public final class MessageChannel: Sendable {
     private let connection: NWConnection
     private let queue = DispatchQueue(label: "org.clementine-player.remote.channel")
     private let counters = Mutex((sent: 0, received: 0))
+    /// Whether its bytes count towards the app's [Traffic]: not for the Clementine end in tests.
+    private let countsTraffic: Bool
 
     public init(endpoint: Endpoint) {
         self.endpoint = endpoint
@@ -26,12 +28,14 @@ public final class MessageChannel: Sendable {
         tcp.noDelay = true
         tcp.connectionTimeout = 3
         connection = NWConnection(host: NWEndpoint.Host(endpoint.host), port: port, using: NWParameters(tls: nil, tcp: tcp))
+        countsTraffic = true
     }
 
     /// A channel on a connection accepted by a listener (in tests), started straight away.
     init(accepted connection: NWConnection) {
         endpoint = Endpoint(host: "client")
         self.connection = connection
+        countsTraffic = false
         connection.start(queue: queue)
     }
 
@@ -93,6 +97,9 @@ public final class MessageChannel: Sendable {
             })
         }
         counters.withLock { $0.sent += data.count }
+        if countsTraffic {
+            Traffic.add(sent: data.count)
+        }
     }
 
     /// Waits for the next message. Throws [ProtocolError] for bad data, and [ChannelError.closed] or
@@ -102,6 +109,9 @@ public final class MessageChannel: Sendable {
         let length = try Framing.length(ofHeader: header)
         let body = try await read(length)
         counters.withLock { $0.received += 4 + length }
+        if countsTraffic {
+            Traffic.add(received: 4 + length)
+        }
         return try Framing.decode(body)
     }
 
