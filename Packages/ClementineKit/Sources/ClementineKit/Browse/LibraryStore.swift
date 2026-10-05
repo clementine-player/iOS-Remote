@@ -13,6 +13,9 @@ public enum DownloadFailure: Error, Sendable, Equatable {
     case wrongAuthCode
     /// Clementine only accepts connections from its local network, and this phone isn't on it.
     case notLocalNetwork
+    /// Too many wrong auth codes have come from this phone, so Clementine won't check one for
+    /// this long, if it said.
+    case tooManyWrongAuthCodes(retryAfter: Duration?)
     /// Not enough space on the phone.
     case insufficientSpace
     /// Couldn't write the file.
@@ -31,6 +34,7 @@ public enum DownloadFailure: Error, Sendable, Equatable {
         case .downloadForbidden: self = .forbidden
         case .wrongAuthCode, .notAuthenticated: self = .wrongAuthCode
         case .notLocalNetwork: self = .notLocalNetwork
+        case .tooManyWrongAuthCodes: self = .tooManyWrongAuthCodes(retryAfter: disconnect.retryAfter)
         case .serverShutdown, nil: self = .connection
         }
     }

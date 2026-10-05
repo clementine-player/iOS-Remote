@@ -225,6 +225,34 @@ struct ConnectionTests {
         #expect(clementine.clientCount == 1)
     }
 
+    @Test func refusedForTooManyWrongAuthCodes() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        clementine.respond { message, client in
+            guard message.type == .connect else { return }
+            try? await client.send(RemoteMessage(.disconnect) {
+                $0.responseDisconnect.reasonDisconnect = .tooManyWrongAuthCodes
+                $0.responseDisconnect.retryAfterSeconds = 20
+            })
+            client.cancel()
+        }
+
+        let session = RemoteSession()
+        session.connect(to: clementine.endpoint, authCode: 0)
+        try await eventually { session.status == .disconnected }
+        #expect(session.closeReason == .tooManyWrongAuthCodes(retryAfter: .seconds(20)))
+        #expect(clementine.clientCount == 1)
+    }
+
+    @Test func waitsAreRoundedUp() {
+        let english = Locale(identifier: "en_US")
+        #expect(Duration.seconds(10).waitDescription(locale: english) == "10 seconds")
+        #expect(Duration.seconds(60).waitDescription(locale: english) == "1 minute")
+        #expect(Duration.seconds(61).waitDescription(locale: english) == "2 minutes")
+        #expect(Duration.seconds(2560).waitDescription(locale: english) == "43 minutes")
+        #expect(Duration.seconds(3600).waitDescription(locale: english) == "1 hour")
+    }
+
     @Test func givesUpWhenClementineKeepsHangingUp() async throws {
         let clementine = try await FakeClementine()
         defer { clementine.stop() }

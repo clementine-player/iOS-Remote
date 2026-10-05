@@ -175,6 +175,8 @@ final class AppModel {
             connectProblem = .authCode
         case .disconnected(.notLocalNetwork):
             connectProblem = .notLocalNetwork
+        case .tooManyWrongAuthCodes(let retryAfter):
+            connectProblem = .tooManyWrongAuthCodes(retryAfter: retryAfter)
         case .oldProtocol:
             connectProblem = .oldClementine
         case .disconnected:
@@ -243,6 +245,9 @@ enum ConnectProblem: Equatable, Identifiable {
     case localNetworkDenied
     /// Clementine only accepts connections from its local network, and this phone isn't on it.
     case notLocalNetwork
+    /// Too many wrong auth codes have come from this phone, so Clementine won't check one for
+    /// this long, if it said.
+    case tooManyWrongAuthCodes(retryAfter: Duration?)
 
     var id: String { String(describing: self) }
 }

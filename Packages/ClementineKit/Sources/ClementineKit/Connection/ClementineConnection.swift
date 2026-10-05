@@ -26,6 +26,9 @@ public actor ClementineConnection {
         case localNetworkDenied
         /// Clementine closed the connection, for this reason if it gave one.
         case disconnected(DisconnectReason?)
+        /// Too many wrong auth codes have come from this phone, so Clementine won't check one for
+        /// this long, if it said.
+        case tooManyWrongAuthCodes(retryAfter: Duration?)
         /// The connection was lost and couldn't be restored.
         case lost
         /// Clementine is too old.
@@ -131,8 +134,7 @@ public actor ClementineConnection {
                 hasHeard = true
                 reconnectsUnheard = 0
                 if message.type == .disconnect {
-                    let response = message.responseDisconnect
-                    finish(.disconnected(response.hasReasonDisconnect ? response.reasonDisconnect : nil))
+                    finish(Self.closeReason(message.responseDisconnect))
                     return
                 }
                 if message.type != .keepAlive {
@@ -233,6 +235,14 @@ public actor ClementineConnection {
             channel.cancel()
         }
         return false
+    }
+
+    private static func closeReason(_ disconnect: Pb_Remote_ResponseDisconnect) -> CloseReason {
+        guard disconnect.hasReasonDisconnect else { return .disconnected(nil) }
+        if disconnect.reasonDisconnect == .tooManyWrongAuthCodes {
+            return .tooManyWrongAuthCodes(retryAfter: disconnect.retryAfter)
+        }
+        return .disconnected(disconnect.reasonDisconnect)
     }
 
     private func finish(_ reason: CloseReason) {
