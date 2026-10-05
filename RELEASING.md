@@ -58,6 +58,14 @@ upload's is higher than the one before.
 in `en-US/`, and the notes for App Review in `review_information/`. Each release uploads it as
 it is, so change it there rather than in App Store Connect.
 
+**App Review needs a Clementine** to try the app with. It gets the demo Clementine,
+`demo.clementine-player.org`, which the Android remote's reviewers use too: a Clementine on
+Google Cloud playing the showcase library, set up as the Android remote's
+[RELEASING.md](https://github.com/clementine-player/Android-Remote/blob/master/RELEASING.md#demo-clementine-for-store-reviewers)
+says. Each release adds its address and auth code to the notes for App Review. The auth code is
+the repository secret `DEMO_AUTH_CODE`, never committed: anyone with it can control the demo.
+Without it, the release workflow releases nothing.
+
 ## How it signs in
 
 There are no certificates or provisioning profiles in the repository or its secrets.
@@ -105,8 +113,10 @@ on the team: it signs with that account.
    - *App Information:* the age rating questionnaire (no objectionable content).
    - *Pricing and Availability:* free, in every country.
    - *App Review Information*, on the version page: a contact's name, phone number and email.
-     The notes for the reviewer, which explain that the app needs Clementine, are in
-     `fastlane/metadata/review_information/notes.txt`.
+     The notes for the reviewer, which explain that the app needs Clementine and how to use the
+     demo Clementine, are in `fastlane/metadata/review_information/notes.txt`.
+   - The demo Clementine's auth code, which its setup prints, as the secret
+     `DEMO_AUTH_CODE`: `gh secret set DEMO_AUTH_CODE --body <auth code>`.
 5. If `v*` tags get a repository ruleset, let GitHub Actions bypass it: the release workflow
    pushes the tags.
 6. Run the *testflight* workflow (*Actions → testflight → Run workflow*, on `main`) to check

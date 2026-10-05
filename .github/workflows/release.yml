@@ -8,7 +8,8 @@
 #   - meanwhile, takes the App Store screenshots: screenshots.yml, light, on the devices the App
 #     Store wants (a 6.9" iPhone and a 13" iPad)
 #   - submits the build for App Review with the listing in fastlane/metadata, the screenshots
-#     and the notes. Once Apple approves it, it's released.
+#     and the notes. App Review is told to use the demo Clementine, demo.clementine-player.org,
+#     with the auth code in the secret DEMO_AUTH_CODE. Once Apple approves it, it's released.
 #   - publishes a GitHub release with the notes
 #
 # Run it with a tag to publish an existing release again after a failure: it uploads the build
@@ -54,9 +55,15 @@ jobs:
         env:
           TAG: ${{ inputs.tag }}
           HAS_ASC_KEY: ${{ secrets.ASC_KEY_ID != '' }}
+          HAS_DEMO_AUTH_CODE: ${{ secrets.DEMO_AUTH_CODE != '' }}
         run: |
           if [ "$HAS_ASC_KEY" != true ]; then
             echo "::warning::Releases aren't set up yet, so nothing was released: the App Store Connect API key isn't set (see RELEASING.md)."
+            echo "release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$HAS_DEMO_AUTH_CODE" != true ]; then
+            echo "::warning::Nothing was released: App Review needs the demo Clementine's auth code, and DEMO_AUTH_CODE isn't set (see RELEASING.md)."
             echo "release=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -213,6 +220,7 @@ jobs:
 
       - name: Submit for App Review
         env:
+          DEMO_AUTH_CODE: ${{ secrets.DEMO_AUTH_CODE }}
           # App Store Connect takes no release notes for an app's first version.
           NOTES: ${{ needs.plan.outputs.first != 'true' && format('{0}/notes/release_notes.txt', runner.temp) || '' }}
         run: >

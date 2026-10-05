@@ -7,6 +7,8 @@
 default_platform(:ios)
 
 APP_ID = "org.clementine-player.remote"
+# The Clementine App Review connects to: see the Android remote's RELEASING.md.
+DEMO_HOST = "demo.clementine-player.org"
 
 platform :ios do
   before_all do
@@ -62,8 +64,15 @@ platform :ios do
   # The screenshots directory has a folder per language (en-US), and the App Store tells the
   # devices apart by their size. The first release has no release notes: App Store Connect
   # takes none.
+  #
+  # The notes for App Review get the demo Clementine's address and its auth code, from
+  # DEMO_AUTH_CODE: it's kept out of the repository.
   lane :submit do |options|
     notes = options[:release_notes]
+    auth_code = ENV.fetch("DEMO_AUTH_CODE", "")
+    UI.user_error!("DEMO_AUTH_CODE isn't set: App Review needs it to connect") if auth_code.empty?
+    review_notes = File.read("metadata/review_information/notes.txt").strip +
+      "\n\nAddress: #{DEMO_HOST}\nAuth code: #{auth_code}"
     upload_to_app_store(
       app_identifier: APP_ID,
       app_version: options.fetch(:version),
@@ -80,6 +89,7 @@ platform :ios do
       force: true,
       # Can't be checked with an API key; the app has none.
       precheck_include_in_app_purchases: false,
+      app_review_information: { notes: review_notes },
       submission_information: {
         add_id_info_uses_idfa: false,
         content_rights_contains_third_party_content: false,
