@@ -107,6 +107,8 @@ jobs:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
           TESTFLIGHT_GROUPS: ${{ vars.TESTFLIGHT_GROUPS }}
+          # For Beta App Review's notes, when a build goes to external groups.
+          DEMO_AUTH_CODE: ${{ secrets.DEMO_AUTH_CODE }}
           FASTLANE_SKIP_UPDATE_CHECK: "1"
           FASTLANE_OPT_OUT_USAGE: "1"
           FASTLANE_HIDE_CHANGELOG: "1"
