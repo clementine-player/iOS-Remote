@@ -126,6 +126,27 @@ struct ConnectionTests {
         #expect(session.playlistSongs.count == 2)
     }
 
+    /// Clementine sends a song it can't read (a missing file, say) with no fields set, so with
+    /// index 0. Its place in the list is its index in the playlist.
+    @Test func numbersPlaylistSongsByTheirPlace() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        clementine.respondLikeClementine()
+
+        let session = RemoteSession()
+        session.connect(to: clementine.endpoint, authCode: 0)
+        try await eventually { session.status == .connected }
+
+        // FakeClementine.song is the third, index 2.
+        await clementine.broadcast(RemoteMessage(.playlistSongs) {
+            $0.responsePlaylistSongs.requestedPlaylist.id = 1
+            $0.responsePlaylistSongs.songs = [SongMetadata(), SongMetadata(), FakeClementine.song, SongMetadata()]
+        })
+        try await eventually { session.playlistSongs[1] != nil }
+        #expect(session.playlistSongs[1]?.map(\.index) == [0, 1, 2, 3])
+        #expect(session.playlistSongs[1]?[2].title == "Clair de lune")
+    }
+
     @Test func reconnectsWhenTheConnectionDrops() async throws {
         let clementine = try await FakeClementine()
         defer { clementine.stop() }

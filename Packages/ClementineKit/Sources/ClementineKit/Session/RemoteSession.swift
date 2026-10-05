@@ -312,7 +312,15 @@ public final class RemoteSession {
         case .playlistSongs:
             let response = message.responsePlaylistSongs
             let id = response.requestedPlaylist.id
-            playlistSongs[id] = response.songs.map(Song.init)
+            // Clementine numbers the songs by their place, except a song it can't read (a
+            // missing file, say), which comes with no fields set: index 0, the first song's.
+            // So each is numbered by its place here, which keeps the queue's rows apart and has
+            // a tap on one play that song.
+            playlistSongs[id] = response.songs.enumerated().map { place, metadata in
+                var song = Song(metadata)
+                song.index = Int32(place)
+                return song
+            }
             if requestedPlaylists.remove(id) != nil, let loading = playlistsLoading {
                 playlistsLoading = (min(loading.done + 1, loading.total), loading.total)
             }
