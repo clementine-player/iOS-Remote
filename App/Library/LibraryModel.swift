@@ -178,10 +178,19 @@ extension DownloadFailure {
         case .forbidden: "Clementine doesn't allow downloads. Turn them on in its Network Remote settings."
         case .wrongAuthCode: "Enter the auth code shown in Clementine's Network Remote settings."
         case .notLocalNetwork: "Clementine only accepts connections from its local network."
+        case .tooManyWrongAuthCodes(let retryAfter):
+            "Too many wrong auth codes. Clementine won't check another from this phone for \(retryAfter.waitDescription)."
         case .insufficientSpace: "There isn't enough space on this phone"
         case .cantSave: "Couldn't save the file"
         case .corrupt: "The library Clementine sent is damaged"
         case .cancelled: "Download canceled"
         }
+    }
+}
+
+extension Duration? {
+    /// How long Clementine said to wait, or "a while" if it didn't.
+    var waitDescription: String {
+        self?.waitDescription() ?? String(localized: "a while")
     }
 }

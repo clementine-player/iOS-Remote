@@ -274,6 +274,7 @@ struct ConnectView: View {
         case .unreachable, nil: "Couldn't reach Clementine"
         case .localNetworkDenied: "Local Network is off"
         case .notLocalNetwork: "Clementine refused the connection"
+        case .tooManyWrongAuthCodes: "Too many wrong auth codes"
         }
     }
 
@@ -295,6 +296,8 @@ struct ConnectView: View {
             "That address is on your network, and Clementine Remote needs Local Network access to reach it. Turn on Local Network in Settings."
         case .notLocalNetwork:
             "Clementine only accepts connections from its local network. To connect from elsewhere, turn off \"Only allow connections from the local network\" in its Network Remote settings."
+        case .tooManyWrongAuthCodes(let retryAfter):
+            "Clementine won't check another auth code from this phone for \(retryAfter.waitDescription). Then enter the code shown in its Network Remote settings."
         }
     }
 }

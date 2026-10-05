@@ -203,6 +203,11 @@ public nonisolated enum Pb_Remote_ReasonDisconnect: Int, SwiftProtobuf.Enum, Swi
   /// client isn't on it. Older clients read this as Server_Shutdown.
   case notLocalNetwork = 5
 
+  /// Too many wrong auth codes have come from the client's address, so
+  /// Clementine isn't checking its codes for a while: see retry_after_seconds.
+  /// Older clients read this as Server_Shutdown.
+  case tooManyWrongAuthCodes = 6
+
   public init() {
     self = .serverShutdown
   }
@@ -1183,11 +1188,23 @@ public nonisolated struct Pb_Remote_ResponseDisconnect: Sendable {
   /// Clears the value of `reasonDisconnect`. Subsequent reads from it will return its default value.
   public mutating func clearReasonDisconnect() {self._reasonDisconnect = nil}
 
+  /// With Too_Many_Wrong_Auth_Codes: how long until Clementine checks a code
+  /// from the client's address again.
+  public var retryAfterSeconds: Int32 {
+    get {_retryAfterSeconds ?? 0}
+    set {_retryAfterSeconds = newValue}
+  }
+  /// Returns true if `retryAfterSeconds` has been explicitly set.
+  public var hasRetryAfterSeconds: Bool {self._retryAfterSeconds != nil}
+  /// Clears the value of `retryAfterSeconds`. Subsequent reads from it will return its default value.
+  public mutating func clearRetryAfterSeconds() {self._retryAfterSeconds = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _reasonDisconnect: Pb_Remote_ReasonDisconnect? = nil
+  fileprivate var _retryAfterSeconds: Int32? = nil
 }
 
 public nonisolated struct Pb_Remote_ResponseActiveChanged: Sendable {
@@ -3378,7 +3395,7 @@ nonisolated extension Pb_Remote_ShuffleMode: SwiftProtobuf._ProtoNameProviding {
 }
 
 nonisolated extension Pb_Remote_ReasonDisconnect: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}Server_Shutdown\0\u{1}Wrong_Auth_Code\0\u{1}Not_Authenticated\0\u{1}Download_Forbidden\0\u{1}Not_Local_Network\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}Server_Shutdown\0\u{1}Wrong_Auth_Code\0\u{1}Not_Authenticated\0\u{1}Download_Forbidden\0\u{1}Not_Local_Network\0\u{1}Too_Many_Wrong_Auth_Codes\0")
 }
 
 nonisolated extension Pb_Remote_DownloadItem: SwiftProtobuf._ProtoNameProviding {
@@ -4219,7 +4236,7 @@ nonisolated extension Pb_Remote_RequestConnect: SwiftProtobuf.Message, SwiftProt
 
 nonisolated extension Pb_Remote_ResponseDisconnect: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ResponseDisconnect"
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}reason_disconnect\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}reason_disconnect\0\u{3}retry_after_seconds\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -4228,6 +4245,7 @@ nonisolated extension Pb_Remote_ResponseDisconnect: SwiftProtobuf.Message, Swift
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularEnumField(value: &self._reasonDisconnect) }()
+      case 2: try { try decoder.decodeSingularInt32Field(value: &self._retryAfterSeconds) }()
       default: break
       }
     }
@@ -4241,11 +4259,15 @@ nonisolated extension Pb_Remote_ResponseDisconnect: SwiftProtobuf.Message, Swift
     try { if let v = self._reasonDisconnect {
       try visitor.visitSingularEnumField(value: v, fieldNumber: 1)
     } }()
+    try { if let v = self._retryAfterSeconds {
+      try visitor.visitSingularInt32Field(value: v, fieldNumber: 2)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Pb_Remote_ResponseDisconnect, rhs: Pb_Remote_ResponseDisconnect) -> Bool {
     if lhs._reasonDisconnect != rhs._reasonDisconnect {return false}
+    if lhs._retryAfterSeconds != rhs._retryAfterSeconds {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
