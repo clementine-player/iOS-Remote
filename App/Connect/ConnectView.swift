@@ -11,7 +11,6 @@ struct ConnectView: View {
     @State private var host = ""
     @State private var authCode = ""
     @State private var isSettingsPresented = false
-    @State private var isWelcomePresented = false
     @FocusState private var isHostFocused: Bool
 
     var body: some View {
@@ -92,11 +91,6 @@ struct ConnectView: View {
                         }
                     }
             }
-        }
-        .alert("Welcome", isPresented: $isWelcomePresented) {
-            Button("Continue") {}
-        } message: {
-            Text("Clementine Remote controls the Clementine music player on your computer. You need Clementine \(Self.clementineVersion) or later, from clementine-player.org.")
         }
         .alert(problemTitle, isPresented: problemPresented, presenting: model.connectProblem) { problem in
             if problem == .authCode {
@@ -222,12 +216,7 @@ struct ConnectView: View {
         if host.isEmpty {
             host = model.settings.lastHost
         }
-        if model.settings.isFirstLaunch {
-            model.settings.isFirstLaunch = false
-            isWelcomePresented = true
-        } else {
-            model.autoConnect()
-        }
+        model.autoConnect()
     }
 
     /// While connecting automatically, connects to the last Clementine at its new address once

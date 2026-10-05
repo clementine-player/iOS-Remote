@@ -31,7 +31,6 @@ public enum SettingKey {
     public static let knownHosts = "known_ips"
     public static let lastAuthCode = "last_auth_code"
     public static let libraryHost = "library_ip"
-    public static let firstLaunch = "first_call"
     public static let rendererID = "renderer_id"
 }
 
@@ -53,7 +52,6 @@ public struct Settings: Sendable {
         SettingKey.port: Int(RemoteProtocol.defaultPort),
         SettingKey.keepScreenOn: false,
         SettingKey.renderer: true,
-        SettingKey.firstLaunch: true,
     ] }
 
     private let storeName: String?
@@ -127,10 +125,6 @@ public struct Settings: Sendable {
     public var libraryHost: String {
         get { store.string(forKey: SettingKey.libraryHost) ?? "" }
         nonmutating set { store.set(newValue, forKey: SettingKey.libraryHost) }
-    }
-    public var isFirstLaunch: Bool {
-        get { store.bool(forKey: SettingKey.firstLaunch) }
-        nonmutating set { store.set(newValue, forKey: SettingKey.firstLaunch) }
     }
 
     /// Remembers an address connected to, and the Clementine's network name if it was found there.

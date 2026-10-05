@@ -82,8 +82,8 @@ Shown at launch and whenever the app is not connected. From the redesign's Conne
   button. The rest of the screen is disabled.
 - **Footer:** "Needs Clementine 1.3 or later, with Tools → Preferences → Network Remote turned on."
 - **Alerts:** the auth code prompt (numeric field; an invalid code keeps it open), couldn't connect
-  (with the reason: not on Wi-Fi, not a private address, or check the address), Clementine too old,
-  and the first-run welcome.
+  (with the reason: not on Wi-Fi, not a private address, or check the address), and Clementine too
+  old.
 - Landscape: the hero fills the left half, the rest scrolls on the right.
 
 ### Queue (tab 1)
@@ -600,4 +600,4 @@ ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
 
 Saved state: last address (`save_clementine_ip`), its network name (`last_server_name`), addresses
 used (`known_ips`), last auth code (`last_auth_code`), the Clementine the library came from
-(`library_ip`), first launch (`first_call`), this install's renderer id (`renderer_id`).
+(`library_ip`), this install's renderer id (`renderer_id`).
