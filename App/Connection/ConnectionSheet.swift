@@ -71,7 +71,7 @@ struct ConnectionSheet: View {
             }
             .task {
                 while !Task.isCancelled {
-                    await updateTraffic()
+                    updateTraffic()
                     try? await Task.sleep(for: .milliseconds(500))
                 }
             }
@@ -83,8 +83,8 @@ struct ConnectionSheet: View {
         return String(format: "%02d:%02d:%02d", seconds / 3600, seconds / 60 % 60, seconds % 60)
     }
 
-    private func updateTraffic() async {
-        let bytes = await session.byteCounts()
+    private func updateTraffic() {
+        let bytes = session.byteCounts()
         let seconds = max(1, Int(Date.now.timeIntervalSince(session.connectedSince ?? .now)))
         let rate = Int64(bytes.sent + bytes.received) / Int64(seconds)
         traffic = "\(formatBytes(Int64(bytes.sent))) / \(formatBytes(Int64(bytes.received))) (\(formatBytes(rate))/s)"

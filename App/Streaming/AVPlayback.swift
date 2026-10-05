@@ -18,6 +18,10 @@ final class AVPlayback: Playback {
     private var playerObservation: NSKeyValueObservation?
     /// Per item: its status, and the notifications of its end.
     private var itemObservations: [ObjectIdentifier: [Any]] = [:]
+    /// Per item: the bytes it has fetched that are already counted in [Traffic].
+    private var counted: [ObjectIdentifier: Int] = [:]
+    /// Counts what's being fetched while there's a player.
+    private var trafficTimer: Timer?
 
     var state: PlaybackState {
         guard let player, let current else { return .idle }
@@ -119,7 +123,27 @@ final class AVPlayback: Playback {
             Task { @MainActor in self?.listener?.playbackStateChanged() }
         }
         self.player = player
+        // Twice a second, as the connection sheet reads it.
+        trafficTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated { self?.countTraffic() }
+        }
         return player
+    }
+
+    private func countTraffic() {
+        for item in [current, queued].compactMap({ $0 }) {
+            count(item)
+        }
+    }
+
+    /// Adds what [item] has fetched since it was last counted to the app's [Traffic].
+    private func count(_ item: AVPlayerItem) {
+        let id = ObjectIdentifier(item)
+        let fetched = item.accessLog()?.events.reduce(0) { $0 + max(0, Int($1.numberOfBytesTransferred)) } ?? 0
+        let new = fetched - counted[id, default: 0]
+        guard new > 0 else { return }
+        Traffic.add(received: new)
+        counted[id] = fetched
     }
 
     private func activateSession() {
@@ -174,6 +198,8 @@ final class AVPlayback: Playback {
     }
 
     private func forget(_ item: AVPlayerItem) {
+        count(item)
+        counted[ObjectIdentifier(item)] = nil
         for observation in itemObservations.removeValue(forKey: ObjectIdentifier(item)) ?? [] {
             if let observation = observation as? NSKeyValueObservation {
                 observation.invalidate()
