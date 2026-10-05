@@ -51,6 +51,12 @@ public final class RemoteSession {
     /// Where Clementine can play: its computer and the renderers connected to it.
     public private(set) var outputs: [Output] = []
 
+    /// Clementine's computer as Clementine names it, or else its name on the network, or its
+    /// address.
+    public var computerName: String {
+        outputs.first { $0.isLocal && !$0.name.isEmpty }?.name ?? hostName
+    }
+
     /// Where Clementine plays now.
     public var activeOutput: Output? {
         outputs.first { $0.state == .active }
