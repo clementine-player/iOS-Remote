@@ -47,9 +47,10 @@ fi
 [ -n "${name:-}" ] || name=$(scripts/version.sh "$commit" | sed -n 's/^name=//p')
 build=$(( $(scripts/version.sh "$commit" | sed -n 's/^build=//p') + 1 ))
 
-# The notes of every commit since then, oldest first.
+# The notes of every commit since then, oldest first, each once: the nightly translations
+# commits (translations.yml) all have the same one.
 notes=$(git log --reverse --format='%(trailers:key=Release-note,valueonly,separator=%x0A)' \
-  ${last:+"$last.."}"$commit" | sed '/^[[:space:]]*$/d')
+  ${last:+"$last.."}"$commit" | sed '/^[[:space:]]*$/d' | awk '!seen[$0]++')
 [ -n "$notes" ] || notes="Fixes and improvements."
 
 printf '%s\n' "$notes" | sed 's/^/- /' > "$notes_dir/notes.md"

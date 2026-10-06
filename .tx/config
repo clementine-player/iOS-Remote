@@ -1,0 +1,15 @@
+# Transifex (https://app.transifex.com/davidsansome/clementine-remot/), where the app is
+# translated, next to the Android remote. .github/workflows/translations.yml pushes the String
+# Catalog here when it changes on main, and pulls the translations back every night.
+#
+# A String Catalog holds every language, and so does each file Transifex gives back, so the
+# pull downloads them to build/transifex, and scripts/merge-transifex-translations.py merges
+# their translations into the app's catalog.
+[main]
+host = https://app.transifex.com
+
+[o:davidsansome:p:clementine-remot:r:ios]
+source_file = App/Resources/Localizable.xcstrings
+file_filter = build/transifex/<lang>.xcstrings
+source_lang = en
+type = XCSTRINGS
