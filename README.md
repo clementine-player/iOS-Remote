@@ -62,7 +62,9 @@ the release workflow, which also takes the App Store's screenshots. See
 
 `scripts/generate-proto.sh` regenerates the protocol code from
 `Packages/ClementineKit/Proto/remotecontrolmessages.proto`, and
-`scripts/import-android-translations.py` imports the Android remote's translations.
+`scripts/merge-transifex-translations.py` merges translations pulled from Transifex (see
+[RELEASING.md](RELEASING.md#translations)). `scripts/import-android-translations.py` imported the
+Android remote's translations, before the app was on Transifex.
 
 ## Licence
 
