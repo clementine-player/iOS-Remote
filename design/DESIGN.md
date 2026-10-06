@@ -230,10 +230,16 @@ From the Downloads board.
 - Large title "Downloads", subtitle "*x* free on this phone".
 - **Downloading:** a row per job ("Album Suite bergamasque", "(2/4) Claude Debussy - Prélude" or
   "Transcoding (1/3)"), with a thin progress bar and "3.2 MiB / 18 MiB (1.1 MiB/s)". Cancel button.
-- **On this phone:** finished jobs, with their result ("Download complete", "Canceled",
+- **Finished:** finished jobs, with their result ("Download complete", "Canceled",
   "Insufficient space", …). Tapping one lists its songs; tapping a song plays it in the app. Swipe to
   remove from the list (the files stay).
 - When downloads only run on Wi-Fi, a card says so with a **Change** button to the setting.
+- **On this phone:** every song saved in the downloads folder, downloaded now or before, by folder
+  and file name (so by artist and album, with the folder settings' defaults). Each is named after
+  its file, with its folders as the second line: reading the tags would mean opening every file.
+  Tapping one plays it in the app. Read when the tab shows, when the app comes back to the front,
+  and each time a download finishes.
+- With nothing downloading, downloaded or on the phone: "No downloads", and where to download from.
 - Files are saved in the app's Documents folder under `Clementine/`, visible in the Files app.
 
 ### Connection sheet

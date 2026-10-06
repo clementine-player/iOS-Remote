@@ -2,11 +2,13 @@ import ClementineKit
 import QuickLook
 import SwiftUI
 
-/// Songs downloading, and those downloaded to the phone.
+/// Songs downloading, those downloaded, and every song on the phone, downloaded now or before.
 struct DownloadsView: View {
     @Environment(AppModel.self) private var model
     @AppStorage(SettingKey.wifiOnly) private var wifiOnly = false
     @State private var opened: DownloadsModel.Job?
+    @State private var previewed: URL?
+    @Environment(\.scenePhase) private var scenePhase
     @State private var isSettingsPresented = false
 
     private var downloads: DownloadsModel { model.downloads }
@@ -43,7 +45,7 @@ struct DownloadsView: View {
                             }
                         }
                     } header: {
-                        SectionTitle("On this phone")
+                        SectionTitle("Finished")
                     }
                 }
                 if wifiOnly {
@@ -64,11 +66,28 @@ struct DownloadsView: View {
                         .listRowBackground(Palette.surface)
                     }
                 }
+                if let songs = downloads.onPhone, !songs.isEmpty {
+                    Section {
+                        ForEach(songs, id: \.file) { song in
+                            Button {
+                                previewed = song.file
+                            } label: {
+                                MediaRow(title: song.title, meta: song.artist) {
+                                    SongThumbnail(systemImage: "play.fill")
+                                }
+                            }
+                            .buttonStyle(.plain)
+                            .listRowBackground(Palette.surface)
+                        }
+                    } header: {
+                        SectionTitle("On this phone")
+                    }
+                }
             }
             .listStyle(.plain)
             .surfaceBackground()
             .overlay {
-                if downloads.jobs.isEmpty {
+                if downloads.isEmpty {
                     ContentUnavailableView(
                         "No downloads", systemImage: "arrow.down.circle",
                         description: Text("Download songs, albums and playlists from the player, the queue and the library. They're saved in the Files app."))
@@ -77,6 +96,14 @@ struct DownloadsView: View {
             .navigationTitle("Downloads")
             .navigationSubtitle(downloads.freeSpace.map { String(localized: "\(formatBytes($0)) free on this phone") } ?? "")
             .connectionToolbar()
+            .task { downloads.readOnPhone() }
+            .onChange(of: scenePhase) { _, phase in
+                // Songs may have been deleted, or added, in the Files app meanwhile.
+                if phase == .active {
+                    downloads.readOnPhone()
+                }
+            }
+            .quickLookPreview($previewed, in: downloads.onPhone?.map(\.file) ?? [])
             .sheet(item: $opened) { job in
                 DownloadedSongs(job: job)
                     .presentationDetents([.medium, .large])
