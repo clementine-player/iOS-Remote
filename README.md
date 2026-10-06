@@ -43,10 +43,10 @@ DESTINATION="id=<your device's UDID>" scripts/build.sh -allowProvisioningUpdates
 ## Apple Watch
 
 The app comes with an Apple Watch app (`WatchApp/`, the `ClementineRemoteWatch` target), which
-controls Clementine through the phone: see [Apple Watch](design/DESIGN.md#apple-watch). It's a
-draft: it isn't embedded in the phone app yet, so TestFlight builds and releases leave it out, and
-`scripts/build.sh` doesn't build it (CI does, on its own). To try it in the simulator, pair a watch
-with a phone, then build and install each app:
+controls Clementine through the phone: see [Apple Watch](design/DESIGN.md#apple-watch). It's
+embedded in the phone app, so `scripts/build.sh` builds it too, but it's a draft:
+`scripts/archive.sh` takes it out again, so TestFlight builds and releases leave it out. To try it
+in the simulator, pair a watch with a phone and install each app on its own:
 
 ```sh
 phone=$(xcrun simctl create "Remote iPhone" "iPhone 17 Pro")
@@ -54,16 +54,15 @@ watch=$(xcrun simctl create "Remote Watch" "Apple Watch Ultra 2 (49mm)")
 xcrun simctl pair "$watch" "$phone"
 xcrun simctl boot "$phone"; xcrun simctl boot "$watch"
 DESTINATION="id=$phone" scripts/build.sh
-xcodebuild -project ClementineRemote.xcodeproj -scheme ClementineRemoteWatch \
-    -destination "id=$watch" -derivedDataPath build/DerivedData build
-products=build/DerivedData/Build/Products
-xcrun simctl install "$phone" "$products/Debug-iphonesimulator/Clementine Remote.app"
-xcrun simctl install "$watch" "$products/Debug-watchsimulator/ClementineRemoteWatch.app"
+app="build/DerivedData/Build/Products/Debug-iphonesimulator/Clementine Remote.app"
+xcrun simctl install "$phone" "$app"
+xcrun simctl install "$watch" "$app/Watch/ClementineRemoteWatch.app"
 ```
 
 Connect the phone to Clementine, then open Clementine on the watch. It's been tried with iOS 27
-and watchOS 27 simulators (`xcodebuild -downloadPlatform watchOS` if you don't have one). The
-simulator may not tell the phone
+and watchOS 27 simulators (`xcodebuild -downloadPlatform watchOS` if you don't have one). The phone
+app needs the watch app embedded for the two to talk, even in the simulator. The simulator may not
+tell the phone
 that the watch app is installed, so the phone can't send news on its own, but it still answers
 the watch's requests, which the watch makes every 15 seconds.
 

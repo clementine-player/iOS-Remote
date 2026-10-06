@@ -527,11 +527,11 @@ Intents, as above). It can't update live while the app is suspended; it shows wh
 
 ### Apple Watch
 
-A draft, iOS only for now: the Android remote has no Wear OS app yet. It isn't embedded in the
-phone app, so it doesn't ship: TestFlight builds and releases leave it out, and CI builds it on its
-own. The phone's side (`WatchLink`) does ship, but does nothing without the watch app installed. To
-ship it, add `ClementineRemoteWatch` to the app's dependencies in `project.yml`, which embeds it,
-and have `scripts/archive.sh` sign it as it signs the widget.
+A draft, iOS only for now: the Android remote has no Wear OS app yet. It's embedded in the
+phone app, as the watch only talks to an app that has it, but doesn't ship: `scripts/archive.sh`
+takes it out of the archive, so TestFlight builds and releases leave it out. The phone's side
+(`WatchLink`) does ship, but does nothing without the watch app installed. To ship it, have
+`scripts/archive.sh` sign it as it signs the widget, rather than take it out.
 
 A watch app with one screen, Now Playing:
 

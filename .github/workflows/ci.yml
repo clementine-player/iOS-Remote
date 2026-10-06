@@ -62,12 +62,6 @@ jobs:
       - name: Build and test
         # CI has no signing account: build for the simulator without a team.
         run: scripts/build.sh test DEVELOPMENT_TEAM=
-      - name: Build the Apple Watch app
-        # A draft, not embedded in the app yet (see project.yml), so built on its own.
-        run: |
-          xcodebuild -project ClementineRemote.xcodeproj -scheme ClementineRemoteWatch \
-            -destination 'generic/platform=watchOS Simulator' -derivedDataPath build/DerivedData \
-            build DEVELOPMENT_TEAM=
 
   # A single check for branch protection to require. It runs even when a job
   # it needs fails, because GitHub treats a skipped required check as passing.

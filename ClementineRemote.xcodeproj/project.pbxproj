@@ -29,6 +29,7 @@
 		5519998FF94C9CDB9C36CA95 /* ConnectionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC8D6A33585EA2F0980CEEF /* ConnectionSheet.swift */; };
 		599E5FF4F8BAC2B033636E4E /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4856A6293D1829361A2A9A17 /* Theme.swift */; };
 		59F2ED95C3EC8E18D1C61A1F /* VolumeButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D0E12EF32CE14014407139 /* VolumeButtons.swift */; };
+		5A8B18AC5A2B11E2E1BB15DE /* ClementineRemoteWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 0D746C8B4BB4F3CC4AD0F215 /* ClementineRemoteWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		5B2423FA1DE74D6BB9A80BBC /* ClementineWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275DDCC3A769C5E570362F65 /* ClementineWidget.swift */; };
 		656537921D83710E755C5F51 /* OutputSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3565B08D99C9EB73FC5E33 /* OutputSheet.swift */; };
 		6F00AA6F669DE2D2094B9ED6 /* QueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB6C96030EC2FA49A4E8212 /* QueueView.swift */; };
@@ -75,6 +76,13 @@
 			remoteGlobalIDString = B55B382E90303C5A7F992938;
 			remoteInfo = ClementineRemote;
 		};
+		BD77AC46CE33B862EC7F75E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A96B9C98D2D96A5DC2AA80DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C723700E0AEF5EAC48ACDEAA;
+			remoteInfo = ClementineRemoteWatch;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -87,6 +95,17 @@
 				7232C827CCBC7AADD14B8A97 /* ClementineWidget.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C1179906A8199DDCA3B46A74 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				5A8B18AC5A2B11E2E1BB15DE /* ClementineRemoteWatch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -476,11 +495,13 @@
 				73BB163DD87132B08E7B9C00 /* Resources */,
 				D687E33C1743CE829FC9FC06 /* Frameworks */,
 				8C76F6DB9E3ABD0A2E1145BF /* Embed Foundation Extensions */,
+				C1179906A8199DDCA3B46A74 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				4829CF6A2AC2F0CFCEE0F00C /* PBXTargetDependency */,
+				8337ABE082D3E4A7A02DF834 /* PBXTargetDependency */,
 			);
 			name = ClementineRemote;
 			packageProductDependencies = (
@@ -701,6 +722,11 @@
 			isa = PBXTargetDependency;
 			target = 3344B7E1BF3419B020F13A38 /* ClementineWidget */;
 			targetProxy = 0B7FEB15ABD069551909B2A6 /* PBXContainerItemProxy */;
+		};
+		8337ABE082D3E4A7A02DF834 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C723700E0AEF5EAC48ACDEAA /* ClementineRemoteWatch */;
+			targetProxy = BD77AC46CE33B862EC7F75E9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

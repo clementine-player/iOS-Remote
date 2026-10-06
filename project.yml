@@ -35,8 +35,9 @@ targets:
       - package: ClementineKit
         product: ClementineWatch
       - target: ClementineWidget
-      # Not ClementineRemoteWatch yet: embedding it would ship it to TestFlight and the App Store.
-      # Until it's ready, it's built on its own (and by CI), and installed on the watch by hand.
+      # Embedded, as the watch only talks to an app that has it, but a draft: scripts/archive.sh
+      # takes it out again, so TestFlight builds and releases leave it out.
+      - target: ClementineRemoteWatch
     entitlements:
       path: App/ClementineRemote.entitlements
       properties:
