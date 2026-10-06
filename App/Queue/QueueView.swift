@@ -10,6 +10,8 @@ struct QueueView: View {
     @State private var editMode = EditMode.inactive
     @State private var isClearConfirmationPresented = false
     @State private var isNamingPlaylist = false
+    /// The song last tapped to play: the list stays where it is when it starts playing.
+    @State private var tappedIndex: Int32?
 
     private var shown: Playlist? { model.selectedPlaylist }
 
@@ -53,8 +55,12 @@ struct QueueView: View {
                         }
                     }
                 }
-                .onChange(of: playingIndex, initial: true) { _, _ in
-                    scrollToPlaying(scroller)
+                .onChange(of: playingIndex, initial: true) { _, index in
+                    let tapped = tappedIndex
+                    tappedIndex = nil
+                    if index != tapped {
+                        scrollToPlaying(scroller)
+                    }
                 }
                 .onChange(of: shown?.id) { _, _ in
                     selection = []
@@ -141,8 +147,8 @@ struct QueueView: View {
         Button {
             if editMode.isEditing {
                 toggle(song)
-            } else if let shown {
-                session.play(song, in: shown.id)
+            } else {
+                play(song)
             }
         } label: {
             MediaRow(
@@ -161,7 +167,7 @@ struct QueueView: View {
         .accessibilityIdentifier("song-\(song.index)")
         .contextMenu {
             Button("Play", systemImage: "play") {
-                if let shown { session.play(song, in: shown.id) }
+                play(song)
             }
             Button("Remove from playlist", systemImage: "trash", role: .destructive) {
                 remove([song])
@@ -184,8 +190,8 @@ struct QueueView: View {
                     .textStyle(.bodyMedium)
                 Spacer()
                 Button("Play", systemImage: "play.fill") {
-                    if let first = selected.first, let shown {
-                        session.play(first, in: shown.id)
+                    if let first = selected.first {
+                        play(first)
                     }
                     endSelection()
                 }
@@ -259,6 +265,12 @@ struct QueueView: View {
     private func endSelection() {
         selection = []
         editMode = .inactive
+    }
+
+    private func play(_ song: Song) {
+        guard let shown else { return }
+        tappedIndex = song.index
+        session.play(song, in: shown.id)
     }
 
     private func remove(_ songs: [Song]) {
