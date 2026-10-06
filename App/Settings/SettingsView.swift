@@ -62,7 +62,10 @@ struct SettingsView: View {
                     Text("Only on Wi-Fi")
                     Text("Download songs only when connected to Wi-Fi.")
                 }
-                Toggle("Replace existing files", isOn: $replaceExisting)
+                Toggle(isOn: $replaceExisting) {
+                    Text("Replace existing files")
+                    Text("Downloads songs again when they differ from those on this phone.")
+                }
                 Toggle(isOn: $playlistFolder) {
                     Text("Playlist folder")
                     Text("Save a playlist's songs in a folder named after it.")

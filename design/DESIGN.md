@@ -495,8 +495,10 @@ The protocol is Clementine's (clementine-player/Clementine#7530), which the Andr
 
 - Each job is its own connection (`downloader = true`) sending `DOWNLOAD_SONGS`: the current song,
   its album, a playlist, or a list of URLs.
-- For each song Clementine first offers it (chunk 0, with the song's metadata); the app accepts
-  unless the file exists and overwriting is off (`SONG_OFFER_RESPONSE`). Then chunks until
+- For each song Clementine first offers it (chunk 0, with the song's metadata and size); the app
+  accepts unless the file exists and either replacing is off or the saved file is the size offered
+  (`SONG_OFFER_RESPONSE`): the offer tells nothing else to compare, so downloading a playlist again
+  only downloads the songs that are new or changed. Then chunks until
   `chunk_number == chunk_count`. `DOWNLOAD_TOTAL_SIZE` gives the total, `TRANSCODING_FILES` the
   transcoding progress, and `DOWNLOAD_QUEUE_EMPTY` ends the job. `DISCONNECT` means downloads are
   turned off in Clementine.

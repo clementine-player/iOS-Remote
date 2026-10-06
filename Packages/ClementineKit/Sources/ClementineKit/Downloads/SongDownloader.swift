@@ -4,6 +4,7 @@ import Foundation
 public struct DownloadOptions: Sendable {
     /// The folder songs are saved under.
     public var directory: URL
+    /// Download again a song saved under the same name, when it differs from the one offered.
     public var replaceExisting = false
     /// Save a playlist's songs in a folder named after it.
     public var playlistFolder = false
@@ -138,8 +139,9 @@ public struct SongDownloader: Sendable {
                     // An offer of the next song.
                     song = chunk.songMetadata
                     let file = file(for: song)
-                    let exists = FileManager.default.fileExists(atPath: file.path)
-                    let accept = !exists || options.replaceExisting
+                    let accept = Self.shouldDownload(
+                        savedSize: Self.size(of: file), offeredSize: Int64(chunk.size),
+                        replaceExisting: options.replaceExisting)
                     do {
                         try await channel.send(Messages.songOfferResponse(accepted: accept))
                     } catch {
@@ -199,6 +201,21 @@ public struct SongDownloader: Sendable {
         status.title = song.title
         status.artist = song.artist
         status.album = song.album
+    }
+
+    /// Whether to download an offered song: if it isn't saved yet, or if existing files are to be
+    /// replaced and the one saved isn't the same. The offer only tells the file's size, so a saved
+    /// song of the same size is taken to be the same: downloading a playlist again then only
+    /// downloads the songs that are new or changed.
+    static func shouldDownload(savedSize: Int64?, offeredSize: Int64, replaceExisting: Bool) -> Bool {
+        guard let savedSize else { return true }
+        return replaceExisting && savedSize != offeredSize
+    }
+
+    /// The size of the file saved at [file], or nil if there's none.
+    static func size(of file: URL) -> Int64? {
+        guard let attributes = try? FileManager.default.attributesOfItem(atPath: file.path) else { return nil }
+        return (attributes[.size] as? NSNumber)?.int64Value ?? 0
     }
 
     /// Where [song] is saved: under the playlist, artist and album folders the options ask for.
