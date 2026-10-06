@@ -7,7 +7,8 @@ iOS's own controls and patterns.
 
 [Clementine-Android]: https://github.com/clementine-player/Android-Remote
 
-- **Platform:** iOS 26 and later, iPhone and iPad. Swift 6, SwiftUI, Observation.
+- **Platform:** iOS 26 and later, iPhone and iPad, with an Apple Watch app (watchOS 26 and later).
+  Swift 6, SwiftUI, Observation.
 - **Look:** Clementine's colours (orange and plum, with Material 3 roles generated from them), light
   and dark following the system, or as chosen in Settings. SF Pro type at the design system's
   sizes. SF Symbols, with the Android app's own player glyphs where SF Symbols has no match.
@@ -530,6 +531,63 @@ The app shares the last Clementine and song with the widget and the intents thro
 A home screen widget (WidgetKit) with the last song seen and play/pause and next buttons (App
 Intents, as above). It can't update live while the app is suspended; it shows what the app last saw.
 
+### Apple Watch
+
+A draft, iOS only for now: the Android remote has no Wear OS app yet. It's embedded in the
+phone app, as the watch only talks to an app that has it, but doesn't ship: `scripts/archive.sh`
+takes it out of the archive, so TestFlight builds and releases leave it out. The phone's side
+(`WatchLink`) does ship, but does nothing without the watch app installed. To ship it, have
+`scripts/archive.sh` sign it as it signs the widget, rather than take it out.
+
+A watch app with one screen, Now Playing:
+
+- The cover fills the screen, under the clock, darkened at the top for the clock and towards the
+  bottom for what's over it. A song without a cover has a music note (56 pt, `on-surface-variant`
+  on `surface-container-highest`), as the phone does; with nothing playing, the Clementine mark.
+  The phone sends the cover at 320 px, about the screen's size.
+- Over the bottom of the cover: the title in white and the artist in `primary`, one line each and
+  inset 8 pt more than the rest, clear of the screen's rounded edge, a
+  progress bar while the length is known, then the buttons, down to the bottom of the screen. No
+  title bar: the Clementine's name isn't worth the room.
+- Previous, play/pause and next, always left to right. Play/pause is a 76 × 60 pt
+  `primary-container` button with an `on-primary-container` glyph, as on the phone's player.
+- The Digital Crown sets Clementine's volume, as it sets the volume in the watch's own Now Playing.
+  While it changes, and for 1.5 s after, a meter beside the crown (`digitalCrownAccessory`) shows
+  it: a speaker over a 44 pt level in `primary`. There's no volume bar on screen. The volume is
+  sent once the crown pauses for a moment (150 ms). With VoiceOver, swiping up and down changes it
+  by 5%.
+- Love (a heart at the top right) when Last.fm buttons are on.
+- With the wrist down (Always On, `isLuminanceReduced`), the cover, the progress bar and Love fade
+  to black over 0.4 s. The title, the artist and the buttons stay where they were, dimmed.
+- Not connected: the mark, "Not connected" and a Connect button that connects the phone to the
+  Clementine it connected to last; "Can't reach your iPhone" when the phone's out of reach;
+  "Connecting…" while it connects.
+
+The watch has its own assets, `WatchApp/Assets.xcassets`: the icon, the mark, and the colours it
+uses, each in its dark value only, as watchOS is always dark and ignores the dark appearance. They
+need changing with the app's if the palette changes.
+
+**How it reaches Clementine.** watchOS only lets an app open sockets while it streams audio
+(TN3135), so the watch can't connect to Clementine itself. The phone does it for the watch, over
+WatchConnectivity (`WatchLink` in the app, `PhoneLink` on the watch, the messages in
+`ClementineWatch`):
+
+- The phone sends what's playing (`WatchNowPlaying`, as JSON: the song, play state, position and
+  when it was taken, volume, Love, and the cover made 320 px JPEG) as the application context, and
+  as a message too when the watch app is running. It sends it again when something changes, but
+  not for the position moving on as expected: the watch counts on from it.
+- The watch sends commands (`WatchCommand`) as message data. The phone replies with what's playing
+  300 ms later, once Clementine has said what changed.
+- A message from the watch wakes the phone app in the background if need be. If the app's
+  connection is suspended it reconnects; if it isn't connected, it connects to the Clementine it
+  connected to last. It keeps the connection for 30 s after the watch last asked for anything, in
+  a background task, then lets it go as it does when sent to the background.
+- While on screen, the watch asks for news every 15 s (`refresh`), which keeps the phone connected.
+
+The watch only ever talks to Clementine through the phone. Talking to it directly over the watch's
+Wi‑Fi would need Clementine to answer plain HTTP, which watchOS allows; that was considered and
+left out.
+
 ## Architecture
 
 ```
@@ -541,6 +599,7 @@ ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
 │  ├─ Streaming/                     AVPlayback (AVQueuePlayer), NowPlaying (lock screen)
 │  └─ Resources/                     Assets.xcassets, Localizable.xcstrings
 ├─ Widget/                           widget extension
+├─ WatchApp/                         Apple Watch app (shares App/Theme/Theme.swift; its own assets)
 └─ Packages/ClementineKit/           Swift package: everything testable without UI
    ├─ Protocol/      generated remotecontrolmessages.pb.swift, framing, message builders
    ├─ Connection/    MessageStream (NWConnection, framing), ClementineConnection (actor:
@@ -553,6 +612,7 @@ ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
    ├─ Downloads/     DownloadManager, SongDownloader, DownloadStorage
    ├─ Settings/      Settings keys and defaults
    └─ Streaming/     Renderer: plays what Clementine sends, through a Playback
+   ClementineWatch   (a second library, Foundation only) what the phone and the watch tell each other
 ```
 
 - **Only dependency:** swift-protobuf. SQLite is the system library, through a small wrapper.

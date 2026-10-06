@@ -44,6 +44,8 @@ settings=$(xcodebuild -project ClementineRemote.xcodeproj -scheme ClementineRemo
 app_group=$(sed -n 's/^ *APP_GROUP = //p' <<< "$settings" | head -n 1)
 [ -n "$app_group" ] || { echo "Couldn't read APP_GROUP from the build settings" >&2; exit 1; }
 app="$archive/Products/Applications/Clementine Remote.app"
+# The Apple Watch app is a draft: not shipped yet. To ship it, sign it here as the widget is.
+rm -rf "$app/Watch"
 sign() {
   local bundle=$1 entitlements=$2
   sed "s/\$(APP_GROUP)/$app_group/g" "$entitlements" > "$out/entitlements.plist"

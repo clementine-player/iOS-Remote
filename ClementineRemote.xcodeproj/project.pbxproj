@@ -9,7 +9,11 @@
 /* Begin PBXBuildFile section */
 		015B3D7098D15696CE753DCA /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4806AC63E537A5050C1E6BD /* LibraryView.swift */; };
 		02B054CAB79B78B9185BBFC3 /* InternetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46866E6F5E51462F605F0CA /* InternetView.swift */; };
+		05AD1BE1767A45392CD494C5 /* ClementineWatch in Frameworks */ = {isa = PBXBuildFile; productRef = D1190B34E085877802608D00 /* ClementineWatch */; };
+		0B99087E44B26407F87B9201 /* ClementineRemoteWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6944EAAD175AE565B5AE573E /* ClementineRemoteWatchApp.swift */; };
+		10F30E7ECA7C1265A6F085C4 /* ClementineWatch in Frameworks */ = {isa = PBXBuildFile; productRef = 8CABEB5D172268B601BEA825 /* ClementineWatch */; };
 		198DA2CE0EAEC3C225F8AC81 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 761E362C08E663B70599A6DD /* SwiftUI.framework */; };
+		1B205C967423C0F3BA0A14D1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B31886EE0CE346E029B07887 /* Assets.xcassets */; };
 		1B87E42072E67CED101AEDC9 /* ClementineRemoteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9202E1E8FCA97103ED358B /* ClementineRemoteApp.swift */; };
 		1DBC787744D19CBA495822CC /* CommandIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD37699892851B35F20411F /* CommandIntents.swift */; };
 		26A8AB385A63716EE8F3DB7E /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A27CF1AC8998F6F615C91C80 /* WidgetKit.framework */; };
@@ -19,10 +23,13 @@
 		36954F6C6ACE7723D3857EC2 /* BrowseViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA68FFC1E32BF4A71DE0743 /* BrowseViews.swift */; };
 		4BD2396847EB8FE9C5A85B4B /* SharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B044E45F9BBD1D9AA21079 /* SharedState.swift */; };
 		4BFB403F92B90FA8717655D2 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B6AE23EEE05A3E90A3968 /* PlayerView.swift */; };
+		4C47E0FB8D4FED2C73A8469D /* NowPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF442886418C1FDC537CC28 /* NowPlayingView.swift */; };
 		4D6AE5E0768E9DF84BD802B2 /* ClementineKit in Frameworks */ = {isa = PBXBuildFile; productRef = 12273CB88A5BBB32D77ACFB5 /* ClementineKit */; };
 		5107AC925D396BC0B86C0AA0 /* AppIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAC7FD0127C2A1352E98E05 /* AppIntents.swift */; };
 		5519998FF94C9CDB9C36CA95 /* ConnectionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC8D6A33585EA2F0980CEEF /* ConnectionSheet.swift */; };
+		599E5FF4F8BAC2B033636E4E /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4856A6293D1829361A2A9A17 /* Theme.swift */; };
 		59F2ED95C3EC8E18D1C61A1F /* VolumeButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D0E12EF32CE14014407139 /* VolumeButtons.swift */; };
+		5A8B18AC5A2B11E2E1BB15DE /* ClementineRemoteWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 0D746C8B4BB4F3CC4AD0F215 /* ClementineRemoteWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		5B2423FA1DE74D6BB9A80BBC /* ClementineWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275DDCC3A769C5E570362F65 /* ClementineWidget.swift */; };
 		656537921D83710E755C5F51 /* OutputSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3565B08D99C9EB73FC5E33 /* OutputSheet.swift */; };
 		6F00AA6F669DE2D2094B9ED6 /* QueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB6C96030EC2FA49A4E8212 /* QueueView.swift */; };
@@ -31,6 +38,7 @@
 		8337C9D440F6AFBDF803EC32 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9B3C025F4213A8DA1AFDBF /* NetworkMonitor.swift */; };
 		8BC16A794293F5B9E10598BF /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0CF9A7519C0E1D02B75CB8 /* Components.swift */; };
 		8BE2981C189125C3A83B7093 /* NowPlaying.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC7AB47D2CE0823058DA1A6 /* NowPlaying.swift */; };
+		924243E535B3BC297ED448CA /* WatchLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AFBA2740BFCADE6C934B2D /* WatchLink.swift */; };
 		966C61688B26C962744DD318 /* SearchResultsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FB960CAAB19E927D7A7CE4 /* SearchResultsViews.swift */; };
 		A09283F3D3CC8256B986B1FD /* CommandIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD37699892851B35F20411F /* CommandIntents.swift */; };
 		A83B1DAF857B6BC5EB001422 /* LibraryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B11B3C0886EBF71B26160B /* LibraryModel.swift */; };
@@ -50,6 +58,7 @@
 		E615AF26FE3FE54B8A706F57 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B17CFBC70A46B3612277583 /* Assets.xcassets */; };
 		ECC005CFCC20810B3ADA1F4D /* ConnectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216338887AAE5E1DC3F81FD0 /* ConnectUITests.swift */; };
 		F654C2A83CDAA6826BF57BF4 /* SongDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0567EB712221368C115A0A43 /* SongDetailsView.swift */; };
+		FB286EA22D221C062696E6EF /* PhoneLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D945D7BB3F6BCD7F1BC169D /* PhoneLink.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +76,13 @@
 			remoteGlobalIDString = B55B382E90303C5A7F992938;
 			remoteInfo = ClementineRemote;
 		};
+		BD77AC46CE33B862EC7F75E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A96B9C98D2D96A5DC2AA80DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C723700E0AEF5EAC48ACDEAA;
+			remoteInfo = ClementineRemoteWatch;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -81,11 +97,24 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C1179906A8199DDCA3B46A74 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				5A8B18AC5A2B11E2E1BB15DE /* ClementineRemoteWatch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0567EB712221368C115A0A43 /* SongDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetailsView.swift; sourceTree = "<group>"; };
 		05FB960CAAB19E927D7A7CE4 /* SearchResultsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViews.swift; sourceTree = "<group>"; };
+		0C4A40F7030DCD71D896CE86 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		0D746C8B4BB4F3CC4AD0F215 /* ClementineRemoteWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClementineRemoteWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		175C247F8C73B1831518D42C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		19DA434663A3FC3E7779EDD6 /* Clementine Remote.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "Clementine Remote.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DDDE87078B3BE38BF533D5A /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -98,11 +127,14 @@
 		468183AFD2E06A2AAA047535 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		4856A6293D1829361A2A9A17 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		4B17CFBC70A46B3612277583 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4D945D7BB3F6BCD7F1BC169D /* PhoneLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneLink.swift; sourceTree = "<group>"; };
 		53A993163DF245FDB672E969 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		5EC8D6A33585EA2F0980CEEF /* ConnectionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionSheet.swift; sourceTree = "<group>"; };
 		5F3565B08D99C9EB73FC5E33 /* OutputSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputSheet.swift; sourceTree = "<group>"; };
 		5F415670725AF9A27921DB62 /* ClementineRemoteUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ClementineRemoteUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		603095C98126DB9E947CC1B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		62AFBA2740BFCADE6C934B2D /* WatchLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchLink.swift; sourceTree = "<group>"; };
+		6944EAAD175AE565B5AE573E /* ClementineRemoteWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClementineRemoteWatchApp.swift; sourceTree = "<group>"; };
 		6E9A6B2B1E90151D16A87EC0 /* Screenshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screenshots.swift; sourceTree = "<group>"; };
 		761E362C08E663B70599A6DD /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		7DF39D4B14D20BD86B19043B /* ClementineRemote.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ClementineRemote.entitlements; sourceTree = "<group>"; };
@@ -115,6 +147,7 @@
 		AAE9D27E1EDA6F353DEF40CB /* PlaylistPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistPicker.swift; sourceTree = "<group>"; };
 		AE9B3C025F4213A8DA1AFDBF /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		AFB6C96030EC2FA49A4E8212 /* QueueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueView.swift; sourceTree = "<group>"; };
+		B31886EE0CE346E029B07887 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BB1826BB720362B7433CE882 /* ClementineKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ClementineKit; path = Packages/ClementineKit; sourceTree = SOURCE_ROOT; };
 		C1EE8BBC662FAA0FC417A564 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C473DE02F14A3512CD1127FB /* DownloadsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsModel.swift; sourceTree = "<group>"; };
@@ -130,6 +163,7 @@
 		E9487E83AC1EF9117BF817B9 /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
 		ECAC7FD0127C2A1352E98E05 /* AppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntents.swift; sourceTree = "<group>"; };
 		EE0CF9A7519C0E1D02B75CB8 /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		FBF442886418C1FDC537CC28 /* NowPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +182,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D6AE5E0768E9DF84BD802B2 /* ClementineKit in Frameworks */,
+				10F30E7ECA7C1265A6F085C4 /* ClementineWatch in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D992AAA409BC003697BA1F94 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05AD1BE1767A45392CD494C5 /* ClementineWatch in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -169,6 +212,14 @@
 				AFB6C96030EC2FA49A4E8212 /* QueueView.swift */,
 			);
 			path = Queue;
+			sourceTree = "<group>";
+		};
+		2338BBB018FFEA4D21930E81 /* Watch */ = {
+			isa = PBXGroup;
+			children = (
+				62AFBA2740BFCADE6C934B2D /* WatchLink.swift */,
+			);
+			path = Watch;
 			sourceTree = "<group>";
 		};
 		29048EE99DFD130886427FFE /* Frameworks */ = {
@@ -215,11 +266,24 @@
 			path = Intents;
 			sourceTree = "<group>";
 		};
+		4C59BD5010875E91AC0D839A /* WatchApp */ = {
+			isa = PBXGroup;
+			children = (
+				B31886EE0CE346E029B07887 /* Assets.xcassets */,
+				6944EAAD175AE565B5AE573E /* ClementineRemoteWatchApp.swift */,
+				0C4A40F7030DCD71D896CE86 /* Info.plist */,
+				FBF442886418C1FDC537CC28 /* NowPlayingView.swift */,
+				4D945D7BB3F6BCD7F1BC169D /* PhoneLink.swift */,
+			);
+			path = WatchApp;
+			sourceTree = "<group>";
+		};
 		5220779CAFE7847E9F864295 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				19DA434663A3FC3E7779EDD6 /* Clementine Remote.app */,
 				5F415670725AF9A27921DB62 /* ClementineRemoteUITests.xctest */,
+				0D746C8B4BB4F3CC4AD0F215 /* ClementineRemoteWatch.app */,
 				364851AE9A1126E4A11B1469 /* ClementineWidget.appex */,
 			);
 			name = Products;
@@ -311,6 +375,7 @@
 				EC71102FF0B589351C75F6E8 /* Streaming */,
 				88FE4D9DD28CB9D79CAE438C /* Support */,
 				E83A13DBBAE1A4DC8F4D8FEB /* Theme */,
+				2338BBB018FFEA4D21930E81 /* Watch */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -341,6 +406,7 @@
 				38787F3E609D6D2A758E7A85 /* Packages */,
 				6D2DBDA6FEACF04185D996F4 /* Shared */,
 				E30F36A8A2A2CAEAABD049F3 /* UITests */,
+				4C59BD5010875E91AC0D839A /* WatchApp */,
 				7EAA2624D411F6FC13A295C4 /* Widget */,
 				29048EE99DFD130886427FFE /* Frameworks */,
 				5220779CAFE7847E9F864295 /* Products */,
@@ -431,18 +497,41 @@
 				73BB163DD87132B08E7B9C00 /* Resources */,
 				D687E33C1743CE829FC9FC06 /* Frameworks */,
 				8C76F6DB9E3ABD0A2E1145BF /* Embed Foundation Extensions */,
+				C1179906A8199DDCA3B46A74 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				4829CF6A2AC2F0CFCEE0F00C /* PBXTargetDependency */,
+				8337ABE082D3E4A7A02DF834 /* PBXTargetDependency */,
 			);
 			name = ClementineRemote;
 			packageProductDependencies = (
 				12273CB88A5BBB32D77ACFB5 /* ClementineKit */,
+				8CABEB5D172268B601BEA825 /* ClementineWatch */,
 			);
 			productName = ClementineRemote;
 			productReference = 19DA434663A3FC3E7779EDD6 /* Clementine Remote.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C723700E0AEF5EAC48ACDEAA /* ClementineRemoteWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6E1ACA5B5F0A3F204E871144 /* Build configuration list for PBXNativeTarget "ClementineRemoteWatch" */;
+			buildPhases = (
+				4555D12748F89E9B5D0B7838 /* Sources */,
+				1DFE47BDE20C9F31B57D3544 /* Resources */,
+				D992AAA409BC003697BA1F94 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ClementineRemoteWatch;
+			packageProductDependencies = (
+				D1190B34E085877802608D00 /* ClementineWatch */,
+			);
+			productName = ClementineRemoteWatch;
+			productReference = 0D746C8B4BB4F3CC4AD0F215 /* ClementineRemoteWatch.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -464,6 +553,10 @@
 						TestTargetID = B55B382E90303C5A7F992938;
 					};
 					B55B382E90303C5A7F992938 = {
+						DevelopmentTeam = 7B2GP77Y4A;
+						ProvisioningStyle = Automatic;
+					};
+					C723700E0AEF5EAC48ACDEAA = {
 						DevelopmentTeam = 7B2GP77Y4A;
 						ProvisioningStyle = Automatic;
 					};
@@ -516,12 +609,21 @@
 			targets = (
 				B55B382E90303C5A7F992938 /* ClementineRemote */,
 				3344B7E1BF3419B020F13A38 /* ClementineWidget */,
+				C723700E0AEF5EAC48ACDEAA /* ClementineRemoteWatch */,
 				61CE098612E2DEBBC85A3C92 /* ClementineRemoteUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		1DFE47BDE20C9F31B57D3544 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1B205C967423C0F3BA0A14D1 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		73BB163DD87132B08E7B9C00 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -549,6 +651,17 @@
 				5B2423FA1DE74D6BB9A80BBC /* ClementineWidget.swift in Sources */,
 				1DBC787744D19CBA495822CC /* CommandIntents.swift in Sources */,
 				35E7D5066C04B7AD89E61632 /* SharedState.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4555D12748F89E9B5D0B7838 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0B99087E44B26407F87B9201 /* ClementineRemoteWatchApp.swift in Sources */,
+				4C47E0FB8D4FED2C73A8469D /* NowPlayingView.swift in Sources */,
+				FB286EA22D221C062696E6EF /* PhoneLink.swift in Sources */,
+				599E5FF4F8BAC2B033636E4E /* Theme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -595,6 +708,7 @@
 				D3DC501DC0E77D6C9758DFEE /* Theme.swift in Sources */,
 				C465668F76779553E3C62F78 /* Toast.swift in Sources */,
 				59F2ED95C3EC8E18D1C61A1F /* VolumeButtons.swift in Sources */,
+				924243E535B3BC297ED448CA /* WatchLink.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -610,6 +724,11 @@
 			isa = PBXTargetDependency;
 			target = 3344B7E1BF3419B020F13A38 /* ClementineWidget */;
 			targetProxy = 0B7FEB15ABD069551909B2A6 /* PBXContainerItemProxy */;
+		};
+		8337ABE082D3E4A7A02DF834 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C723700E0AEF5EAC48ACDEAA /* ClementineRemoteWatch */;
+			targetProxy = BD77AC46CE33B862EC7F75E9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -633,6 +752,21 @@
 			};
 			name = Release;
 		};
+		278584933A91ADBDAB64987D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				INFOPLIST_FILE = WatchApp/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(WATCH_BUNDLE_ID)";
+				PRODUCT_NAME = ClementineRemoteWatch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
 		2970C09CB5340CC29475C0C5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -651,6 +785,21 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
+		};
+		4DB3AEB74604EB140A1ADE30 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				INFOPLIST_FILE = WatchApp/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(WATCH_BUNDLE_ID)";
+				PRODUCT_NAME = ClementineRemoteWatch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
 		};
 		74A9EA0E2208886D1B202BA4 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -724,12 +873,12 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Release;
 		};
@@ -832,12 +981,12 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Debug;
 		};
@@ -891,6 +1040,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		6E1ACA5B5F0A3F204E871144 /* Build configuration list for PBXNativeTarget "ClementineRemoteWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				278584933A91ADBDAB64987D /* Debug */,
+				4DB3AEB74604EB140A1ADE30 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		C20411687C17D9E03C7FA584 /* Build configuration list for PBXNativeTarget "ClementineRemoteUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -917,6 +1075,14 @@
 		406A23301C2BC4419F6BA73E /* ClementineKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ClementineKit;
+		};
+		8CABEB5D172268B601BEA825 /* ClementineWatch */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ClementineWatch;
+		};
+		D1190B34E085877802608D00 /* ClementineWatch */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ClementineWatch;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
