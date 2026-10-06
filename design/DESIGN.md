@@ -557,7 +557,9 @@ A watch app with one screen, Now Playing:
   Clementine it connected to last; "Can't reach your iPhone" when the phone's out of reach;
   "Connecting…" while it connects.
 
-The watch is always dark, so each colour has an Apple Watch entry with its dark value.
+The watch has its own assets, `WatchApp/Assets.xcassets`: the icon, the mark, and the colours it
+uses, each in its dark value only, as watchOS is always dark and ignores the dark appearance. They
+need changing with the app's if the palette changes.
 
 **How it reaches Clementine.** watchOS only lets an app open sockets while it streams audio
 (TN3135), so the watch can't connect to Clementine itself. The phone does it for the watch, over
@@ -591,7 +593,7 @@ ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
 │  ├─ Streaming/                     AVPlayback (AVQueuePlayer), NowPlaying (lock screen)
 │  └─ Resources/                     Assets.xcassets, Localizable.xcstrings
 ├─ Widget/                           widget extension
-├─ WatchApp/                         Apple Watch app (shares App/Theme/Theme.swift and the assets)
+├─ WatchApp/                         Apple Watch app (shares App/Theme/Theme.swift; its own assets)
 └─ Packages/ClementineKit/           Swift package: everything testable without UI
    ├─ Protocol/      generated remotecontrolmessages.pb.swift, framing, message builders
    ├─ Connection/    MessageStream (NWConnection, framing), ClementineConnection (actor:

@@ -120,9 +120,9 @@ targets:
     type: application
     platform: watchOS
     sources:
+      # With its own assets (WatchApp/Assets.xcassets): the colours it uses, in their dark values.
       - path: WatchApp
       - path: App/Theme/Theme.swift
-      - path: App/Resources/Assets.xcassets
     dependencies:
       - package: ClementineKit
         product: ClementineWatch
