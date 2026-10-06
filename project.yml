@@ -85,6 +85,8 @@ targets:
       - path: Widget
       - path: Shared
       - path: App/Resources/Assets.xcassets
+      # The app's strings and their translations: the widget's own strings are in it too.
+      - path: App/Resources/Localizable.xcstrings
     dependencies:
       - package: ClementineKit
       - sdk: WidgetKit.framework
