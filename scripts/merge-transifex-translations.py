@@ -56,6 +56,15 @@ def acceptable(localization, source):
     return placeholders(found[0]["value"]) == source
 
 
+def write_catalog(path, catalog):
+    """Writes the catalog as Xcode does, so that a build doesn't rewrite it: " : " between keys
+    and values, keys sorted, an empty object over three lines, and no newline at the end."""
+    text = json.dumps(catalog, indent=2, ensure_ascii=False, separators=(",", " : "), sort_keys=True)
+    text = re.sub(r"^( *)(.* : )\{\}(,?)$", lambda m: f"{m.group(1)}{m.group(2)}{{\n\n{m.group(1)}}}{m.group(3)}",
+                  text, flags=re.M)
+    path.write_text(text, encoding="utf-8")
+
+
 def main(paths):
     catalog = json.loads(CATALOG.read_text())
     source_language = catalog["sourceLanguage"]
@@ -84,7 +93,7 @@ def main(paths):
                     localizations[language] = localization
                     changed[language] += 1
 
-    CATALOG.write_text(json.dumps(catalog, indent=2, ensure_ascii=False) + "\n")
+    write_catalog(CATALOG, catalog)
     for problem in sorted(set(rejected)):
         print(f"::warning::Left out a translation whose placeholders don't match the English: {problem}")
     print(f"{sum(changed.values())} translations changed" +
