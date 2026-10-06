@@ -194,8 +194,7 @@ struct AboutView: View {
                 Text("David Sansome (Clementine)")
                 Text("John Maguire (Clementine)")
                 Text("Arnaud Bienner (Clementine)")
-                Link("And everyone who contributed to and translated the Android remote",
-                     destination: URL(string: "https://github.com/clementine-player/Android-Remote/graphs/contributors")!)
+                Text("Thanks to all the [contributors](https://github.com/clementine-player/Android-Remote/graphs/contributors) and [translators](https://app.transifex.com/davidsansome/clementine-remot/)!")
             }
 
             Section {
