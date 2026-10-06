@@ -104,6 +104,53 @@ struct DownloadTests {
         #expect(clementine.received.last { $0.type == .songOfferResponse }?.responseSongOffer.accepted == false)
     }
 
+    /// Downloads [data] as "Clair de lune.ogg" into a folder holding [saved] under that name,
+    /// replacing existing files; returns the file, whether the offer was accepted, and the result.
+    private func downloadOver(_ saved: Data, with data: Data) async throws -> (file: URL, accepted: Bool?, status: DownloadStatus) {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        serve(clementine, songs: [(song("Clair de lune", artist: "Claude Debussy", album: "Suite"), data)])
+
+        let directory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        var options = DownloadOptions(directory: directory)
+        options.artistFolder = false
+        options.replaceExisting = true
+        let file = directory.appending(path: "Clair de lune.ogg")
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        try saved.write(to: file)
+
+        let status = await SongDownloader(
+            endpoint: clementine.endpoint, authCode: 0, request: Messages.downloadSongs(.currentItem),
+            playlistName: nil, options: options
+        ).run { _ in }
+        let accepted = clementine.received.last { $0.type == .songOfferResponse }?.responseSongOffer.accepted
+        return (file, accepted, status)
+    }
+
+    @Test func replacesSongsThatDiffer() async throws {
+        let (file, accepted, status) = try await downloadOver(Data("old".utf8), with: Data("longer".utf8))
+        #expect(status.state == .finished(nil))
+        #expect(accepted == true)
+        #expect(try Data(contentsOf: file) == Data("longer".utf8))
+        #expect(status.songs.map(\.file) == [file])
+    }
+
+    @Test func keepsSongsOfTheSameSizeWhenReplacing() async throws {
+        let (file, accepted, status) = try await downloadOver(Data("old".utf8), with: Data("new".utf8))
+        #expect(status.state == .finished(nil))
+        #expect(accepted == false)
+        #expect(try Data(contentsOf: file) == Data("old".utf8))
+        #expect(status.songs.map(\.file) == [file])
+    }
+
+    @Test func shouldDownload() {
+        #expect(SongDownloader.shouldDownload(savedSize: nil, offeredSize: 10, replaceExisting: false))
+        #expect(SongDownloader.shouldDownload(savedSize: nil, offeredSize: 10, replaceExisting: true))
+        #expect(!SongDownloader.shouldDownload(savedSize: 9, offeredSize: 10, replaceExisting: false))
+        #expect(SongDownloader.shouldDownload(savedSize: 9, offeredSize: 10, replaceExisting: true))
+        #expect(!SongDownloader.shouldDownload(savedSize: 10, offeredSize: 10, replaceExisting: true))
+    }
+
     @Test func playlistFolder() {
         var options = DownloadOptions(directory: URL(filePath: "/d"))
         options.playlistFolder = true
