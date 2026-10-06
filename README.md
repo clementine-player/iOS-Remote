@@ -24,7 +24,7 @@ translations would replace them.
 Needs Xcode 26 or later and [XcodeGen](https://github.com/yonaskolb/XcodeGen).
 
 ```sh
-scripts/build.sh          # regenerate the Xcode project and build for the simulator
+scripts/build.sh          # regenerate the Xcode project, build for the simulator, sync the strings
 scripts/build.sh test     # run the tests
 ```
 
