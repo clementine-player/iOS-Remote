@@ -7561,6 +7561,9 @@
         }
       }
     },
+    "Finished" : {
+
+    },
     "Folders" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -9566,7 +9569,6 @@
 
     },
     "Not connected" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ca" : {
           "stringUnit" : {
@@ -9879,6 +9881,9 @@
           }
         }
       }
+    },
+    "Open Clementine Remote to connect" : {
+
     },
     "Open Settings" : {
 
@@ -10326,6 +10331,9 @@
           }
         }
       }
+    },
+    "Play, pause and skip songs in Clementine." : {
+
     },
     "Player" : {
       "localizations" : {
