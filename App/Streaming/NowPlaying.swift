@@ -9,6 +9,9 @@ final class NowPlaying {
     private unowned let model: AppModel
     /// Commands start enabled once they have targets.
     private var commandsEnabled = true
+    private var seekEnabled = true
+    /// The cover last shown, kept so it isn't decoded again on every update.
+    private var cover: (data: Data, artwork: MPMediaItemArtwork)?
 
     init(model: AppModel) {
         self.model = model
@@ -34,6 +37,12 @@ final class NowPlaying {
             MainActor.assumeIsolated { session.previous() }
             return .success
         }
+        center.changePlaybackPositionCommand.addTarget { event in
+            guard let event = event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
+            let seconds = Int(event.positionTime)
+            MainActor.assumeIsolated { session.seek(to: seconds) }
+            return .success
+        }
         setCommandsEnabled(false)
     }
 
@@ -42,6 +51,7 @@ final class NowPlaying {
         let renderer = model.renderer
         guard let item = renderer.item else {
             MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+            cover = nil
             setCommandsEnabled(false)
             return
         }
@@ -58,15 +68,31 @@ final class NowPlaying {
         } else {
             info[MPNowPlayingInfoPropertyIsLiveStream] = true
         }
-        // Clementine sends the cover with the song playing, rather than with the item.
-        if let data = model.session.song?.artData, let size = UIImage(data: data)?.size {
-            // iOS asks for the image off the main thread: the closure holds only the data.
-            info[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: size) { @Sendable _ in
-                UIImage(data: data) ?? UIImage()
-            }
+        if let artwork = artwork(for: item) {
+            info[MPMediaItemPropertyArtwork] = artwork
         }
         MPNowPlayingInfoCenter.default().nowPlayingInfo = info
         setCommandsEnabled(true)
+        setSeekEnabled(item.lengthMs > 0)
+    }
+
+    /// The cover of [item]'s song. Clementine sends the cover with the song playing, rather than
+    /// with the item, and the two can arrive in either order: the cover is only the item's once
+    /// they're the same song.
+    private func artwork(for item: RenderItem) -> MPMediaItemArtwork? {
+        guard let song = model.session.song, song.url == item.song.url, let data = song.artData else {
+            return nil
+        }
+        if let cover, cover.data == data {
+            return cover.artwork
+        }
+        guard let size = UIImage(data: data)?.size else { return nil }
+        // iOS asks for the image off the main thread: the closure holds only the data.
+        let made = MPMediaItemArtwork(boundsSize: size) { @Sendable _ in
+            UIImage(data: data) ?? UIImage()
+        }
+        cover = (data, made)
+        return made
     }
 
     private func setCommandsEnabled(_ enabled: Bool) {
@@ -77,5 +103,15 @@ final class NowPlaying {
                         center.nextTrackCommand, center.previousTrackCommand] {
             command.isEnabled = enabled
         }
+        if !enabled {
+            setSeekEnabled(false)
+        }
+    }
+
+    /// Seeking needs the song's length: without it the lock screen shows no position to drag.
+    private func setSeekEnabled(_ enabled: Bool) {
+        guard enabled != seekEnabled else { return }
+        seekEnabled = enabled
+        MPRemoteCommandCenter.shared().changePlaybackPositionCommand.isEnabled = enabled
     }
 }

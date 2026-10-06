@@ -438,8 +438,9 @@ remote.
 - **In the background:** the app has the `audio` background mode. While Clementine plays here the
   connection stays open in the background; once it stops, the app lets it go as usual. iOS pauses
   playback for calls, and Clementine shows it paused.
-- **Lock screen:** while playing here, Now Playing shows the song and the cover, and its buttons
-  control Clementine.
+- **Lock screen:** while playing here, Now Playing shows the song and its cover, and its buttons
+  and position bar (for songs with a length) control Clementine. The cover comes with Clementine's
+  current song, so it's only shown once that's the song playing here.
 - **Security:** the tracks come over plain HTTP from Clementine's computer, allowed by
   `NSAllowsLocalNetworking` and `NSAllowsArbitraryLoadsForMedia`.
 
