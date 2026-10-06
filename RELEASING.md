@@ -107,8 +107,9 @@ Android remote's does:
   pushed to Transifex for the translators.
 - Every night, the translations are pulled back and merged into the catalog
   (`scripts/merge-transifex-translations.py`), and committed to `main` when they changed, as
-  "Automatic merge of translations from Transifex". Only translated strings come back, and a
-  translation whose placeholders don't match the English is left out, with a warning. Xcode
+  "Automatic merge of translations from Transifex". Only translated strings come back, reviewed and
+  not reviewed yet alike (each pulled on its own, as one Transifex mode can leave the other
+  out), and a translation whose placeholders don't match the English is left out, with a warning. Xcode
   still decides which strings the app has. The commit has a release note, so new translations
   make the next release; however many nights they changed, the release notes say so once.
 - Transifex fills in strings whose English it has translated already, for this app or the
