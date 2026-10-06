@@ -11156,12 +11156,6 @@
         "uz": {
           "variations": {
             "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Qo'shiq %lld yuklduzcha bilan baholandi"
-                }
-              },
               "other": {
                 "stringUnit": {
                   "state": "translated",
