@@ -40,7 +40,11 @@ struct ConnectionSheet: View {
                     }
                     if let since = session.connectedSince {
                         TimelineView(.periodic(from: since, by: 1)) { context in
-                            LabeledContent("Connected for", value: uptime(since: since, now: context.date))
+                            LabeledContent {
+                                Text(uptime(since: since, now: context.date))
+                            } label: {
+                                Text("Connected for", comment: "Label for how long the phone has been connected to Clementine, shown next to it as a duration such as 01:23:45.")
+                            }
                         }
                     }
                     LabeledContent("Data sent / received", value: traffic)
