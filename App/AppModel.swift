@@ -25,6 +25,8 @@ final class AppModel {
     /// Clementine's internet services.
     let internet: InternetBrowser
     @ObservationIgnored private var nowPlaying: NowPlaying?
+    /// The Apple Watch app's way to Clementine.
+    @ObservationIgnored private var watch: WatchLink?
     @ObservationIgnored private var scenePhase = ScenePhase.active
 
     var selectedTab = Tab.queue
@@ -63,6 +65,7 @@ final class AppModel {
         internet.onAdded = { [weak self] action, result in
             self?.showAdded(action, result: result)
         }
+        watch = WatchLink(model: self)
     }
 
     /// Says how putting internet service nodes on the playlist went, where the player doesn't show it.

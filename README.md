@@ -40,6 +40,33 @@ and app group there. It overrides `Config/Signing.xcconfig` and isn't committed.
 DESTINATION="id=<your device's UDID>" scripts/build.sh -allowProvisioningUpdates build
 ```
 
+## Apple Watch
+
+The app comes with an Apple Watch app (`WatchApp/`, the `ClementineRemoteWatch` target), which
+controls Clementine through the phone: see [Apple Watch](design/DESIGN.md#apple-watch). It's a
+draft: it isn't embedded in the phone app yet, so TestFlight builds and releases leave it out, and
+`scripts/build.sh` doesn't build it (CI does, on its own). To try it in the simulator, pair a watch
+with a phone, then build and install each app:
+
+```sh
+phone=$(xcrun simctl create "Remote iPhone" "iPhone 17 Pro")
+watch=$(xcrun simctl create "Remote Watch" "Apple Watch Ultra 2 (49mm)")
+xcrun simctl pair "$watch" "$phone"
+xcrun simctl boot "$phone"; xcrun simctl boot "$watch"
+DESTINATION="id=$phone" scripts/build.sh
+xcodebuild -project ClementineRemote.xcodeproj -scheme ClementineRemoteWatch \
+    -destination "id=$watch" -derivedDataPath build/DerivedData build
+products=build/DerivedData/Build/Products
+xcrun simctl install "$phone" "$products/Debug-iphonesimulator/Clementine Remote.app"
+xcrun simctl install "$watch" "$products/Debug-watchsimulator/ClementineRemoteWatch.app"
+```
+
+Connect the phone to Clementine, then open Clementine on the watch. It's been tried with iOS 27
+and watchOS 27 simulators (`xcodebuild -downloadPlatform watchOS` if you don't have one). The
+simulator may not tell the phone
+that the watch app is installed, so the phone can't send news on its own, but it still answers
+the watch's requests, which the watch makes every 15 seconds.
+
 ## Screenshots
 
 On pull requests that change the app, `.github/workflows/screenshots.yml` takes screenshots of
