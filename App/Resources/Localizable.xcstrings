@@ -11,10 +11,24 @@
 
     },
     "%@ free on this phone" : {
-
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ свободно на этом телефоне"
+          }
+        }
+      }
     },
     "%@ stars" : {
-
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ звезды"
+          }
+        }
+      }
     },
     "%@ · port %@" : {
       "localizations" : {
@@ -41,6 +55,36 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld albums"
+                }
+              }
+            }
+          }
+        },
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld альбома"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld альбомов"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld альбом"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld альбомов"
                 }
               }
             }
@@ -378,6 +422,30 @@
             }
           }
         },
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld itens"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld item"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld itens"
+                }
+              }
+            }
+          }
+        },
         "pt-PT" : {
           "variations" : {
             "plural" : {
@@ -558,6 +626,36 @@
               }
             }
           }
+        },
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld выбраны"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld выбрано"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld выбран"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld выбрано"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -576,6 +674,36 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld songs"
+                }
+              }
+            }
+          }
+        },
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld песни"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld песен"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld песня"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld песен"
                 }
               }
             }
@@ -926,6 +1054,30 @@
             }
           }
         },
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld faixas adicionadas à lista de reprodução"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld faixa adicionada à lista de reprodução"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld faixas adicionadas à lista de reprodução"
+                }
+              }
+            }
+          }
+        },
         "pt-PT" : {
           "variations" : {
             "plural" : {
@@ -1243,13 +1395,52 @@
 
     },
     "Add to playlist" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiungi alla scaletta"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить в плейлист"
+          }
+        }
+      }
     },
     "Added to the playlist" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiunto alla scaletta"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавлено в плейлист"
+          }
+        }
+      }
     },
     "Address" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indirizzo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Адрес"
+          }
+        }
+      }
     },
     "Adds it to the playlist" : {
 
@@ -1570,6 +1761,12 @@
             "value" : "Artysta / Rok"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artista/Ano"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1621,7 +1818,20 @@
 
     },
     "Albums" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Album"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Альбомы"
+          }
+        }
+      }
     },
     "Appearance" : {
 
@@ -1701,6 +1911,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Artysta"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artista"
           }
         },
         "pt-PT" : {
@@ -1821,6 +2037,12 @@
             "value" : "Artysta / Album"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artista/Álbum"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1939,6 +2161,12 @@
             "value" : "Album"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Álbum"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1987,7 +2215,20 @@
 
     },
     "Artists" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artisti"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Артисты"
+          }
+        }
+      }
     },
     "Ascending" : {
       "localizations" : {
@@ -2067,6 +2308,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rosnąco"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ascendente"
           }
         },
         "pt-PT" : {
@@ -2227,6 +2474,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kod uwierzytelniający"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Código de autenticação"
           }
         },
         "pt-PT" : {
@@ -2393,6 +2646,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Autorzy"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autores"
           }
         },
         "pt-PT" : {
@@ -2709,6 +2968,12 @@
             "value" : "Utwór zignorowany :-("
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faixa banida :-("
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2845,6 +3110,12 @@
             "value" : "Anuluj"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2887,10 +3158,36 @@
 
     },
     "Change" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambia"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сменить"
+          }
+        }
+      }
     },
     "Choose where to play" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scegli dove riprodurre"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите, где играть"
+          }
+        }
+      }
     },
     "Clear playlist" : {
       "localizations" : {
@@ -3045,6 +3342,12 @@
             "value" : "ကလီမန်တိုင်း"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine"
+          }
+        },
         "sr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3115,6 +3418,12 @@
             "value" : "ကလီမန်တိုင်းအဝေးထိန်း"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine Remote"
+          }
+        },
         "sr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3148,7 +3457,20 @@
 
     },
     "Clementine can't add that to the playlist" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine non può aggiungere quel brano alla scaletta"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine не может добавить его в плейлист."
+          }
+        }
+      }
     },
     "Clementine creates the playlist and shows it." : {
 
@@ -3435,6 +3757,12 @@
             "value" : "Niekompatybilna wersja"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versão não compatível"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3571,6 +3899,12 @@
             "value" : "Clementine op %@"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine em %@"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3610,16 +3944,55 @@
       }
     },
     "Clementine only accepts connections from its local network." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine accetta connessioni solo dalla sua rete locale."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine принимает подключения только из своей локальной сети."
+          }
+        }
+      }
     },
     "Clementine only accepts connections from its local network. To connect from elsewhere, turn off \"Only allow connections from the local network\" in its Network Remote settings." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine accetta connessioni solo dalla rete locale. Per connettersi da altrove, disabilita l'opzione \"Consenti connessioni solo dalla rete locale\" nelle impostazioni di controllo remoto tramite rete."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine принимает подключения только из своей локальной сети. Чтобы подключиться извне, отключите «Разрешать подключения только из локальной сети» в настройках удалённого управления по сети."
+          }
+        }
+      }
     },
     "Clementine plays on its computer, or sends its music to a device that's connected to it." : {
 
     },
     "Clementine refused the connection" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine ha rifiutato la connessione"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine отклонил подключение"
+          }
+        }
+      }
     },
     "Clementine stopped answering. Check that it's still running, then connect again." : {
 
@@ -4036,6 +4409,12 @@
             "value" : "Automatyczne podłączanie"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ligação automática"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4090,10 +4469,36 @@
 
     },
     "Connected" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connesso"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подключено"
+          }
+        }
+      }
     },
     "Connected for" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connesso per"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подключено для"
+          }
+        }
+      }
     },
     "Connecting to Clementine…" : {
       "localizations" : {
@@ -4706,6 +5111,12 @@
             "value" : "Malejąco"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descendente"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4751,7 +5162,20 @@
       }
     },
     "Details" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dettagli"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сведения"
+          }
+        }
+      }
     },
     "Disc" : {
       "localizations" : {
@@ -4997,6 +5421,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rozłącz"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desligar"
           }
         },
         "pt-PT" : {
@@ -5331,6 +5761,12 @@
             "value" : "Nie powtarzaj"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não repetir"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5497,6 +5933,12 @@
             "value" : "Nie losuj"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não baralhar"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5637,6 +6079,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zrobione"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminado"
           }
         },
         "pt-PT" : {
@@ -6421,6 +6869,12 @@
             "value" : "Pobieraj utwory tylko kiedy w zasięgu sieci wifi"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apenas descarregar faixas se ligado a uma rede Wi-Fi."
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6632,7 +7086,20 @@
 
     },
     "Downloading" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scaricamento"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скачивается"
+          }
+        }
+      }
     },
     "Downloading data…" : {
       "localizations" : {
@@ -7046,6 +7513,12 @@
             "value" : "Pobrane"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descargas"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7263,10 +7736,30 @@
       }
     },
     "Downloads only run on Wi-Fi." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scarica solo su Wi-Fi."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скачивание выполняется только по Wi-Fi."
+          }
+        }
+      }
     },
     "Downloads songs again when they differ from those on this phone." : {
-
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повторно скачивает песни, если они отличаются от находящихся на этом телефоне."
+          }
+        }
+      }
     },
     "Enter the auth code shown in Clementine's Network Remote settings." : {
 
@@ -7517,6 +8010,12 @@
             "value" : "Podaj kryteria wyszukiwania aby znaleźć muzykę na twoim komputerze oraz w internecie"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Introduza os termos da pesquisa para procurar músicas no seu computador e na Internet"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7562,7 +8061,20 @@
       }
     },
     "Finished" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completato"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завершено"
+          }
+        }
+      }
     },
     "Folders" : {
       "extractionState" : "stale",
@@ -7655,6 +8167,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Foldery"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pastas"
           }
         },
         "pt-PT" : {
@@ -7905,6 +8423,12 @@
             "value" : "Gatunek / Artysta / Album"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Género/Artista/Álbum"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7950,7 +8474,134 @@
       }
     },
     "Genre / Artist / Album" : {
-
+      "localizations" : {
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estil / Artista / Àlbum"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Žánr/Umělec/Album"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Genre / Interpret / Album"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Género / artista / álbum"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Genre / Artiste / Album"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Žanru / Izvođaču / Albumu"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Műfaj / Előadó / Album"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Genere / Artista / Album"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ジャンル / アーティスト / アルバム"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Žanrą / Atlikėją / Albumą"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Genre / Artis / Album"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Genre / Artiest / Album"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gatunek / Artysta / Album"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Género/Artista/Álbum"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Género/Artista/Álbum"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жанр / Артист / Альбом"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Žáner / Interpret / Album"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "жанру/извођачу/албуму"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Genre / Artist / Album"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tarz / Sanatçı / Albüm"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жанр / Виконавець / Альбом"
+          }
+        }
+      }
     },
     "Grouping" : {
       "localizations" : {
@@ -8038,6 +8689,12 @@
             "value" : "Grupowanie"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agrupamento"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8086,7 +8743,20 @@
 
     },
     "Internet" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Internet"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Интернет"
+          }
+        }
+      }
     },
     "Is Clementine running? Is it version %@ or later, with the network remote turned on in its settings? Is the address right?" : {
 
@@ -8186,6 +8856,12 @@
             "value" : "Pozostaw ekran włączony"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manter ecrã ligado"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8232,6 +8908,12 @@
     },
     "Last.fm" : {
       "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last.fm"
+          }
+        },
         "sr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8401,10 +9083,162 @@
       }
     },
     "Let Clementine play on this phone" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lascia che Clementine riproduca su questo telefono"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разрешить проигрывание Clementine на этом телефоне"
+          }
+        }
+      }
     },
     "Library" : {
-
+      "localizations" : {
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Col·lecció"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sbírka"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bibliothek"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Βιβλιοθήκη"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Colección"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kirjasto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bibliothèque"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fonoteka"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zenetár"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raccolta"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ライブラリー"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biblioteka"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pustaka"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bibliotheek"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biblioteka"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biblioteca"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biblioteca"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Фонотека"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zbierka"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Библиотека"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bibliotek"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kütüphane"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Фонотека"
+          }
+        }
+      }
     },
     "Licence" : {
       "localizations" : {
@@ -8520,6 +9354,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Licencja"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Licença"
           }
         },
         "pt-PT" : {
@@ -8742,13 +9582,39 @@
       }
     },
     "Loading…" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caricamento..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Загрузка…"
+          }
+        }
+      }
     },
     "Local Network is off" : {
 
     },
     "Looking for Clementine…" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alla ricerca di Clementine…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поиск Clementine…"
+          }
+        }
+      }
     },
     "Looking for lyrics…" : {
 
@@ -8911,7 +9777,20 @@
       }
     },
     "Love on Last.fm" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mi piace su Last.fm"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В избранное Last.fm"
+          }
+        }
+      }
     },
     "Loved on Last.fm" : {
       "localizations" : {
@@ -9017,6 +9896,12 @@
             "value" : "Utwór dodany do ulubionych <3"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gosto da faixa <3"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9068,13 +9953,52 @@
       }
     },
     "Lyrics" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Testi"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Текст песни"
+          }
+        }
+      }
     },
     "Lyrics and details" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Testi e dettagli"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Текст песни и сведения"
+          }
+        }
+      }
     },
     "More options" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altre opzioni"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Больше параметров"
+          }
+        }
+      }
     },
     "Name" : {
 
@@ -9089,7 +10013,20 @@
 
     },
     "Next" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Successiva"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Следующее"
+          }
+        }
+      }
     },
     "Next song" : {
       "localizations" : {
@@ -9181,6 +10118,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Następny utwór"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Próxima faixa"
           }
         },
         "pt-PT" : {
@@ -9660,6 +10603,12 @@
             "value" : "Niepołączony"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não ligado"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9705,22 +10654,81 @@
       }
     },
     "Not looking on this network" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non sto cercando su questa rete"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не ищет в этой сети"
+          }
+        }
+      }
     },
     "Not showing up? Check that its network remote is turned on, or enter its address below." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non appare? Verifica che il suo controllo remoto di rete sia attivo oppure digita il suo indirizzo qui sotto."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не отображается? Проверьте, включён ли его удалённый доступ по сети, или введите его адрес ниже."
+          }
+        }
+      }
     },
     "Nothing here" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qui non c'è nulla"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Здесь ничего нет"
+          }
+        }
+      }
     },
     "OK" : {
 
     },
     "On this phone" : {
-
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "На этом телефоне"
+          }
+        }
+      }
     },
     "On your network" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sulla tua rete"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В вашей сети"
+          }
+        }
+      }
     },
     "Only on Wi-Fi" : {
       "localizations" : {
@@ -9830,6 +10838,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tylko WiFi"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apenas Wifi"
           }
         },
         "pt-PT" : {
@@ -9956,6 +10970,12 @@
             "value" : "Wolne Oprogramowanie"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Código livre"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10007,13 +11027,178 @@
 
     },
     "Or enter its address" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oppure digita il suo indirizzo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Или введите его адрес"
+          }
+        }
+      }
     },
     "Other matches" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altre corrispondenze"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прочие совпадения"
+          }
+        }
+      }
     },
     "Pause" : {
-
+      "localizations" : {
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fes una pausa"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pozastavit"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Παυση"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pausar"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keskeytä"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pauza"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Szünet"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pausa"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一時停止"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pristabdyti"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jeda"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pauzeren"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pausa"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pausa"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pausa"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пауза"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pozastaviť"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Паузирај"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pausa"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duraklat"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пауза"
+          }
+        }
+      }
     },
     "Pauses Clementine." : {
 
@@ -10022,10 +11207,162 @@
 
     },
     "Pick the Clementine you want to control. It needs to be on the same Wi-Fi as this phone." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleziona l'istanza di Clementine che vuoi controllare. Deve essere collegata alla stessa rete Wi-Fi di questo telefono."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите Clementine, которым хотите управлять. Он должен находиться в той же сети Wi-Fi, что и этот телефон."
+          }
+        }
+      }
     },
     "Play" : {
-
+      "localizations" : {
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reprodueix"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Přehrát"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiedergabe"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναπαραγωγή"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reproducir"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toista"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lecture"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reprodukcija"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lejátszás"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riproduci"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再生"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Groti"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Main"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afspelen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odtwarzaj"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reproduzir"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reproduzir"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Играть"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prehrať"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пусти"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spela"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oynat"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пуск"
+          }
+        }
+      }
     },
     "Play count" : {
       "localizations" : {
@@ -10188,13 +11525,52 @@
       }
     },
     "Play next" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riproduci dopo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Играть следующим"
+          }
+        }
+      }
     },
     "Play now" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riproduci ora"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Играть сейчас"
+          }
+        }
+      }
     },
     "Play on" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riproduci su"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Играет на"
+          }
+        }
+      }
     },
     "Play or pause" : {
       "localizations" : {
@@ -10286,6 +11662,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Odtwarzaj / Pauza"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reproduzir/Pausa"
           }
         },
         "pt-PT" : {
@@ -10427,6 +11809,12 @@
             "value" : "Odtwarzacz"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reprodutor"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10478,13 +11866,46 @@
       }
     },
     "Playing" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riproduzione"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Играет"
+          }
+        }
+      }
     },
     "Playing from" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riproduzione da"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Играет с"
+          }
+        }
+      }
     },
     "Playing next" : {
-
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Будет следующим"
+          }
+        }
+      }
     },
     "Playing on %@" : {
 
@@ -10567,6 +11988,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Afspeellijst"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lista de reprodução"
           }
         },
         "pt-PT" : {
@@ -10711,6 +12138,12 @@
             "value" : "Proszę uaktualnić Clementine! Potrzebujesz Clementine w wersji %1$@ lub późniejszej."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por favor atualize o Clementine. Necessita, no mínimo, da versão %1$@."
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10821,6 +12254,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Poort"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Porta"
           }
         },
         "pt-PT" : {
@@ -11013,10 +12452,36 @@
       }
     },
     "Previous" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Precedente"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Предыдущее"
+          }
+        }
+      }
     },
     "Queue" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accoda"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очередь"
+          }
+        }
+      }
     },
     "Rate %lld stars" : {
       "localizations" : {
@@ -11403,6 +12868,30 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "Utwór oceniony na %lld gwiazdek"
+                }
+              }
+            }
+          }
+        },
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Faixa avaliada em %lld estrelas"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Faixa avaliada em %lld estrelas"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Faixa avaliada em %lld estrelas"
                 }
               }
             }
@@ -12041,6 +13530,12 @@
             "value" : "Powtarzaj album"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repetir álbum"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12205,6 +13700,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Powtarzaj listę odtwarzania"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repetir lista"
           }
         },
         "pt-PT" : {
@@ -12373,6 +13874,12 @@
             "value" : "Powtarzaj utwór"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repetir faixa"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12533,6 +14040,12 @@
             "value" : "Nadpisuj istniejące pliki"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Substituir ficheiros existentes"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12584,7 +14097,20 @@
       }
     },
     "Replace playlist" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sostituisci la scaletta"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Заменить плейлист"
+          }
+        }
+      }
     },
     "Save a playlist's songs in a folder named after it." : {
 
@@ -12850,6 +14376,12 @@
             "value" : "Szukaj wszystkiego"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pesquisar por algo"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12895,7 +14427,20 @@
       }
     },
     "Search again" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca ancora"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повторить поиск"
+          }
+        }
+      }
     },
     "Search the library" : {
 
@@ -13088,7 +14633,20 @@
 
     },
     "Set up in Clementine" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configura in Clementine"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Настроить в Clementine"
+          }
+        }
+      }
     },
     "Settings" : {
       "localizations" : {
@@ -13523,6 +15081,12 @@
             "value" : "Losuj albumy"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Baralhar álbuns"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13689,6 +15253,12 @@
             "value" : "Losuj wszystko"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Baralhar tudo"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13853,6 +15423,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Losuj ścieżki w tym albumie"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Baralhar faixas deste álbum"
           }
         },
         "pt-PT" : {
@@ -14148,6 +15724,12 @@
             "value" : "Nummer"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faixa"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14199,7 +15781,20 @@
 
     },
     "Songs" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brani"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Песни"
+          }
+        }
+      }
     },
     "Songs are saved in Clementine Remote's folder, in the Files app." : {
 
@@ -14294,6 +15889,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sortowanie"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Organização"
           }
         },
         "pt-PT" : {
@@ -14513,7 +16114,20 @@
 
     },
     "Stations" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stazioni"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Станции"
+          }
+        }
+      }
     },
     "Stop" : {
       "localizations" : {
@@ -14593,6 +16207,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zatrzymaj"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parar"
           }
         },
         "pt-PT" : {
@@ -14803,10 +16423,36 @@
 
     },
     "Switch Clementine" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passa a Clementine"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Переключить Clementine"
+          }
+        }
+      }
     },
     "Switching…" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passaggio…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Переключение…"
+          }
+        }
+      }
     },
     "System" : {
 
@@ -14933,6 +16579,12 @@
             "value" : "Nieprawidłowy kod"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Código inválido"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14984,7 +16636,20 @@
       }
     },
     "That's no longer in Clementine" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non è più presente in Clementine"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Его больше нет в Clementine."
+          }
+        }
+      }
     },
     "The library Clementine sent is damaged" : {
 
@@ -15337,7 +17002,20 @@
 
     },
     "Too many wrong auth codes" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Troppi codici di autenticazione errati"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Слишком много неверных кодов аутентификации"
+          }
+        }
+      }
     },
     "Too many wrong auth codes. Clementine won't check another from this phone for %@." : {
 
@@ -15733,6 +17411,12 @@
             "value" : "Nieznane"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desconhecido"
+          }
+        },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15876,6 +17560,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wersja"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versão"
           }
         },
         "pt-PT" : {
@@ -16027,6 +17717,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Poziom skoku zmiany głośności"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nível da mudança de volume"
           }
         },
         "pt-PT" : {
@@ -16243,7 +17939,20 @@
 
     },
     "a while" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "un po' di tempo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "некоторого времени"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
