@@ -1,5 +1,6 @@
 # Publishes every change to the app on main as a TestFlight build, for the App Store Connect
-# team's internal testers (and the external groups in the TESTFLIGHT_GROUPS variable, if any).
+# team's internal testers and its "External testers" group (or the groups in the TESTFLIGHT_GROUPS
+# variable, if it's set).
 # Its "What to Test" is the last 5 commits' titles. Changes that don't reach the app (tests,
 # docs, CI, the store listing) don't make one. The Android remote's dev.yml does the same for
 # Google Play's internal testing track.
@@ -106,7 +107,8 @@ jobs:
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
-          TESTFLIGHT_GROUPS: ${{ vars.TESTFLIGHT_GROUPS }}
+          # The external groups, comma separated.
+          TESTFLIGHT_GROUPS: ${{ vars.TESTFLIGHT_GROUPS || 'External testers' }}
           # For Beta App Review's notes, when a build goes to external groups.
           DEMO_AUTH_CODE: ${{ secrets.DEMO_AUTH_CODE }}
           FASTLANE_SKIP_UPDATE_CHECK: "1"
