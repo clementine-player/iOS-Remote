@@ -17,6 +17,7 @@
 		2E89727B527288C7A3667C8D /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDE87078B3BE38BF533D5A /* MainView.swift */; };
 		35E7D5066C04B7AD89E61632 /* SharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B044E45F9BBD1D9AA21079 /* SharedState.swift */; };
 		36954F6C6ACE7723D3857EC2 /* BrowseViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA68FFC1E32BF4A71DE0743 /* BrowseViews.swift */; };
+		4687C804D92FDE4D9C3CE3FE /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8231CF7038EDE553E2AC1660 /* Localizable.xcstrings */; };
 		4BD2396847EB8FE9C5A85B4B /* SharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B044E45F9BBD1D9AA21079 /* SharedState.swift */; };
 		4BFB403F92B90FA8717655D2 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B6AE23EEE05A3E90A3968 /* PlayerView.swift */; };
 		4D6AE5E0768E9DF84BD802B2 /* ClementineKit in Frameworks */ = {isa = PBXBuildFile; productRef = 12273CB88A5BBB32D77ACFB5 /* ClementineKit */; };
@@ -536,6 +537,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E615AF26FE3FE54B8A706F57 /* Assets.xcassets in Resources */,
+				4687C804D92FDE4D9C3CE3FE /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
