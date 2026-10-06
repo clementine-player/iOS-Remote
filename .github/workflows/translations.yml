@@ -1,5 +1,8 @@
 # Keeps the app's translations in step with Transifex, as Clementine and the Android remote do:
-#   - push: when the String Catalog changes on main, sends it to Transifex for the translators
+#   - push: when the String Catalog changes on main, sends it to Transifex for the translators.
+#     Transifex takes a catalog's translations along with its strings, replacing its own (the
+#     catalog has every language), so the push first pulls the translations made on Transifex
+#     since the last pull into the catalog: without that, it would erase them.
 #   - pull: every night, brings the translations back into the catalog
 #     (scripts/merge-transifex-translations.py), and commits them to main when they changed.
 #     Each such commit has a release note, so new translations make the next release.
@@ -57,6 +60,9 @@ jobs:
           curl -fsSL "https://github.com/transifex/cli/releases/download/v$TX_VERSION/tx-linux-amd64.tar.gz" \
             | tar -xz -C "$RUNNER_TEMP/tx" tx
           echo "$RUNNER_TEMP/tx" >> "$GITHUB_PATH"
+      - name: Pull the translations made since the last pull
+        if: env.TX_TOKEN != ''
+        run: scripts/pull-transifex-translations.sh
       - name: Push the English strings
         if: env.TX_TOKEN != ''
         run: tx push --source --silent
@@ -101,22 +107,11 @@ jobs:
           curl -fsSL "https://github.com/transifex/cli/releases/download/v$TX_VERSION/tx-linux-amd64.tar.gz" \
             | tar -xz -C "$RUNNER_TEMP/tx" tx
           echo "$RUNNER_TEMP/tx" >> "$GITHUB_PATH"
-      # Only translated strings: the app shows English for the rest by itself.
       - name: Pull the translations
         id: pull
         if: env.TX_TOKEN != '' && env.HAS_TX_KEY == 'true'
         run: |
-          # Transifex's onlytranslated mode can leave reviewed translations out, as it does for the
-          # Android remote's files, and onlyreviewed leaves out those not reviewed yet: both are
-          # pulled, and the merge takes the translations from each.
-          # (A mode with nothing to give may write no files at all.)
-          shopt -s nullglob
-          mkdir -p build/transifex
-          tx pull --all --force --mode onlyreviewed --silent
-          mv build/transifex build/transifex-reviewed
-          mkdir -p build/transifex
-          tx pull --all --force --mode onlytranslated --silent
-          scripts/merge-transifex-translations.py build/transifex-reviewed/*.xcstrings build/transifex/*.xcstrings
+          scripts/pull-transifex-translations.sh
           if git diff --quiet -- App/Resources/Localizable.xcstrings; then
             echo "Translations are up to date."
           else

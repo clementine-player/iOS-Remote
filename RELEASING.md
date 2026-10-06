@@ -104,7 +104,8 @@ to the Android remote, and `.github/workflows/translations.yml` keeps the two in
 Android remote's does:
 
 - When the String Catalog (`App/Resources/Localizable.xcstrings`) changes on `main`, it's
-  pushed to Transifex for the translators.
+  pushed to Transifex for the translators. Transifex takes the translations in it too, replacing
+  its own, so the translations made on Transifex since the last pull are pulled into it first.
 - Every night, the translations are pulled back and merged into the catalog
   (`scripts/merge-transifex-translations.py`), and committed to `main` when they changed, as
   "Automatic merge of translations from Transifex". Only translated strings come back, reviewed and
