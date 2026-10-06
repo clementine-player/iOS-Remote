@@ -10632,153 +10632,543 @@
           }
         },
         "ca": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nota de la peça %lld estrelles"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Nota de la peça %lld estrelles"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Nota de la peça %lld estrelles"
+                }
+              }
+            }
           }
         },
         "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Píseň hodnocena %lld hvězdičkami"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Píseň hodnocena %lld hvězdičkami"
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Píseň hodnocena %lld hvězdičkami"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Píseň hodnocena %lld hvězdičkami"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Píseň hodnocena %lld hvězdičkami"
+                }
+              }
+            }
           }
         },
         "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lied mit %lld bewertet"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Lied mit %lld bewertet"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Lied mit %lld bewertet"
+                }
+              }
+            }
           }
         },
         "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Τραγούδι βαθμολογία $αστέρια$ αστέρια"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Τραγούδι βαθμολογία %lld αστέρια"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Τραγούδι βαθμολογία %lld αστέρια"
+                }
+              }
+            }
           }
         },
         "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Canciones con %lld estrellas"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Canciones con %lld estrellas"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Canciones con %lld estrellas"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Canciones con %lld estrellas"
+                }
+              }
+            }
           }
         },
         "fi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kappaleelle annettu %lld tähteä"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Kappaleelle annettu %lld tähteä"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Kappaleelle annettu %lld tähteä"
+                }
+              }
+            }
           }
         },
         "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Morceau noté %lld étoiles"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Morceau noté %lld étoiles"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Morceau noté %lld étoiles"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Morceau noté %lld étoiles"
+                }
+              }
+            }
           }
         },
         "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ocjena pjesme %lld zvjejzdica"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ocjena pjesme %lld zvjejzdica"
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ocjena pjesme %lld zvjejzdica"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ocjena pjesme %lld zvjejzdica"
+                }
+              }
+            }
           }
         },
         "hu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "A szám értékelése %lld csillag"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "A szám értékelése %lld csillag"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "A szám értékelése %lld csillag"
+                }
+              }
+            }
           }
         },
         "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Canzoni votate %lld stars"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Canzoni votate %lld stars"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Canzoni votate %lld stars"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Canzoni votate %lld stars"
+                }
+              }
+            }
           }
         },
         "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "曲の評価は %lld スター"
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "曲の評価は %lld スター"
+                }
+              }
+            }
           }
         },
         "ka": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "სიმღერა შეფასებულია %lld ვარსკვლავით"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "სიმღერა შეფასებულია %lld ვარსკვლავით"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "სიმღერა შეფასებულია %lld ვარსკვლავით"
+                }
+              }
+            }
           }
         },
         "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "음악이 별 $star$ 등급입니다."
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "음악이 별 %lld 등급입니다."
+                }
+              }
+            }
           }
         },
         "lt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Daina įvertinta %lld žvaigždutėmis"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Daina įvertinta %lld žvaigždutėmis"
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Daina įvertinta %lld žvaigždutėmis"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Daina įvertinta %lld žvaigždutėmis"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Daina įvertinta %lld žvaigždutėmis"
+                }
+              }
+            }
           }
         },
         "ms": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lagu ditaraf %lld bintang"
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Lagu ditaraf %lld bintang"
+                }
+              }
+            }
           }
         },
         "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nummer gewaardeerd op %lld sterren"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Nummer gewaardeerd op %lld sterren"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Nummer gewaardeerd op %lld sterren"
+                }
+              }
+            }
           }
         },
         "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Utwór oceniony na %lld gwiazdek"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Utwór oceniony na %lld gwiazdek"
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Utwór oceniony na %lld gwiazdek"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Utwór oceniony na %lld gwiazdek"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Utwór oceniony na %lld gwiazdek"
+                }
+              }
+            }
           }
         },
         "pt-PT": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Faixa avaliada em %lld estrelas"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Faixa avaliada em %lld estrelas"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Faixa avaliada em %lld estrelas"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Faixa avaliada em %lld estrelas"
+                }
+              }
+            }
           }
         },
         "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Песня оценена на %lld звёзд"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Песня оценена на %lld звёзд"
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Песня оценена на %lld звёзд"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Песня оценена на %lld звёзд"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Песня оценена на %lld звёзд"
+                }
+              }
+            }
           }
         },
         "sk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Skladba je ohodnotená %lld hviezdičkami"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Skladba je ohodnotená %lld hviezdičkami"
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Skladba je ohodnotená %lld hviezdičkami"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Skladba je ohodnotená %lld hviezdičkami"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Skladba je ohodnotená %lld hviezdičkami"
+                }
+              }
+            }
           }
         },
         "sr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Песма оцењена са %lld звезда"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Песма оцењена са %lld звезда"
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Песма оцењена са %lld звезда"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Песма оцењена са %lld звезда"
+                }
+              }
+            }
           }
         },
         "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Låtbetyg $stjärnor$ stjärnor"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Låtbetyg %lld stjärnor"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Låtbetyg %lld stjärnor"
+                }
+              }
+            }
           }
         },
         "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld yıldızla değerlendirilmiş şarkı"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld yıldızla değerlendirilmiş şarkı"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld yıldızla değerlendirilmiş şarkı"
+                }
+              }
+            }
           }
         },
         "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Композицію оцінено у %lld зірок"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Композицію оцінено у %lld зірок"
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Композицію оцінено у %lld зірок"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Композицію оцінено у %lld зірок"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Композицію оцінено у %lld зірок"
+                }
+              }
+            }
           }
         },
         "uz": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Qo'shiq %lld yuklduzcha bilan baholandi"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Qo'shiq %lld yuklduzcha bilan baholandi"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Qo'shiq %lld yuklduzcha bilan baholandi"
+                }
+              }
+            }
           }
         }
       }
