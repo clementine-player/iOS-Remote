@@ -39,11 +39,17 @@ def locale(code):
     return code.replace("@latin", "-Latn").replace("@cyrillic", "-Cyrl").replace("_", "-")
 
 
-def acceptable(localization, source):
-    """Whether a pulled translation is whole, and has the English's placeholders."""
+def translated(localization):
+    """Whether a pulled translation is whole. Transifex gives each string a download mode leaves
+    out (the unreviewed ones, say) as a "translated" unit with no value."""
     found = list(units(localization))
-    if not found or any(unit.get("state") != "translated" or not unit.get("value") for unit in found):
-        return False
+    return bool(found) and all(unit.get("state") == "translated" and unit.get("value")
+                               for unit in found)
+
+
+def acceptable(localization, source):
+    """Whether a pulled translation has the English's placeholders."""
+    found = list(units(localization))
     if "variations" in localization:
         # A plural's "one" can say "One song" rather than "%lld song".
         return all(not placeholders(unit["value"]) - source for unit in found)
@@ -68,9 +74,10 @@ def main(paths):
                 language = locale(code)
                 if language == source_language:
                     continue
+                if not translated(localization):
+                    continue
                 if not acceptable(localization, source):
-                    if any(unit.get("state") == "translated" for unit in units(localization)):
-                        rejected.append(f"{language}: {key!r}")
+                    rejected.append(f"{language}: {key!r}")
                     continue
                 localizations = ours.setdefault("localizations", {})
                 if localizations.get(language) != localization:
