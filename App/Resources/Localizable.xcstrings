@@ -54,6 +54,12 @@
                   "value": "%lld položky"
                 }
               },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld položek"
+                }
+              },
               "other": {
                 "stringUnit": {
                   "state": "translated",
@@ -90,6 +96,12 @@
                   "value": "%lld elemento"
                 }
               },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld elementos"
+                }
+              },
               "other": {
                 "stringUnit": {
                   "state": "translated",
@@ -124,6 +136,12 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "%lld élément"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld éléments"
                 }
               },
               "other": {
@@ -186,6 +204,12 @@
                   "value": "%lld elemento"
                 }
               },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld elementi"
+                }
+              },
               "other": {
                 "stringUnit": {
                   "state": "translated",
@@ -220,6 +244,12 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "%lld elementai"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld elementų"
                 }
               },
               "other": {
@@ -300,6 +330,12 @@
                   "value": "%lld item"
                 }
               },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld itens"
+                }
+              },
               "other": {
                 "stringUnit": {
                   "state": "translated",
@@ -352,6 +388,12 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "%lld položky"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld položiek"
                 }
               },
               "other": {
@@ -418,6 +460,12 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "%lld записи"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld записів"
                 }
               },
               "other": {
@@ -550,6 +598,12 @@
                   "value": "%lld písně přidány do nynějšího seznamu skladeb"
                 }
               },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld písní přidáno do nynějšího seznamu skladeb"
+                }
+              },
               "other": {
                 "stringUnit": {
                   "state": "translated",
@@ -586,6 +640,12 @@
                   "value": "Se añadió %lld canción a la lista"
                 }
               },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Se añadieron %lld canciones a la lista"
+                }
+              },
               "other": {
                 "stringUnit": {
                   "state": "translated",
@@ -620,6 +680,12 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "%lld titre ajouté à la liste de lecture en cours"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld titres ajoutés à la liste de lecture en cours"
                 }
               },
               "other": {
@@ -682,6 +748,12 @@
                   "value": "%lld canzone aggiunta alla playlist corrente"
                 }
               },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld canzoni aggiunta alla playlist corrente"
+                }
+              },
               "other": {
                 "stringUnit": {
                   "state": "translated",
@@ -716,6 +788,12 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "%lld dainos pridėtos į esamą grojaraštį"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld dainų pridėta į esamą grojaraštį"
                 }
               },
               "other": {
@@ -796,6 +874,12 @@
                   "value": "%lld faixa adicionada à lista de reprodução"
                 }
               },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld faixas adicionadas à lista de reprodução"
+                }
+              },
               "other": {
                 "stringUnit": {
                   "state": "translated",
@@ -848,6 +932,12 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "%lld skladby pridané do aktuálneho zoznamu skladieb"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld skladieb pridaných do aktuálneho zoznamu skladieb"
                 }
               },
               "other": {
@@ -914,6 +1004,12 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "До поточного списку відтворення додано %lld композиції"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "До поточного списку відтворення додано %lld композицій"
                 }
               },
               "other": {
