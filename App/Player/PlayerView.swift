@@ -140,6 +140,9 @@ struct PlayerView: View {
             }
             Spacer()
             ActionButton(title: "Queue", systemImage: "list.bullet") {
+                if let playing = session.activePlaylistID {
+                    model.selectedPlaylistID = playing
+                }
                 model.selectedTab = .queue
                 dismiss()
             }
