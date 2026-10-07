@@ -155,21 +155,31 @@ public enum Messages {
         RemoteMessage(.rateSong) { $0.requestRateSong.rating = rating }
     }
 
-    /// Adds [urls] to a playlist; with [playNow], Clementine plays the first of them.
-    public static func insertURLs(_ urls: [String], playlistID: Int32, playNow: Bool = false) -> RemoteMessage {
+    /// Adds [urls] to a playlist; with [playNow], Clementine plays the first of them. With
+    /// [enqueue], they're queued after anything queued already; with [enqueueNext], in front of it.
+    public static func insertURLs(
+        _ urls: [String], playlistID: Int32, playNow: Bool = false, enqueue: Bool = false, enqueueNext: Bool = false
+    ) -> RemoteMessage {
         RemoteMessage(.insertUrls) {
             $0.requestInsertUrls.playlistID = playlistID
             $0.requestInsertUrls.urls = urls
             $0.requestInsertUrls.playNow = playNow
+            $0.requestInsertUrls.enqueue = enqueue
+            $0.requestInsertUrls.enqueueNext = enqueueNext
         }
     }
 
-    /// Adds [songs] to a playlist; with [playNow], Clementine plays the first of them.
-    public static func insertSongs(_ songs: [SongMetadata], playlistID: Int32, playNow: Bool = false) -> RemoteMessage {
+    /// Adds [songs] to a playlist; with [playNow], Clementine plays the first of them. With
+    /// [enqueue], they're queued after anything queued already; with [enqueueNext], in front of it.
+    public static func insertSongs(
+        _ songs: [SongMetadata], playlistID: Int32, playNow: Bool = false, enqueue: Bool = false, enqueueNext: Bool = false
+    ) -> RemoteMessage {
         RemoteMessage(.insertUrls) {
             $0.requestInsertUrls.playlistID = playlistID
             $0.requestInsertUrls.songs = songs
             $0.requestInsertUrls.playNow = playNow
+            $0.requestInsertUrls.enqueue = enqueue
+            $0.requestInsertUrls.enqueueNext = enqueueNext
         }
     }
 

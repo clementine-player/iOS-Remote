@@ -101,14 +101,13 @@ final class LibraryModel {
         }
     }
 
-    /// Adds the songs of [items] to [target], by default the playlist selected in the queue.
-    /// With [playIfStopped], Clementine plays them unless it's playing already, as it does
-    /// when you double-click a song in it.
-    func add(_ items: [BrowseItem], to target: PlaylistTarget = .selected, playIfStopped: Bool = false) async {
+    /// Adds the songs of [items] to [target], by default the playlist selected in the queue,
+    /// doing [action].
+    func add(_ items: [BrowseItem], to target: PlaylistTarget = .selected, action: AddAction = .append) async {
         let settings = model.settings
         guard let urls = try? await store.songURLs(of: items, grouping: settings.libraryGrouping, sorting: settings.librarySorting),
               !urls.isEmpty, let playlist = await model.playlist(for: target) else { return }
-        model.session.add(urls: urls, to: playlist.id, playIfStopped: playIfStopped)
+        model.session.add(urls: urls, to: playlist.id, action: action)
         model.showAdded(urls.count, to: playlist)
     }
 
@@ -151,10 +150,10 @@ final class LibrarySearch: SearchResults {
         try? await store.searchLevel(below: opened, sorting: model.settings.librarySorting)
     }
 
-    func add(_ items: [BrowseItem], to target: PlaylistTarget, playIfStopped: Bool) async {
+    func add(_ items: [BrowseItem], to target: PlaylistTarget, action: AddAction) async {
         let urls = await songURLs(of: items)
         guard !urls.isEmpty, let playlist = await model.playlist(for: target) else { return }
-        model.session.add(urls: urls, to: playlist.id, playIfStopped: playIfStopped)
+        model.session.add(urls: urls, to: playlist.id, action: action)
         model.showAdded(urls.count, to: playlist)
     }
 

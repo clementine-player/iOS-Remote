@@ -80,6 +80,9 @@ public final class RemoteSession {
     /// Whether this Clementine can be browsed like its Internet sidebar, for its internet services.
     public private(set) var canBrowse = false
 
+    /// Whether this Clementine can queue added songs to play next ([AddAction.playNext]).
+    public private(set) var canEnqueueNext = false
+
     // MARK: Playing
 
     public private(set) var song: Song?
@@ -232,6 +235,7 @@ public final class RemoteSession {
         canChooseOutput = false
         outputs = []
         canBrowse = false
+        canEnqueueNext = false
     }
 
     private func handle(_ event: ClementineConnection.Event, from source: ClementineConnection) {
@@ -272,6 +276,7 @@ public final class RemoteSession {
             }
             canChooseOutput = info.features.contains(.rendering)
             canBrowse = info.features.contains(.browse)
+            canEnqueueNext = info.features.contains(.enqueueNext)
             if canChooseOutput {
                 send(RemoteMessage(.requestOutputs))
             }
@@ -470,18 +475,38 @@ public final class RemoteSession {
         send(Messages.closePlaylist(playlistID))
     }
 
-    /// Adds songs, by their URLs, to playlist [playlistID], or the active playlist when nil.
-    /// With [playIfStopped], plays the first of them unless something is playing already.
-    public func add(urls: [String], to playlistID: Int32? = nil, playIfStopped: Bool = false) {
+    /// Adds songs, by their URLs, to playlist [playlistID], or the active playlist when nil, doing
+    /// [action].
+    public func add(urls: [String], to playlistID: Int32? = nil, action: AddAction = .append) {
         guard let playlistID = playlistID ?? activePlaylistID, !urls.isEmpty else { return }
-        send(Messages.insertURLs(urls, playlistID: playlistID, playNow: playIfStopped && playState != .playing))
+        prepare(action, playlistID: playlistID)
+        send(Messages.insertURLs(
+            urls, playlistID: playlistID, playNow: playsNow(action),
+            enqueue: action == .queue, enqueueNext: action == .playNext))
     }
 
-    /// Adds songs, described in full, to playlist [playlistID], or the active playlist when nil.
-    /// With [playIfStopped], plays the first of them unless something is playing already.
-    public func add(songs: [SongMetadata], to playlistID: Int32? = nil, playIfStopped: Bool = false) {
+    /// Adds songs, described in full, to playlist [playlistID], or the active playlist when nil,
+    /// doing [action].
+    public func add(songs: [SongMetadata], to playlistID: Int32? = nil, action: AddAction = .append) {
         guard let playlistID = playlistID ?? activePlaylistID, !songs.isEmpty else { return }
-        send(Messages.insertSongs(songs, playlistID: playlistID, playNow: playIfStopped && playState != .playing))
+        prepare(action, playlistID: playlistID)
+        send(Messages.insertSongs(
+            songs, playlistID: playlistID, playNow: playsNow(action),
+            enqueue: action == .queue, enqueueNext: action == .playNext))
+    }
+
+    private func prepare(_ action: AddAction, playlistID: Int32) {
+        if action == .replace {
+            clear(playlistID: playlistID)
+        }
+    }
+
+    private func playsNow(_ action: AddAction) -> Bool {
+        switch action {
+        case .playNow, .replace: true
+        case .playIfStopped: playState != .playing
+        case .append, .queue, .playNext: false
+        }
     }
 
     /// Creates a playlist called [name], and returns it once Clementine has; nil if Clementine

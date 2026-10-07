@@ -12,9 +12,8 @@ protocol SearchResults: AnyObject, Observable {
     var revision: Int { get }
     /// The level below [opened], an artist or album of the results.
     func level(below opened: BrowseItem) async -> BrowseLevel?
-    /// Adds the songs of [items] to [target]. With [playIfStopped], Clementine plays them unless
-    /// it's playing already, as it does when you double-click a song in it.
-    func add(_ items: [BrowseItem], to target: PlaylistTarget, playIfStopped: Bool) async
+    /// Adds the songs of [items] to [target], doing [action].
+    func add(_ items: [BrowseItem], to target: PlaylistTarget, action: AddAction) async
     /// Downloads the songs of [items] to the phone, when they can be.
     var download: (([BrowseItem]) async -> Void)? { get }
 }
@@ -143,7 +142,7 @@ private struct SearchSectionHeader: View {
 }
 
 /// A result on the first page: a song or station adds itself to the playlist; an artist or album
-/// opens.
+/// opens. Touch and hold for what else can be done with it.
 private struct SearchRow: View {
     let item: BrowseItem
     let section: SearchSection
@@ -155,7 +154,7 @@ private struct SearchRow: View {
         Group {
             if item.kind == .song {
                 Button {
-                    Task { await results.add([item], to: .selected, playIfStopped: true) }
+                    Task { await results.add([item], to: .selected, action: .playIfStopped) }
                 } label: {
                     row
                 }
@@ -167,6 +166,11 @@ private struct SearchRow: View {
             }
         }
         .buttonStyle(.plain)
+        .contextMenu {
+            BrowseAddActions(item: item) { target, action in
+                Task { await results.add([item], to: target, action: action) }
+            }
+        }
         .listRowBackground(Palette.surface)
         .listRowSeparator(.hidden)
     }
@@ -200,7 +204,7 @@ struct SearchListView: View {
             if case .opened(let item) = page, let level, !editMode.isEditing {
                 BrowseHeader(
                     item: item, count: level.items.count,
-                    add: { target in Task { await results.add([item], to: target, playIfStopped: false) } },
+                    add: { target in Task { await results.add([item], to: target, action: .append) } },
                     download: results.download.map { download in { Task { await download([item]) } } })
             }
             if let level {
@@ -216,8 +220,8 @@ struct SearchListView: View {
                         return nil
                     },
                     opens: { .opened($0) }
-                ) { song in
-                    Task { await results.add([song], to: .selected, playIfStopped: true) }
+                ) { items, target, action in
+                    Task { await results.add(items, to: target, action: action) }
                 }
             }
         }
@@ -256,7 +260,7 @@ struct SearchListView: View {
                     .textStyle(.bodyMedium)
                 Spacer()
                 AddToPlaylistMenu { target in
-                    Task { await results.add(items, to: target, playIfStopped: false) }
+                    Task { await results.add(items, to: target, action: .append) }
                     endSelection()
                 }
                 .disabled(items.isEmpty)
