@@ -1410,6 +1410,9 @@
         }
       }
     },
+    "Add to queue" : {
+
+    },
     "Added to the playlist" : {
       "localizations" : {
         "it" : {
@@ -10901,6 +10904,9 @@
 
     },
     "Open Settings" : {
+
+    },
+    "Open in new playlist" : {
 
     },
     "Open-source software" : {
