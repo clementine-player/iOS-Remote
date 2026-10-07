@@ -2,16 +2,43 @@
   "sourceLanguage" : "en",
   "strings" : {
     "%@ (playing)" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (in riproduzione)"
+          }
+        }
+      }
     },
     "%@ (this iPad)" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (questo iPad)"
+          }
+        }
+      }
     },
     "%@ (this phone)" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (questo telefono)"
+          }
+        }
+      }
     },
     "%@ free on this phone" : {
       "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ liberi su questo telefono"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22,6 +49,12 @@
     },
     "%@ stars" : {
       "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ stelle"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -36,6 +69,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@ · port %2$@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · porta %2$@"
           }
         }
       }
@@ -55,6 +94,30 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld albums"
+                }
+              }
+            }
+          }
+        },
+        "it" : {
+          "variations" : {
+            "plural" : {
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld album"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld album"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld album"
                 }
               }
             }
@@ -97,6 +160,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "%1$lld h %2$lld min"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "%1$lld h %2$lld min"
           }
         }
@@ -327,6 +396,18 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld アイテム"
+                }
+              }
+            }
+          }
+        },
+        "ko" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld 항목"
                 }
               }
             }
@@ -605,7 +686,14 @@
       }
     },
     "%lld min" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min"
+          }
+        }
+      }
     },
     "%lld selected" : {
       "localizations" : {
@@ -622,6 +710,30 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld selected"
+                }
+              }
+            }
+          }
+        },
+        "it" : {
+          "variations" : {
+            "plural" : {
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld selezionati"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld selezionato"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld selezionati"
                 }
               }
             }
@@ -679,6 +791,30 @@
             }
           }
         },
+        "it" : {
+          "variations" : {
+            "plural" : {
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld brani"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld brano"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld brani"
+                }
+              }
+            }
+          }
+        },
         "ru" : {
           "variations" : {
             "plural" : {
@@ -726,6 +862,30 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld songs added to %@"
+                }
+              }
+            }
+          }
+        },
+        "it" : {
+          "variations" : {
+            "plural" : {
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld brani aggiunti a %@"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld brano aggiunto a %@"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld brani aggiunti a %@"
                 }
               }
             }
@@ -934,19 +1094,19 @@
               "many" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld canzoni aggiunta alla playlist corrente"
+                  "value" : "%lld brani aggiunti alla scaletta"
                 }
               },
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld canzone aggiunta alla playlist corrente"
+                  "value" : "%lld brano aggiunto alla scaletta"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld canzoni aggiunta alla playlist corrente"
+                  "value" : "%lld brani aggiunti alla scaletta"
                 }
               }
             }
@@ -1237,7 +1397,14 @@
       }
     },
     "%lld%%" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld%%"
+          }
+        }
+      }
     },
     "(%lld/%lld) Please wait" : {
       "localizations" : {
@@ -1245,6 +1412,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "(%1$lld/%2$lld) Please wait"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(%1$lld/%2$lld) Attendi"
           }
         }
       }
@@ -1308,7 +1481,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Info su"
+            "value" : "Informazioni"
           }
         },
         "ja" : {
@@ -1392,7 +1565,14 @@
       }
     },
     "About Clementine Remote" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Informazioni su Clementine Remote"
+          }
+        }
+      }
     },
     "Add to playlist" : {
       "localizations" : {
@@ -1411,7 +1591,14 @@
       }
     },
     "Add to queue" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiungi alla coda"
+          }
+        }
+      }
     },
     "Added to the playlist" : {
       "localizations" : {
@@ -1446,10 +1633,24 @@
       }
     },
     "Adds it to the playlist" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo aggiunge alla scaletta"
+          }
+        }
+      }
     },
     "Adds to the playlist selected in the queue. Touch and hold to pick another." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiunge alla scaletta selezionata nella coda. Tieni premuto per sceglierne un'altra."
+          }
+        }
+      }
     },
     "Advanced" : {
       "localizations" : {
@@ -1619,6 +1820,12 @@
             "value" : "Albumi"
           }
         },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Album"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1688,7 +1895,14 @@
       }
     },
     "Album %@" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Album %@"
+          }
+        }
+      }
     },
     "Album artist / Album" : {
       "localizations" : {
@@ -1732,6 +1946,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Előadó / Év"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artista dell'album / Album"
           }
         },
         "ja" : {
@@ -1815,10 +2035,24 @@
       }
     },
     "Album folders" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cartelle degli album"
+          }
+        }
+      }
     },
     "Album · %@" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Album · %@"
+          }
+        }
+      }
     },
     "Albums" : {
       "localizations" : {
@@ -1837,10 +2071,24 @@
       }
     },
     "Appearance" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aspetto"
+          }
+        }
+      }
     },
     "Arnaud Bienner (Clementine)" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arnaud Bienner (Clementine)"
+          }
+        }
+      }
     },
     "Artist" : {
       "localizations" : {
@@ -1884,6 +2132,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Előadó"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artista"
           }
         },
         "ja" : {
@@ -2010,6 +2264,12 @@
             "value" : "Előadó / Album"
           }
         },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artista / Album"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2134,6 +2394,12 @@
             "value" : "Album"
           }
         },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artista / Anno"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2215,7 +2481,14 @@
       }
     },
     "Artist folders" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cartelle degli artisti"
+          }
+        }
+      }
     },
     "Artists" : {
       "localizations" : {
@@ -2281,6 +2554,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Növekvő"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crescente"
           }
         },
         "ja" : {
@@ -2926,7 +3205,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tracce bannatte :-("
+            "value" : "Bandite su Last.fm"
           }
         },
         "ja" : {
@@ -3158,7 +3437,14 @@
       }
     },
     "Cancel download" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annulla lo scaricamento"
+          }
+        }
+      }
     },
     "Change" : {
       "localizations" : {
@@ -3251,7 +3537,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pulisci playlist"
+            "value" : "Pulisci la scaletta"
           }
         },
         "ja" : {
@@ -3335,10 +3621,23 @@
       }
     },
     "Clear playlist?" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vuoi ripulire la scaletta?"
+          }
+        }
+      }
     },
     "Clementine" : {
       "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine"
+          }
+        },
         "my" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3403,6 +3702,12 @@
             "value" : "Clementine távvezérlő"
           }
         },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine Remote"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3454,17 +3759,31 @@
       }
     },
     "Clementine Remote controls the Clementine music player on your computer. It collects no data: it only talks to your own Clementine, on your own network." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine Remote controlla il lettore musicale Clementine sul tuo computer. Non raccoglie alcun dato: comunica esclusivamente con la tua istanza di Clementine, all'interno della tua rete."
+          }
+        }
+      }
     },
     "Clementine can send its music here, when it plays on other devices. Takes effect the next time the app connects." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine può trasmettere la musica qui quando è in riproduzione su altri dispositivi. La modifica avrà effetto alla prossima connessione dell'applicazione."
+          }
+        }
+      }
     },
     "Clementine can't add that to the playlist" : {
       "localizations" : {
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Clementine non può aggiungere quel brano alla scaletta"
+            "value" : "Clementine non può aggiungerlo alla scaletta"
           }
         },
         "ru" : {
@@ -3476,7 +3795,14 @@
       }
     },
     "Clementine creates the playlist and shows it." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine crea la scaletta e la mostra."
+          }
+        }
+      }
     },
     "Clementine doesn't allow downloads. Turn them on in its Network Remote settings." : {
       "localizations" : {
@@ -3543,7 +3869,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Download Proibito. Attivalo nelle impostazioni di Clementine."
+            "value" : "Scaricamento proibito. Attivalo nelle impostazioni di controllo remoto di Clementine."
           }
         },
         "ja" : {
@@ -3709,7 +4035,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Versione non compatibile"
+            "value" : "Clementine è troppo datato"
           }
         },
         "ja" : {
@@ -3979,7 +4305,14 @@
       }
     },
     "Clementine plays on its computer, or sends its music to a device that's connected to it." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine riproduce musica sul computer o la invia a un dispositivo a esso collegato."
+          }
+        }
+      }
     },
     "Clementine refused the connection" : {
       "localizations" : {
@@ -3998,19 +4331,54 @@
       }
     },
     "Clementine stopped answering. Check that it's still running, then connect again." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine ha smesso di rispondere. Verifica che sia ancora in esecuzione, poi riconnettiti."
+          }
+        }
+      }
     },
     "Clementine volume" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volume di Clementine"
+          }
+        }
+      }
     },
     "Clementine won't check another auth code from this phone for %@. Then enter the code shown in its Network Remote settings." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine non richiederà un altro codice di autenticazione da questo telefono per %@. Successivamente, digita il codice mostrato nelle impostazioni di controllo remoto."
+          }
+        }
+      }
     },
     "Clementine's remote control protocol" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protocollo di controllo remoto di Clementine"
+          }
+        }
+      }
     },
     "Close player" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chiudi il lettore"
+          }
+        }
+      }
     },
     "Close playlist" : {
       "localizations" : {
@@ -4071,7 +4439,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Chiudi playlist"
+            "value" : "Chiudi la scaletta"
           }
         },
         "ja" : {
@@ -4379,7 +4747,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Auto-Connetti"
+            "value" : "Connessione automatica"
           }
         },
         "ja" : {
@@ -4463,13 +4831,34 @@
       }
     },
     "Connect to Clementine" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connettiti a Clementine"
+          }
+        }
+      }
     },
     "Connect to Clementine in Clementine Remote first." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connettiti prima a Clementine tramite Clementine Remote."
+          }
+        }
+      }
     },
     "Connect to the last Clementine when the app starts." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connettiti all'ultima istanza di Clementine all'avvio dell'applicazione."
+          }
+        }
+      }
     },
     "Connected" : {
       "localizations" : {
@@ -4569,7 +4958,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Connessione a Clementine"
+            "value" : "Connessione a Clementine..."
           }
         },
         "ja" : {
@@ -4671,7 +5060,14 @@
       }
     },
     "Connecting…" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connessione..."
+          }
+        }
+      }
     },
     "Connection" : {
       "localizations" : {
@@ -4834,19 +5230,54 @@
       }
     },
     "Copyright Apple Inc. and the SwiftProtobuf project authors. Licensed under the Apache License, Version 2.0." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copyright Apple Inc. e gli autori del progetto SwiftProtobuf. Rilasciato nei termini della Apache License, Versione 2.0."
+          }
+        }
+      }
     },
     "Copyright David Sansome and Andreas Muttscheller. Licensed under the Apache License, Version 2.0." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copyright David Sansome e Andreas Muttscheller. Rilasciato nei termini della Apache License, Versione 2.0."
+          }
+        }
+      }
     },
     "Couldn't connect to Clementine" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile connettersi a Clementine"
+          }
+        }
+      }
     },
     "Couldn't create the playlist. Creating playlists needs Clementine 1.4 or later." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile creare la scaletta. La creazione delle scalette richiede Clementine 1.4 o versione successiva."
+          }
+        }
+      }
     },
     "Couldn't download the library: %@" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile scaricare la raccolta: %@"
+          }
+        }
+      }
     },
     "Couldn't reach Clementine" : {
       "localizations" : {
@@ -5015,25 +5446,74 @@
       }
     },
     "Couldn't reach Clementine." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile raggiungere Clementine."
+          }
+        }
+      }
     },
     "Couldn't save the file" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile salvare il file"
+          }
+        }
+      }
     },
     "Cover art" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copertina"
+          }
+        }
+      }
     },
     "Create" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crea"
+          }
+        }
+      }
     },
     "Dark" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scuro"
+          }
+        }
+      }
     },
     "Data sent / received" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dati inviati / ricevuti"
+          }
+        }
+      }
     },
     "David Sansome (Clementine)" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "David Sansome (Clementine)"
+          }
+        }
+      }
     },
     "Descending" : {
       "localizations" : {
@@ -5083,6 +5563,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Csökkenő"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decrescente"
           }
         },
         "ja" : {
@@ -5478,7 +5964,14 @@
       }
     },
     "Disconnect from Clementine" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disconnettiti da Clementine"
+          }
+        }
+      }
     },
     "Disconnected" : {
       "localizations" : {
@@ -5647,7 +6140,14 @@
       }
     },
     "Disconnects Clementine Remote from Clementine." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disconnette Clementine Remote da Clementine."
+          }
+        }
+      }
     },
     "Don't repeat" : {
       "localizations" : {
@@ -5886,7 +6386,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Non casuale"
+            "value" : "Non mescolare"
           }
         },
         "ja" : {
@@ -6191,6 +6691,12 @@
             "value" : "Letöltés"
           }
         },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scarica"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6330,7 +6836,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Download cancellato"
+            "value" : "Scaricamento annullato"
           }
         },
         "ja" : {
@@ -6496,7 +7002,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Download completato"
+            "value" : "Scaricamento completato"
           }
         },
         "ja" : {
@@ -6598,10 +7104,24 @@
       }
     },
     "Download finished" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scaricamento terminato"
+          }
+        }
+      }
     },
     "Download library" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scarica la raccolta"
+          }
+        }
+      }
     },
     "Download playlist" : {
       "localizations" : {
@@ -6668,7 +7188,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scarica playlist"
+            "value" : "Scarica la scaletta"
           }
         },
         "ja" : {
@@ -6828,7 +7348,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scarica canzoni solo quando connesso a rete wifi."
+            "value" : "Scarica i brani solo quando connesso a una rete Wi-Fi."
           }
         },
         "ja" : {
@@ -6930,7 +7450,14 @@
       }
     },
     "Download songs, albums and playlists from the player, the queue and the library. They're saved in the Files app." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scarica brani, album e scalette dal lettore, dalla coda e dalla raccolta. Vengono salvati nell'applicazione File."
+          }
+        }
+      }
     },
     "Download started" : {
       "localizations" : {
@@ -6991,7 +7518,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Download iniziato!"
+            "value" : "Scaricamento iniziato"
           }
         },
         "ja" : {
@@ -7087,7 +7614,14 @@
       }
     },
     "Downloaded songs" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brani scaricati"
+          }
+        }
+      }
     },
     "Downloading" : {
       "localizations" : {
@@ -7170,7 +7704,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Download dati"
+            "value" : "Scaricamento dei dati..."
           }
         },
         "ja" : {
@@ -7324,7 +7858,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Download libreria"
+            "value" : "Scaricamento della raccolta..."
           }
         },
         "ja" : {
@@ -7478,7 +8012,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Download"
+            "value" : "Scaricamenti"
           }
         },
         "ja" : {
@@ -7638,7 +8172,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Download permesso solo su wifi."
+            "value" : "Gli scaricamenti sono consentiti solo tramite Wi-Fi"
           }
         },
         "ja" : {
@@ -7744,7 +8278,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scarica solo su Wi-Fi."
+            "value" : "Gli scaricamenti avvengono solo tramite Wi-Fi."
           }
         },
         "ru" : {
@@ -7757,6 +8291,12 @@
     },
     "Downloads songs again when they differ from those on this phone." : {
       "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scarica nuovamente i brani quando differiscono da quelli presenti su questo telefono."
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7827,7 +8367,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nome file"
+            "value" : "File"
           }
         },
         "ja" : {
@@ -7981,7 +8521,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inserisci i termini di ricerca per trovare la musica sul tuo computer e su internet"
+            "value" : "Trova musica nella tua raccolta e nei servizi Internet di Clementine."
           }
         },
         "ja" : {
@@ -8397,6 +8937,12 @@
             "value" : "Műfaj / Előadó / Album"
           }
         },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Genere / Album"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8663,6 +9209,12 @@
             "value" : "Csoportosítás"
           }
         },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raggruppamento"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8763,10 +9315,24 @@
       }
     },
     "Is Clementine running? Is it version %@ or later, with the network remote turned on in its settings? Is the address right?" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine è in esecuzione? Si tratta della versione %@ o successiva, con il controllo remoto di rete attivato nelle impostazioni? L'indirizzo è corretto?"
+          }
+        }
+      }
     },
     "John Maguire (Clementine)" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "John Maguire (Clementine)"
+          }
+        }
+      }
     },
     "Keep the screen on" : {
       "localizations" : {
@@ -8827,7 +9393,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mantieni schermo acceso"
+            "value" : "Mantieni lo schermo acceso"
           }
         },
         "ja" : {
@@ -8912,6 +9478,12 @@
     },
     "Last.fm" : {
       "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last.fm"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8985,7 +9557,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lunghezza"
+            "value" : "Durata"
           }
         },
         "ja" : {
@@ -9417,7 +9989,14 @@
       }
     },
     "Light" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chiaro"
+          }
+        }
+      }
     },
     "Loading playlists" : {
       "localizations" : {
@@ -9484,7 +10063,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Download Playlist"
+            "value" : "Caricamento delle scalette"
           }
         },
         "ja" : {
@@ -9621,10 +10200,24 @@
       }
     },
     "Looking for lyrics…" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ricerca del testo…"
+          }
+        }
+      }
     },
     "Lost the connection to Clementine" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connessione a Clementine interrotta"
+          }
+        }
+      }
     },
     "Love" : {
       "localizations" : {
@@ -9685,7 +10278,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Amore"
+            "value" : "Mi piace"
           }
         },
         "ja" : {
@@ -9855,7 +10448,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tracce amate <3"
+            "value" : "Amata su Last.fm"
           }
         },
         "ja" : {
@@ -10005,16 +10598,44 @@
       }
     },
     "Name" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nome"
+          }
+        }
+      }
     },
     "Needs Clementine %@ or later, with Tools → Preferences → Network Remote turned on." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Richiede Clementine %@ o versione successiva, con l'opzione Strumenti → Preferenze → Controllo remoto di rete attivata."
+          }
+        }
+      }
     },
     "New playlist" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuova scaletta"
+          }
+        }
+      }
     },
     "New playlist…" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuova scaletta..."
+          }
+        }
+      }
     },
     "Next" : {
       "localizations" : {
@@ -10091,7 +10712,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prossima canzone"
+            "value" : "Brano successivo"
           }
         },
         "ja" : {
@@ -10239,7 +10860,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nessun download!"
+            "value" : "Nessuno scaricamento"
           }
         },
         "ja" : {
@@ -10341,7 +10962,14 @@
       }
     },
     "No library yet" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ancora nessuna raccota"
+          }
+        }
+      }
     },
     "No lyrics found." : {
       "localizations" : {
@@ -10510,10 +11138,24 @@
       }
     },
     "No song playing" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessun brano in riproduzione"
+          }
+        }
+      }
     },
     "No songs" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessun brano"
+          }
+        }
+      }
     },
     "Not connected" : {
       "localizations" : {
@@ -10706,10 +11348,23 @@
       }
     },
     "OK" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
     },
     "On this phone" : {
       "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Su questo telefono"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10799,7 +11454,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Solo WiFi"
+            "value" : "Solo su Wi-Fi"
           }
         },
         "ja" : {
@@ -10901,13 +11556,34 @@
       }
     },
     "Open Clementine Remote to connect" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apri Clementine Remote per connetterti"
+          }
+        }
+      }
     },
     "Open Settings" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apri le impostazioni"
+          }
+        }
+      }
     },
     "Open in new playlist" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apri in una nuova scaletta"
+          }
+        }
+      }
     },
     "Open-source software" : {
       "localizations" : {
@@ -10951,6 +11627,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nyílt forráskód"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Software Open Source"
           }
         },
         "ja" : {
@@ -11028,10 +11710,24 @@
       }
     },
     "Opens Clementine Remote and connects to the last Clementine." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apre Clementine Remote e si connette all'ultima istanza di Clementine."
+          }
+        }
+      }
     },
     "Opens the player" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apre il lettore"
+          }
+        }
+      }
     },
     "Or enter its address" : {
       "localizations" : {
@@ -11208,10 +11904,24 @@
       }
     },
     "Pauses Clementine." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sospende Clementine."
+          }
+        }
+      }
     },
     "Phone volume" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volume del telefono"
+          }
+        }
+      }
     },
     "Pick the Clementine you want to control. It needs to be on the same Wi-Fi as this phone." : {
       "localizations" : {
@@ -11430,7 +12140,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conteggio riproduzione"
+            "value" : "Conteggio di riproduzione"
           }
         },
         "ja" : {
@@ -11638,7 +12348,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Play / Pausa"
+            "value" : "Riproduci o sospendi"
           }
         },
         "ja" : {
@@ -11722,7 +12432,14 @@
       }
     },
     "Play, pause and skip songs in Clementine." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riproduci, sospendi e salta i brani in Clementine."
+          }
+        }
+      }
     },
     "Player" : {
       "localizations" : {
@@ -11772,6 +12489,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lejátszó"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lettore"
           }
         },
         "ja" : {
@@ -11907,6 +12630,12 @@
     },
     "Playing next" : {
       "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prossimo in riproduzione"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11916,7 +12645,14 @@
       }
     },
     "Playing on %@" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riproduzione su %@"
+          }
+        }
+      }
     },
     "Playlist" : {
       "localizations" : {
@@ -11971,7 +12707,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Playlist"
+            "value" : "Scaletta"
           }
         },
         "ja" : {
@@ -12049,10 +12785,24 @@
       }
     },
     "Playlist %@" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scaletta %@"
+          }
+        }
+      }
     },
     "Playlist folder" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cartella della scaletta"
+          }
+        }
+      }
     },
     "Plays Clementine if it's paused, and pauses it if it's playing." : {
 
@@ -12113,7 +12863,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aggiorna Clementine! Hai bisogno di Clementine %1$@ o successivo."
+            "value" : "Aggiorna Clementine! Hai bisogno di Clementine %1$@ o versione successiva."
           }
         },
         "ja" : {
@@ -12303,7 +13053,14 @@
       }
     },
     "Position" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Posizione"
+          }
+        }
+      }
     },
     "Preparing the library…" : {
       "localizations" : {
@@ -12364,7 +13121,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ottimizazione database"
+            "value" : "Preparazione della raccolta..."
           }
         },
         "ja" : {
@@ -12506,6 +13263,30 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "Rate %lld stars"
+                }
+              }
+            }
+          }
+        },
+        "it" : {
+          "variations" : {
+            "plural" : {
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Valuta con %lld stelle"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Valuta con %lld stella"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Valuta con %lld stelle"
                 }
               }
             }
@@ -12731,19 +13512,19 @@
               "many" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Canzoni votate %lld stars"
+                  "value" : "Valutato con %lld stelle"
                 }
               },
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Canzoni votate %lld stars"
+                  "value" : "Valutato con %lld stella"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Canzoni votate %lld stars"
+                  "value" : "Valutato con %lld stelle"
                 }
               }
             }
@@ -13152,7 +13933,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Punteggio"
+            "value" : "Valutazione"
           }
         },
         "ja" : {
@@ -13254,13 +14035,34 @@
       }
     },
     "Reconnecting to Clementine" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riconnessione a Clementine"
+          }
+        }
+      }
     },
     "Reconnecting…" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riconnessione..."
+          }
+        }
+      }
     },
     "Remove from list" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rimuovi dall'elenco"
+          }
+        }
+      }
     },
     "Remove from playlist" : {
       "localizations" : {
@@ -13321,7 +14123,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rimuovi dalla playlist"
+            "value" : "Rimuovi dalla scaletta"
           }
         },
         "ja" : {
@@ -13487,7 +14289,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ripeti album"
+            "value" : "Ripeti l'album"
           }
         },
         "ja" : {
@@ -13659,7 +14461,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ripeti playlist"
+            "value" : "Ripeti la scaletta"
           }
         },
         "ja" : {
@@ -13831,7 +14633,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ripeti traccia"
+            "value" : "Ripeti la traccia"
           }
         },
         "ja" : {
@@ -14003,7 +14805,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sovrascrivi file esistenti"
+            "value" : "Sovrascrivi i file esistenti"
           }
         },
         "ja" : {
@@ -14121,10 +14923,24 @@
       }
     },
     "Save a playlist's songs in a folder named after it." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salva i brani di una scaletta in una cartella che ne porta il nome."
+          }
+        }
+      }
     },
     "Save each song in a folder named after its artist." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salva ogni brano in una cartella che prende il nome dell'artista."
+          }
+        }
+      }
     },
     "Search" : {
       "localizations" : {
@@ -14351,7 +15167,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cerca qualsiasi cosa"
+            "value" : "Cerca Clementine"
           }
         },
         "ja" : {
@@ -14451,7 +15267,14 @@
       }
     },
     "Search the library" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca nella raccolta"
+          }
+        }
+      }
     },
     "Search this playlist" : {
       "localizations" : {
@@ -14518,7 +15341,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cerca traccia"
+            "value" : "Cerca in questa scaletta"
           }
         },
         "ja" : {
@@ -14626,19 +15449,54 @@
       }
     },
     "Searching for “%@”…" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ricerca di “%@”…"
+          }
+        }
+      }
     },
     "See All" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vedi tutti"
+          }
+        }
+      }
     },
     "See all %@" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vedi tutti i %@"
+          }
+        }
+      }
     },
     "Select" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleziona"
+          }
+        }
+      }
     },
     "Select songs" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleziona i brani"
+          }
+        }
+      }
     },
     "Set up in Clementine" : {
       "localizations" : {
@@ -14829,7 +15687,14 @@
       }
     },
     "Show" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra"
+          }
+        }
+      }
     },
     "Show buttons to love and ban songs." : {
       "localizations" : {
@@ -14885,6 +15750,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kapcsolja be a számok kedveléséhez / tiltásához."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra i pulsanti per preferire e bandire i brani."
           }
         },
         "ja" : {
@@ -14968,10 +15839,24 @@
       }
     },
     "Shows the cover full size" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra la copertina a grandezza naturale"
+          }
+        }
+      }
     },
     "Shows the lyrics" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra i testi"
+          }
+        }
+      }
     },
     "Shuffle albums" : {
       "localizations" : {
@@ -15038,7 +15923,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ripeti casualmente album"
+            "value" : "Mescola gli album"
           }
         },
         "ja" : {
@@ -15210,7 +16095,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tutto casuale"
+            "value" : "Mescola tutto"
           }
         },
         "ja" : {
@@ -15382,7 +16267,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ripeti casualmente tracce in questo album"
+            "value" : "Mescola le tracce in questo album"
           }
         },
         "ja" : {
@@ -15650,7 +16535,14 @@
       }
     },
     "Skips to Clementine's next song." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passa al brano successivo di Clementine."
+          }
+        }
+      }
     },
     "Song" : {
       "localizations" : {
@@ -15705,7 +16597,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Canzone"
+            "value" : "Brano"
           }
         },
         "ja" : {
@@ -15783,10 +16675,24 @@
       }
     },
     "Song %@" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brano %@"
+          }
+        }
+      }
     },
     "Song · %@" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brano · %@"
+          }
+        }
+      }
     },
     "Songs" : {
       "localizations" : {
@@ -15805,7 +16711,14 @@
       }
     },
     "Songs are saved in Clementine Remote's folder, in the Files app." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I brani sono salvati nella cartella di Clementine Remote, nell'applicazione File."
+          }
+        }
+      }
     },
     "Sorting" : {
       "localizations" : {
@@ -16014,7 +16927,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inzio download"
+            "value" : "Inizio dello scaricamento"
           }
         },
         "ja" : {
@@ -16116,10 +17029,24 @@
       }
     },
     "Starts Clementine playing." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avvia la riproduzione con Clementine."
+          }
+        }
+      }
     },
     "Station · %@" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stazione · %@"
+          }
+        }
+      }
     },
     "Stations" : {
       "localizations" : {
@@ -16191,6 +17118,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Leállítás"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ferma"
           }
         },
         "ja" : {
@@ -16326,7 +17259,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ferma dopo che la traccia è finita."
+            "value" : "Ferma alla fine della traccia"
           }
         },
         "ja" : {
@@ -16422,7 +17355,14 @@
       }
     },
     "Stops Clementine." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ferma Clementine."
+          }
+        }
+      }
     },
     "Stream" : {
 
@@ -16463,13 +17403,34 @@
       }
     },
     "System" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistema"
+          }
+        }
+      }
     },
     "Thanks to all the [contributors](https://github.com/clementine-player/Android-Remote/graphs/contributors) and [translators](https://app.transifex.com/davidsansome/clementine-remot/)!" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grazie a tutti i [collaboratori](https://github.com/clementine-player/Android-Remote/graphs/contributors) e ai [traduttori](https://app.transifex.com/davidsansome/clementine-remot/)!"
+          }
+        }
+      }
     },
     "That address is on your network, and Clementine Remote needs Local Network access to reach it. Turn on Local Network in Settings." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quell'indirizzo si trova sulla tua rete e Clementine Remote necessita dell'accesso alla rete locale per raggiungerlo. Attiva la rete locale nelle Impostazioni."
+          }
+        }
+      }
     },
     "That isn't a valid code" : {
       "localizations" : {
@@ -16536,7 +17497,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Codice non valido"
+            "value" : "Non è un codice valido"
           }
         },
         "ja" : {
@@ -16660,10 +17621,24 @@
       }
     },
     "The library Clementine sent is damaged" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La raccolta che Clementine ha inviato è danneggiata"
+          }
+        }
+      }
     },
     "The phone's volume buttons change Clementine's volume while the app is open." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I tasti del volume del telefono modificano il volume di Clementine mentre l'applicazione è aperta."
+          }
+        }
+      }
     },
     "There isn't enough space on this phone" : {
       "localizations" : {
@@ -16730,7 +17705,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spazio insufficente, download interrotto."
+            "value" : "Spazio insufficiente, scaricamento interrotto."
           }
         },
         "ja" : {
@@ -16902,7 +17877,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La playlist è vuota!"
+            "value" : "Questa scaletta è vuota"
           }
         },
         "ja" : {
@@ -17004,10 +17979,24 @@
       }
     },
     "This program is distributed in the hope that it will be useful, but without any warranty." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questo programma viene distribuito nella speranza che sia utile, ma senza alcuna garanzia."
+          }
+        }
+      }
     },
     "This removes every song from the playlist in Clementine." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questo rimuove tutti i brani dalla scaletta in Clementine."
+          }
+        }
+      }
     },
     "Too many wrong auth codes" : {
       "localizations" : {
@@ -17026,10 +18015,24 @@
       }
     },
     "Too many wrong auth codes. Clementine won't check another from this phone for %@." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Troppi codici di autenticazione errati. Clementine non ne verificherà altri da questo telefono per %@."
+          }
+        }
+      }
     },
     "Top Result" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Risultato migliore"
+          }
+        }
+      }
     },
     "Track" : {
       "localizations" : {
@@ -17250,7 +18253,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Transcodifica file"
+            "value" : "Transcodifica dei file"
           }
         },
         "ja" : {
@@ -17464,7 +18467,14 @@
       }
     },
     "Update library" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiorna la raccolta"
+          }
+        }
+      }
     },
     "Version" : {
       "localizations" : {
@@ -17621,13 +18631,34 @@
       }
     },
     "Version %@" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versione %@"
+          }
+        }
+      }
     },
     "Volume %lld%%" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volume %lld%%"
+          }
+        }
+      }
     },
     "Volume buttons control Clementine" : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I pulsanti del volume controllano Clementine."
+          }
+        }
+      }
     },
     "Volume step" : {
       "localizations" : {
@@ -17778,7 +18809,14 @@
       }
     },
     "While connected to Clementine." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mentre è connesso a Clementine."
+          }
+        }
+      }
     },
     "Without Local Network access, Clementine Remote can't find Clementine on your network. Enter its address below, or turn on Local Network in Settings." : {
 
@@ -17944,7 +18982,14 @@
       }
     },
     "Your library isn't on this phone yet. Download it from Clementine to browse it here." : {
-
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La raccolta non è ancora presente su questo telefono. Scaricala da Clementine per sfogliarla qui."
+          }
+        }
+      }
     },
     "a while" : {
       "localizations" : {
