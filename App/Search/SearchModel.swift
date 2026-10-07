@@ -66,13 +66,12 @@ final class SearchModel: SearchResults {
     /// Results of the global search are added to playlists, not downloaded.
     var download: (([BrowseItem]) async -> Void)? { nil }
 
-    /// Adds the songs of [items] to [target], by default the playlist selected in the queue.
-    /// With [playIfStopped], Clementine plays them unless it's playing already, as it does
-    /// when you double-click a song in it.
-    func add(_ items: [BrowseItem], to target: PlaylistTarget = .selected, playIfStopped: Bool = false) async {
+    /// Adds the songs of [items] to [target], by default the playlist selected in the queue,
+    /// doing [action].
+    func add(_ items: [BrowseItem], to target: PlaylistTarget = .selected, action: AddAction = .append) async {
         guard let songs = try? await store.songs(of: items, sorting: model.settings.librarySorting),
               !songs.isEmpty, let playlist = await model.playlist(for: target) else { return }
-        model.session.add(songs: songs, to: playlist.id, playIfStopped: playIfStopped)
+        model.session.add(songs: songs, to: playlist.id, action: action)
         model.showAdded(songs.count, to: playlist)
     }
 }

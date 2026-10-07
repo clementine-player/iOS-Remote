@@ -90,8 +90,8 @@ private struct LibraryLevelView: View {
                 BrowseRows(
                     level: level, selection: $selection, isEditing: editMode.isEditing,
                     alphabetical: true, descending: sorting == LibrarySorting.descending.rawValue
-                ) { song in
-                    Task { await library.add([song], playIfStopped: true) }
+                ) { items, target, action in
+                    Task { await library.add(items, to: target, action: action) }
                 }
             }
         }

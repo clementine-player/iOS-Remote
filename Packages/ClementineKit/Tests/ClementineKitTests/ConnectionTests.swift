@@ -349,15 +349,58 @@ struct ConnectionTests {
         session.connect(to: clementine.endpoint, authCode: 0)
         try await eventually { session.status == .connected && session.playState == .playing }
 
-        session.add(urls: ["file:///a.ogg"], playIfStopped: true)
+        session.add(urls: ["file:///a.ogg"], action: .playIfStopped)
         await clementine.broadcast(RemoteMessage(.pause))
         try await eventually { session.playState == .paused }
-        session.add(urls: ["file:///b.ogg"], playIfStopped: true)
-        session.add(songs: [FakeClementine.song], playIfStopped: true)
+        session.add(urls: ["file:///b.ogg"], action: .playIfStopped)
+        session.add(songs: [FakeClementine.song], action: .playIfStopped)
         session.add(urls: ["file:///c.ogg"])
         try await clementine.waitUntil { $0.received.filter { $0.type == .insertUrls }.count == 4 }
         let inserts = clementine.received.filter { $0.type == .insertUrls }
         #expect(inserts.map(\.requestInsertUrls.playNow) == [false, true, true, false])
+    }
+
+    @Test func addsSongsAsEachActionSays() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        clementine.respondLikeClementine()
+
+        let session = RemoteSession()
+        session.connect(to: clementine.endpoint, authCode: 0)
+        try await eventually { session.status == .connected && session.playState == .playing }
+
+        let actions: [AddAction] = [.append, .playIfStopped, .playNow, .queue, .playNext]
+        for action in actions {
+            session.add(urls: ["file:///a.ogg"], action: action)
+        }
+        try await clementine.waitUntil { $0.received.filter { $0.type == .insertUrls }.count == actions.count }
+        let inserts = clementine.received.filter { $0.type == .insertUrls }.map(\.requestInsertUrls)
+        #expect(inserts.map(\.playNow) == [false, false, true, false, false])
+        #expect(inserts.map(\.enqueue) == [false, false, false, true, false])
+        #expect(inserts.map(\.enqueueNext) == [false, false, false, false, true])
+    }
+
+    @Test func replacingEmptiesThePlaylistThenPlays() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        clementine.respondLikeClementine()
+
+        let session = RemoteSession()
+        session.connect(to: clementine.endpoint, authCode: 0)
+        try await eventually { session.status == .connected }
+        await clementine.broadcast(RemoteMessage(.playlistSongs) {
+            $0.responsePlaylistSongs.requestedPlaylist.id = 1
+            $0.responsePlaylistSongs.songs = [FakeClementine.song]
+        })
+        try await eventually { session.playlistSongs[1]?.count == 1 }
+
+        session.add(songs: [FakeClementine.song], to: 1, action: .replace)
+        try await clementine.waitUntil { $0.received.contains { $0.type == .insertUrls } }
+        let sent = clementine.received.filter { $0.type == .removeSongs || $0.type == .insertUrls }
+        #expect(sent.map(\.type) == [.removeSongs, .insertUrls])
+        #expect(sent.first?.requestRemoveSongs.playlistID == 1)
+        #expect(sent.last?.requestInsertUrls.playNow == true)
+        #expect(session.playlistSongs[1] == [])
     }
 
     @Test func anOlderClementineDoesntCreatePlaylists() async throws {

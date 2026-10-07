@@ -247,6 +247,9 @@ public nonisolated enum Pb_Remote_ServerFeature: Int, SwiftProtobuf.Enum, Swift.
   /// The server can be browsed like its Internet sidebar (REQUEST_BROWSE).
   case browse = 2
 
+  /// The server honors RequestInsertUrls.enqueue_next.
+  case enqueueNext = 3
+
   public init() {
     self = .unspecified
   }
@@ -1312,6 +1315,18 @@ public nonisolated struct Pb_Remote_RequestInsertUrls: Sendable {
   /// Clears the value of `newPlaylistName`. Subsequent reads from it will return its default value.
   public mutating func clearNewPlaylistName() {self._newPlaylistName = nil}
 
+  /// Queue them to play straight after the current song, in front of anything
+  /// queued already. Servers with SERVER_FEATURE_ENQUEUE_NEXT honor it; older
+  /// ones just insert them.
+  public var enqueueNext: Bool {
+    get {_enqueueNext ?? false}
+    set {_enqueueNext = newValue}
+  }
+  /// Returns true if `enqueueNext` has been explicitly set.
+  public var hasEnqueueNext: Bool {self._enqueueNext != nil}
+  /// Clears the value of `enqueueNext`. Subsequent reads from it will return its default value.
+  public mutating func clearEnqueueNext() {self._enqueueNext = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -1321,6 +1336,7 @@ public nonisolated struct Pb_Remote_RequestInsertUrls: Sendable {
   fileprivate var _playNow: Bool? = nil
   fileprivate var _enqueue: Bool? = nil
   fileprivate var _newPlaylistName: String? = nil
+  fileprivate var _enqueueNext: Bool? = nil
 }
 
 /// Client want to change track
@@ -3417,7 +3433,7 @@ nonisolated extension Pb_Remote_GlobalSearchStatus: SwiftProtobuf._ProtoNameProv
 }
 
 nonisolated extension Pb_Remote_ServerFeature: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0SERVER_FEATURE_UNSPECIFIED\0\u{1}SERVER_FEATURE_RENDERING\0\u{1}SERVER_FEATURE_BROWSE\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0SERVER_FEATURE_UNSPECIFIED\0\u{1}SERVER_FEATURE_RENDERING\0\u{1}SERVER_FEATURE_BROWSE\0\u{1}SERVER_FEATURE_ENQUEUE_NEXT\0")
 }
 
 nonisolated extension Pb_Remote_RendererFeature: SwiftProtobuf._ProtoNameProviding {
@@ -4353,7 +4369,7 @@ nonisolated extension Pb_Remote_RequestSetTrackPosition: SwiftProtobuf.Message, 
 
 nonisolated extension Pb_Remote_RequestInsertUrls: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".RequestInsertUrls"
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}playlist_id\0\u{1}urls\0\u{1}position\0\u{3}play_now\0\u{1}enqueue\0\u{1}songs\0\u{3}new_playlist_name\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}playlist_id\0\u{1}urls\0\u{1}position\0\u{3}play_now\0\u{1}enqueue\0\u{1}songs\0\u{3}new_playlist_name\0\u{3}enqueue_next\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -4368,6 +4384,7 @@ nonisolated extension Pb_Remote_RequestInsertUrls: SwiftProtobuf.Message, SwiftP
       case 5: try { try decoder.decodeSingularBoolField(value: &self._enqueue) }()
       case 6: try { try decoder.decodeRepeatedMessageField(value: &self.songs) }()
       case 7: try { try decoder.decodeSingularStringField(value: &self._newPlaylistName) }()
+      case 8: try { try decoder.decodeSingularBoolField(value: &self._enqueueNext) }()
       default: break
       }
     }
@@ -4399,6 +4416,9 @@ nonisolated extension Pb_Remote_RequestInsertUrls: SwiftProtobuf.Message, SwiftP
     try { if let v = self._newPlaylistName {
       try visitor.visitSingularStringField(value: v, fieldNumber: 7)
     } }()
+    try { if let v = self._enqueueNext {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 8)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -4410,6 +4430,7 @@ nonisolated extension Pb_Remote_RequestInsertUrls: SwiftProtobuf.Message, SwiftP
     if lhs._enqueue != rhs._enqueue {return false}
     if lhs.songs != rhs.songs {return false}
     if lhs._newPlaylistName != rhs._newPlaylistName {return false}
+    if lhs._enqueueNext != rhs._enqueueNext {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

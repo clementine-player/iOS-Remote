@@ -189,4 +189,12 @@ struct InternetBrowserTests {
         session.apply(RemoteMessage(.info) { $0.responseClementineInfo.features = [.rendering] })
         #expect(!session.canBrowse)
     }
+
+    @Test func sessionKnowsWhetherItCanQueueSongsToPlayNext() {
+        let session = RemoteSession()
+        session.apply(RemoteMessage(.info) { $0.responseClementineInfo.features = [.browse, .enqueueNext] })
+        #expect(session.canEnqueueNext)
+        session.apply(RemoteMessage(.info) { $0.responseClementineInfo.features = [.browse] })
+        #expect(!session.canEnqueueNext)
+    }
 }

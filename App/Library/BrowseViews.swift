@@ -2,7 +2,8 @@ import ClementineKit
 import SwiftUI
 
 /// The rows of a level of the library or search results. Groups open the level below; songs are
-/// added to the playlist. In edit mode, rows are selected instead.
+/// added to the playlist. Touching and holding a row offers what else can be done with it. In edit
+/// mode, rows are selected instead.
 struct BrowseRows: View {
     let level: BrowseLevel
     @Binding var selection: Set<Int>
@@ -16,7 +17,8 @@ struct BrowseRows: View {
     /// Splits artists, albums and genres into sections by their first letter, with an index.
     var alphabetical = false
     var descending = false
-    let addSong: (BrowseItem) -> Void
+    /// Adds the songs of the items to a playlist, doing an action.
+    let add: ([BrowseItem], PlaylistTarget, AddAction) -> Void
 
     var body: some View {
         if alphabetical, level.kind.isAlphabetical {
@@ -69,7 +71,7 @@ struct BrowseRows: View {
                     }
                 } else if item.kind == .song {
                     Button {
-                        addSong(item)
+                        add([item], .selected, .playIfStopped)
                     } label: {
                         BrowseRow(item: item, icon: icon(item), meta: meta(item))
                     }
@@ -85,6 +87,11 @@ struct BrowseRows: View {
                 }
             }
             .buttonStyle(.plain)
+            .contextMenu {
+                if !isEditing {
+                    BrowseAddActions(item: item) { add([item], $0, $1) }
+                }
+            }
             .listRowBackground(selection.contains(index) ? Palette.secondaryContainer : Palette.surface)
             .listRowSeparator(.hidden)
             .tag(index)
@@ -116,6 +123,29 @@ struct BrowseRow: View {
                     IconTile(systemImage: item.kind.systemImage)
                 }
             }
+        }
+    }
+}
+
+/// What can be done with an item of the library or search results, as Clementine's own library
+/// offers.
+struct BrowseAddActions: View {
+    let item: BrowseItem
+    let add: (PlaylistTarget, AddAction) -> Void
+
+    @Environment(RemoteSession.self) private var session
+
+    var body: some View {
+        Button("Play now", systemImage: "play.fill") { add(.selected, .playNow) }
+        if session.canEnqueueNext {
+            Button("Play next", systemImage: "text.line.first.and.arrowtriangle.forward") { add(.selected, .playNext) }
+        }
+        Button("Add to queue", systemImage: "text.line.last.and.arrowtriangle.forward") { add(.selected, .queue) }
+        Divider()
+        Button("Add to playlist", systemImage: "plus") { add(.selected, .append) }
+        Button("Replace playlist", systemImage: "arrow.triangle.2.circlepath") { add(.selected, .replace) }
+        Button("Open in new playlist", systemImage: "rectangle.stack.badge.plus") {
+            add(.new(item.displayTitle), .append)
         }
     }
 }
