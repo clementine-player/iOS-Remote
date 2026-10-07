@@ -230,10 +230,16 @@ From the Downloads board.
 - Large title "Downloads", subtitle "*x* free on this phone".
 - **Downloading:** a row per job ("Album Suite bergamasque", "(2/4) Claude Debussy - Prélude" or
   "Transcoding (1/3)"), with a thin progress bar and "3.2 MiB / 18 MiB (1.1 MiB/s)". Cancel button.
-- **On this phone:** finished jobs, with their result ("Download complete", "Canceled",
+- **Finished:** finished jobs, with their result ("Download complete", "Canceled",
   "Insufficient space", …). Tapping one lists its songs; tapping a song plays it in the app. Swipe to
   remove from the list (the files stay).
 - When downloads only run on Wi-Fi, a card says so with a **Change** button to the setting.
+- **On this phone:** every song saved in the downloads folder, downloaded now or before, by folder
+  and file name (so by artist and album, with the folder settings' defaults). Each is named after
+  its file, with its folders as the second line: reading the tags would mean opening every file.
+  Tapping one plays it in the app. Read when the tab shows, when the app comes back to the front,
+  and each time a download finishes.
+- With nothing downloading, downloaded or on the phone: "No downloads", and where to download from.
 - Files are saved in the app's Documents folder under `Clementine/`, visible in the Files app.
 
 ### Connection sheet
@@ -432,8 +438,9 @@ remote.
 - **In the background:** the app has the `audio` background mode. While Clementine plays here the
   connection stays open in the background; once it stops, the app lets it go as usual. iOS pauses
   playback for calls, and Clementine shows it paused.
-- **Lock screen:** while playing here, Now Playing shows the song and the cover, and its buttons
-  control Clementine.
+- **Lock screen:** while playing here, Now Playing shows the song and its cover, and its buttons
+  and position bar (for songs with a length) control Clementine. The cover comes with Clementine's
+  current song, so it's only shown once that's the song playing here.
 - **Security:** the tracks come over plain HTTP from Clementine's computer, allowed by
   `NSAllowsLocalNetworking` and `NSAllowsArbitraryLoadsForMedia`.
 
@@ -495,8 +502,10 @@ The protocol is Clementine's (clementine-player/Clementine#7530), which the Andr
 
 - Each job is its own connection (`downloader = true`) sending `DOWNLOAD_SONGS`: the current song,
   its album, a playlist, or a list of URLs.
-- For each song Clementine first offers it (chunk 0, with the song's metadata); the app accepts
-  unless the file exists and overwriting is off (`SONG_OFFER_RESPONSE`). Then chunks until
+- For each song Clementine first offers it (chunk 0, with the song's metadata and size); the app
+  accepts unless the file exists and either replacing is off or the saved file is the size offered
+  (`SONG_OFFER_RESPONSE`): the offer tells nothing else to compare, so downloading a playlist again
+  only downloads the songs that are new or changed. Then chunks until
   `chunk_number == chunk_count`. `DOWNLOAD_TOTAL_SIZE` gives the total, `TRANSCODING_FILES` the
   transcoding progress, and `DOWNLOAD_QUEUE_EMPTY` ends the job. `DISCONNECT` means downloads are
   turned off in Clementine.

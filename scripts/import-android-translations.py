@@ -223,6 +223,15 @@ def unit(value):
     return {"stringUnit": {"state": "translated", "value": value}}
 
 
+def write_catalog(path, catalog):
+    """Writes the catalog as Xcode does, so that a build doesn't rewrite it: " : " between keys
+    and values, keys sorted, an empty object over three lines, and no newline at the end."""
+    text = json.dumps(catalog, indent=2, ensure_ascii=False, separators=(",", " : "), sort_keys=True)
+    text = re.sub(r"^( *)(.* : )\{\}(,?)$", lambda m: f"{m.group(1)}{m.group(2)}{{\n\n{m.group(1)}}}{m.group(3)}",
+                  text, flags=re.M)
+    path.write_text(text, encoding="utf-8")
+
+
 def main():
     android = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "../Clementine-Android") / "app/src/main/res"
     catalog = pathlib.Path(__file__).resolve().parent.parent / "App/Resources/Localizable.xcstrings"
@@ -265,8 +274,12 @@ def main():
             value = rated.replace("$stars$", "%lld")
             entries.setdefault("Rated %lld stars", {"localizations": {}})["localizations"][locale] = unit(value)
 
-    catalog.write_text(json.dumps({"sourceLanguage": "en", "strings": dict(sorted(entries.items())), "version": "1.0"},
-                                  indent=2, ensure_ascii=False) + "\n")
+    # Into the catalog's strings, which the build keeps up to date (scripts/sync-strings.sh), with
+    # their translations from Transifex: only the translations taken from Android are replaced.
+    existing = json.loads(catalog.read_text(encoding="utf-8"))
+    for key, entry in entries.items():
+        existing["strings"].setdefault(key, {}).setdefault("localizations", {}).update(entry["localizations"])
+    write_catalog(catalog, existing)
     languages = {locale for entry in entries.values() for locale in entry["localizations"]}
     print(f"{len(entries)} strings, {len(languages)} languages")
 

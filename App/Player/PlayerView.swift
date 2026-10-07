@@ -75,7 +75,7 @@ struct PlayerView: View {
                 .frame(width: 48, height: 48)
             Spacer()
             VStack(spacing: 0) {
-                Text("Playing from")
+                Text("Playing from", comment: "Small heading at the top of the player, above the name of the playlist the song is playing from.")
                     .textStyle(.labelMedium)
                     .foregroundStyle(Palette.onSurfaceVariant)
                 Text(session.activePlaylist?.name ?? "")
@@ -140,6 +140,9 @@ struct PlayerView: View {
             }
             Spacer()
             ActionButton(title: "Queue", systemImage: "list.bullet") {
+                if let playing = session.activePlaylistID {
+                    model.selectedPlaylistID = playing
+                }
                 model.selectedTab = .queue
                 dismiss()
             }

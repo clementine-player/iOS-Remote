@@ -62,7 +62,10 @@ struct SettingsView: View {
                     Text("Only on Wi-Fi")
                     Text("Download songs only when connected to Wi-Fi.")
                 }
-                Toggle("Replace existing files", isOn: $replaceExisting)
+                Toggle(isOn: $replaceExisting) {
+                    Text("Replace existing files")
+                    Text("Downloads songs again when they differ from those on this phone.")
+                }
                 Toggle(isOn: $playlistFolder) {
                     Text("Playlist folder")
                     Text("Save a playlist's songs in a folder named after it.")
@@ -194,8 +197,7 @@ struct AboutView: View {
                 Text("David Sansome (Clementine)")
                 Text("John Maguire (Clementine)")
                 Text("Arnaud Bienner (Clementine)")
-                Link("And everyone who contributed to and translated the Android remote",
-                     destination: URL(string: "https://github.com/clementine-player/Android-Remote/graphs/contributors")!)
+                Text("Thanks to all the [contributors](https://github.com/clementine-player/Android-Remote/graphs/contributors) and [translators](https://app.transifex.com/davidsansome/clementine-remot/)!")
             }
 
             Section {

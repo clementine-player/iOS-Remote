@@ -59,6 +59,10 @@ final class AppModel {
         session.addObserver { [renderer, internet] message in
             renderer.handle(message)
             internet.handle(message)
+            // The cover comes with the song, which can arrive after the item it's for.
+            if message.type == .currentMetainfo {
+                nowPlaying.update()
+            }
         }
         internet.onAdded = { [weak self] action, result in
             self?.showAdded(action, result: result)

@@ -104,6 +104,96 @@ struct DownloadTests {
         #expect(clementine.received.last { $0.type == .songOfferResponse }?.responseSongOffer.accepted == false)
     }
 
+    /// Downloads [data] as "Clair de lune.ogg" into a folder holding [saved] under that name,
+    /// replacing existing files; returns the file, whether the offer was accepted, and the result.
+    private func downloadOver(_ saved: Data, with data: Data) async throws -> (file: URL, accepted: Bool?, status: DownloadStatus) {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        serve(clementine, songs: [(song("Clair de lune", artist: "Claude Debussy", album: "Suite"), data)])
+
+        let directory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        var options = DownloadOptions(directory: directory)
+        options.artistFolder = false
+        options.replaceExisting = true
+        let file = directory.appending(path: "Clair de lune.ogg")
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        try saved.write(to: file)
+
+        let status = await SongDownloader(
+            endpoint: clementine.endpoint, authCode: 0, request: Messages.downloadSongs(.currentItem),
+            playlistName: nil, options: options
+        ).run { _ in }
+        let accepted = clementine.received.last { $0.type == .songOfferResponse }?.responseSongOffer.accepted
+        return (file, accepted, status)
+    }
+
+    @Test func replacesSongsThatDiffer() async throws {
+        let (file, accepted, status) = try await downloadOver(Data("old".utf8), with: Data("longer".utf8))
+        #expect(status.state == .finished(nil))
+        #expect(accepted == true)
+        #expect(try Data(contentsOf: file) == Data("longer".utf8))
+        #expect(status.songs.map(\.file) == [file])
+    }
+
+    @Test func keepsSongsOfTheSameSizeWhenReplacing() async throws {
+        let (file, accepted, status) = try await downloadOver(Data("old".utf8), with: Data("new".utf8))
+        #expect(status.state == .finished(nil))
+        #expect(accepted == false)
+        #expect(try Data(contentsOf: file) == Data("old".utf8))
+        #expect(status.songs.map(\.file) == [file])
+    }
+
+    @Test func shouldDownload() {
+        #expect(SongDownloader.shouldDownload(savedSize: nil, offeredSize: 10, replaceExisting: false))
+        #expect(SongDownloader.shouldDownload(savedSize: nil, offeredSize: 10, replaceExisting: true))
+        #expect(!SongDownloader.shouldDownload(savedSize: 9, offeredSize: 10, replaceExisting: false))
+        #expect(SongDownloader.shouldDownload(savedSize: 9, offeredSize: 10, replaceExisting: true))
+        #expect(!SongDownloader.shouldDownload(savedSize: 10, offeredSize: 10, replaceExisting: true))
+    }
+
+    @Test func listsTheSongsSaved() throws {
+        let directory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        for path in [
+            "Claude Debussy/Suite bergamasque/10 Passepied.ogg",
+            "Claude Debussy/Suite bergamasque/2 Menuet.FLAC",
+            "Claude Debussy/Suite bergamasque/cover.jpg",
+            "Claude Debussy/.hidden/Prélude.mp3",
+            "Arvo Pärt/Für Alina.mp3",
+            "Spiegel im Spiegel.m4a",
+        ] {
+            let file = directory.appending(path: path)
+            try FileManager.default.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try Data("x".utf8).write(to: file)
+        }
+
+        let songs = DownloadedSong.saved(in: directory)
+        #expect(songs.map(\.title) == ["Spiegel im Spiegel", "Für Alina", "2 Menuet", "10 Passepied"])
+        #expect(songs.map(\.artist) == ["", "Arvo Pärt", "Claude Debussy / Suite bergamasque", "Claude Debussy / Suite bergamasque"])
+        #expect(songs.map(\.file.lastPathComponent) == ["Spiegel im Spiegel.m4a", "Für Alina.mp3", "2 Menuet.FLAC", "10 Passepied.ogg"])
+        #expect(try Data(contentsOf: songs[0].file) == Data("x".utf8))
+    }
+
+    @Test func listsNothingWithoutTheFolder() {
+        let directory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        #expect(DownloadedSong.saved(in: directory).isEmpty)
+    }
+
+    @Test func listsWhatItDownloads() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        serve(clementine, songs: [(song("Clair de lune", artist: "Claude Debussy", album: "Suite bergamasque"), Data("0123".utf8))])
+        let directory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        let status = await SongDownloader(
+            endpoint: clementine.endpoint, authCode: 0, request: Messages.downloadSongs(.currentItem),
+            playlistName: nil, options: DownloadOptions(directory: directory)
+        ).run { _ in }
+        #expect(status.state == .finished(nil))
+
+        let songs = DownloadedSong.saved(in: directory)
+        #expect(songs.map(\.title) == ["Clair de lune"])
+        #expect(songs.map(\.artist) == ["Claude Debussy / Suite bergamasque"])
+    }
+
     @Test func playlistFolder() {
         var options = DownloadOptions(directory: URL(filePath: "/d"))
         options.playlistFolder = true

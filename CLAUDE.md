@@ -28,6 +28,14 @@ because without it the generated scheme names the app `ClementineRemote.app`.
 
 `Packages/ClementineKit` is a Swift package, so files added there need no project change.
 
+## The String Catalog is kept up to date
+
+`App/Resources/Localizable.xcstrings` holds every string the app shows, and is what goes to
+Transifex for translating. Xcode adds a new string to it when it builds, but `xcodebuild` doesn't,
+so `scripts/build.sh` runs `scripts/sync-strings.sh` after building, which does. After adding or
+changing a string, build, and commit the updated catalog with the change: CI fails if a build
+changes it. Strings the app no longer has are marked stale, not removed.
+
 ## Keep the iOS and Android clients in step
 
 Clementine Remote has two clients: this one and the [Android

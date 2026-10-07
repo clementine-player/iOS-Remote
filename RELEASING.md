@@ -97,6 +97,42 @@ nothing, each with a notice saying so.
 submits releases. To run `scripts/archive.sh` on your own Mac, sign in to Xcode with an account
 on the team: it signs with that account.
 
+## Translations
+
+The app is translated on [Transifex](https://app.transifex.com/davidsansome/clementine-remot/), next
+to the Android remote, and `.github/workflows/translations.yml` keeps the two in step, as the
+Android remote's does:
+
+- When the String Catalog (`App/Resources/Localizable.xcstrings`) changes on `main`, it's
+  pushed to Transifex for the translators. Transifex takes the translations in it too, replacing
+  its own, so the translations made on Transifex since the last pull are pulled into it first.
+- Every night, the translations are pulled back and merged into the catalog
+  (`scripts/merge-transifex-translations.py`), and committed to `main` when they changed, as
+  "Automatic merge of translations from Transifex". Only translated strings come back, reviewed and
+  not reviewed yet alike (each pulled on its own, as one Transifex mode can leave the other
+  out), and a translation whose placeholders don't match the English is left out, with a warning. Xcode
+  still decides which strings the app has. The commit has a release note, so new translations
+  make the next release; however many nights they changed, the release notes say so once.
+- Transifex fills in strings whose English it has translated already, for this app or the
+  Android remote (its translation memory fill-up): the same wording in both apps is translated
+  once.
+
+Translations are made on Transifex, not in pull requests: the next pull would overwrite them.
+
+**One-time setup:**
+
+1. **Transifex:** the project is shared with the Android remote, and its first translations run
+   adds the languages: do that first. The catalog is uploaded as one file, and Transifex only
+   fills in languages the project has. Make an API token (*User settings → API token*):
+   `gh secret set TX_TOKEN --body <token>`. The resource needn't be made by hand: the first
+   push makes it.
+2. **GitHub:** make a deploy key with write access (*Settings → Deploy keys*), and
+   `gh secret set TX_KEY < <private key file>`. If `main`'s branch protection or rulesets would
+   refuse the push, let deploy keys bypass them. It pushes as itself so that the other
+   workflows run on the commit; the workflow's own token can't start them.
+3. **The first time,** run the workflow by hand with *Push translations* ticked: it sends the
+   catalog's translations up to Transifex, so translators start from them, then pulls.
+
 ## One-time setup
 
 1. **Create the app** in [App Store Connect](https://appstoreconnect.apple.com): *Apps → + →

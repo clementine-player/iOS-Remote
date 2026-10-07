@@ -62,6 +62,20 @@ jobs:
       - name: Build and test
         # CI has no signing account: build for the simulator without a team.
         run: scripts/build.sh test DEVELOPMENT_TEAM=
+      - name: Check the String Catalog has the app's strings
+        # The catalog is what Transifex gets to translate: a string added to the app needs the
+        # catalog the build updated committed with it.
+        run: |
+          if [ -n "$(git status --porcelain -- App/Resources/Localizable.xcstrings)" ]; then
+            git diff --stat -- App/Resources/Localizable.xcstrings
+            echo "::error::App/Resources/Localizable.xcstrings is out of date. Run scripts/build.sh and commit the catalog it updated, or take it from this run's String Catalog artifact."
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v5
+        if: failure()
+        with:
+          name: String Catalog
+          path: App/Resources/Localizable.xcstrings
 
   # A single check for branch protection to require. It runs even when a job
   # it needs fails, because GitHub treats a skipped required check as passing.

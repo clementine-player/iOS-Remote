@@ -26,6 +26,10 @@ final class DownloadsModel {
     }
 
     private(set) var jobs: [Job] = []
+    /// The songs on this phone, downloaded now or before, by folder and file name; nil until
+    /// they've been read.
+    private(set) var onPhone: [DownloadedSong]?
+    private var onPhoneReads = 0
     private var tasks: [Int: Task<Void, Never>] = [:]
     private var nextID = 0
     private unowned let model: AppModel
@@ -39,6 +43,9 @@ final class DownloadsModel {
 
     var active: [Job] { jobs.filter { !$0.isFinished } }
     var finished: [Job] { jobs.filter(\.isFinished).reversed() }
+
+    /// Nothing downloading, downloaded, or on this phone, once the songs on it have been read.
+    var isEmpty: Bool { jobs.isEmpty && onPhone?.isEmpty == true }
 
     /// Free space on the phone.
     var freeSpace: Int64? {
@@ -116,6 +123,7 @@ final class DownloadsModel {
             await shown.value
             update(id, status)
             tasks[id] = nil
+            readOnPhone()
             finished(status)
             UIApplication.shared.endBackgroundTask(background)
         }
@@ -144,6 +152,21 @@ final class DownloadsModel {
     /// Takes a finished download off the list; its songs stay on the phone.
     func remove(_ id: Int) {
         jobs.removeAll { $0.id == id && $0.isFinished }
+    }
+
+    /// Reads the songs on this phone again: when Downloads shows, and each time a download
+    /// finishes.
+    func readOnPhone() {
+        onPhoneReads += 1
+        let read = onPhoneReads
+        let directory = directory
+        Task {
+            let songs = await Task.detached { DownloadedSong.saved(in: directory) }.value
+            // An earlier read that finishes later is out of date.
+            if read == onPhoneReads {
+                onPhone = songs
+            }
+        }
     }
 
     private func requestNotifications() {

@@ -11,12 +11,20 @@ You need Clementine 1.3 or later, with Tools → Preferences → Network Remote 
 
 The design is in [design/DESIGN.md](design/DESIGN.md).
 
+## Translating
+
+The app is translated on [Transifex](https://explore.transifex.com/davidsansome/clementine-remot/),
+together with the Android remote: sign in with a GitHub account, or make a Transifex one, and
+join a language. Translations made there come back into the app by themselves, every night, and
+go out with the next release. Please don't translate in pull requests: the next night's
+translations would replace them.
+
 ## Building
 
 Needs Xcode 26 or later and [XcodeGen](https://github.com/yonaskolb/XcodeGen).
 
 ```sh
-scripts/build.sh          # regenerate the Xcode project and build for the simulator
+scripts/build.sh          # regenerate the Xcode project, build for the simulator, sync the strings
 scripts/build.sh test     # run the tests
 ```
 
@@ -62,7 +70,9 @@ the release workflow, which also takes the App Store's screenshots. See
 
 `scripts/generate-proto.sh` regenerates the protocol code from
 `Packages/ClementineKit/Proto/remotecontrolmessages.proto`, and
-`scripts/import-android-translations.py` imports the Android remote's translations.
+`scripts/merge-transifex-translations.py` merges translations pulled from Transifex (see
+[RELEASING.md](RELEASING.md#translations)). `scripts/import-android-translations.py` imported the
+Android remote's translations, before the app was on Transifex.
 
 ## Licence
 
