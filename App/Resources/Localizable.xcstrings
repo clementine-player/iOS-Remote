@@ -9,6 +9,12 @@
             "value" : "%@ (přehrává)"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (esitamisel)"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -37,6 +43,12 @@
             "value" : "%@ (tento iPad)"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (selles iPad-is)"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -63,6 +75,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ (tento telefon)"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (selles telefonis)"
           }
         },
         "fi" : {
@@ -121,6 +139,12 @@
             "value" : "%@ hvězdiček"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ tärni"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -152,6 +176,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "%1$@ · port %2$@"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "%1$@ · port %2$@"
           }
         },
@@ -220,6 +250,24 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld albums"
+                }
+              }
+            }
+          }
+        },
+        "et" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld album"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld albumit"
                 }
               }
             }
@@ -311,6 +359,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$lld h %2$lld min"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld t %2$lld min"
           }
         },
         "fi" : {
@@ -438,6 +492,24 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld elementos"
+                }
+              }
+            }
+          }
+        },
+        "et" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld objekt"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld objekti"
                 }
               }
             }
@@ -855,6 +927,12 @@
             "value" : "%lld min"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -890,6 +968,24 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld selected"
+                }
+              }
+            }
+          }
+        },
+        "et" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld on valitud"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld on valitud"
                 }
               }
             }
@@ -989,6 +1085,24 @@
             }
           }
         },
+        "et" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld lugu"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld lugu"
+                }
+              }
+            }
+          }
+        },
         "fi" : {
           "variations" : {
             "plural" : {
@@ -1078,6 +1192,24 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld songs added to %@"
+                }
+              }
+            }
+          }
+        },
+        "et" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld lugu on lisatud esitusloendisse „%@“"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld lugu on lisatud esitusloendisse „%@“"
                 }
               }
             }
@@ -1263,6 +1395,24 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "Se añadieron %lld canciones a la lista"
+                }
+              }
+            }
+          }
+        },
+        "et" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld lugu on lisatud esitusloendisse"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld lugu on lisatud esitusloendisse"
                 }
               }
             }
@@ -1668,6 +1818,12 @@
             "value" : "%lld%%"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld%%"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1700,6 +1856,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "(%1$lld/%2$lld) Please wait"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(%1$lld/%2$lld) Palun oota"
           }
         },
         "fi" : {
@@ -1752,6 +1914,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Acerca de"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rakenduse teave"
           }
         },
         "fi" : {
@@ -1900,6 +2068,12 @@
             "value" : "Přidat do seznamu skladeb"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lisa esitusloendisse"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1950,6 +2124,12 @@
             "value" : "Přidáno do seznamu skladeb"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lisatud esitusloendisse"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1978,6 +2158,12 @@
             "value" : "Adresa"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aadress"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2004,6 +2190,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Přidá do seznamu skladeb"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lisab esitusloendisse"
           }
         },
         "fi" : {
@@ -2084,6 +2276,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Avanzadas"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Täiendavad seadistused"
           }
         },
         "fi" : {
@@ -2222,6 +2420,12 @@
             "value" : "Álbum"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Album"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2354,6 +2558,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Artista / año"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Albumi esitaja / Album"
           }
         },
         "fi" : {
@@ -2530,6 +2740,12 @@
             "value" : "Alba"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Albumid"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2630,6 +2846,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Artista"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esitaja"
           }
         },
         "fi" : {
@@ -2768,6 +2990,12 @@
             "value" : "Artista / álbum"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esitaja / Album"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2902,6 +3130,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Álbum"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esitaja / Aasta"
           }
         },
         "fi" : {
@@ -3050,6 +3284,12 @@
             "value" : "Umělci"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esitajad"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3094,6 +3334,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ascendente"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kasvavalt"
           }
         },
         "fi" : {
@@ -3896,6 +4142,12 @@
             "value" : "Cancelar"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Katkesta"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4036,6 +4288,12 @@
             "value" : "Změnit"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muuda"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4114,6 +4372,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vaciar lista"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tühjenda esitusloend"
           }
         },
         "fi" : {
@@ -4262,6 +4526,12 @@
             "value" : "Clementine"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4318,6 +4588,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Control remoto de Clementine"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine'i kaugjuhtimispult"
           }
         },
         "fi" : {
@@ -4464,6 +4740,12 @@
             "value" : "Clementine nemůže přidávat do seznamu skladeb"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine ei saa seda esitusloendisse lisada"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4547,7 +4829,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Allalaadimine keelatud. Aktiveeri Clementine'i seadetes."
+            "value" : "Clementine hetkel ei luba allalaadimist. Saad selle Clementine'i kaugjuhtimisliidese seadistustes lubada."
           }
         },
         "fi" : {
@@ -4713,7 +4995,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ühitamatu versioon"
+            "value" : "Clementine'i versioon on liiga vana"
           }
         },
         "fi" : {
@@ -4880,6 +5162,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clementine en %@"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine seadmes %@"
           }
         },
         "fi" : {
@@ -5264,6 +5552,12 @@
             "value" : "Cerrar lista"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sulge esitusloend"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5572,6 +5866,12 @@
             "value" : "Conexión automática"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ühenda automaatselt"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5774,6 +6074,12 @@
             "value" : "Připojeno"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ühendatud"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5858,7 +6164,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Clementine'iga ühendamine"
+            "value" : "Ühendan Clementine'iga…"
           }
         },
         "fi" : {
@@ -5997,6 +6303,12 @@
             "value" : "Připojuje se..."
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ühendamisel…"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6047,6 +6359,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Conexión"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ühendus"
           }
         },
         "fi" : {
@@ -6340,7 +6658,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ei leidnud hosti"
+            "value" : "Clementine'iga arvuti polnud leitav"
           }
         },
         "fi" : {
@@ -6535,6 +6853,12 @@
             "value" : "Obálka"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaanepilt"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6561,6 +6885,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vytvořit"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loo"
           }
         },
         "fi" : {
@@ -6613,6 +6943,12 @@
     },
     "Data sent / received" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saadetud või vastuvõetud andmeid"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6636,6 +6972,12 @@
     "David Sansome (Clementine)" : {
       "localizations" : {
         "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "David Sansome (Clementine)"
+          }
+        },
+        "et" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "David Sansome (Clementine)"
@@ -6685,6 +7027,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Descendente"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kahanevalt"
           }
         },
         "fi" : {
@@ -6805,6 +7153,12 @@
             "value" : "Podrobnosti"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Üksiaksjad"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6849,6 +7203,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Disco"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plaat"
           }
         },
         "fi" : {
@@ -7009,6 +7369,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desconectar"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Katkesta ühendus"
           }
         },
         "fi" : {
@@ -7178,7 +7544,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lahti ühendatud"
+            "value" : "Ühendus on katkestatud"
           }
         },
         "fi" : {
@@ -7707,6 +8073,12 @@
             "value" : "Hecho"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valmis"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7849,6 +8221,12 @@
             "value" : "Descarga"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laadi alla"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7988,7 +8366,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Allalaadimine tühistatud"
+            "value" : "Allalaadimine on tühistatud"
           }
         },
         "fi" : {
@@ -8154,7 +8532,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Allalaadimine lõpetatud"
+            "value" : "Allalaadimine on lõpetatud"
           }
         },
         "fi" : {
@@ -8364,7 +8742,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Esitusloendi allalaadimine"
+            "value" : "Laadi esitusloend alla"
           }
         },
         "fi" : {
@@ -8855,6 +9233,12 @@
     },
     "Downloading" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allalaadimisel"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8910,7 +9294,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Andmete allalaadimine"
+            "value" : "Andmed on allalaadimisel"
           }
         },
         "fi" : {
@@ -9067,6 +9451,12 @@
             "value" : "Descargando la colección"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muusikakogu on allalaadimisel…"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9219,6 +9609,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Descargas"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allalaadimised"
           }
         },
         "fi" : {
@@ -9378,7 +9774,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Allalaadimine on lubatud ainult wifi kaudu"
+            "value" : "Allalaadimine on lubatud ainult WiFi võrgus"
           }
         },
         "fi" : {
@@ -9599,6 +9995,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nombre de archivo"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fail"
           }
         },
         "fi" : {
@@ -9867,6 +10269,12 @@
     },
     "Finished" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lõpetatud"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9918,6 +10326,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Carpetas"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaustad"
           }
         },
         "fi" : {
@@ -10056,6 +10470,12 @@
             "value" : "Género"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Žanr"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10184,6 +10604,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Género / artista / álbum"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Žanr / Album"
           }
         },
         "fi" : {
@@ -10464,6 +10890,12 @@
             "value" : "Agrupación"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grupeerimine"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10592,6 +11024,12 @@
     },
     "Internet" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Internet"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10686,6 +11124,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mantener pantalla encendida"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jäta ekraan sisselülitatuks"
           }
         },
         "fi" : {
@@ -10806,6 +11250,12 @@
             "value" : "Last.fm"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last.fm"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10862,6 +11312,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Duración"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kestus"
           }
         },
         "fi" : {
@@ -11044,6 +11500,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Colección"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muusikakogu"
           }
         },
         "fi" : {
@@ -11385,7 +11847,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Esitusloendite allalaadimine"
+            "value" : "Esitusloendid on laadimisel"
           }
         },
         "fi" : {
@@ -11518,6 +11980,12 @@
     },
     "Loading…" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laadimisel…"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11958,6 +12426,12 @@
     },
     "Lyrics" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laulusõnad"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12112,6 +12586,12 @@
     },
     "Next" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Järgmine"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12162,6 +12642,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Próxima canción"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Järgmine lugu"
           }
         },
         "fi" : {
@@ -12309,7 +12795,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pole allalaadimisi!"
+            "value" : "Pole allalaadimisi"
           }
         },
         "fi" : {
@@ -12497,7 +12983,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Laulusõnu ei leitud"
+            "value" : "Laulusõnu ei leidu."
           }
         },
         "fi" : {
@@ -12704,6 +13190,12 @@
             "value" : "No conectado"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pole ühendatud"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12860,6 +13352,12 @@
     },
     "Nothing here" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siin pole mitte midagi"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12981,7 +13479,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ainult WIFI"
+            "value" : "Ainult WiFi võrgus"
           }
         },
         "fi" : {
@@ -13158,6 +13656,12 @@
     },
     "Open in new playlist" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ava uues esitusloendis"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13202,6 +13706,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Código abierto"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avatud lähtekoodiga tarkvara"
           }
         },
         "fi" : {
@@ -13422,6 +13932,12 @@
             "value" : "Pausar"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peata esitus"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13628,6 +14144,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reproducir"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esita"
           }
         },
         "fi" : {
@@ -13902,6 +14424,12 @@
     },
     "Play next" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esita järgmisena"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13924,6 +14452,12 @@
     },
     "Play now" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esita kohe"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14156,6 +14690,12 @@
             "value" : "Reproductor"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pleier"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14286,6 +14826,12 @@
     },
     "Playing" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esitamisel"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14397,6 +14943,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lista"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esitusloend"
           }
         },
         "fi" : {
@@ -14999,6 +15551,12 @@
     },
     "Previous" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eelmine"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15021,6 +15579,12 @@
     },
     "Queue" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lisa järjekorda"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15777,6 +16341,12 @@
             "value" : "Valoración"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinnang"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16001,6 +16571,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quitar de la lista"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eemalda esitusloendist"
           }
         },
         "fi" : {
@@ -16815,6 +17391,12 @@
     },
     "Replace playlist" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asenda esitusloend"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17189,6 +17771,12 @@
     },
     "Search again" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otsi lugu"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17570,7 +18158,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Seaded"
+            "value" : "Seadistused"
           }
         },
         "fi" : {
@@ -18463,6 +19051,12 @@
             "value" : "Tamaño"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suurus"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18639,6 +19233,12 @@
             "value" : "Canción"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lugu"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18789,6 +19389,12 @@
     },
     "Songs" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lood"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18861,6 +19467,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Orden"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Järjestus"
           }
         },
         "fi" : {
@@ -19008,7 +19620,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Allalaadimise alustamine"
+            "value" : "Allalaadimine on käivitamisel"
           }
         },
         "fi" : {
@@ -19185,6 +19797,12 @@
     },
     "Stations" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raadiojaaamad"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19235,6 +19853,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Detener"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lõpeta"
           }
         },
         "fi" : {
@@ -19370,7 +19994,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tühista peatumine pärast loo lõppu."
+            "value" : "Lõpeta esitus peale seda lugu"
           }
         },
         "fi" : {
@@ -19573,6 +20197,12 @@
     },
     "Switching…" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vahetamisel…"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19694,7 +20324,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vale kood"
+            "value" : "See pole korrektne kood"
           }
         },
         "fi" : {
@@ -19932,7 +20562,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ruum otsas, allalaadimise katkestamine."
+            "value" : "Selles nutiseadmes pole piisavalt andmeruumi"
           }
         },
         "fi" : {
@@ -20130,7 +20760,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Esitusloend on tühi!"
+            "value" : "See esitusloend on tühi"
           }
         },
         "fi" : {
@@ -20401,6 +21031,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pista"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lugu"
           }
         },
         "fi" : {
@@ -20697,6 +21333,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desconocido"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pole teada"
           }
         },
         "fi" : {
@@ -21263,6 +21905,12 @@
             "value" : "Año"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aasta"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21415,6 +22063,12 @@
     },
     "a while" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ühe hetke"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
