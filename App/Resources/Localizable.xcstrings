@@ -27,6 +27,12 @@
             "value" : "%@ (in riproduzione)"
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (dimainkan)"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -59,6 +65,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ (questo iPad)"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (iPad ini)"
           }
         },
         "ru" : {
@@ -95,6 +107,12 @@
             "value" : "%@ (questo telefono)"
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (telefon ini)"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -111,6 +129,12 @@
             "value" : "%@ zdarma na tomto telefonu"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vaba andmeruumi on selles telefonis %@"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -121,6 +145,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ liberi su questo telefono"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ bebas dalam telefon ini"
           }
         },
         "ru" : {
@@ -155,6 +185,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ stelle"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ bintang"
           }
         },
         "ru" : {
@@ -195,6 +231,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ · porta %2$@"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · port %2$@"
           }
         },
         "ru" : {
@@ -315,6 +357,18 @@
             }
           }
         },
+        "ms" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld album"
+                }
+              }
+            }
+          }
+        },
         "ru" : {
           "variations" : {
             "plural" : {
@@ -377,6 +431,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$lld h %2$lld min"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld j %2$lld min"
           }
         },
         "ru" : {
@@ -945,6 +1005,12 @@
             "value" : "%lld min"
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1028,6 +1094,18 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld selezionati"
+                }
+              }
+            }
+          }
+        },
+        "ms" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld dipilih"
                 }
               }
             }
@@ -1145,6 +1223,18 @@
             }
           }
         },
+        "ms" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld buah lagu"
+                }
+              }
+            }
+          }
+        },
         "ru" : {
           "variations" : {
             "plural" : {
@@ -1252,6 +1342,18 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld brani aggiunti a %@"
+                }
+              }
+            }
+          }
+        },
+        "ms" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld buah lagu ditambah ke dalam %@"
                 }
               }
             }
@@ -1836,6 +1938,12 @@
             "value" : "%lld%%"
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld%%"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1874,6 +1982,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "(%1$lld/%2$lld) Attendi"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(%1$lld/%2$lld) Tunggu sebentar"
           }
         },
         "ru" : {
@@ -2052,6 +2166,12 @@
             "value" : "Informazioni su Clementine Remote"
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perihal Clementine Remote"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2086,6 +2206,12 @@
             "value" : "Aggiungi alla scaletta"
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tambah ke senarai main"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2096,6 +2222,12 @@
     },
     "Add to queue" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lisa esitusjärjekorda"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2142,6 +2274,12 @@
             "value" : "Aggiunto alla scaletta"
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ditambah ke dalam senarai main"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2174,6 +2312,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Indirizzo"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alamat"
           }
         },
         "ru" : {
@@ -2210,6 +2354,12 @@
             "value" : "Lo aggiunge alla scaletta"
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tambah ia ke dalam senarai main"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2236,6 +2386,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aggiunge alla scaletta selezionata nella coda. Tieni premuto per sceglierne un'altra."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tambah ke senarai main terpilih dalam baris gilir. Sentuh dan tahan untuk pilih yang lain."
           }
         },
         "ru" : {
@@ -2462,6 +2618,12 @@
             "value" : "Albumas"
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Album"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2514,6 +2676,12 @@
             "value" : "Album %@"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Album %@"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2521,6 +2689,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Album %@"
+          }
+        },
+        "ms" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Album %@"
@@ -2684,6 +2858,12 @@
             "value" : "Složky alb"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Albumi kaustad"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2694,6 +2874,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cartelle degli album"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder album"
           }
         },
         "ru" : {
@@ -2712,6 +2898,12 @@
             "value" : "Album · %@"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Album · %@"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2719,6 +2911,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Album · %@"
+          }
+        },
+        "ms" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Album · %@"
@@ -2758,6 +2956,12 @@
             "value" : "Album"
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Album"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2774,6 +2978,12 @@
             "value" : "Vzhled"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Välimus"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2784,6 +2994,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aspetto"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Penampilan"
           }
         },
         "ru" : {
@@ -2802,6 +3018,12 @@
             "value" : "Arnaud Bienner (Clementine)"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arnaud Bienner (Clementine)"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2809,6 +3031,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arnaud Bienner (Clementine)"
+          }
+        },
+        "ms" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Arnaud Bienner (Clementine)"
@@ -3256,6 +3484,12 @@
             "value" : "Složky umělců"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esitaja kaustad"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3266,6 +3500,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cartelle degli artisti"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder artis"
           }
         },
         "ru" : {
@@ -3300,6 +3540,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Artisti"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artis"
           }
         },
         "ru" : {
@@ -4260,6 +4506,12 @@
             "value" : "Zrušit stahování"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Katkesta allalaadimine"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4270,6 +4522,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Annulla lo scaricamento"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Batal muat turun"
           }
         },
         "ru" : {
@@ -4306,6 +4564,12 @@
             "value" : "Cambia"
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ubah"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4322,6 +4586,12 @@
             "value" : "Vybrat, kde přehrávat"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vali esitamise koht"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4332,6 +4602,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Scegli dove riprodurre"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pilih lokasi mahu dimainkan"
           }
         },
         "ru" : {
@@ -4498,6 +4774,12 @@
             "value" : "Smazat seznam skladeb"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kas tühjendad esitusloendi?"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4508,6 +4790,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vuoi ripulire la scaletta?"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kosongkan senarai main?"
           }
         },
         "ru" : {
@@ -4539,6 +4827,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine"
+          }
+        },
+        "ms" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clementine"
@@ -4636,6 +4930,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clementine 리모콘"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine Remote"
           }
         },
         "my" : {
@@ -4758,6 +5058,12 @@
             "value" : "Clementine non può aggiungerlo alla scaletta"
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine tidak dapat menambahnya ke dalam senarai main"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4784,6 +5090,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clementine crea la scaletta e la mostra."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine mencipta senarai main dan memaparkannya."
           }
         },
         "ru" : {
@@ -5288,6 +5600,12 @@
             "value" : "Clementine accetta connessioni solo dalla sua rete locale."
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine hanya menerima sambungan daripada rangkaian setempat sahaja."
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5372,6 +5690,12 @@
             "value" : "Clementine ha rifiutato la connessione"
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine menolak sambungan"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5400,6 +5724,12 @@
             "value" : "Clementine ha smesso di rispondere. Verifica che sia ancora in esecuzione, poi riconnettiti."
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine berhanti menmbalas, Periksa sama ada ia masih berjalan, kemudian sambung sekali lagi."
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5426,6 +5756,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Volume di Clementine"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine volume"
           }
         },
         "ru" : {
@@ -5472,6 +5808,12 @@
             "value" : "Protokol dálkového ovládání Clementine"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine'i kaugjuhtimisprotokoll"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5482,6 +5824,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Protocollo di controllo remoto di Clementine"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protokol kawalan jauh Clementine"
           }
         },
         "ru" : {
@@ -5500,6 +5848,12 @@
             "value" : "Zavřít přehrávač"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sulge pleier"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5510,6 +5864,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Chiudi il lettore"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutup pemain"
           }
         },
         "ru" : {
@@ -5760,6 +6120,12 @@
             "value" : "Prisijungti"
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sambung"
+          }
+        },
         "my" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5990,6 +6356,12 @@
             "value" : "Připojit se ke Clementine"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ühenda Clementine'iga"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6000,6 +6372,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Connettiti a Clementine"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sambung ke Clementine"
           }
         },
         "ru" : {
@@ -6028,6 +6406,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Connettiti prima a Clementine tramite Clementine Remote."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sambung ke Clementine dalam Clementine Remote dahulu."
           }
         },
         "ru" : {
@@ -6219,6 +6603,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Jungiamasi prie Clementine"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menyambung ke Clementine…"
           }
         },
         "my" : {
@@ -6715,6 +7105,12 @@
             "value" : "Nepavyko pasiekti kompiuterio"
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gagal mencapai Clementine"
+          }
+        },
         "my" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6823,6 +7219,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nepodařilo se uložit soubor"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faili salvestamine ei õnnestunud"
           }
         },
         "fi" : {
@@ -7489,6 +7891,12 @@
     },
     "Disconnect from Clementine" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Katkesta ühendus Clementine'iga"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7599,6 +8007,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Atsijungta"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terputus"
           }
         },
         "my" : {
@@ -8665,6 +9079,12 @@
     },
     "Download finished" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allalaadimine on lõppenud"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9351,6 +9771,12 @@
             "value" : "Atsiunčiami duomenys"
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Memuat turun data…"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9907,6 +10333,12 @@
     },
     "Downloads only run on Wi-Fi." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allalaadimine toimib ainult WiFi võrgus"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10524,6 +10956,12 @@
             "value" : "Žanras"
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Genre"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10746,6 +11184,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Género / artista / álbum"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Žanr / Esitaja / Album"
           }
         },
         "fi" : {
@@ -11074,6 +11518,12 @@
     },
     "John Maguire (Clementine)" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "John Maguire (Clementine)"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11263,6 +11713,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last.fm"
+          }
+        },
+        "ms" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Last.fm"
@@ -11904,6 +12360,12 @@
             "value" : "Atsiunčiami grojaraščiai"
           }
         },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Memuatkan senarai main"
+          }
+        },
         "my" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12024,6 +12486,12 @@
     },
     "Looking for Clementine…" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otsin Clementine'iga arvutit…"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12046,6 +12514,12 @@
     },
     "Looking for lyrics…" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otsin  laulusõnu…"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12068,6 +12542,12 @@
     },
     "Lost the connection to Clementine" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ühendus Clementine'iga on katkenud"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12454,6 +12934,12 @@
     },
     "Lyrics and details" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laulusõnad ja üksikasjad"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12476,6 +12962,12 @@
     },
     "More options" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lisavalikud"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12498,6 +12990,12 @@
     },
     "Name" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nimi"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12542,6 +13040,12 @@
     },
     "New playlist" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uus esitusloend"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12564,6 +13068,12 @@
     },
     "New playlist…" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uus esitusloend…"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12928,6 +13438,12 @@
     },
     "No library yet" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muusikakogu veel pole"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13116,6 +13632,12 @@
     },
     "No song playing" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ükski lugu ei ole hetkel esitamisel"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13138,6 +13660,12 @@
     },
     "No songs" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lugusid pole"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13330,6 +13858,12 @@
     },
     "Not showing up? Check that its network remote is turned on, or enter its address below." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kas kuidagi  pole näha? Kontrolli, kas arvutis on ligipääs võrgus sisse lülitatud või sisesta aadress käsitsi."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13380,6 +13914,12 @@
     },
     "OK" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sobib"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13402,6 +13942,12 @@
     },
     "On this phone" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selles telefonis"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13424,6 +13970,12 @@
     },
     "On your network" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sinu võrgus"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13634,6 +14186,12 @@
     },
     "Open Settings" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ava seadistused"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13836,6 +14394,12 @@
     },
     "Opens the player" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avatakse pleieris"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13858,6 +14422,12 @@
     },
     "Or enter its address" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Või sisesta aadress"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13880,6 +14450,12 @@
     },
     "Other matches" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muud vasted"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14050,6 +14626,12 @@
     },
     "Pauses Clementine." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peatab Clementine'i."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14072,6 +14654,12 @@
     },
     "Phone volume" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telefoni helivaljus"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14094,6 +14682,12 @@
     },
     "Pick the Clementine you want to control. It needs to be on the same Wi-Fi as this phone." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vali arvuti, milles leiduvat Clementine'i soovid juhtida. Ta peab olema selle nutiseadmega samas WiFi võrgus."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14292,6 +14886,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "N.º de reproducciones"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esitamisi"
           }
         },
         "fi" : {
@@ -14530,6 +15130,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reproducir/pausar"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esita / Peata"
           }
         },
         "fi" : {
@@ -14855,6 +15461,12 @@
     "Playing from" : {
       "comment" : "Small heading at the top of the player, above the name of the playlist the song is playing from.",
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esitamisel asukohast"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14877,6 +15489,12 @@
     },
     "Playing next" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esitamisel järgmisena"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15079,6 +15697,12 @@
     },
     "Playlist folder" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esitusloendi kaust"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15155,6 +15779,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "¡Actualice Clementine! Necesita Clementine %1$@ o posterior."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palun uuenda arvutis Clementine'i versiooni. Selle versioon peaks olema %@ või hilisem."
           }
         },
         "fi" : {
@@ -15281,6 +15911,12 @@
             "value" : "Puerto"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Port"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15321,6 +15957,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Prievadas"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Port"
           }
         },
         "my" : {
@@ -15375,6 +16017,12 @@
     },
     "Position" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asukoht"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15425,6 +16073,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Optimizando la base de datos"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valmistan muusikakogu ette…"
           }
         },
         "fi" : {
@@ -15692,6 +16346,18 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "Valuta con %lld stelle"
+                }
+              }
+            }
+          }
+        },
+        "ms" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ditaraf %lld bintang"
                 }
               }
             }
@@ -16477,6 +17143,12 @@
     },
     "Reconnecting to Clementine" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ühendan uuesti Clementine'iga"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16499,6 +17171,12 @@
     },
     "Reconnecting…" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ühendan uuesti…"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16521,6 +17199,12 @@
     },
     "Remove from list" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eemalda loendist"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18059,6 +18743,12 @@
     },
     "Select" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vali"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18081,6 +18771,12 @@
     },
     "Select songs" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vali lood"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18103,6 +18799,12 @@
     },
     "Set up in Clementine" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seadista Clementine'is"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18297,6 +18999,12 @@
     },
     "Show" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näita"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18461,6 +19169,12 @@
     },
     "Shows the cover full size" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näitab täismõõdus kaanepilti"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18483,6 +19197,12 @@
     },
     "Shows the lyrics" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näita laulusõnu"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19345,6 +20065,12 @@
     },
     "Song %@" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lugu %@"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19367,6 +20093,12 @@
     },
     "Song · %@" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lugu · %@"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19775,6 +20507,12 @@
     },
     "Station · %@" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raadiojaaam · %@"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20937,6 +21675,12 @@
     },
     "Too many wrong auth codes" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liiga mitu vale autentimiskoodi sisestust"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20959,6 +21703,12 @@
     },
     "Too many wrong auth codes. Clementine won't check another from this phone for %@." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liiga mitu vale autentimiskoodi sisestust. Clementine ei kontrolli sellest telefonist päritud koode %@."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21197,6 +21947,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Convirtiendo archivos"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kodeerin faile"
           }
         },
         "fi" : {
@@ -21447,6 +22203,12 @@
     },
     "Update library" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uuenda muusikakogu"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21623,6 +22385,12 @@
     },
     "Version %@" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versioon %@"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21645,6 +22413,12 @@
     },
     "Volume %lld%%" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helivaljus %lld%%"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
