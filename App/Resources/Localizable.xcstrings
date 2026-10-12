@@ -233,6 +233,12 @@
             "value" : "%1$@ · port %2$@"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · puerto %2$@"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -454,6 +460,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "%1$lld h %2$lld min"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "%1$lld h %2$lld min"
           }
         },
@@ -1024,6 +1036,12 @@
     "%lld min" : {
       "localizations" : {
         "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min"
+          }
+        },
+        "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld min"
@@ -2268,6 +2286,12 @@
             "value" : "O Clementine Remote"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine'i kaugjuhtimispuldi teave"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2300,6 +2324,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Přidat do seznamu skladeb"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir a lista"
           }
         },
         "et" : {
@@ -2370,6 +2400,12 @@
             "value" : "Přidáno do seznamu skladeb"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se añadió a la lista"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2408,6 +2444,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Adresa"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dirección"
           }
         },
         "et" : {
@@ -3052,6 +3094,12 @@
             "value" : "Alba"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Álbumes"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3636,6 +3684,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Umělci"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artistas"
           }
         },
         "et" : {
@@ -4660,6 +4714,12 @@
             "value" : "Změnit"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiar"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4698,6 +4758,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vybrat, kde přehrávat"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elija dónde reproducir"
           }
         },
         "et" : {
@@ -5158,6 +5224,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clementine nemůže přidávat do seznamu skladeb"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine no lo puede añadir a la lista"
           }
         },
         "et" : {
@@ -5708,6 +5780,18 @@
             "value" : "Clementine přijímá pouze připojení z vlastní místní sítě."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine solo acepta conexiones de su red local."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine lubab ühendusi vaid kohtvõrgust."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5798,6 +5882,18 @@
             "value" : "Clementine odmítla spojení"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine rechazó la conexión"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine keeldus ühendusest"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5864,6 +5960,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hlasitost Clementine"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine'i helivaljus"
           }
         },
         "fi" : {
@@ -7675,6 +7777,12 @@
             "value" : "Podrobnosti"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detalles"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9445,6 +9553,12 @@
             "value" : "Solo descargar canciones mientras está conectado a una red wifi."
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laadi lood alla vaid WiFi võrgus."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9627,6 +9741,12 @@
             "value" : "La descarga ha comenzado."
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allalaadimine algas"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9773,6 +9893,12 @@
     },
     "Downloading" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descargando"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10453,6 +10579,12 @@
     },
     "Downloads only run on Wi-Fi." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las descargas solo se ejecutan con wifi."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10481,6 +10613,12 @@
     },
     "Downloads songs again when they differ from those on this phone." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vuelve a descargar las canciones cuando no coinciden con las que hay en este móvil."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11588,6 +11726,12 @@
     },
     "Internet" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Internet"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12568,6 +12712,12 @@
     },
     "Loading…" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cargando…"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12612,6 +12762,12 @@
     },
     "Looking for Clementine…" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscando a Clementine…"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13032,6 +13188,12 @@
     },
     "Lyrics" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letra"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13060,6 +13222,12 @@
     },
     "Lyrics and details" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letra y detalles"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13088,6 +13256,12 @@
     },
     "More options" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más opciones"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13222,6 +13396,12 @@
     },
     "Next" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siguiente"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13962,6 +14142,12 @@
     },
     "Not looking on this network" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se está buscando en esta red"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13984,6 +14170,12 @@
     },
     "Not showing up? Check that its network remote is turned on, or enter its address below." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿No aparece? Cerciórese de que el mando de red esté activado o introduzca su dirección:"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14096,6 +14288,12 @@
     },
     "On your network" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En su red"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14548,6 +14746,12 @@
     },
     "Or enter its address" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O introduzca su dirección"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14576,6 +14780,12 @@
     },
     "Other matches" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otras coincidencias"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14808,6 +15018,12 @@
     },
     "Pick the Clementine you want to control. It needs to be on the same Wi-Fi as this phone." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elija el Clementine que quiere controlar. Debe estar en la misma red wifi que este teléfono."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15150,6 +15366,12 @@
     },
     "Play next" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reproducir a continuación"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15178,6 +15400,12 @@
     },
     "Play now" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reproducir ahora"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15206,6 +15434,12 @@
     },
     "Play on" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reproducir en"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16331,6 +16565,12 @@
     },
     "Previous" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anterior"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16359,6 +16599,12 @@
     },
     "Queue" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cola"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18225,6 +18471,12 @@
     },
     "Replace playlist" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reemplazar lista"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18493,6 +18745,12 @@
             "value" : "Busque lo que quiera"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otsi Clementine'ist"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18605,6 +18863,12 @@
     },
     "Search again" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar nuevamente"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18827,6 +19091,12 @@
     },
     "Searching for “%@”…" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscando «%@»…"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20271,6 +20541,12 @@
     },
     "Songs" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Canciones"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20685,6 +20961,12 @@
     },
     "Stations" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emisoras"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20876,7 +21158,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Activa/desactiva la detención tras finalizar la pista."
+            "value" : "Detener al finalizar esta pista"
           }
         },
         "et" : {
@@ -21351,6 +21633,12 @@
     },
     "That's no longer in Clementine" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ya no está en Clementine"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21825,6 +22113,12 @@
     },
     "Too many wrong auth codes" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demasiados códigos de autenticación incorrectos"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22987,6 +23281,12 @@
     },
     "a while" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "un rato"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
