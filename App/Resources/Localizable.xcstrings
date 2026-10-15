@@ -5272,6 +5272,12 @@
             "value" : "Clementine vytvoří seznam skladeb a zobrazí ho."
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine koostab esitusloendi ja kuvab seda."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7109,6 +7115,12 @@
     },
     "Copyright Apple Inc. and the SwiftProtobuf project authors. Licensed under the Apache License, Version 2.0." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoriõigused kuuluvad Apple Inc.-ile ja SwiftProtobuf projekti autoritele. Litsentseeritud Apache'i litsentsi versioon 2.0 alusel."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7135,6 +7147,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Autorské právo David Sansome a Andreas Muttscheller. Licencováno pod licencí Apache, verze 2.0."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoriõigused David Sansome'ile ja Andreas Muttschellerile. Litsentseeritud Apache'i litsentsi versioon 2.0 alusel."
           }
         },
         "fi" : {
@@ -7165,6 +7183,12 @@
             "value" : "Nepodařilo se připojit ke Clementine"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine'iga ühendamine ei õnnestunud"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7187,6 +7211,12 @@
     },
     "Couldn't create the playlist. Creating playlists needs Clementine 1.4 or later." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esitusloendi koostamine ei õnnestunud - see eeldab, et kasutusel on Clementine 1.4 või uuem."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7213,6 +7243,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nepodařilo se stáhnout sbírku: %@"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muusikakogu allalaadimine ei õnnestunud: %@"
           }
         },
         "fi" : {
@@ -7415,6 +7451,12 @@
             "value" : "Nepodařilo se spojit se s Clementine."
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine'iga arvuti pole leitav."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7543,6 +7585,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tmavý"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tume kujundus"
           }
         },
         "fi" : {
@@ -8319,6 +8367,12 @@
     },
     "Disconnects Clementine Remote from Clementine." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Katkestab Clementine'i kaugjuhtimisrakenduse ühenduse Clementine'iga."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9335,6 +9389,12 @@
     },
     "Download library" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laadi muusikakogu alla"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9871,6 +9931,12 @@
     },
     "Downloaded songs" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allalaaditud lood"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12176,6 +12242,12 @@
     },
     "Let Clementine play on this phone" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Luba Clementine'il esitada muusikat selles telefonis"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12518,6 +12590,12 @@
     },
     "Light" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hele kujundus"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16705,6 +16783,24 @@
             }
           }
         },
+        "et" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Hinda %lld tärniga"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Hinda %lld tärniga"
+                }
+              }
+            }
+          }
+        },
         "fi" : {
           "variations" : {
             "plural" : {
@@ -16914,6 +17010,24 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "Calificación: %lld estrellas"
+                }
+              }
+            }
+          }
+        },
+        "et" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Hinnatud %lld tärniga"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Hinnatud %lld tärniga"
                 }
               }
             }
@@ -18897,6 +19011,12 @@
     },
     "Search the library" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otsi muusikakogust"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19095,6 +19215,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Buscando «%@»…"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otsin märksõna „%@“…"
           }
         },
         "fi" : {
@@ -21329,6 +21455,12 @@
     },
     "Streams can't be downloaded" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voogedastuse allalaadimine pole võimalik"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21345,6 +21477,12 @@
     },
     "Switch Clementine" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vaheta Clementine'i"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21417,6 +21555,12 @@
     },
     "Thanks to all the [contributors](https://github.com/clementine-player/Android-Remote/graphs/contributors) and [translators](https://app.transifex.com/davidsansome/clementine-remot/)!" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tänud kõigile [kaasautoritele](https://github.com/clementine-player/Android-Remote/graphs/contributors) ja [tõlkijatele](https://app.transifex.com/davidsansome/clementine-remot/)!"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21639,6 +21783,12 @@
             "value" : "Ya no está en Clementine"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seda enam ei leidu Clementine'is"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21661,6 +21811,12 @@
     },
     "The library Clementine sent is damaged" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine'i edastatud muusikakogu on vigane"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21683,6 +21839,12 @@
     },
     "The phone's volume buttons change Clementine's volume while the app is open." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kui rakendus on avatud, siis telefoni helivaljuse nupud muudavad Clementine'i helivaljust."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22885,6 +23047,12 @@
     },
     "Volume buttons control Clementine" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helivaljuse nupud juhuvad Clementine'i"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22935,6 +23103,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Paso de volumen"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helivaljuse samm"
           }
         },
         "fi" : {
