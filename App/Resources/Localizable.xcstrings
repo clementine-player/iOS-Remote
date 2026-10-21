@@ -13084,6 +13084,12 @@
     },
     "Love on Last.fm" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Märgi Last.fm-is meeldivaks"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15955,6 +15961,12 @@
     },
     "Playing on %@" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esitamisel asukohas %@"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
