@@ -246,7 +246,15 @@ final class Screenshots: XCTestCase {
             reveal.tap()
         }
         let field = try waitFor(app.searchFields.firstMatch)
-        field.tap()
+        // A tap doesn't always give the field the keyboard on a runner, and typing then fails.
+        let focused = NSPredicate(format: "hasKeyboardFocus == true")
+        for _ in 1...3 {
+            field.tap()
+            let focus = XCTNSPredicateExpectation(predicate: focused, object: field)
+            if XCTWaiter.wait(for: [focus], timeout: Self.settle) == .completed {
+                break
+            }
+        }
         field.typeText(text + "\n")
     }
 
