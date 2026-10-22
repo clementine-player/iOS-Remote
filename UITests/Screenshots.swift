@@ -39,15 +39,18 @@ final class Screenshots: XCTestCase {
         app = XCUIApplication()
         // Stay on the connect screen, and fill in Clementine's address.
         app.launchArguments = ["-pref_autoconnect", "NO", "-save_clementine_ip", host]
-        do {
-            try takeScreenshots()
-        } catch {
-            // What the screen showed, to see why.
-            try? save(XCUIScreen.main.screenshot(), as: "failure")
-            try? app.debugDescription.write(
-                to: directory.appendingPathComponent(prefix + "failure.txt"), atomically: true, encoding: .utf8)
-            throw error
-        }
+        try takeScreenshots()
+    }
+
+    /// On a failure, what the screen showed, to see why: whether the test threw, or one of
+    /// XCTest's own checks failed, as typing into a field without the keyboard does.
+    /// scripts/post_screenshots.sh looks for failure.png, so a failed run's missing screens don't
+    /// replace main's.
+    override func tearDownWithError() throws {
+        guard let app, let directory, testRun?.hasSucceeded == false else { return }
+        try? save(XCUIScreen.main.screenshot(), as: "failure")
+        try? app.debugDescription.write(
+            to: directory.appendingPathComponent(prefix + "failure.txt"), atomically: true, encoding: .utf8)
     }
 
     private func takeScreenshots() throws {
