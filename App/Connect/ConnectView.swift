@@ -267,7 +267,7 @@ struct ConnectView: View {
         }
     }
 
-    private func problemMessage(_ problem: ConnectProblem) -> LocalizedStringKey {
+    private func problemMessage(_ problem: ConnectProblem) -> LocalizedStringResource {
         switch problem {
         case .authCode:
             "Enter the auth code shown in Clementine's Network Remote settings."
@@ -286,7 +286,9 @@ struct ConnectView: View {
         case .notLocalNetwork:
             "Clementine only accepts connections from its local network. To connect from elsewhere, turn off \"Only allow connections from the local network\" in its Network Remote settings."
         case .tooManyWrongAuthCodes(let retryAfter):
-            "Clementine won't check another auth code from this phone for \(retryAfter.waitDescription). Then enter the code shown in its Network Remote settings."
+            LocalizedStringResource(
+                "Clementine won't check another auth code from this phone for \(retryAfter.waitDescription). Then enter the code shown in its Network Remote settings.",
+                comment: "The placeholder is how long Clementine said to wait before it checks another auth code from this phone: \"10 seconds\", \"1 minute\", \"3 minutes\", \"2 hours\", or \"a while\" if it didn't say. The iOS app shows the same sentence with the duration in iOS's own words, which can't take another grammatical form, so write the sentence so the duration reads right as it is.")
         }
     }
 }
