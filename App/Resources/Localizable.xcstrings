@@ -16895,6 +16895,9 @@
         }
       }
     },
+    "Rate %@ stars" : {
+
+    },
     "Rate %lld stars" : {
       "localizations" : {
         "cs" : {
@@ -17072,6 +17075,9 @@
           }
         }
       }
+    },
+    "Rated %@ stars" : {
+
     },
     "Rated %lld stars" : {
       "localizations" : {

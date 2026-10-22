@@ -89,7 +89,11 @@ struct SongDetailsView: View {
                 .frame(width: 96, alignment: .leading)
             Rating(stars: song.rating * 5) { stars in
                 session.rate(stars: stars)
-                model.toasts.show("Rated \(stars) stars")
+                if stars == stars.rounded() {
+                    model.toasts.show("Rated \(Int(stars)) stars")
+                } else {
+                    model.toasts.show("Rated \(stars.formatted()) stars")
+                }
             }
         }
 
@@ -141,25 +145,31 @@ private struct DetailRow: View {
     }
 }
 
-/// Clementine's rating in half stars. Tapping a star rates the song that many stars.
+/// Clementine's rating in half stars. Tapping a star rates the song that many stars, or half a
+/// star less on its leading half. VoiceOver offers the half star as an action on each star.
 private struct Rating: View {
     let stars: Float
-    let rate: (Int) -> Void
+    let rate: (Float) -> Void
 
     var body: some View {
         HStack(spacing: 0) {
             ForEach(1...5, id: \.self) { star in
-                Button {
-                    rate(star)
-                } label: {
-                    Image(systemName: symbol(star))
-                        .font(.title3)
-                        .foregroundStyle(Palette.primary)
-                        .frame(width: 44, height: 44)
-                        .contentShape(.rect)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Rate \(star) stars")
+                let whole = Float(star)
+                let half = whole - 0.5
+                Image(systemName: symbol(star))
+                    .font(.title3)
+                    .foregroundStyle(Palette.primary)
+                    .frame(width: 44, height: 44)
+                    .contentShape(.rect)
+                    // Local coordinates start from the leading edge, in right-to-left languages too.
+                    .onTapGesture(coordinateSpace: .local) { location in
+                        rate(location.x < 22 ? half : whole)
+                    }
+                    .accessibilityElement()
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityLabel("Rate \(star) stars")
+                    .accessibilityAction { rate(whole) }
+                    .accessibilityAction(named: "Rate \(half.formatted()) stars") { rate(half) }
             }
         }
         .accessibilityElement(children: .contain)

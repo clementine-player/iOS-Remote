@@ -395,10 +395,10 @@ public final class RemoteSession {
         return repeatMode
     }
 
-    /// Rates the current song from 0 to 5 stars, showing it at once.
-    public func rate(stars: Int) {
+    /// Rates the current song from 0 to 5 stars, in half stars, showing it at once.
+    public func rate(stars: Float) {
         guard song != nil else { return }
-        let rating = Float(max(0, min(5, stars))) / 5
+        let rating = (max(0, min(5, stars)) * 2).rounded() / 10
         song?.rating = rating
         send(Messages.rate(rating))
     }
