@@ -60,8 +60,19 @@ jobs:
           xcrun simctl boot "$id"
           xcrun simctl bootstatus "$id" -b
       - name: Build and test
-        # CI has no signing account: build for the simulator without a team.
-        run: scripts/build.sh test DEVELOPMENT_TEAM=
+        # CI has no signing account: build for the simulator without a team. xcodebuild exits with
+        # 70 when it finds no simulator to run on: once, it found none at all, although the one
+        # picked had booted, so it tries once more then.
+        run: |
+          status=0
+          scripts/build.sh test DEVELOPMENT_TEAM= || status=$?
+          if [ "$status" = 70 ]; then
+            echo "::warning::xcodebuild found no simulator; trying again"
+            xcrun simctl list devices booted
+            scripts/build.sh test DEVELOPMENT_TEAM=
+          else
+            exit "$status"
+          fi
       - name: Check the String Catalog has the app's strings
         # The catalog is what Transifex gets to translate: a string added to the app needs the
         # catalog the build updated committed with it.
