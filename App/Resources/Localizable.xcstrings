@@ -2532,6 +2532,12 @@
             "value" : "Přidá do seznamu skladeb vybranou skladbu z řady. Chcete-li vybrat jinou, podržte prst na obrazovce."
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lisab valitud esitusloendi esitusjärjekorda. Järgmise lisamiseks vajuta ja hoia all."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4402,6 +4408,12 @@
             "value" : "Vetada en Last.fm"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keelatud Last.fm-is"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5170,6 +5182,12 @@
             "value" : "Aplikace Clementine Remote ovládá hudební přehrávač Clementine ve vašem počítači. Neshromažďuje žádná data: komunikuje pouze s vaším vlastním přehrávačem Clementine ve vaší vlastní síti."
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine'i kaugjuhtimispult juhib Clementine'i muusikapleierit sinu arvutis. Ta ei kogu mitte mingeid andmeid ning suhtleb sinu määratud võrgus asuvas arvutis leiduva Clementine'iga."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5196,6 +5214,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aplikace Clementine sem může odesílat svou hudbu, když se přehrává na jiných zařízeních. Nastavení se projeví při příštím připojení aplikace."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine oskab muudes seadmetes esitatavat muusikat siia saata. Jõustub järgmisel korral, kui ühendus luuakse."
           }
         },
         "fi" : {
@@ -5832,6 +5856,12 @@
             "value" : "Aplikace Clementine přijímá pouze připojení z místní sítě. Chcete-li se připojit z jiného místa, vypněte v nastavení pro síťové vzdálené ovládání volbu Povolit spojení pouze z místní sítě."
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine lubab ühendusi vaid kohtvõrgust. Ühendamiseks mujalt lülita Clementine seadistuste kaugjuhtimispuldi alajaotusest välja eelistus „Luba ühendusi vaid kohtvõrgust“."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5858,6 +5888,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clementine přehrává hudbu v počítači nebo ji odesílá do zařízení, které je k němu připojeno."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine võib lugusid esitada arvutis või edastada seda nutiseadmesse, millega ta on ühendatud."
           }
         },
         "fi" : {
@@ -5934,6 +5970,12 @@
             "value" : "Clementine přestala odpovídat. Prověřte, zda je zařízení stále v provozu, a pak je znovu připojte."
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine ei vasta enam päringutele. Kontrolli, et ta veel töötab ja ühenda siis uuesti."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6006,6 +6048,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clementine z tohoto telefonu již nebude ověřovat žádný další autorizační kód po %@. Poté zadejte kód zobrazený v nastavení pro síťové vzdálené ovládání."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine ei kontrolli järgmist autentimiskoodi sellest nutiseadmest %@. Seejärel sisesta Clementine'i kaugjuhtimisliidese seadistustes kuvatav kood."
           }
         },
         "fi" : {
@@ -6624,6 +6672,12 @@
             "value" : "Nejprve se připojit ke Clementine v aplikaci Clementine Remote."
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esmalt ühenda Clementine'iga tema kaugjuhtimispuldist."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6656,6 +6710,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Při spuštění aplikace se připojit k poslednímu zařízení Clementine."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rakenduse käivitamisel ühenda viimatikasutatud Clementine'iga."
           }
         },
         "fi" : {
@@ -6719,6 +6779,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Připojeno po"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ühenduse kestus: "
           }
         },
         "fi" : {
@@ -9749,6 +9815,12 @@
     },
     "Download songs, albums and playlists from the player, the queue and the library. They're saved in the Files app." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laadi pleierist, esitusjärjekorrast ja muusikakogust alla lugusid, albumeid ja esitusloendeid. Nad salvestuvad failirakenduses."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10685,6 +10757,12 @@
             "value" : "Vuelve a descargar las canciones cuando no coinciden con las que hay en este móvil."
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laadib lood uuesti alla, kui need erinevad nutiseadmes leiduvatest."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10707,6 +10785,12 @@
     },
     "Enter the auth code shown in Clementine's Network Remote settings." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sisesta Clementine'i programmi kaugjuhtimisliidese seadistustes kuvatav autentimiskood."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10911,6 +10995,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Escriba términos de búsqueda más arriba para encontrar música en el equipo y en la Internet"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otsi muusikat oma muusikakogust ja internetiteenustest, mis Clementine'is on seadistatud."
           }
         },
         "fi" : {
@@ -11776,6 +11866,12 @@
     },
     "Inside the artist's folder, save each song in a folder named after its album." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esitaja kaustas salvesta iga lugu albumikohasesse kausta."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11826,6 +11922,12 @@
     },
     "Is Clementine running? Is it version %@ or later, with the network remote turned on in its settings? Is the address right?" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kas Clementine töötab arvutis? Kas tema versioon on %@ või uuem ning kaugjuhtimispuldi kasutamine on seadistustest lubatud? Kas aadress ikka on õige?"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12824,6 +12926,12 @@
     },
     "Local Network is off" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kohtvõrgu kasutamine on lülitatud välja"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12877,7 +12985,7 @@
         "et" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Otsin  laulusõnu…"
+            "value" : "Otsin laulusõnu…"
           }
         },
         "fi" : {
@@ -12958,6 +13066,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Me encanta"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meeldib"
           }
         },
         "fi" : {
@@ -13140,6 +13254,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Le encanta en Last.fm"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Märgitud Last.fm-is meeldivaks"
           }
         },
         "fi" : {
@@ -13402,6 +13522,12 @@
     },
     "Needs Clementine %@ or later, with Tools → Preferences → Network Remote turned on." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vajalik on Clementine'i versioon %@ või hilisem ja valik „Tarvikud“ → „Eelistused“ → „Kaugjuhtimispult“ on lülitatud sisse."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14232,6 +14358,12 @@
             "value" : "No se está buscando en esta red"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ei otsi sellest võrgust"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14572,6 +14704,12 @@
     },
     "Open Clementine Remote to connect" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ühendamiseks ava Clementine'i kaugjuhtimispult"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14780,6 +14918,12 @@
     },
     "Opens Clementine Remote and connects to the last Clementine." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avab Clementine'i kaugjuhtimispuldi ja ühendab viimatikasutatud Clementine'iga."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15524,6 +15668,12 @@
             "value" : "Reproducir en"
           }
         },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esita siin:"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15694,6 +15844,12 @@
     },
     "Play, pause and skip songs in Clementine." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esita Clementine'is lugusid, peata esitus või keri edasi."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16125,6 +16281,12 @@
     },
     "Playlist %@" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esitusloend: %@"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16175,6 +16337,12 @@
     },
     "Plays Clementine if it's paused, and pauses it if it's playing." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esitab Clementine'ist kui esitus on peatatud ja peatab, kui on esitamisel."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16191,6 +16359,12 @@
     },
     "Plays it, or adds it to the playlist if Clementine is playing" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esitab seda või kui Clementine esitab midagi, siis lisab esitusloendisse"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18631,6 +18805,12 @@
     },
     "Save a playlist's songs in a folder named after it." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salvestab esitusloendi lood esitaja nimega kausta"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18653,6 +18833,12 @@
     },
     "Save each song in a folder named after its artist." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salvestab iga loo esitaja nimega kausta."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19257,6 +19443,12 @@
     },
     "See All" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vaata kõiki"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19279,6 +19471,12 @@
     },
     "See all %@" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vaata kõike: %@"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19613,6 +19811,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Actívelo para marcar pistas como favoritas o vetarlas."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näita nuppe, mis võimaldavad lugusid märkida meeldivaks või keelata."
           }
         },
         "fi" : {
@@ -20465,6 +20669,12 @@
     },
     "Skips to Clementine's next song." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kerib järgmise Clementine'i loo juurde."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20713,6 +20923,12 @@
     },
     "Songs are saved in Clementine Remote's folder, in the Files app." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lood salvestatakse failihalduris Clementine'i kaugjuhtimispuldi kausta."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21049,6 +21265,12 @@
     },
     "Starts Clementine playing." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Käivitab Clementine'i ja alustab esitust"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21429,6 +21651,12 @@
     },
     "Stops Clementine." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lõpetab Clementine'i töö."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21451,6 +21679,12 @@
     },
     "Stream" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voogedastus"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21545,6 +21779,12 @@
     },
     "System" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Süsteem"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21595,6 +21835,12 @@
     },
     "That address is on your network, and Clementine Remote needs Local Network access to reach it. Turn on Local Network in Settings." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See aadress asub sinu võrgus ja Clementine'i kaugjuhtimispult vajaf ligipääsuks õigust kasutada kohtvõrku. Lülita see võimalus seadistustest sisse."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22045,6 +22291,12 @@
     },
     "This phone doesn't have a local network address. Try turning off \"Use only local IP addresses\" in Clementine's settings." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sel nutiseadmel on kohtvõrgule mitteomane IP-aadress. Proovi lülitada Clementine'i seadistustest välja valik „Kasuta vaid kohalikke IP-aadresse“."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22061,6 +22313,12 @@
     },
     "This phone isn't on Wi-Fi. Connect to the same network as Clementine. To reach Clementine over the internet, forward its port and turn off \"Use only local IP addresses\" in Clementine's settings." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See nutiseade pole WiFi võrgus. Ühenda ta Clementine'iga samasse võrku. Kui soovid ligipääsu internetist, siis seadista ruuterist pordi suunamine ja lülita Clementine'i seadistustest välja valik „Kasuta vaid kohalikke IP-aadresse“."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22243,6 +22501,12 @@
     },
     "This program is distributed in the hope that it will be useful, but without any warranty." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seda programmi levitatakse lootuses, et see on kasulik, kuid ILMA IGASUGUSE GARANTIITA."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22265,6 +22529,12 @@
     },
     "This removes every song from the playlist in Clementine." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Järgnevaga eemaldad kõik lood Clementine'i esitusloendist. "
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22349,6 +22619,12 @@
     },
     "Top Result" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parimad tulemused"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23241,6 +23517,12 @@
     },
     "While connected to Clementine." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ühendatuna Clementine'iga."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23263,6 +23545,12 @@
     },
     "Without Local Network access, Clementine Remote can't find Clementine on your network. Enter its address below, or turn on Local Network in Settings." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kui ligipääs kohtvõrgule on puudu, siis Clementine'i kaugjuhtimispult ei suuda Clementine'iga arvutit sinu võrgust leida. Sisesta alljärgnevas vajalik aadress või luba seadistustest kohtvõrgu kasutamine."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23445,6 +23733,12 @@
     },
     "Your library isn't on this phone yet. Download it from Clementine to browse it here." : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sinu muusikakogu veel pole selles nutiseadmes. Siin sirvimiseks laadi ta Clementine'ist alla."
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
