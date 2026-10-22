@@ -178,7 +178,9 @@ extension DownloadFailure {
         case .wrongAuthCode: "Enter the auth code shown in Clementine's Network Remote settings."
         case .notLocalNetwork: "Clementine only accepts connections from its local network."
         case .tooManyWrongAuthCodes(let retryAfter):
-            "Too many wrong auth codes. Clementine won't check another from this phone for \(retryAfter.waitDescription)."
+            LocalizedStringResource(
+                "Too many wrong auth codes. Clementine won't check another from this phone for \(retryAfter.waitDescription).",
+                comment: "The placeholder is how long Clementine said to wait before it checks another auth code from this phone: \"10 seconds\", \"1 minute\", \"3 minutes\", \"2 hours\", or \"a while\" if it didn't say. The iOS app shows the same sentence with the duration in iOS's own words, which can't take another grammatical form, so write the sentence so the duration reads right as it is.")
         case .insufficientSpace: "There isn't enough space on this phone"
         case .cantSave: "Couldn't save the file"
         case .corrupt: "The library Clementine sent is damaged"
@@ -190,6 +192,6 @@ extension DownloadFailure {
 extension Duration? {
     /// How long Clementine said to wait, or "a while" if it didn't.
     var waitDescription: String {
-        self?.waitDescription() ?? String(localized: "a while")
+        self?.waitDescription() ?? String(localized: "a while", comment: "Shown instead of a duration when Clementine doesn't say how long to wait, in the sentences about too many wrong auth codes.")
     }
 }
