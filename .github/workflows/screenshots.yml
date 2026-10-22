@@ -154,6 +154,10 @@ jobs:
       # The simulator shares the Mac's network, so the app reaches Clementine at 127.0.0.1.
       # xcodebuild passes TEST_RUNNER_ variables to the test without the prefix. The test runs
       # twice, with the simulator light then dark: set from the test itself, the app stayed light.
+      # Each runs again once if it fails: on a runner, the app sometimes stops answering XCTest for
+      # minutes, or the simulator fails to launch the test runner, and a second run gets through.
+      # The first run's result bundle is kept, with its failure; its failure.png goes, so that
+      # post_screenshots.sh sees a complete run.
       - name: Take the screenshots
         env:
           APPEARANCES: ${{ inputs.appearances || 'light dark' }}
@@ -165,10 +169,19 @@ jobs:
             echo "::group::The screenshots, $appearance"
             xcrun simctl ui "$SIMULATOR" appearance "$appearance"
             prefix=$([ "$appearance" = dark ] && echo dark_ || true)
-            # CI has no signing account: build for the simulator without a team.
-            TEST_RUNNER_SCREENSHOTS_PREFIX=$prefix \
-              scripts/build.sh test -only-testing:ClementineRemoteUITests/Screenshots \
-              -resultBundlePath "build/Screenshots-$appearance.xcresult" DEVELOPMENT_TEAM= || status=1
+            for attempt in 1 2; do
+              rm -f "screenshots/${prefix}failure.png" "screenshots/${prefix}failure.txt"
+              # CI has no signing account: build for the simulator without a team.
+              if TEST_RUNNER_SCREENSHOTS_PREFIX=$prefix \
+                scripts/build.sh test -only-testing:ClementineRemoteUITests/Screenshots \
+                -resultBundlePath "build/Screenshots-$appearance-$attempt.xcresult" DEVELOPMENT_TEAM=; then
+                break
+              elif [ "$attempt" = 1 ]; then
+                echo "::warning::The $appearance screenshots failed; taking them again"
+              else
+                status=1
+              fi
+            done
             echo "::endgroup::"
           done
           # The test skips itself without its variables, which would pass with nothing to show.
