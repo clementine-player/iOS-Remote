@@ -45,6 +45,7 @@
 		D3DC501DC0E77D6C9758DFEE /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4856A6293D1829361A2A9A17 /* Theme.swift */; };
 		D64BCDEA186CDD0D6C01E9BB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8231CF7038EDE553E2AC1660 /* Localizable.xcstrings */; };
 		D7EBC5574BEE449B6894CAC1 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325DF06B37A9ED9447D1F0EA /* SearchView.swift */; };
+		D84AE4D61449F2DADE7A9BBD /* FoldReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA022D6110999DDCC5895808 /* FoldReader.swift */; };
 		DABBD0C9CA0835FA60F11422 /* AVPlayback.swift in Sources */ = {isa = PBXBuildFile; fileRef = C636902427E849DF54E5B07F /* AVPlayback.swift */; };
 		DF7E75F26D11DC8C8C821618 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175C247F8C73B1831518D42C /* SettingsView.swift */; };
 		E52201111A30A07B353D1DA9 /* PlaylistPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D27E1EDA6F353DEF40CB /* PlaylistPicker.swift */; };
@@ -131,6 +132,7 @@
 		E9487E83AC1EF9117BF817B9 /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
 		ECAC7FD0127C2A1352E98E05 /* AppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntents.swift; sourceTree = "<group>"; };
 		EE0CF9A7519C0E1D02B75CB8 /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		FA022D6110999DDCC5895808 /* FoldReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldReader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -275,6 +277,7 @@
 		88FE4D9DD28CB9D79CAE438C /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				FA022D6110999DDCC5895808 /* FoldReader.swift */,
 				AE9B3C025F4213A8DA1AFDBF /* NetworkMonitor.swift */,
 				468183AFD2E06A2AAA047535 /* Toast.swift */,
 				C4D0E12EF32CE14014407139 /* VolumeButtons.swift */,
@@ -578,6 +581,7 @@
 				5519998FF94C9CDB9C36CA95 /* ConnectionSheet.swift in Sources */,
 				761C4231EA060F078910BF81 /* DownloadsModel.swift in Sources */,
 				AF5B4FBB88A0EB985218B5A6 /* DownloadsView.swift in Sources */,
+				D84AE4D61449F2DADE7A9BBD /* FoldReader.swift in Sources */,
 				02B054CAB79B78B9185BBFC3 /* InternetView.swift in Sources */,
 				A83B1DAF857B6BC5EB001422 /* LibraryModel.swift in Sources */,
 				015B3D7098D15696CE753DCA /* LibraryView.swift in Sources */,

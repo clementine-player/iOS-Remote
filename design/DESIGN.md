@@ -60,6 +60,12 @@ iOS's own controls and patterns.
 On iPad, and in landscape on large iPhones, the tab view becomes a sidebar-adaptable tab view, the
 player lays the artwork beside the song, and sheets are presented as forms.
 
+On a foldable (iPhone Duo) half-open like a book or set down like a laptop, the player and the
+Connect screen lay out on either side of the fold, so nothing sits across it (see each screen).
+The fold is the `.division` reserved region (`GeometryProxy.reservedRegions`, iOS 27.1), active
+regions only; open flat or closed there's none, and they look as on any other phone. A pane in
+Split View that the fold doesn't cross has no fold either.
+
 ## Screen by screen
 
 ### Connect
@@ -85,6 +91,10 @@ Shown at launch and whenever the app is not connected. From the redesign's Conne
   (with the reason: not on Wi-Fi, not a private address, or check the address), and Clementine too
   old.
 - Landscape: the hero fills the left half, the rest scrolls on the right.
+- Half-open like a book (a vertical fold): the hero fills the leading side of the fold, the rest
+  scrolls on the trailing side.
+- Set down like a laptop (a horizontal fold): the hero fills the space above the fold, with the
+  mark as large as fits there (48 to 168 pt); the rest scrolls below it.
 
 ### Queue (tab 1)
 
@@ -137,6 +147,10 @@ From the Now playing board. Opened from the mini player; swipe down or the chevr
 - Download asks what to download: this song, its album, or the playlist. Streams can't be
   downloaded.
 - Landscape and iPad: artwork on the left at full height; song, seek bar and controls beside it.
+- Half-open like a book (a vertical fold): the artwork on the leading side of the fold; the top
+  row, song, seek bar, controls, volume and bottom row on the trailing side.
+- Set down like a laptop (a horizontal fold): the artwork above the fold; the top row and
+  everything else below it, scrolling if it doesn't fit.
 
 ### Details and lyrics sheet
 

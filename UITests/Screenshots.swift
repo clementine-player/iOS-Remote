@@ -116,6 +116,17 @@ final class Screenshots: XCTestCase {
         pause(Self.settle)
         try screenshot("09_outputs")
         try waitFor(app.navigationBars["Play on"].buttons["Done"]).tap()
+
+        // The player on a foldable set down like a laptop. A test can't pose a simulator, so the
+        // app fakes a fold across the middle of the screen. Unnumbered, so it's shown on pull
+        // requests but isn't one of the App Store's.
+        app.terminate()
+        app.launchArguments += ["-fake_fold", "horizontal"]
+        app.launch()
+        try waitFor(app.buttons["connect"]).tap()
+        try waitFor(app.buttons["connectionChip"])
+        try openPlayer()
+        try screenshot("player_fold")
     }
 
     // MARK: - Screens
