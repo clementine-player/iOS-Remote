@@ -43,9 +43,12 @@ permissions:
 jobs:
   testflight:
     if: github.ref == 'refs/heads/main'
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 60
     env:
+      # Xcode 27.1, for the iOS 27.1 SDK (iPhone Duo's fold): the xcode-27 image has it, but
+      # defaults to 27.0.
+      DEVELOPER_DIR: /Applications/Xcode_27.1.app/Contents/Developer
       # A step's condition can't read secrets, so this says whether the API key is set.
       HAS_ASC_KEY: ${{ secrets.ASC_KEY_ID != '' }}
     steps:

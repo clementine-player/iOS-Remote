@@ -101,9 +101,12 @@ jobs:
   build:
     needs: plan
     if: needs.plan.outputs.release == 'true'
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 60
     env:
+      # Xcode 27.1, for the iOS 27.1 SDK (iPhone Duo's fold): the xcode-27 image has it, but
+      # defaults to 27.0.
+      DEVELOPER_DIR: /Applications/Xcode_27.1.app/Contents/Developer
       NAME: ${{ needs.plan.outputs.name }}
       BUILD: ${{ needs.plan.outputs.build }}
       COMMIT: ${{ needs.plan.outputs.commit }}
