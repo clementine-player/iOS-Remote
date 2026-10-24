@@ -5,6 +5,6 @@ set -eu
 cd "$(dirname "$0")/.."
 xcodegen generate --quiet
 xcodebuild -project ClementineRemote.xcodeproj -scheme ClementineRemote \
-    -destination "${DESTINATION:-platform=iOS Simulator,name=iPhone 17 Pro,OS=26.5}" \
+    -destination "${DESTINATION:-platform=iOS Simulator,name=iPhone 17}" \
     -derivedDataPath build/DerivedData "${@:-build}"
 scripts/sync-strings.sh

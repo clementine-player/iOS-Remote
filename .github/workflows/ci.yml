@@ -13,7 +13,11 @@ concurrency:
 jobs:
   # ClementineKit's tests, on macOS: quick, and no simulator needed.
   package:
-    runs-on: macos-26
+    runs-on: xcode-27
+    env:
+      # Xcode 27.1, for the iOS 27.1 SDK (iPhone Duo's fold): the xcode-27 image has it, but
+      # defaults to 27.0.
+      DEVELOPER_DIR: /Applications/Xcode_27.1.app/Contents/Developer
     steps:
       - uses: actions/checkout@v5
       - name: Show Xcode
@@ -24,7 +28,11 @@ jobs:
 
   # The app built for the simulator, with ClementineKit's and the UI tests.
   app:
-    runs-on: macos-26
+    runs-on: xcode-27
+    env:
+      # Xcode 27.1, for the iOS 27.1 SDK (iPhone Duo's fold): the xcode-27 image has it, but
+      # defaults to 27.0.
+      DEVELOPER_DIR: /Applications/Xcode_27.1.app/Contents/Developer
     steps:
       - uses: actions/checkout@v5
       - name: Install XcodeGen
