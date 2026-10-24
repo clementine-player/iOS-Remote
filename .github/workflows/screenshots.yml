@@ -88,7 +88,7 @@ env:
 jobs:
   screenshots:
     runs-on: xcode-27
-    timeout-minutes: 60
+    timeout-minutes: 90
     env:
       # Xcode 27.1, for the iOS 27.1 SDK (iPhone Duo's fold): the xcode-27 image has it, but
       # defaults to 27.0.
@@ -176,7 +176,7 @@ jobs:
               rm -f "screenshots/${prefix}failure.png" "screenshots/${prefix}failure.txt"
               # CI has no signing account: build for the simulator without a team.
               if TEST_RUNNER_SCREENSHOTS_PREFIX=$prefix \
-                scripts/build.sh test -only-testing:ClementineRemoteUITests/Screenshots \
+                scripts/build.sh test -only-testing:ClementineRemoteUITests/Screenshots/testTakeScreenshots \
                 -resultBundlePath "build/Screenshots-$appearance-$attempt.xcresult" DEVELOPMENT_TEAM=; then
                 break
               elif [ "$attempt" = 1 ]; then
@@ -192,6 +192,55 @@ jobs:
             echo "::error::The test took no screenshots"
             exit 1
           fi
+          exit $status
+
+      # The player on iPhone Duo, Apple's foldable, closed: on its outer screen. A test can't open
+      # or pose the Duo, so this is its only screenshot; the other poses are checked by hand. It
+      # needs the iOS 27.1 simulator runtime, which the image lacks, so it's downloaded (several
+      # GB: too large to cache well). Not for the App Store's screenshots.
+      - name: Take the iPhone Duo screenshot
+        if: always() && !inputs.device
+        env:
+          APPEARANCES: ${{ inputs.appearances || 'light dark' }}
+          TEST_RUNNER_CLEMENTINE_HOST: 127.0.0.1
+          TEST_RUNNER_SCREENSHOTS_DIR: ${{ github.workspace }}/screenshots
+        run: |
+          if ! xcrun simctl list runtimes available | grep -q '^iOS 27\.1 '; then
+            echo "::group::Downloading the iOS 27.1 simulator runtime"
+            xcodebuild -downloadPlatform iOS -buildVersion 27.1
+            echo "::endgroup::"
+          fi
+          xcrun simctl shutdown "$SIMULATOR" || true
+          id=$(xcrun simctl create "iPhone Duo" com.apple.CoreSimulator.SimDeviceType.iPhone-Duo \
+            com.apple.CoreSimulator.SimRuntime.iOS-27-1)
+          echo "Using simulator $id"
+          xcrun simctl boot "$id"
+          xcrun simctl bootstatus "$id" -b
+          xcrun simctl status_bar "$id" override --time 9:41 --dataNetwork wifi --wifiMode active \
+            --wifiBars 3 --cellularMode notSupported --batteryState charged --batteryLevel 100
+          status=0
+          for appearance in $APPEARANCES; do
+            echo "::group::The iPhone Duo screenshot, $appearance"
+            xcrun simctl ui "$id" appearance "$appearance"
+            prefix=$([ "$appearance" = dark ] && echo dark_ || true)
+            # A failure the other screenshots left stays, for post_screenshots.sh to see.
+            failed_before=$([ -e "screenshots/${prefix}failure.png" ] && echo yes || true)
+            for attempt in 1 2; do
+              if [ "$attempt" = 2 ] && [ -z "$failed_before" ]; then
+                rm -f "screenshots/${prefix}failure.png" "screenshots/${prefix}failure.txt"
+              fi
+              if TEST_RUNNER_SCREENSHOTS_PREFIX=$prefix DESTINATION="id=$id" \
+                scripts/build.sh test -only-testing:ClementineRemoteUITests/Screenshots/testTakeFoldScreenshots \
+                -resultBundlePath "build/Screenshots-duo-$appearance-$attempt.xcresult" DEVELOPMENT_TEAM=; then
+                break
+              elif [ "$attempt" = 1 ]; then
+                echo "::warning::The $appearance iPhone Duo screenshot failed; taking it again"
+              else
+                status=1
+              fi
+            done
+            echo "::endgroup::"
+          done
           exit $status
 
       - uses: actions/upload-artifact@v5
