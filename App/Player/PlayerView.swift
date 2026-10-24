@@ -35,17 +35,17 @@ struct PlayerView: View {
                     .padding(.bottom, Metrics.space4)
                 }
             case .horizontal(let above, let height):
-                // Set down like a laptop: the artwork above the fold, everything to tap below it,
-                // scrolling if it doesn't fit.
+                // Set down like a laptop: the top row at the top as ever, the artwork between it
+                // and the fold, and the rest below the fold, scrolling if it doesn't fit.
                 VStack(spacing: 0) {
+                    topBar
                     artwork
                         .padding(.horizontal, Metrics.space6)
                         .padding(.vertical, Metrics.space3)
                         .frame(maxWidth: .infinity)
-                        .frame(height: above)
+                        .frame(height: max(above - Self.topBarHeight, 0))
                     Spacer()
                         .frame(height: height)
-                    topBar
                     ScrollView {
                         controls
                             .padding(.horizontal, Metrics.space6)
@@ -58,12 +58,20 @@ struct PlayerView: View {
                 VStack(spacing: 0) {
                     topBar
                     if landscape {
+                        // The artwork as large as the height allows, leaving the rest a column at
+                        // least as wide as a phone's: on wide screens that's the height, on
+                        // squarer ones (iPad, an unfolded foldable) more than half the width.
+                        let side = min(
+                            geometry.size.height - Self.topBarHeight - Metrics.space4,
+                            geometry.size.width - 3 * Metrics.space6 - Self.minControlsWidth)
                         HStack(alignment: .center, spacing: Metrics.space6) {
                             artwork
+                                .frame(width: max(side, 0), height: max(side, 0))
                             controls
                         }
                         .padding(.horizontal, Metrics.space6)
                         .padding(.bottom, Metrics.space4)
+                        .frame(maxHeight: .infinity)
                     } else {
                         VStack(spacing: 0) {
                             artwork
@@ -132,6 +140,7 @@ struct PlayerView: View {
         }
         .foregroundStyle(Palette.onSurface)
         .padding(.horizontal, Metrics.space1)
+        .frame(height: Self.topBarHeight)
     }
 
     private var artwork: some View {
@@ -145,6 +154,10 @@ struct PlayerView: View {
         .accessibilityHint("Shows the lyrics")
         .accessibilityIdentifier("artwork")
     }
+
+    private static let topBarHeight: CGFloat = 48
+    /// The narrowest the song and controls go beside the artwork.
+    private static let minControlsWidth: CGFloat = 360
 
     /// Everything beside or below the artwork when there's room for it in one column.
     private var controls: some View {
