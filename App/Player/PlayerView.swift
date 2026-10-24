@@ -7,6 +7,7 @@ struct PlayerView: View {
     @Environment(AppModel.self) private var model
     @Environment(RemoteSession.self) private var session
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.layoutDirection) private var layoutDirection
     @AppStorage(SettingKey.showLastFM) private var showLastFM = true
     @State private var isDetailsPresented = false
     @State private var detailsPage = SongDetailsView.Page.details
@@ -14,40 +15,74 @@ struct PlayerView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let landscape = geometry.size.width > geometry.size.height
-            VStack(spacing: 0) {
-                topBar
-                if landscape {
-                    HStack(alignment: .center, spacing: Metrics.space6) {
-                        artwork
-                        VStack(spacing: Metrics.space3) {
+            switch geometry.fold(layoutDirection: layoutDirection) {
+            case .vertical(let leading, let width):
+                // Half-open like a book: the artwork on one side of the fold, the rest on the
+                // other. The top row goes over the rest, so nothing sits on the fold.
+                HStack(spacing: 0) {
+                    artwork
+                        .padding(Metrics.space6)
+                        .frame(width: leading)
+                        .frame(maxHeight: .infinity)
+                    Spacer()
+                        .frame(width: width)
+                    VStack(spacing: 0) {
+                        topBar
+                        controls
+                            .padding(.horizontal, Metrics.space6)
+                            .frame(maxHeight: .infinity)
+                    }
+                    .padding(.bottom, Metrics.space4)
+                }
+            case .horizontal(let above, let height):
+                // Set down like a laptop: the artwork above the fold, everything to tap below it,
+                // scrolling if it doesn't fit.
+                VStack(spacing: 0) {
+                    artwork
+                        .padding(.horizontal, Metrics.space6)
+                        .padding(.vertical, Metrics.space3)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: above)
+                    Spacer()
+                        .frame(height: height)
+                    topBar
+                    ScrollView {
+                        controls
+                            .padding(.horizontal, Metrics.space6)
+                            .padding(.bottom, Metrics.space4)
+                    }
+                    .scrollBounceBehavior(.basedOnSize)
+                }
+            case nil:
+                let landscape = geometry.size.width > geometry.size.height
+                VStack(spacing: 0) {
+                    topBar
+                    if landscape {
+                        HStack(alignment: .center, spacing: Metrics.space6) {
+                            artwork
+                            controls
+                        }
+                        .padding(.horizontal, Metrics.space6)
+                        .padding(.bottom, Metrics.space4)
+                    } else {
+                        VStack(spacing: 0) {
+                            artwork
+                                .frame(maxHeight: max(120, geometry.size.height - 430))
+                                .padding(.top, Metrics.space3)
                             songInfo
+                                .padding(.top, Metrics.space6)
                             SeekBar()
+                                .padding(.top, Metrics.space3)
                             TransportControls()
+                                .padding(.top, Metrics.space1)
                             VolumeSlider()
+                                .padding(.top, Metrics.space2)
+                            Spacer(minLength: Metrics.space2)
                             actions
                         }
+                        .padding(.horizontal, Metrics.space6)
+                        .padding(.bottom, Metrics.space2)
                     }
-                    .padding(.horizontal, Metrics.space6)
-                    .padding(.bottom, Metrics.space4)
-                } else {
-                    VStack(spacing: 0) {
-                        artwork
-                            .frame(maxHeight: max(120, geometry.size.height - 430))
-                            .padding(.top, Metrics.space3)
-                        songInfo
-                            .padding(.top, Metrics.space6)
-                        SeekBar()
-                            .padding(.top, Metrics.space3)
-                        TransportControls()
-                            .padding(.top, Metrics.space1)
-                        VolumeSlider()
-                            .padding(.top, Metrics.space2)
-                        Spacer(minLength: Metrics.space2)
-                        actions
-                    }
-                    .padding(.horizontal, Metrics.space6)
-                    .padding(.bottom, Metrics.space2)
                 }
             }
         }
@@ -109,6 +144,17 @@ struct PlayerView: View {
         .accessibilityLabel("Cover art")
         .accessibilityHint("Shows the lyrics")
         .accessibilityIdentifier("artwork")
+    }
+
+    /// Everything beside or below the artwork when there's room for it in one column.
+    private var controls: some View {
+        VStack(spacing: Metrics.space3) {
+            songInfo
+            SeekBar()
+            TransportControls()
+            VolumeSlider()
+            actions
+        }
     }
 
     private var songInfo: some View {

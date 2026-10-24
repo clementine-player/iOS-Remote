@@ -7,6 +7,7 @@ struct ConnectView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openURL) private var openURL
+    @Environment(\.layoutDirection) private var layoutDirection
     @State private var browser = ServiceBrowser()
     @State private var host = ""
     @State private var authCode = ""
@@ -20,9 +21,46 @@ struct ConnectView: View {
             // keyboard again.
             let height = geometry.size.height + geometry.safeAreaInsets.bottom
             let landscape = geometry.size.width > height
+            let fold = geometry.fold(
+                layoutDirection: layoutDirection,
+                size: CGSize(width: geometry.size.width, height: height))
             ScrollViewReader { scroller in
                 Group {
-                    if landscape {
+                    if case .vertical(let leading, let width) = fold {
+                        // Half-open like a book: the header on one side of the fold, the rest on
+                        // the other.
+                        HStack(spacing: 0) {
+                            Header(iconSize: 168, fill: true, topInset: geometry.safeAreaInsets.top, onSettings: showSettings)
+                                .frame(width: leading)
+                                .frame(maxHeight: .infinity)
+                                .ignoresSafeArea(edges: .top)
+                            Spacer()
+                                .frame(width: width)
+                            ScrollView {
+                                content
+                            }
+                            .frame(maxWidth: .infinity)
+                            .scrollBounceBehavior(.basedOnSize)
+                        }
+                    } else if case .horizontal(let above, let foldHeight) = fold {
+                        // Set down like a laptop: the header above the fold, the rest below it.
+                        // Clementine is as large as the space above leaves room for.
+                        VStack(spacing: 0) {
+                            Header(
+                                iconSize: min(168, max(48, above - Self.spaceAroundIcon)),
+                                fill: true,
+                                topInset: geometry.safeAreaInsets.top,
+                                onSettings: showSettings)
+                                .frame(height: geometry.safeAreaInsets.top + above)
+                            Spacer()
+                                .frame(height: foldHeight)
+                            ScrollView {
+                                content
+                            }
+                            .scrollBounceBehavior(.basedOnSize)
+                        }
+                        .ignoresSafeArea(edges: .top)
+                    } else if landscape {
                         HStack(spacing: 0) {
                             Header(iconSize: 168, fill: true, topInset: geometry.safeAreaInsets.top, onSettings: showSettings)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -117,6 +155,9 @@ struct ConnectView: View {
 
     static let clementineVersion = "1.3"
     private static let addressID = "address"
+    /// About what the header needs besides Clementine: the settings button, the name and the
+    /// space around them.
+    private static let spaceAroundIcon: CGFloat = 140
 
     private var content: some View {
         let session = model.session
