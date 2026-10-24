@@ -1,5 +1,6 @@
 import XCTest
 
+@MainActor
 final class ConnectUITests: XCTestCase {
     func testShowsTheConnectScreen() {
         let app = XCUIApplication()
