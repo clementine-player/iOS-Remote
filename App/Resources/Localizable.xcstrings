@@ -44,6 +44,12 @@
             "state" : "translated",
             "value" : "%@ (играет)"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (spelar)"
+          }
         }
       }
     },
@@ -89,6 +95,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ (этот iPad)"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (denna iPad)"
           }
         }
       }
@@ -136,6 +148,12 @@
             "state" : "translated",
             "value" : "%@ (этот телефон)"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (denna telefon)"
+          }
         }
       }
     },
@@ -176,6 +194,12 @@
             "state" : "translated",
             "value" : "%@ свободно на этом телефоне"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ledigt på denna telefon"
+          }
         }
       }
     },
@@ -215,6 +239,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ звезды"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ stjärnor"
           }
         }
       }
@@ -267,6 +297,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ · порт %2$@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · port %2$@"
           }
         }
       }
@@ -446,6 +482,24 @@
               }
             }
           }
+        },
+        "sv" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld album"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld album"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -497,6 +551,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$lld ч %2$lld мин"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld h %2$lld min"
           }
         }
       }
@@ -1076,6 +1136,12 @@
             "state" : "translated",
             "value" : "%lld мин"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min"
+          }
         }
       }
     },
@@ -1220,6 +1286,24 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld выбрано"
+                }
+              }
+            }
+          }
+        },
+        "sv" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld markerad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld markerade"
                 }
               }
             }
@@ -1372,6 +1456,24 @@
               }
             }
           }
+        },
+        "sv" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld låt"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld låtar"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1516,6 +1618,24 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld песен добавлено в %@"
+                }
+              }
+            }
+          }
+        },
+        "sv" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld låt har lagts till i %@"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld låtar har lagts till i %@"
                 }
               }
             }
@@ -2000,13 +2120,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld låt har lagts till aktuella spellistan"
+                  "value" : "%lld låt har lagts till i spellistan"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld låtar har lagts till aktuella spellistan"
+                  "value" : "%lld låtar har lagts till i spellistan"
                 }
               }
             }
@@ -2081,6 +2201,12 @@
             "state" : "translated",
             "value" : "%lld%%"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld%%"
+          }
         }
       }
     },
@@ -2126,6 +2252,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "(%1$lld/%2$lld) Подождите"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(%1$lld/%2$lld) Vänta"
           }
         }
       }
@@ -2315,6 +2447,12 @@
             "state" : "translated",
             "value" : "О Clementine Remote"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Om Clementine Remote"
+          }
         }
       }
     },
@@ -2361,6 +2499,12 @@
             "state" : "translated",
             "value" : "Добавить в плейлист"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lägg till i spellista"
+          }
         }
       }
     },
@@ -2388,6 +2532,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Добавить в очередь"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lägg till i uppspelningskön"
           }
         }
       }
@@ -2435,6 +2585,12 @@
             "state" : "translated",
             "value" : "Добавлено в плейлист"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Har lagts till i spellistan"
+          }
         }
       }
     },
@@ -2481,6 +2637,12 @@
             "state" : "translated",
             "value" : "Адрес"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adress"
+          }
         }
       }
     },
@@ -2521,6 +2683,12 @@
             "state" : "translated",
             "value" : "Добавляет его в плейлист"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lägger till i spellistan"
+          }
         }
       }
     },
@@ -2560,6 +2728,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Добавляется в плейлист, выбранный в очереди. Коснитесь и удерживайте, чтобы выбрать другой."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lägger till i den spellista som är vald i kön. Tryck och håll ned för att välja en annan."
           }
         }
       }
@@ -2695,7 +2869,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Avancerad"
+            "value" : "Avancerat"
           }
         },
         "tr" : {
@@ -2810,6 +2984,12 @@
             "value" : "Албум"
           }
         },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Album"
+          }
+        },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2866,6 +3046,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Альбом %@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Album %@"
           }
         }
       }
@@ -2995,7 +3181,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Artist / Årtal"
+            "value" : "Albumartist / Album"
           }
         },
         "tr" : {
@@ -3049,6 +3235,12 @@
             "state" : "translated",
             "value" : "Папки альбомов"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Albummappar"
+          }
         }
       }
     },
@@ -3088,6 +3280,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Альбом · %@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Album · %@"
           }
         }
       }
@@ -3135,6 +3333,12 @@
             "state" : "translated",
             "value" : "Альбомы"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Album"
+          }
         }
       }
     },
@@ -3175,6 +3379,12 @@
             "state" : "translated",
             "value" : "Внешний вид"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utseende"
+          }
         }
       }
     },
@@ -3214,6 +3424,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Арно Биннер (Clementine)"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arnaud Bienner (Clementine)"
           }
         }
       }
@@ -3627,7 +3843,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Album"
+            "value" : "Artist / År"
           }
         },
         "tr" : {
@@ -3681,6 +3897,12 @@
             "state" : "translated",
             "value" : "Папки артистов"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artistmappar"
+          }
         }
       }
     },
@@ -3726,6 +3948,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Артисты"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artister"
           }
         }
       }
@@ -4021,7 +4249,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Auktoriseringskod"
+            "value" : "Autentiseringskod"
           }
         },
         "tr" : {
@@ -4193,7 +4421,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Utgivare"
+            "value" : "Upphovspersoner"
           }
         },
         "tr" : {
@@ -4519,7 +4747,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Låt utesluten :-("
+            "value" : "Utesluten på Last.fm"
           }
         },
         "tr" : {
@@ -4715,6 +4943,12 @@
             "state" : "translated",
             "value" : "Отменить скачивание"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avbryt hämtning"
+          }
         }
       }
     },
@@ -4761,6 +4995,12 @@
             "state" : "translated",
             "value" : "Сменить"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ändra"
+          }
         }
       }
     },
@@ -4806,6 +5046,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Выберите, где играть"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Välj uppspelningsenhet"
           }
         }
       }
@@ -4995,6 +5241,12 @@
             "state" : "translated",
             "value" : "Очистить плейлист?"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Töm spellistan?"
+          }
         }
       }
     },
@@ -5052,6 +5304,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Клементина"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine"
           }
         }
       }
@@ -5157,7 +5415,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Clementine's Fjärrkontroll"
+            "value" : "Clementine Remote"
           }
         },
         "tr" : {
@@ -5205,6 +5463,12 @@
             "state" : "translated",
             "value" : "Clementine Remote управляет музыкальным проигрывателем Clementine на вашем компьютере. Он не собирает никаких данных: он взаимодействует только с вашим собственным Clementine в вашей собственной сети."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine Remote styr musikspelaren Clementine på din dator. Appen samlar inte in några data: den kommunicerar bara med din egen Clementine i ditt eget nätverk."
+          }
         }
       }
     },
@@ -5238,6 +5502,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clementine может отправлять свою музыку сюда, когда воспроизводит её на других устройствах. Вступит в силу при следующем подключении приложения."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine kan skicka sin musik hit när uppspelningen sker på andra enheter. Gäller nästa gång appen ansluter."
           }
         }
       }
@@ -5285,6 +5555,12 @@
             "state" : "translated",
             "value" : "Clementine не может добавить это в плейлист"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine kan inte lägga till det i spellistan"
+          }
         }
       }
     },
@@ -5324,6 +5600,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clementine создаёт плейлист и отображает его."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine skapar spellistan och visar den."
           }
         }
       }
@@ -5471,7 +5753,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nedladdning förbjuden. Aktivera i Clementine's inställningar."
+            "value" : "Clementine tillåter inte hämtningar. Aktivera dem under Nätverksfjärrkontroll i inställningarna."
           }
         },
         "tr" : {
@@ -5643,7 +5925,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Okompatibel version"
+            "value" : "Clementine är för gammal"
           }
         },
         "tr" : {
@@ -5845,6 +6127,12 @@
             "state" : "translated",
             "value" : "Clementine принимает подключения только из своей локальной сети."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine tillåter bara anslutningar från sitt lokala nätverk."
+          }
         }
       }
     },
@@ -5879,6 +6167,12 @@
             "state" : "translated",
             "value" : "Clementine принимает подключения только из своей локальной сети. Чтобы подключиться извне, отключите «Разрешать подключения только из локальной сети» в настройках удалённого управления по сети."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine tillåter bara anslutningar från sitt lokala nätverk. För att ansluta från annat håll avaktiverar du ”Tillåt endast anslutningar från det lokala nätverket” under Nätverksfjärrkontroll i inställningarna."
+          }
         }
       }
     },
@@ -5912,6 +6206,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clementine воспроизводит музыку на своём компьютере или отправляет её на устройство, подключённое к нему."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine spelar upp musik på datorn eller skickar den till en enhet som är ansluten till programmet."
           }
         }
       }
@@ -5959,6 +6259,12 @@
             "state" : "translated",
             "value" : "Clementine отклонил подключение"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine nekade anslutningen"
+          }
         }
       }
     },
@@ -5998,6 +6304,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clementine перестал отвечать. Проверьте, что он всё ещё запущен, и подключитесь снова."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine slutade svara. Kontrollera att programmet fortfarande körs och anslut sedan igen."
           }
         }
       }
@@ -6039,6 +6351,12 @@
             "state" : "translated",
             "value" : "Громкость Clementine"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementines volym"
+          }
         }
       }
     },
@@ -6073,6 +6391,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clementine не будет проверять последующие коды аутентификации с этого телефона в течение %@. Затем введите код, показанный в настройках удалённого управления по сети."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vänta %@ innan Clementine kan kontrollera en ny autentiseringskod från den här telefonen. Ange sedan koden som visas under Nätverksfjärrkontroll i inställningarna."
           }
         }
       }
@@ -6114,6 +6438,12 @@
             "state" : "translated",
             "value" : "Протокол удалённого управления Clementine"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementines fjärrkontrollprotokoll"
+          }
         }
       }
     },
@@ -6153,6 +6483,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Закрыть проигрыватель"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stäng spelaren"
           }
         }
       }
@@ -6662,6 +6998,12 @@
             "state" : "translated",
             "value" : "Подключиться к Clementine"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anslut till Clementine"
+          }
         }
       }
     },
@@ -6702,6 +7044,12 @@
             "state" : "translated",
             "value" : "Сначала подключитесь к Clementine в Clementine Remote."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anslut först till Clementine i Clementine Remote."
+          }
         }
       }
     },
@@ -6735,6 +7083,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Подключаться к последнему Clementine при запуске приложения."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anslut till senast använda Clementine när appen startar."
           }
         }
       }
@@ -6770,6 +7124,12 @@
             "state" : "translated",
             "value" : "Подключено"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ansluten"
+          }
         }
       }
     },
@@ -6804,6 +7164,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Подключено в течение"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anslutningstid"
           }
         }
       }
@@ -6957,7 +7323,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ansluter till Clementine"
+            "value" : "Ansluter till Clementine…"
           }
         },
         "tr" : {
@@ -7010,6 +7376,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Подключение…"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ansluter…"
           }
         }
       }
@@ -7205,6 +7577,12 @@
             "state" : "translated",
             "value" : "Авторское право принадлежит Apple Inc. и авторам проекта SwiftProtobuf. Лицензировано под Apache License, версия 2.0."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copyright Apple Inc. och SwiftProtobuf-projektets upphovspersoner. Licensierat under Apache License, version 2.0."
+          }
         }
       }
     },
@@ -7238,6 +7616,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Авторское право принадлежит Дэвиду Сэнсому и Андреасу Мутчеллеру. Лицензировано под Apache License, версия 2.0."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copyright David Sansome och Andreas Muttscheller. Licensierat under Apache License, version 2.0."
           }
         }
       }
@@ -7273,6 +7657,12 @@
             "state" : "translated",
             "value" : "Не удалось подключиться к Clementine"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunde inte ansluta till Clementine"
+          }
         }
       }
     },
@@ -7300,6 +7690,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Не удалось создать плейлист. Для создания плейлистов требуется Clementine 1.4 или более поздняя версия."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunde inte skapa spellistan. För att skapa spellistor krävs Clementine 1.4 eller senare."
           }
         }
       }
@@ -7334,6 +7730,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Не удалось скачать фонотеку: %@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunde inte hämta musikbiblioteket: %@"
           }
         }
       }
@@ -7487,7 +7889,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kunde ej nå värd"
+            "value" : "Kunde inte nå Clementine"
           }
         },
         "tr" : {
@@ -7541,6 +7943,12 @@
             "state" : "translated",
             "value" : "Не удалось связаться с Clementine."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunde inte nå Clementine."
+          }
         }
       }
     },
@@ -7574,6 +7982,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Не удалось сохранить файл"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunde inte spara filen"
           }
         }
       }
@@ -7609,6 +8023,12 @@
             "state" : "translated",
             "value" : "Обложка"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omslagsbild"
+          }
         }
       }
     },
@@ -7642,6 +8062,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Создать"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skapa"
           }
         }
       }
@@ -7677,6 +8103,12 @@
             "state" : "translated",
             "value" : "Тёмный"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mörkt"
+          }
         }
       }
     },
@@ -7704,6 +8136,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Данные отправлены / получены"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skickade / mottagna data"
           }
         }
       }
@@ -7738,6 +8176,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Дэвид Сэнсом (Clementine)"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "David Sansome (Clementine)"
           }
         }
       }
@@ -7920,6 +8364,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сведения"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detaljer"
           }
         }
       }
@@ -8257,6 +8707,12 @@
             "state" : "translated",
             "value" : "Отключиться от Clementine"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koppla från Clementine"
+          }
         }
       }
     },
@@ -8456,6 +8912,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Отключает Clementine Remote от Clementine."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopplar från Clementine Remote från Clementine."
           }
         }
       }
@@ -9077,7 +9539,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ladda ner"
+            "value" : "Hämta"
           }
         },
         "tr" : {
@@ -9237,7 +9699,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nedladdning avbruten"
+            "value" : "Hämtning avbruten"
           }
         },
         "tr" : {
@@ -9403,7 +9865,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nedladdning färdig"
+            "value" : "Hämtning klar"
           }
         },
         "tr" : {
@@ -9451,6 +9913,12 @@
             "state" : "translated",
             "value" : "Скачивание завершено"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hämtning slutförd"
+          }
         }
       }
     },
@@ -9478,6 +9946,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Скачать фонотеку"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hämta musikbibliotek"
           }
         }
       }
@@ -9625,7 +10099,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ladda ned spellista"
+            "value" : "Hämta spellista"
           }
         },
         "tr" : {
@@ -9791,7 +10265,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ladda endast ned låtar när du är ansluten till ett wifi nätverk."
+            "value" : "Hämta bara låtar när enheten är ansluten till wifi."
           }
         },
         "tr" : {
@@ -9838,6 +10312,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Скачивайте песни, альбомы и плейлисты из проигрывателя, очереди и фонотеки. Они сохраняются в приложении «Файлы»."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hämta låtar, album och spellistor från spelaren, kön och musikbiblioteket. De sparas i appen Filer."
           }
         }
       }
@@ -9985,7 +10465,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nedladdning startad!"
+            "value" : "Hämtning startad"
           }
         },
         "tr" : {
@@ -10027,6 +10507,12 @@
             "state" : "translated",
             "value" : "Скачанные песни"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hämtade låtar"
+          }
         }
       }
     },
@@ -10060,6 +10546,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Скачивается"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hämtar"
           }
         }
       }
@@ -10207,7 +10699,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Laddar ner data"
+            "value" : "Hämtar data…"
           }
         },
         "tr" : {
@@ -10373,7 +10865,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Laddar ned bibliotek"
+            "value" : "Hämtar musikbiblioteket…"
           }
         },
         "tr" : {
@@ -10527,7 +11019,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nedladdningar"
+            "value" : "Hämtningar"
           }
         },
         "tr" : {
@@ -10693,7 +11185,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nedladdning tillåts endast med wifi anslutning."
+            "value" : "Hämtningar tillåts bara via wifi"
           }
         },
         "tr" : {
@@ -10747,6 +11239,12 @@
             "state" : "translated",
             "value" : "Скачивание выполняется только по Wi-Fi."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hämtningar sker bara via wifi."
+          }
         }
       }
     },
@@ -10781,6 +11279,12 @@
             "state" : "translated",
             "value" : "Повторно скачивает песни, если они отличаются от находящихся на этом телефоне."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hämtar låtar igen när de skiljer sig från dem på denna telefon."
+          }
         }
       }
     },
@@ -10802,6 +11306,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Введите код авторизации, показанный в настройках сетевого удалённого управления Clementine."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ange autentiseringskoden som visas under Nätverksfjärrkontroll i Clementines inställningar."
           }
         }
       }
@@ -10949,7 +11459,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Filnamn"
+            "value" : "Fil"
           }
         },
         "tr" : {
@@ -11097,7 +11607,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ange söktermer ovan för att hitta musik på din dator och på nätet"
+            "value" : "Hitta musik i ditt musikbibliotek och i Clementines internettjänster."
           }
         },
         "tr" : {
@@ -11138,6 +11648,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Завершено"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slutfört"
           }
         }
       }
@@ -11413,6 +11929,12 @@
             "value" : "Жанр"
           }
         },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Genre"
+          }
+        },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11558,7 +12080,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Genre / Artist / Album"
+            "value" : "Genre / Album"
           }
         },
         "tr" : {
@@ -11884,6 +12406,12 @@
             "state" : "translated",
             "value" : "Внутри папки артиста, сохранять каждую песню в папку с названием её альбома."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spara varje låt i en mapp med albumets namn inuti artistens mapp."
+          }
         }
       }
     },
@@ -11918,6 +12446,12 @@
             "state" : "translated",
             "value" : "Интернет"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Internet"
+          }
         }
       }
     },
@@ -11946,6 +12480,12 @@
             "state" : "translated",
             "value" : "Clementine запущен? Это версия %@ или более поздняя, с включённым удалённым доступом по сети в его настройках? Адрес указан верно?"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Körs Clementine? Är det version %@ eller senare, med nätverksfjärrkontrollen aktiverad i inställningarna? Är adressen rätt?"
+          }
         }
       }
     },
@@ -11973,6 +12513,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Джон Магуайр (Clementine)"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "John Maguire (Clementine)"
           }
         }
       }
@@ -12174,6 +12720,12 @@
             "state" : "translated",
             "value" : "Ласт.фм"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last.fm"
+          }
         }
       }
     },
@@ -12368,6 +12920,12 @@
             "state" : "translated",
             "value" : "Разрешить проигрывание Clementine на этом телефоне"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Låt Clementine spela upp på denna telefon"
+          }
         }
       }
     },
@@ -12502,7 +13060,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bibliotek"
+            "value" : "Musikbibliotek"
           }
         },
         "tr" : {
@@ -12716,6 +13274,12 @@
             "state" : "translated",
             "value" : "Светлый"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ljust"
+          }
         }
       }
     },
@@ -12868,7 +13432,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Laddar ner Spellistor"
+            "value" : "Läser in spellistor"
           }
         },
         "tr" : {
@@ -12922,6 +13486,12 @@
             "state" : "translated",
             "value" : "Загрузка…"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Läser in…"
+          }
         }
       }
     },
@@ -12943,6 +13513,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Локальная сеть отключена"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Åtkomst till lokalt nätverk är avstängd"
           }
         }
       }
@@ -12978,6 +13554,12 @@
             "state" : "translated",
             "value" : "Поиск Clementine…"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Söker efter Clementine…"
+          }
         }
       }
     },
@@ -13006,6 +13588,12 @@
             "state" : "translated",
             "value" : "Поиск текстов песен…"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Söker efter låttext…"
+          }
         }
       }
     },
@@ -13033,6 +13621,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Потеряно соединение с Clementine"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anslutningen till Clementine bröts"
           }
         }
       }
@@ -13174,7 +13768,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Älska"
+            "value" : "Gilla"
           }
         },
         "tr" : {
@@ -13221,6 +13815,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "В избранное Last.fm"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markera som favorit på Last.fm"
           }
         }
       }
@@ -13368,7 +13968,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Låt älskad <3"
+            "value" : "Markerad som favorit på Last.fm"
           }
         },
         "tr" : {
@@ -13422,6 +14022,12 @@
             "state" : "translated",
             "value" : "Текст песни"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Låttext"
+          }
         }
       }
     },
@@ -13455,6 +14061,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Текст песни и сведения"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Låttext och detaljer"
           }
         }
       }
@@ -13490,6 +14102,12 @@
             "state" : "translated",
             "value" : "Больше параметров"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fler alternativ"
+          }
         }
       }
     },
@@ -13517,6 +14135,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Имя"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Namn"
           }
         }
       }
@@ -13546,6 +14170,12 @@
             "state" : "translated",
             "value" : "Требуется Clementine %@ или новее с включённым пунктом «Сервис → Настройки → Удалённый доступ»."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kräver Clementine %@ eller senare, med Verktyg → Inställningar → Nätverksfjärrkontroll aktiverad."
+          }
         }
       }
     },
@@ -13574,6 +14204,12 @@
             "state" : "translated",
             "value" : "Новый плейлист"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ny spellista"
+          }
         }
       }
     },
@@ -13601,6 +14237,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Новый плейлист…"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ny spellista…"
           }
         }
       }
@@ -13635,6 +14277,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Следующее"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nästa"
           }
         }
       }
@@ -13930,7 +14578,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inga nedladdningar!"
+            "value" : "Inga hämtningar"
           }
         },
         "tr" : {
@@ -13977,6 +14625,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Пока нет фонотеки"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inget musikbibliotek ännu"
           }
         }
       }
@@ -14172,6 +14826,12 @@
             "state" : "translated",
             "value" : "Ничего не проигрывается"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen låt spelas"
+          }
         }
       }
     },
@@ -14199,6 +14859,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Нет песен"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inga låtar"
           }
         }
       }
@@ -14382,6 +15048,12 @@
             "state" : "translated",
             "value" : "Не ищет в этой сети"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Söker inte i detta nätverk"
+          }
         }
       }
     },
@@ -14416,6 +15088,12 @@
             "state" : "translated",
             "value" : "Не отображается? Проверьте, включён ли его удалённый доступ по сети, или введите его адрес ниже."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visas inte Clementine? Kontrollera att nätverksfjärrkontrollen är aktiverad eller ange adressen nedan."
+          }
         }
       }
     },
@@ -14443,6 +15121,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Здесь ничего нет"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inget här"
           }
         }
       }
@@ -14472,6 +15156,12 @@
             "state" : "translated",
             "value" : "Хорошо"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
         }
       }
     },
@@ -14499,6 +15189,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "На этом телефоне"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "På denna telefon"
           }
         }
       }
@@ -14533,6 +15229,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "В вашей сети"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I ditt nätverk"
           }
         }
       }
@@ -14680,7 +15382,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Endast WIFI"
+            "value" : "Endast via wifi"
           }
         },
         "tr" : {
@@ -14728,6 +15430,12 @@
             "state" : "translated",
             "value" : "Откройте Clementine Remote, чтобы подключиться"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öppna Clementine Remote för att ansluta"
+          }
         }
       }
     },
@@ -14756,6 +15464,12 @@
             "state" : "translated",
             "value" : "Открыть настройки"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öppna Inställningar"
+          }
         }
       }
     },
@@ -14783,6 +15497,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Открыть в новом плейлисте"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öppna i ny spellista"
           }
         }
       }
@@ -14900,7 +15620,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Öppen Källkod"
+            "value" : "Programvara med öppen källkod"
           }
         },
         "tr" : {
@@ -14942,6 +15662,12 @@
             "state" : "translated",
             "value" : "Открывает Clementine Remote и подключается к последнему Clementine."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öppnar Clementine Remote och ansluter till senast använda Clementine."
+          }
         }
       }
     },
@@ -14969,6 +15695,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Открывает проигрыватель"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öppnar spelaren"
           }
         }
       }
@@ -15004,6 +15736,12 @@
             "state" : "translated",
             "value" : "Или введите его адрес"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eller ange adressen"
+          }
         }
       }
     },
@@ -15037,6 +15775,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Прочие совпадения"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Andra träffar"
           }
         }
       }
@@ -15214,6 +15958,12 @@
             "state" : "translated",
             "value" : "Приостанавливает Clementine."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pausar uppspelningen i Clementine."
+          }
         }
       }
     },
@@ -15241,6 +15991,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Громкость телефона"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telefonens volym"
           }
         }
       }
@@ -15275,6 +16031,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Выберите Clementine, которым хотите управлять. Он должен находиться в той же сети Wi-Fi, что и этот телефон."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Välj den Clementine du vill styra. Den måste vara ansluten till samma wifi-nätverk som denna telefon."
           }
         }
       }
@@ -15570,7 +16332,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spelräknare"
+            "value" : "Antal uppspelningar"
           }
         },
         "tr" : {
@@ -15624,6 +16386,12 @@
             "state" : "translated",
             "value" : "Играть следующим"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spela härnäst"
+          }
         }
       }
     },
@@ -15658,6 +16426,12 @@
             "state" : "translated",
             "value" : "Играть сейчас"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spela nu"
+          }
         }
       }
     },
@@ -15691,6 +16465,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Играет на"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spela på"
           }
         }
       }
@@ -15826,7 +16606,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spela / Pausa"
+            "value" : "Spela eller pausa"
           }
         },
         "tr" : {
@@ -15867,6 +16647,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Играть, приостанавливать и пропускать песни в Clementine."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spela, pausa och hoppa över låtar i Clementine."
           }
         }
       }
@@ -16056,6 +16842,12 @@
             "state" : "translated",
             "value" : "Играет"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spelar"
+          }
         }
       }
     },
@@ -16085,6 +16877,12 @@
             "state" : "translated",
             "value" : "Играет с"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spelar från"
+          }
         }
       }
     },
@@ -16113,6 +16911,12 @@
             "state" : "translated",
             "value" : "Будет следующим"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spelas härnäst"
+          }
         }
       }
     },
@@ -16140,6 +16944,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Играет на %@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spelar på %@"
           }
         }
       }
@@ -16305,6 +17115,12 @@
             "state" : "translated",
             "value" : "Плейлист %@"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spellista %@"
+          }
         }
       }
     },
@@ -16333,6 +17149,12 @@
             "state" : "translated",
             "value" : "Папка плейлиста"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spellistemapp"
+          }
         }
       }
     },
@@ -16355,6 +17177,12 @@
             "state" : "translated",
             "value" : "Запускает проигрывание в Clementine, если он на паузе, и ставит на паузу, если он играет."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startar uppspelningen i Clementine om den är pausad och pausar den om den pågår."
+          }
         }
       }
     },
@@ -16376,6 +17204,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Воспроизводит его или добавляет в плейлист, если Clementine играет."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spelar upp det eller lägger till det i spellistan om Clementine redan spelar"
           }
         }
       }
@@ -16505,7 +17339,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uppdatera Clementine! Du behöver Clementine %1$@ eller senare."
+            "value" : "Uppdatera Clementine. Du behöver Clementine %@ eller senare."
           }
         },
         "uk" : {
@@ -16626,6 +17460,12 @@
             "value" : "Порт"
           }
         },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Port"
+          }
+        },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16664,6 +17504,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Позиция"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Position"
           }
         }
       }
@@ -16811,7 +17657,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Optimerar databasen"
+            "value" : "Förbereder musikbiblioteket…"
           }
         },
         "tr" : {
@@ -16859,6 +17705,12 @@
             "state" : "translated",
             "value" : "Предыдущее"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Föregående"
+          }
         }
       }
     },
@@ -16893,11 +17745,24 @@
             "state" : "translated",
             "value" : "Очередь"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uppspelningskö"
+          }
         }
       }
     },
     "Rate %@ stars" : {
-
+      "localizations" : {
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ge betyget %@ stjärnor"
+          }
+        }
+      }
     },
     "Rate %lld stars" : {
       "localizations" : {
@@ -17074,11 +17939,48 @@
               }
             }
           }
+        },
+        "sv" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ge betyget %lld stjärna"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ge betyget %lld stjärnor"
+                }
+              }
+            }
+          }
         }
       }
     },
     "Rated %@ stars" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faixa avaliada em %@ estrelas"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faixa avaliada em %@ estrelas"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Betygsatt med %@ stjärnor"
+          }
+        }
+      }
     },
     "Rated %lld stars" : {
       "localizations" : {
@@ -17604,13 +18506,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Låtbetyg %lld stjärnor"
+                  "value" : "Betygsatt med %lld stjärna"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Låtbetyg %lld stjärnor"
+                  "value" : "Betygsatt med %lld stjärnor"
                 }
               }
             }
@@ -17869,6 +18771,12 @@
             "state" : "translated",
             "value" : "Переподключение к Clementine"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Återansluter till Clementine"
+          }
         }
       }
     },
@@ -17897,6 +18805,12 @@
             "state" : "translated",
             "value" : "Переподключение…"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Återansluter…"
+          }
         }
       }
     },
@@ -17924,6 +18838,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Убрать из списка"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta bort från listan"
           }
         }
       }
@@ -18753,7 +19673,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Åsidosätt existerande filer"
+            "value" : "Ersätt befintliga filer"
           }
         },
         "tr" : {
@@ -18807,6 +19727,12 @@
             "state" : "translated",
             "value" : "Заменить плейлист"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ersätt spellista"
+          }
         }
       }
     },
@@ -18835,6 +19761,12 @@
             "state" : "translated",
             "value" : "Сохранять песни плейлиста в папку с его названием."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spara en spellistas låtar i en mapp med spellistans namn."
+          }
         }
       }
     },
@@ -18862,6 +19794,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сохранять каждую песню в папку с именем её артиста."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spara varje låt i en mapp med artistens namn."
           }
         }
       }
@@ -19163,7 +20101,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sök efter någonting"
+            "value" : "Sök i Clementine"
           }
         },
         "tr" : {
@@ -19211,6 +20149,12 @@
             "state" : "translated",
             "value" : "Повторить поиск"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sök igen"
+          }
         }
       }
     },
@@ -19238,6 +20182,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Поиск фонотеки"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sök i musikbiblioteket"
           }
         }
       }
@@ -19391,7 +20341,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sök låt"
+            "value" : "Sök i denna spellista"
           }
         },
         "tr" : {
@@ -19445,6 +20395,12 @@
             "state" : "translated",
             "value" : "Выполняется поиск «%@»…"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Söker efter ”%@”…"
+          }
         }
       }
     },
@@ -19472,6 +20428,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Смотреть все"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visa alla"
           }
         }
       }
@@ -19501,6 +20463,12 @@
             "state" : "translated",
             "value" : "Смотреть все %@"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visa alla %@"
+          }
         }
       }
     },
@@ -19528,6 +20496,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Выбрать"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markera"
           }
         }
       }
@@ -19557,6 +20531,12 @@
             "state" : "translated",
             "value" : "Выбрать песни"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markera låtar"
+          }
         }
       }
     },
@@ -19584,6 +20564,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Настроить в Clementine"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konfigurera i Clementine"
           }
         }
       }
@@ -19785,6 +20771,12 @@
             "state" : "translated",
             "value" : "Показать"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visa"
+          }
         }
       }
     },
@@ -19919,7 +20911,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aktivera för att älska / utesluta låtar."
+            "value" : "Visa knappar för att markera låtar som favoriter eller utesluta dem."
           }
         },
         "tr" : {
@@ -19961,6 +20953,12 @@
             "state" : "translated",
             "value" : "Показывает обложку в полном размере"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visar omslaget i full storlek"
+          }
         }
       }
     },
@@ -19988,6 +20986,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Показывает текст песни"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visar låttexten"
           }
         }
       }
@@ -20699,6 +21703,12 @@
             "state" : "translated",
             "value" : "Переходит к следующей песне Clementine."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoppar till nästa låt i Clementine."
+          }
         }
       }
     },
@@ -20863,6 +21873,12 @@
             "state" : "translated",
             "value" : "Песня %@"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Låt %@"
+          }
         }
       }
     },
@@ -20890,6 +21906,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Песня · %@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Låt · %@"
           }
         }
       }
@@ -20925,6 +21947,12 @@
             "state" : "translated",
             "value" : "Песни"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Låtar"
+          }
         }
       }
     },
@@ -20952,6 +21980,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Песни сохраняются в папке Clementine Remote в приложении «Файлы»."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Låtar sparas i mappen för Clementine Remote i appen Filer."
           }
         }
       }
@@ -21247,7 +22281,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Startar nedladdning"
+            "value" : "Startar hämtning"
           }
         },
         "tr" : {
@@ -21295,6 +22329,12 @@
             "state" : "translated",
             "value" : "Запускает воспроизведение в Clementine."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startar uppspelningen i Clementine."
+          }
         }
       }
     },
@@ -21322,6 +22362,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Станция · %@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Station · %@"
           }
         }
       }
@@ -21356,6 +22402,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Станции"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stationer"
           }
         }
       }
@@ -21639,7 +22691,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gör stopp när låten är slut."
+            "value" : "Stoppa efter denna låt"
           }
         },
         "tr" : {
@@ -21681,6 +22733,12 @@
             "state" : "translated",
             "value" : "Останавливает Clementine."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stoppar uppspelningen i Clementine."
+          }
         }
       }
     },
@@ -21703,6 +22761,12 @@
             "state" : "translated",
             "value" : "Поток"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ström"
+          }
         }
       }
     },
@@ -21724,6 +22788,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Потоки невозможно скачать"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strömmar kan inte hämtas"
           }
         }
       }
@@ -21753,6 +22823,12 @@
             "state" : "translated",
             "value" : "Переключить Clementine"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Byt Clementine"
+          }
         }
       }
     },
@@ -21780,6 +22856,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Переключение…"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Byter…"
           }
         }
       }
@@ -21809,6 +22891,12 @@
             "state" : "translated",
             "value" : "Система"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
         }
       }
     },
@@ -21837,6 +22925,12 @@
             "state" : "translated",
             "value" : "Спасибо всем [участникам](https://github.com/clementine-player/Android-Remote/graphs/contributors) и [переводчикам](https://app.transifex.com/davidsansome/clementine-remot/)!"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tack till alla [bidragsgivare](https://github.com/clementine-player/Android-Remote/graphs/contributors) och [översättare](https://app.transifex.com/davidsansome/clementine-remot/)!"
+          }
         }
       }
     },
@@ -21864,6 +22958,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Этот адрес находится в вашей сети, и Clementine Remote требуется доступ к локальной сети, чтобы связаться с ним. Включите доступ к локальной сети в настройках."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adressen finns i ditt nätverk och Clementine Remote behöver åtkomst till lokalt nätverk för att nå den. Aktivera Lokalt nätverk i Inställningar."
           }
         }
       }
@@ -22017,7 +23117,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ogiltig Kod"
+            "value" : "Det är inte en giltig kod"
           }
         },
         "tr" : {
@@ -22071,6 +23171,12 @@
             "state" : "translated",
             "value" : "Его больше нет в Clementine"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det finns inte längre i Clementine"
+          }
         }
       }
     },
@@ -22099,6 +23205,12 @@
             "state" : "translated",
             "value" : "Фонотека, отправленная Clementine, повреждена"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Musikbiblioteket som Clementine skickade är skadat"
+          }
         }
       }
     },
@@ -22126,6 +23238,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Кнопки громкости телефона изменяют громкость Clementine, пока приложение открыто."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telefonens volymknappar ändrar Clementines volym medan appen är öppen."
           }
         }
       }
@@ -22273,7 +23391,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Otillräckligt utrymme, avbryter nedladdning."
+            "value" : "Det finns inte tillräckligt med utrymme på denna telefon"
           }
         },
         "tr" : {
@@ -22315,6 +23433,12 @@
             "state" : "translated",
             "value" : "У этого телефона нет адреса в локальной сети. Попробуйте отключить «Использовать только локальные IP-адреса» в настройках Clementine."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telefonen har ingen lokal nätverksadress. Prova att avaktivera ”Använd endast lokala IP-adresser” i Clementines inställningar."
+          }
         }
       }
     },
@@ -22336,6 +23460,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Этот телефон не подключён к Wi-Fi. Подключитесь к той же сети, что и Clementine. Чтобы связаться с Clementine через интернет, перенаправьте его порт и отключите «Использовать только локальные IP-адреса» в настройках Clementine."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telefonen är inte ansluten till wifi. Anslut till samma nätverk som Clementine. För att nå Clementine över internet behöver du vidarebefordra programmets port och avaktivera ”Använd endast lokala IP-adresser” i Clementines inställningar."
           }
         }
       }
@@ -22531,6 +23661,12 @@
             "state" : "translated",
             "value" : "Эта программа распространяется в надежде, что она будет полезной, но без каких-либо гарантий."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detta program distribueras i hopp om att det ska vara användbart, men utan någon garanti."
+          }
         }
       }
     },
@@ -22558,6 +23694,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Это удаляет все песни из плейлиста в Clementine."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detta tar bort alla låtar från spellistan i Clementine."
           }
         }
       }
@@ -22593,6 +23735,12 @@
             "state" : "translated",
             "value" : "Слишком много неверных кодов аутентификации"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "För många felaktiga autentiseringskoder"
+          }
         }
       }
     },
@@ -22622,6 +23770,12 @@
             "state" : "translated",
             "value" : "Слишком много неверных кодов аутентификации. Clementine не будет проверять последующие с этого телефона в течение %@."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "För många felaktiga autentiseringskoder. Vänta %@ innan Clementine kan kontrollera en ny kod från den här telefonen."
+          }
         }
       }
     },
@@ -22649,6 +23803,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Лучший результат"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bästa träffen"
           }
         }
       }
@@ -22796,7 +23956,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Låt"
+            "value" : "Spår"
           }
         },
         "tr" : {
@@ -22950,7 +24110,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Konverterar filer"
+            "value" : "Kodar om filer"
           }
         },
         "tr" : {
@@ -23128,6 +24288,12 @@
             "state" : "translated",
             "value" : "Обновить фонотеку"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uppdatera musikbibliotek"
+          }
         }
       }
     },
@@ -23265,6 +24431,12 @@
             "value" : "Издање"
           }
         },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
+          }
+        },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23310,6 +24482,12 @@
             "state" : "translated",
             "value" : "Версия %@"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %@"
+          }
         }
       }
     },
@@ -23338,6 +24516,12 @@
             "state" : "translated",
             "value" : "Громкость %lld%%"
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volym %lld%%"
+          }
         }
       }
     },
@@ -23365,6 +24549,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Кнопки громкости управляют Clementine"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volymknapparna styr Clementine"
           }
         }
       }
@@ -23506,7 +24696,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ändringsnivå på volymen"
+            "value" : "Volymsteg"
           }
         },
         "tr" : {
@@ -23548,6 +24738,12 @@
             "state" : "translated",
             "value" : "Пока есть подключение к Clementine."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medan enheten är ansluten till Clementine."
+          }
         }
       }
     },
@@ -23569,6 +24765,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Без доступа к локальной сети Clementine Remote не может найти Clementine в вашей сети. Введите его адрес ниже или включите доступ к локальной сети в настройках."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utan åtkomst till lokalt nätverk kan Clementine Remote inte hitta Clementine i ditt nätverk. Ange adressen nedan eller aktivera Lokalt nätverk i Inställningar."
           }
         }
       }
@@ -23764,6 +24966,12 @@
             "state" : "translated",
             "value" : "Вашей фонотеки ещё нет на этом телефоне. Скачайте её из Clementine для просмотра здесь."
           }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ditt musikbibliotek finns inte på denna telefon ännu. Hämta det från Clementine för att kunna bläddra i det här."
+          }
         }
       }
     },
@@ -23798,6 +25006,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "некоторого времени"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "en stund"
           }
         }
       }
