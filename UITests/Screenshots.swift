@@ -16,6 +16,7 @@ import XCTest
 ///
 /// The simulator's appearance is set from outside: set from the test (XCUIDevice.appearance),
 /// the app stayed light.
+@MainActor
 final class Screenshots: XCTestCase {
     private static let timeout: TimeInterval = 30
     /// Downloading and indexing the library takes a while on a simulator.
@@ -46,7 +47,7 @@ final class Screenshots: XCTestCase {
     /// XCTest's own checks failed, as typing into a field without the keyboard does.
     /// scripts/post_screenshots.sh looks for failure.png, so a failed run's missing screens don't
     /// replace main's.
-    override func tearDownWithError() throws {
+    override func tearDown() async throws {
         guard let app, let directory, testRun?.hasSucceeded == false else { return }
         try? save(XCUIScreen.main.screenshot(), as: "failure")
         try? app.debugDescription.write(
