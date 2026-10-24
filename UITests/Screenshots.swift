@@ -8,7 +8,11 @@ import XCTest
 ///     xcrun simctl ui booted appearance dark
 ///     TEST_RUNNER_CLEMENTINE_HOST=127.0.0.1 TEST_RUNNER_SCREENSHOTS_DIR=$PWD/screenshots \
 ///         TEST_RUNNER_SCREENSHOTS_PREFIX=dark_ \
-///         scripts/build.sh test -only-testing:ClementineRemoteUITests/Screenshots
+///         scripts/build.sh test -only-testing:ClementineRemoteUITests/Screenshots/testTakeScreenshots
+///
+/// testTakeFoldScreenshots takes the player on iPhone Duo, closed, as fold_outer_player, in the
+/// same way (the workflow runs it on an iPhone Duo simulator). A test can't open or pose the
+/// Duo, so it's the only fold screenshot; the other poses are checked by hand.
 ///
 /// xcodebuild passes TEST_RUNNER_ variables to the tests without the prefix. The screenshots
 /// are PNGs named in the order they're taken, after SCREENSHOTS_PREFIX. On a failure,
@@ -29,6 +33,22 @@ final class Screenshots: XCTestCase {
     private var prefix = ""
 
     func testTakeScreenshots() throws {
+        try setUpScreenshots()
+        try takeScreenshots()
+    }
+
+    func testTakeFoldScreenshots() throws {
+        try setUpScreenshots()
+        app.launch()
+        try waitFor(app.buttons["connect"]).tap()
+        try waitFor(app.buttons["connectionChip"])
+        try play("Clair de lune")
+        // Let playback move along the seek bar.
+        pause(8)
+        try screenshot("fold_outer_player")
+    }
+
+    private func setUpScreenshots() throws {
         let environment = ProcessInfo.processInfo.environment
         guard let host = environment["CLEMENTINE_HOST"], let path = environment["SCREENSHOTS_DIR"] else {
             throw XCTSkip("Needs CLEMENTINE_HOST and SCREENSHOTS_DIR")
@@ -40,7 +60,6 @@ final class Screenshots: XCTestCase {
         app = XCUIApplication()
         // Stay on the connect screen, and fill in Clementine's address.
         app.launchArguments = ["-pref_autoconnect", "NO", "-save_clementine_ip", host]
-        try takeScreenshots()
     }
 
     /// On a failure, what the screen showed, to see why: whether the test threw, or one of
@@ -117,17 +136,6 @@ final class Screenshots: XCTestCase {
         pause(Self.settle)
         try screenshot("09_outputs")
         try waitFor(app.navigationBars["Play on"].buttons["Done"]).tap()
-
-        // The player on a foldable set down like a laptop. A test can't pose a simulator, so the
-        // app fakes a fold across the middle of the screen. Unnumbered, so it's shown on pull
-        // requests but isn't one of the App Store's.
-        app.terminate()
-        app.launchArguments += ["-fake_fold", "horizontal"]
-        app.launch()
-        try waitFor(app.buttons["connect"]).tap()
-        try waitFor(app.buttons["connectionChip"])
-        try openPlayer()
-        try screenshot("player_fold")
     }
 
     // MARK: - Screens

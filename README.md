@@ -51,11 +51,15 @@ run it locally, with a Clementine set up by `clementine-it/start-clementine.sh`:
 
 ```sh
 TEST_RUNNER_CLEMENTINE_HOST=127.0.0.1 TEST_RUNNER_SCREENSHOTS_DIR=$PWD/screenshots \
-    scripts/build.sh test -only-testing:ClementineRemoteUITests/Screenshots
+    scripts/build.sh test -only-testing:ClementineRemoteUITests/Screenshots/testTakeScreenshots
 ```
 
 For the dark screenshots, run it again with the simulator dark (`xcrun simctl ui booted appearance
 dark`) and `TEST_RUNNER_SCREENSHOTS_PREFIX=dark_`.
+
+The workflow also takes the player on an iPhone Duo simulator, closed (`fold_outer_player`), with
+`testTakeFoldScreenshots` and `DESTINATION=id=<the Duo's UDID>`. A test can't open or pose the Duo,
+so check its other poses by hand in Device Hub.
 
 The comment needs a Cloudflare R2 bucket to host the images: the workflow's header says which
 secrets and variables to set. Without them, the screenshots are only the run's artifact.
