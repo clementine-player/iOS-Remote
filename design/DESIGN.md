@@ -146,11 +146,14 @@ From the Now playing board. Opened from the mini player; swipe down or the chevr
   button when Clementine can play elsewhere (see [Remote streaming](#remote-streaming)), Download.
 - Download asks what to download: this song, its album, or the playlist. Streams can't be
   downloaded.
-- Landscape and iPad: artwork on the left at full height; song, seek bar and controls beside it.
+- Landscape and iPad: artwork on the left; song, seek bar and controls beside it.
 - Half-open like a book (a vertical fold): the artwork on the leading side of the fold; the top
   row, song, seek bar, controls, volume and bottom row on the trailing side.
-- Set down like a laptop (a horizontal fold): the artwork above the fold; the top row and
-  everything else below it, scrolling if it doesn't fit.
+- Set down like a laptop (a horizontal fold): the top row at the top, the artwork between it and
+  the fold, and everything else below the fold, scrolling if it doesn't fit.
+- Landscape (and on iPad, or a foldable open flat): the artwork is as large as the height allows,
+  as long as the song and controls keep a column at least 360 pt wide; the row is centred
+  vertically.
 
 ### Details and lyrics sheet
 
