@@ -286,45 +286,80 @@ struct SongInfo: View {
 }
 
 /// The song's position; it follows the finger while dragging, and Clementine is told on release.
+/// While playing it moves on every frame, rather than once a second when Clementine reports it.
 struct SeekBar: View {
     @Environment(RemoteSession.self) private var session
     @State private var dragging: Double?
+    @State private var position = SongPosition()
 
     var body: some View {
-        let song = session.song
-        let length = song?.length ?? 0
-        let position = session.playState == .stopped ? 0 : session.position
-        let shown = dragging.map { Int($0.rounded()) } ?? position
-        VStack(spacing: 0) {
-            Slider(
-                value: Binding(
-                    get: { dragging ?? Double(min(position, max(length, 1))) },
-                    set: { dragging = $0 }),
-                in: 0...Double(max(length, 1))
-            ) { editing in
-                if !editing, let dragging {
-                    session.seek(to: Int(dragging.rounded()))
-                    self.dragging = nil
-                }
-            }
-            .disabled(length <= 0)
-            .accessibilityLabel("Position")
-            .accessibilityValue(formatTime(shown))
-            if let song {
-                HStack {
-                    Text((song.isLocal ? "" : String(localized: "Stream") + " ") + formatTime(shown))
-                    Spacer()
-                    if length > 0 {
-                        Text(formatTime(length))
+        TimelineView(.animation(paused: session.playState != .playing)) { _ in
+            let song = session.song
+            let length = song?.length ?? 0
+            let seconds = position.seconds(for: session)
+            // The time shown ticks over with each whole second, as a clock does.
+            let shown = dragging.map { Int($0.rounded()) } ?? Int(seconds)
+            VStack(spacing: 0) {
+                Slider(
+                    value: Binding(
+                        get: { dragging ?? min(seconds, Double(max(length, 1))) },
+                        set: { dragging = $0 }),
+                    in: 0...Double(max(length, 1))
+                ) { editing in
+                    if !editing, let dragging {
+                        position.seek(to: Int(dragging.rounded()))
+                        session.seek(to: Int(dragging.rounded()))
+                        self.dragging = nil
                     }
                 }
-                .textStyle(.labelMedium)
-                .monospacedDigit()
-                .foregroundStyle(Palette.onSurfaceVariant)
-                .accessibilityHidden(true)
+                .disabled(length <= 0)
+                .accessibilityLabel("Position")
+                .accessibilityValue(formatTime(shown))
+                if let song {
+                    HStack {
+                        Text((song.isLocal ? "" : String(localized: "Stream") + " ") + formatTime(shown))
+                        Spacer()
+                        if length > 0 {
+                            Text(formatTime(length))
+                        }
+                    }
+                    .textStyle(.labelMedium)
+                    .monospacedDigit()
+                    .foregroundStyle(Palette.onSurfaceVariant)
+                    .accessibilityHidden(true)
+                }
             }
         }
         .environment(\.layoutDirection, .leftToRight)
+    }
+}
+
+/// Where the song is, from what Clementine last said and this phone's clock since
+/// ([PositionClock]).
+@MainActor
+final class SongPosition {
+    private var clock = PositionClock()
+    private var song: Song?
+    private var reported: Int?
+
+    /// In seconds; takes in what `session` says, when that has changed.
+    func seconds(for session: RemoteSession) -> Double {
+        let stopped = session.playState == .stopped
+        let seconds = stopped ? 0 : session.position
+        if reported == nil || session.song != song || stopped {
+            clock.seek(to: seconds)
+        } else if seconds != reported {
+            clock.report(seconds)
+        }
+        clock.setPlaying(session.playState == .playing)
+        song = session.song
+        reported = seconds
+        return clock.position()
+    }
+
+    /// The user seeked to `seconds`.
+    func seek(to seconds: Int) {
+        clock.seek(to: seconds)
     }
 }
 
