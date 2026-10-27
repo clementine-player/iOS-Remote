@@ -23,6 +23,10 @@ later ones are usually quicker. With each build, the workflow sets:
 The feedback email and the reviewers' contact are set once in App Store Connect, under
 *TestFlight → Test Information*, and left as they are.
 
+TestFlight builds, like debug builds, have features that are still being built: code checks
+`TestingFeatures.enabled`, which `testflight.yml` turns on by building with `TESTING_FEATURES`.
+App Store releases never have them.
+
 ## App Store releases
 
 **Release notes live in commit messages.** A commit that changes something users notice ends

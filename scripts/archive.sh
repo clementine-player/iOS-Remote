@@ -13,6 +13,9 @@
 # they have none, so first the app and the widget are signed ad hoc with their own (the app
 # group they share).
 #
+# With TESTING_FEATURES=YES (as for TestFlight), the build has the features still being built
+# (see TestingFeatures in ClementineKit). App Store releases are built without.
+#
 # With ASC_KEY_ID, ASC_ISSUER_ID and ASC_KEY_PATH (an App Store Connect API key, as on CI),
 # Xcode signs in with that key; without them, with the Apple account signed in to Xcode.
 set -euo pipefail
@@ -29,13 +32,19 @@ if [ -n "${ASC_KEY_ID:-}" ]; then
     -authenticationKeyIssuerID "$ASC_ISSUER_ID")
 fi
 
+conditions=()
+if [ "${TESTING_FEATURES:-NO}" = YES ]; then
+  conditions=('SWIFT_ACTIVE_COMPILATION_CONDITIONS=$(inherited) TESTING_FEATURES')
+fi
+
 xcodegen generate --quiet
 rm -rf "$archive"
 mkdir -p "$out"
 xcodebuild archive -project ClementineRemote.xcodeproj -scheme ClementineRemote \
   -destination generic/platform=iOS -archivePath "$archive" \
   -derivedDataPath build/DerivedData-archive \
-  MARKETING_VERSION="$version" CURRENT_PROJECT_VERSION="$build" CODE_SIGNING_ALLOWED=NO
+  MARKETING_VERSION="$version" CURRENT_PROJECT_VERSION="$build" CODE_SIGNING_ALLOWED=NO \
+  ${conditions[@]+"${conditions[@]}"}
 
 # Each bundle's entitlements, with the build settings they use filled in: the extension first,
 # as signing the app seals what's inside it.
