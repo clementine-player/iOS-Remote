@@ -17756,6 +17756,12 @@
     },
     "Rate %@ stars" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinda %@ tärniga"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17962,6 +17968,12 @@
     },
     "Rated %@ stars" : {
       "localizations" : {
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinnatud %@ tärniga"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
