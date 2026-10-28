@@ -2,7 +2,7 @@
 # Regenerates the Swift for Clementine's remote control protocol.
 #
 # Needs protoc and protoc-gen-swift, the same version as the swift-protobuf package in
-# Packages/ClementineKit/Package.swift (1.38.1):
+# Packages/ClementineKit/Package.swift (1.39.0):
 #   brew install protobuf swift-protobuf
 set -eu
 cd "$(dirname "$0")/../Packages/ClementineKit"
