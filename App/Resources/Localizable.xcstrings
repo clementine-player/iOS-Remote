@@ -17762,6 +17762,12 @@
             "value" : "Hinda %@ tärniga"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оценить на %@ звезд(ы)"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17984,6 +17990,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Faixa avaliada em %@ estrelas"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оценено на %@ звезд(ы)"
           }
         },
         "sv" : {
