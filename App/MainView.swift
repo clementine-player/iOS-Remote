@@ -62,6 +62,11 @@ struct MainView: View {
                 .presentationDetents([.medium, .large])
                 .presentationBackground(Palette.surfaceContainerLow)
         }
+        .sheet(isPresented: $model.isPlayFromSheetPresented) {
+            PlayFromSheet()
+                .presentationDetents([.medium])
+                .presentationBackground(Palette.surfaceContainerLow)
+        }
         .background {
             VolumeButtonsView(model: model)
         }
@@ -173,6 +178,21 @@ struct MiniPlayer: View {
             .accessibilityHint("Opens the player")
             .accessibilityIdentifier("miniPlayer")
 
+            // On the phone, Play from takes the output button's place.
+            if playback.isOnPhone, model.canChoosePlayFrom, placement != .inline {
+                Button {
+                    model.isPlayFromSheetPresented = true
+                } label: {
+                    Image(systemName: UIDevice.current.userInterfaceIdiom == .pad ? "ipad" : "iphone")
+                        .foregroundStyle(Palette.primary)
+                        .frame(width: 32, height: 32)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(Text(
+                    "Play from",
+                    comment: "Title of a sheet, and a button's label: choose where the music plays from, Clementine or this phone."))
+                .accessibilityIdentifier("playFromButton")
+            }
             if session.hasOtherOutputs, !playback.isOnPhone, placement != .inline {
                 OutputButton(size: 32) { model.isOutputSheetPresented = true }
             }

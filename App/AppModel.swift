@@ -37,6 +37,16 @@ final class AppModel {
     var isPlayerPresented = false
     var isConnectionSheetPresented = false
     var isOutputSheetPresented = false
+    var isPlayFromSheetPresented = false
+
+    /// Where the app plays from: Clementine, or the songs kept on this phone.
+    enum PlayFrom {
+        case clementine, phone
+    }
+
+    /// Where the app plays from: this phone from when it starts playing there until Play from
+    /// switches back to Clementine.
+    private(set) var playFrom = PlayFrom.clementine
 
     /// Why connecting failed, to explain on the connect screen.
     var connectProblem: ConnectProblem?
@@ -142,19 +152,47 @@ final class AppModel {
             comment: "Shown for a moment after choosing Keep on this phone; the placeholder is an album, an artist or a playlist."))
     }
 
-    /// What the player and the mini player show and control: songs kept on this phone while they
-    /// play, or are paused there, otherwise Clementine.
+    /// What the player and the mini player show and control: songs kept on this phone while the
+    /// app plays from there, and they play or are paused there; otherwise Clementine.
     var playback: any PlayerSource {
-        phonePlayer.song != nil ? PhonePlayerSource(player: phonePlayer) : session
+        isPlayingFromPhone ? PhonePlayerSource(player: phonePlayer) : session
+    }
+
+    /// Whether the app plays from this phone, with a song playing or paused there.
+    var isPlayingFromPhone: Bool {
+        playFrom == .phone && phonePlayer.song != nil
+    }
+
+    /// Whether Play from has a choice: Clementine is connected, and a song plays or is paused on
+    /// this phone.
+    var canChoosePlayFrom: Bool {
+        session.status == .connected && phonePlayer.song != nil
     }
 
     /// Plays [songs] kept on this phone from the one at [index], or all of them at random. Pauses
     /// Clementine, so only one plays.
     func playOnPhone(_ songs: [KeptSong], from index: Int, shuffled: Bool = false) {
+        pauseClementine()
+        playFrom = .phone
+        phonePlayer.play(songs, from: index, shuffled: shuffled)
+    }
+
+    /// Switches where the app plays from, pausing the one it leaves; the other stays paused until
+    /// it's played. This phone only when a song plays or is paused there.
+    func play(from place: PlayFrom) {
+        guard place != playFrom, place == .clementine || phonePlayer.song != nil else { return }
+        switch place {
+        case .phone: pauseClementine()
+        case .clementine: phonePlayer.pause()
+        }
+        playFrom = place
+        nowPlaying?.update()
+    }
+
+    private func pauseClementine() {
         if session.playState == .playing {
             session.pause()
         }
-        phonePlayer.play(songs, from: index, shuffled: shuffled)
     }
 
     /// Where synced songs go: beside the downloaded ones, so the Files app shows them too.
