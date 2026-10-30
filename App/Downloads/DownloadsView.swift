@@ -121,6 +121,12 @@ struct DownloadsView: View {
                 downloads.readOnPhone()
                 syncer.refresh()
             }
+            .onChange(of: syncer.status.networkNotAllowed) { _, notAllowed in
+                // Says why syncing didn't start, while this is shown.
+                if notAllowed {
+                    model.toasts.show(DownloadFailure.networkNotAllowed.message)
+                }
+            }
             .onChange(of: scenePhase) { _, phase in
                 // Songs may have been deleted, or added, in the Files app meanwhile.
                 if phase == .active {
