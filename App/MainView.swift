@@ -25,7 +25,7 @@ struct MainView: View {
             Tab("Search", systemImage: "magnifyingglass", value: AppModel.Tab.search, role: .search) {
                 SearchView()
             }
-            Tab("Downloads", systemImage: "arrow.down.circle", value: AppModel.Tab.downloads) {
+            Tab(downloadsTitle, systemImage: downloadsImage, value: AppModel.Tab.downloads) {
                 DownloadsView()
             }
         }
@@ -59,6 +59,19 @@ struct MainView: View {
         .background {
             VolumeButtonsView(model: model)
         }
+    }
+
+    /// The Downloads tab's name: On phone (or On iPad) once it has the music kept on the device.
+    private var downloadsTitle: String {
+        guard model.isOnThisPhone else { return String(localized: "Downloads") }
+        return UIDevice.current.userInterfaceIdiom == .pad
+            ? String(localized: "On iPad", comment: "The tab with the music saved on the iPad, as opposed to Clementine on the computer. Keep it short: it's a tab label, under an icon, beside four others.")
+            : String(localized: "On phone", comment: "The tab with the music saved on the phone, as opposed to Clementine on the computer. Keep it short: it's a tab label, under an icon, beside four others.")
+    }
+
+    private var downloadsImage: String {
+        guard model.isOnThisPhone else { return "arrow.down.circle" }
+        return UIDevice.current.userInterfaceIdiom == .pad ? "ipad" : "iphone"
     }
 }
 

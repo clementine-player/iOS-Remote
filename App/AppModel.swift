@@ -24,6 +24,8 @@ final class AppModel {
     let renderer: Renderer
     /// Clementine's internet services.
     let internet: InternetBrowser
+    /// Syncs songs from Clementine to the phone, while connected to it.
+    let syncer: Syncer
     @ObservationIgnored private var nowPlaying: NowPlaying?
     @ObservationIgnored private var scenePhase = ScenePhase.active
 
@@ -50,6 +52,10 @@ final class AppModel {
         self.session = session
         renderer = Renderer(playback: AVPlayback(), server: { session.endpoint }) { session.send($0) }
         internet = InternetBrowser { session.send($0) }
+        syncer = Syncer(
+            session: session, store: TestingFeatures.enabled ? Self.openSyncStore() : nil, folder: Self.syncedFolder)
+        // What's kept shows before connecting, for the Clementine last connected.
+        syncer.refresh()
         library = LibraryModel(model: self)
         search = SearchModel(model: self)
         downloads = DownloadsModel(model: self)
@@ -67,6 +73,22 @@ final class AppModel {
         internet.onAdded = { [weak self] action, result in
             self?.showAdded(action, result: result)
         }
+    }
+
+    /// Whether Downloads is On this phone, with the music kept on the phone: when Clementine syncs
+    /// songs to it, or something is kept already.
+    var isOnThisPhone: Bool {
+        session.syncing.supported || !syncer.kept.isEmpty
+    }
+
+    /// Where synced songs go: beside the downloaded ones, so the Files app shows them too.
+    static let syncedFolder = URL.documentsDirectory.appending(path: "Clementine/Synced", directoryHint: .isDirectory)
+
+    /// The synced songs and their rules, in the app's own files; nil if it can't be opened.
+    private static func openSyncStore() -> SyncStore? {
+        let folder = URL.applicationSupportDirectory
+        try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        return try? SyncStore(url: folder.appending(path: "sync.sqlite"))
     }
 
     /// Says how putting internet service nodes on the playlist went, where the player doesn't show it.
