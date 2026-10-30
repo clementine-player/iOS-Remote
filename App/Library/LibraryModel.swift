@@ -125,26 +125,24 @@ final class LibraryModel {
             && SyncSources.keepableFields.contains(fields[item.level])
     }
 
-    /// Keeps [item] on this phone ([canKeep]): its albums, or the artist's songs.
-    func keep(_ item: BrowseItem) async {
+    /// Keeps [item] on this phone ([canKeep]): its albums, or the artist's songs, updated from
+    /// Clementine as [refreshPolicy] says.
+    func keep(_ item: BrowseItem, refreshPolicy: RefreshPolicy = .never) async {
         guard canKeep(item) else { return }
         let serverID = model.session.syncing.serverID
         let grouping = model.settings.libraryGrouping
         let rules: [SyncRule]
         if grouping.fields[item.level] == "artist" {
-            rules = [SyncSources.artistRule(serverID: serverID, artist: item.value)]
+            rules = [SyncSources.artistRule(serverID: serverID, artist: item.value, refreshPolicy: refreshPolicy)]
         } else {
             // One album here can be several in Clementine, filed under different album artists:
             // keep each.
             rules = ((try? await store.albums(of: item, grouping: grouping)) ?? []).map {
-                SyncSources.albumRule(serverID: serverID, albumArtist: $0.albumArtist, album: $0.album)
+                SyncSources.albumRule(
+                    serverID: serverID, albumArtist: $0.albumArtist, album: $0.album, refreshPolicy: refreshPolicy)
             }
         }
-        guard !rules.isEmpty else { return }
-        model.syncer.keep(rules)
-        model.toasts.show(LocalizedStringResource(
-            "Keeping \(item.displayTitle) on this phone",
-            comment: "Shown for a moment after choosing Keep on this phone; the placeholder is an album or an artist."))
+        model.keep(rules, title: item.displayTitle)
     }
 }
 

@@ -46,6 +46,7 @@ struct SyncEngineTests {
         func put(_ path: String, _ data: Data) { files[path] = data }
         func remove(_ path: String) { files[path] = nil }
         func clearOpened() { opened = [] }
+        func clearRequests() { requests = [] }
     }
 
     let store: SyncStore
@@ -59,10 +60,10 @@ struct SyncEngineTests {
         engine = SyncEngine(store: store, folder: folder, supportedFormats: ["audio/flac"], now: { Self.synced })
     }
 
-    func rule(_ sourceID: String, limitItems: Int = 0) async throws -> Int64 {
+    func rule(_ sourceID: String, limitItems: Int = 0, refreshPolicy: RefreshPolicy = .onConnect) async throws -> Int64 {
         try await store.addRule(
             SyncRule(
-                serverID: Self.server, sourceID: sourceID, title: sourceID, kind: .album, refreshPolicy: .never,
+                serverID: Self.server, sourceID: sourceID, title: sourceID, kind: .album, refreshPolicy: refreshPolicy,
                 limitItems: limitItems))
     }
 
@@ -135,6 +136,27 @@ struct SyncEngineTests {
         #expect(try await store.item(serverID: Self.server, itemKey: "b")?.version == "2")
         #expect(try files().count == 2)
         #expect(try files()["Pixies/Doolittle/01 b.flac"] == "b 2")
+    }
+
+    @Test func aRuleKeptAsItIsSyncsOnceUntilItHasItsSongs() async throws {
+        let album = try await rule("library/album/Pixies/Doolittle", refreshPolicy: .never)
+        // The first sync fails, so the next one asks again.
+        guard case .failed = try await engine.sync(clementine).rules[album] else {
+            Issue.record("Expected the first sync to fail")
+            return
+        }
+
+        await clementine.serve("library/album/Pixies/Doolittle", [await song("a")])
+        #expect(try await engine.sync(clementine).rules[album] == .synced(songs: 1, downloaded: 1, skipped: 0))
+
+        // Once it has its songs, it isn't asked for them again, and keeps them.
+        await clementine.serve("library/album/Pixies/Doolittle", [await song("a"), await song("b", title: "Tame")])
+        await clementine.clearRequests()
+        let result = try await engine.sync(clementine)
+        #expect(result.rules[album] == nil)
+        #expect(await clementine.requests.isEmpty)
+        #expect(result.removed == 0)
+        #expect(try await store.ruleItems(ruleID: album).map(\.itemKey) == ["a"])
     }
 
     @Test func aSongInTwoRulesIsDownloadedOnceAndKeptWhileEitherWantsIt() async throws {

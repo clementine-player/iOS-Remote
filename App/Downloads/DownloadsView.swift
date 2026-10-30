@@ -328,9 +328,13 @@ extension KeptRule {
                     comment: "Something kept on the phone that hasn't synced yet, because Clementine isn't reachable.")
         default:
             return [
-                String(
-                    localized: "Kept as it is",
-                    comment: "How often something kept on the phone is updated from Clementine, short: never, so it keeps the songs it has."),
+                rule.refreshPolicy == .never
+                    ? String(
+                        localized: "Kept as it is",
+                        comment: "How often something kept on the phone is updated from Clementine, short: never, so it keeps the songs it has.")
+                    : String(
+                        localized: "Every time you connect",
+                        comment: "How often something kept on the phone is updated from Clementine, short: each time the phone connects to it."),
                 String(
                     localized: "\(songs) songs, \(formatBytes(bytes))",
                     comment: "How much of something kept is on the phone: the number of songs, and their size, such as \"180 MB\"."),

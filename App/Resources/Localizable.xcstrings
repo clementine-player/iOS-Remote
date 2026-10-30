@@ -11342,6 +11342,12 @@
         }
       }
     },
+    "Every time I connect" : {
+      "comment" : "A choice under Update it: what's kept is updated each time the phone connects to Clementine."
+    },
+    "Every time you connect" : {
+      "comment" : "How often something kept on the phone is updated from Clementine, short: each time the phone connects to it."
+    },
     "File" : {
       "localizations" : {
         "ca" : {
@@ -12700,8 +12706,11 @@
         }
       }
     },
+    "Keep the songs it has now" : {
+      "comment" : "Under Never, in the Keep on this phone sheet."
+    },
     "Keeping %@ on this phone" : {
-      "comment" : "Shown for a moment after choosing Keep on this phone; the placeholder is an album or an artist."
+      "comment" : "Shown for a moment after choosing Keep on this phone; the placeholder is an album, an artist or a playlist."
     },
     "Kept as it is" : {
       "comment" : "How often something kept on the phone is updated from Clementine, short: never, so it keeps the songs it has."
@@ -14216,6 +14225,9 @@
           }
         }
       }
+    },
+    "Never" : {
+      "comment" : "A choice under Update it: what's kept is never updated from Clementine."
     },
     "New playlist" : {
       "localizations" : {
@@ -24351,6 +24363,9 @@
           }
         }
       }
+    },
+    "Update it" : {
+      "comment" : "Heading in the Keep on this phone sheet, over how often what's kept is updated from Clementine."
     },
     "Update library" : {
       "localizations" : {
