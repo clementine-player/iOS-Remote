@@ -5974,6 +5974,9 @@
         }
       }
     },
+    "Clementine isn't reachable" : {
+      "comment" : "Banner: the app can't connect to Clementine on the computer."
+    },
     "Clementine on %@" : {
       "localizations" : {
         "ca" : {
@@ -15816,6 +15819,9 @@
         }
       }
     },
+    "Or play what's on this phone" : {
+      "comment" : "On the connect screen, under \"Or enter its address\": instead of connecting, play the music saved on the phone."
+    },
     "Other matches" : {
       "localizations" : {
         "es" : {
@@ -16546,6 +16552,9 @@
         }
       }
     },
+    "Play on this phone" : {
+      "comment" : "A button in the dialog when connecting fails, and a shortcut on the app's icon: play the music saved on the phone instead of connecting."
+    },
     "Play or pause" : {
       "localizations" : {
         "ca" : {
@@ -17024,6 +17033,9 @@
           }
         }
       }
+    },
+    "Playing what's on this phone" : {
+      "comment" : "Banner, under \"Clementine isn't reachable\"."
     },
     "Playlist" : {
       "localizations" : {
@@ -22848,6 +22860,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Stoppar uppspelningen i Clementine."
+          }
+        }
+      }
+    },
+    "Stops connecting · %lld songs" : {
+      "comment" : "On the connect screen while it connects, under On this phone: tapping it stops connecting to Clementine. The placeholder is how many songs are saved on the phone.",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Stops connecting · %lld song"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Stops connecting · %lld songs"
+                }
+              }
+            }
           }
         }
       }
