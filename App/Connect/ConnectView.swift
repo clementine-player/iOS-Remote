@@ -2,7 +2,8 @@ import ClementineKit
 import SwiftUI
 
 /// The connect screen: Clementine's hero, the Clementines found on the network, and an address
-/// to connect to by hand. While connecting, it shows how far along it is.
+/// to connect to by hand. While connecting, it shows how far along it is. With songs on this
+/// phone, it offers to play them instead.
 struct ConnectView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.scenePhase) private var scenePhase
@@ -147,6 +148,12 @@ struct ConnectView: View {
                 Button("Open Settings", action: openSettings)
             } else {
                 Button("OK") {}
+                if model.songsOnPhone > 0 {
+                    Button(String(
+                        localized: "Play on this phone",
+                        comment: "A button in the dialog when connecting fails, and a shortcut on the app's icon: play the music saved on the phone instead of connecting."),
+                        action: model.playWithoutClementine)
+                }
             }
         } message: { problem in
             Text(problemMessage(problem))
@@ -241,6 +248,21 @@ struct ConnectView: View {
             }
             .padding(.horizontal, Metrics.space2)
 
+            if model.songsOnPhone > 0 {
+                VStack(alignment: .leading, spacing: Metrics.space1) {
+                    Text(String(
+                        localized: "Or play what's on this phone",
+                        comment: "On the connect screen, under \"Or enter its address\": instead of connecting, play the music saved on the phone."))
+                        .textStyle(.labelLarge)
+                        .foregroundStyle(Palette.onSurfaceVariant)
+                        .accessibilityAddTraits(.isHeader)
+                        .padding(.leading, Metrics.space2)
+                        .padding(.vertical, Metrics.space2)
+                    OnPhoneRow(songs: model.songsOnPhone, connecting: connecting, action: model.playWithoutClementine)
+                        .background(Palette.surfaceContainerLow, in: .rect(cornerRadius: Metrics.shapeMedium))
+                }
+            }
+
             Text("Needs Clementine \(Self.clementineVersion) or later, with Tools → Preferences → Network Remote turned on.")
                 .textStyle(.labelMedium)
                 .fontWeight(.regular)
@@ -254,6 +276,7 @@ struct ConnectView: View {
 
     private func appeared() {
         browser.start()
+        model.downloads.readOnPhone()
         if host.isEmpty {
             host = model.settings.lastHost
         }
@@ -390,6 +413,42 @@ struct SectionTitle: View {
             .textStyle(.labelLarge)
             .foregroundStyle(Palette.onSurfaceVariant)
             .accessibilityAddTraits(.isHeader)
+    }
+}
+
+/// What's on this phone, to play without Clementine; while connecting, tapping it stops that.
+private struct OnPhoneRow: View {
+    let songs: Int
+    let connecting: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: Metrics.space4) {
+                IconTile(systemImage: UIDevice.current.userInterfaceIdiom == .pad ? "ipad" : "iphone")
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("On this phone")
+                        .textStyle(.bodyLarge)
+                        .foregroundStyle(Palette.onSurface)
+                    Text(connecting
+                        ? String(
+                            localized: "Stops connecting · \(songs) songs",
+                            comment: "On the connect screen while it connects, under On this phone: tapping it stops connecting to Clementine. The placeholder is how many songs are saved on the phone.")
+                        : String(localized: "\(songs) songs"))
+                        .textStyle(.bodyMedium)
+                        .foregroundStyle(Palette.onSurfaceVariant)
+                }
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.forward")
+                    .foregroundStyle(Palette.onSurfaceVariant)
+                    .accessibilityHidden(true)
+            }
+            .padding(.horizontal, Metrics.space4)
+            .padding(.vertical, Metrics.space3)
+            .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("playOnPhone")
     }
 }
 

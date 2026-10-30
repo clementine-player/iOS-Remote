@@ -41,6 +41,10 @@ final class AppModel {
     /// Why connecting failed, to explain on the connect screen.
     var connectProblem: ConnectProblem?
 
+    /// Whether the app plays what's on this phone without Clementine, which it isn't connected to:
+    /// chosen on the connect screen, or from the app's icon.
+    var isWithoutClementine = false
+
     /// Whether connecting automatically is over for this launch: tried already, or something else
     /// done first.
     private(set) var isAutoConnectOver = false
@@ -84,6 +88,50 @@ final class AppModel {
     var isOnThisPhone: Bool {
         session.syncing.supported || !syncer.kept.isEmpty
     }
+
+    /// How many songs are on this phone to play without Clementine, downloaded or kept; 0 without
+    /// testing features, until playing on this phone is released.
+    var songsOnPhone: Int {
+        guard TestingFeatures.enabled else { return 0 }
+        return (downloads.onPhone?.count ?? 0) + syncer.kept.reduce(0) { $0 + $1.songs }
+    }
+
+    /// Plays what's on this phone without Clementine: stops connecting, if it is, and opens On
+    /// this phone. Connected already, it opens On this phone, to play from it.
+    func playWithoutClementine() {
+        stopAutoConnecting()
+        connectProblem = nil
+        selectedTab = .downloads
+        isPlayerPresented = false
+        guard !session.status.isActive else { return }
+        if session.status.isConnecting {
+            session.disconnect()
+        }
+        isWithoutClementine = true
+    }
+
+    /// Connects to the Clementine last connected to, from playing what's on this phone without it.
+    func connectFromPhone() {
+        isWithoutClementine = false
+        let name = settings.lastServerName
+        connect(host: settings.lastHost, name: name.isEmpty ? nil : name)
+    }
+
+    /// Offers Play on this phone on the app's icon while there's something to play.
+    func updateShortcuts() {
+        UIApplication.shared.shortcutItems = songsOnPhone > 0
+            ? [UIApplicationShortcutItem(
+                type: Self.playOnPhoneShortcut,
+                localizedTitle: String(
+                    localized: "Play on this phone",
+                    comment: "A button in the dialog when connecting fails, and a shortcut on the app's icon: play the music saved on the phone instead of connecting."),
+                localizedSubtitle: nil,
+                icon: UIApplicationShortcutIcon(systemImageName: "iphone"))]
+            : []
+    }
+
+    /// The app's icon's shortcut that plays what's on this phone.
+    static let playOnPhoneShortcut = "playOnPhone"
 
     /// Keeps [rules] on this phone, and says so, naming what's kept: [title].
     func keep(_ rules: [SyncRule], title: String) {
