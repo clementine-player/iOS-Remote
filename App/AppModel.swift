@@ -142,6 +142,12 @@ final class AppModel {
             comment: "Shown for a moment after choosing Keep on this phone; the placeholder is an album, an artist or a playlist."))
     }
 
+    /// What the player and the mini player show and control: songs kept on this phone while they
+    /// play, or are paused there, otherwise Clementine.
+    var playback: any PlayerSource {
+        phonePlayer.song != nil ? PhonePlayerSource(player: phonePlayer) : session
+    }
+
     /// Plays [songs] kept on this phone from the one at [index], or all of them at random. Pauses
     /// Clementine, so only one plays.
     func playOnPhone(_ songs: [KeptSong], from index: Int, shuffled: Bool = false) {
@@ -346,4 +352,52 @@ enum ConnectProblem: Equatable, Identifiable {
     case tooManyWrongAuthCodes(retryAfter: Duration?)
 
     var id: String { String(describing: self) }
+}
+
+/// What the player shows and controls: Clementine, or the songs kept on this phone.
+@MainActor
+protocol PlayerSource {
+    var song: Song? { get }
+    var playState: PlayState { get }
+    /// In seconds.
+    var position: Int { get }
+    var shuffleMode: ShuffleMode { get }
+    var repeatMode: RepeatMode { get }
+    /// Whether it's the songs kept on this phone, which have only what the phone can do.
+    var isOnPhone: Bool { get }
+    func playPause()
+    func next()
+    func previous()
+    func seek(to seconds: Int)
+    func stop()
+    func cycleShuffle() -> ShuffleMode
+    func cycleRepeat() -> RepeatMode
+}
+
+extension RemoteSession: PlayerSource {
+    var isOnPhone: Bool { false }
+}
+
+/// The songs kept on this phone, as the player shows them.
+struct PhonePlayerSource: PlayerSource {
+    let player: PhonePlayer
+
+    var song: Song? { player.playingSong }
+    var playState: PlayState { player.isPlaying ? .playing : .paused }
+    var position: Int { Int(player.position) }
+    var shuffleMode: ShuffleMode { player.isShuffled ? .all : .off }
+    var repeatMode: RepeatMode { player.repeatMode }
+    var isOnPhone: Bool { true }
+    func playPause() { player.togglePlayPause() }
+    func next() { player.next() }
+    func previous() { player.previous() }
+    func seek(to seconds: Int) { player.seek(to: Double(seconds)) }
+    func stop() { player.stop() }
+
+    func cycleShuffle() -> ShuffleMode {
+        player.toggleShuffle()
+        return shuffleMode
+    }
+
+    func cycleRepeat() -> RepeatMode { player.cycleRepeat() }
 }
