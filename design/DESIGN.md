@@ -45,6 +45,9 @@ iOS's own controls and patterns.
  └──────────────────────────────────────────────────────────────┘
 ```
 
+In testing builds, Downloads is On this phone, which the app also shows without connecting (see
+[On this phone](#on-this-phone-tab-5-testing-builds)).
+
 | Android (today) | Redesign | iOS |
 |---|---|---|
 | Drawer: Search, Player, Playlists, Library, Downloads, Settings, Quit | Bottom navigation: Queue, Library, Internet, Search, Downloads | `TabView` with five `Tab`s (Internet only when Clementine can be browsed) |
@@ -258,6 +261,82 @@ From the Downloads board.
   and each time a download finishes.
 - With nothing downloading, downloaded or on the phone: "No downloads", and where to download from.
 - Files are saved in the app's Documents folder under `Clementine/`, visible in the Files app.
+
+### On this phone (tab 5, testing builds)
+
+From the "On this phone (offline playback)" canvas. In debug and TestFlight builds
+(`TestingFeatures.enabled`), the Downloads tab becomes On this phone: music kept on the phone, kept
+up to date from Clementine, and played on the phone when Clementine isn't there. The Android remote
+has the same screens and wording.
+
+- Large title "On this phone", subtitle the space used ("6.2 GB of 8 GB · 41 GB free") or, while
+  syncing, "Syncing · *n* songs to go". Toolbar: ConnectionChip, an add button (Keep on this phone)
+  and a menu. The tab keeps its place and its `arrow.down.circle` icon.
+- **Banner**, while Clementine can't be reached: a `surface-container-high` card with the computer
+  glyph, "Clementine isn't reachable", "Playing what's on this phone", and **Connect**.
+- **Browse:** the songs on the phone, navigated as the Library is: artists, then albums, then
+  songs, with the same rows, headers, "*n* items" counts and "Artist / Album" song lines, and
+  **Play** and **Shuffle** in each header. Songs without tags take their artist and album from
+  their folders (`Artist/Album/`).
+- **Syncing:** a row per rule with work to do. While it runs: "12 of 40 songs · 180 MB of 310 MB",
+  a progress bar, and pause and stop buttons (swipe actions too). Queued: "Next · 6 songs, 48 MB".
+  A row never just says it's waiting: it gives the reason, then what's left, and a button when one
+  fixes it: "Waiting for Wi‑Fi", "Waiting to charge", "Waiting for Clementine", "Over your 8 GB
+  budget · needs 1.1 GB" (**Change**), "Downloads are off in Clementine", "Plex needs setting up on
+  the computer". Songs that failed are counted under their rule with the reason ("Plex won't let
+  this song be downloaded").
+- **Kept on this phone:** one row per rule: what it keeps, how it's updated ("Every week", "Every
+  time you connect", "After listening", "Kept as it is") and its size or when it last synced.
+  Tapping one pushes its songs, in order, with Play and Shuffle, and a menu: Sync now, Change how it
+  syncs…, Remove from this phone… (asks first: its songs go unless something else kept has them).
+  Songs not on the phone yet are dimmed, with why. Songs downloaded before syncing existed are one
+  row, "Earlier downloads", kept as they are.
+- **Storage:** a bar of the space used, "6.2 GB used of 8 GB · 41 GB free on this phone", and
+  **Change**, which opens the setting.
+- **Empty:** a phone glyph, "Nothing on this phone yet", "Keep music on this phone to play it when
+  Clementine isn't around. It stays up to date by itself.", then suggestions with **Keep** buttons:
+  Added in the last 30 days, the playlist playing, the most played albums.
+- **Keep on this phone** (in the menus that offer Download: songs, albums, artists, playlists,
+  smart playlists, Internet folders, and the add button): a `.sheet` with medium and large detents,
+  a `Form`: what's kept, **Update it** (Never: keep the songs it has now; Every time I connect;
+  Every day; Every week; After I've listened: when 80% of it has played on this phone), **Keep at
+  most** (All of it, a number of songs, a size), Quality (as in Settings unless changed), then "About
+  40 songs, 310 MB. 1.8 GB left of your 8 GB." and **Keep on this phone**.
+- A first sync over 500 MB asks first ("Sync 1.2 GB now?": Not now, Sync). One that doesn't fit
+  says "Not enough room", with Cancel, Keep fewer songs and Change budget. Both are `.alert`s.
+- When Clementine has downloads turned off, or can't sync, every Keep on this phone action is
+  hidden; what's kept stays playable.
+- Synced files go to `Documents/Clementine/Synced/`, visible in the Files app.
+
+### Playing on the phone (testing builds)
+
+The app plays from one of two places: Clementine, or this phone.
+
+- Playing anything from On this phone plays it on the phone, with its own queue. The Queue tab
+  shows the queue of wherever the app plays from: on the phone, the songs started there, with Up
+  next.
+- The player's top row names where it plays from: "On this phone" in `primary` with the `iphone`
+  glyph, over what's playing ("Newest tracks"); or "Clementine on studio-pc" over the playlist.
+  Tapping it opens **Play from**. On the phone the player has no Love, output, Download, Stop after
+  this song, or lyrics, and the volume is the phone's (`MPVolumeView`).
+- The mini player shows the `iphone` button where the output button sits while it plays on the
+  phone; tapping it opens Play from.
+- **Play from:** a `.sheet` at the medium detent: "Clementine on studio-pc" (with its state:
+  "Paused · Clair de lune", or "Isn't reachable") and "On this phone" ("Playing · So What"), a check
+  on the current one, and "Switching pauses the one you leave." Switching doesn't start the other.
+- While Clementine can't be reached, the Library still browses its copy on the phone: songs kept on
+  the phone play there; the rest are dimmed, "Needs Clementine". Search and Internet show the
+  banner with Connect.
+- Lock screen: Now Playing and the remote commands, as when Clementine plays here (see
+  [Remote streaming](#remote-streaming)): title, "artist — album", cover and position. No Live
+  Activity.
+- **Getting there without Clementine:** if Clementine can't be reached at launch and the phone has
+  music on it, the app opens to On this phone with the banner. On the Connect screen, with music on
+  the phone, an "Or play what's on this phone" section under the address field has one row, "On
+  this phone" ("117 songs · Road trip, Kind of Blue and 2 more"; while connecting automatically,
+  "Stops connecting · 117 songs"); tapping it opens On this phone without connecting. The "Could
+  not reach host" alert gets a **Play on this phone** button. A Home Screen quick action, **Play on
+  this phone**, opens On this phone without connecting automatically.
 
 ### Connection sheet
 
@@ -618,6 +697,10 @@ ClementineRemote.xcodeproj           (generated from project.yml by XcodeGen)
 | | Playlist folder | off | `pref_dl_pl_save_own_dir` |
 | | Artist folder | on | `pref_dl_artist_dir` |
 | | Album folder (needs artist folder) | on | `pref_dl_album_dir` |
+| On this phone (testing builds) | Download over: Wi‑Fi only; Wi‑Fi and mobile data; Any network. Replaces Only on Wi-Fi | Wi‑Fi only | `pref_dl_network` |
+| | Only while charging (background syncs) | on | |
+| | Space for synced music, with the space used and free | the smaller of 8 GB and 10% of free space | |
+| | Quality: original files when the phone plays them, otherwise Opus at 160 kbps; or always Opus | original | |
 | Connection | Connect automatically | on | `pref_autoconnect` |
 | | Let Clementine play on this phone | on | `pref_renderer` |
 | | Port | 5500 | `pref_port` |
