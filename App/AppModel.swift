@@ -54,6 +54,8 @@ final class AppModel {
         internet = InternetBrowser { session.send($0) }
         syncer = Syncer(
             session: session, store: TestingFeatures.enabled ? Self.openSyncStore() : nil, folder: Self.syncedFolder)
+        // What's kept shows before connecting, for the Clementine last connected.
+        syncer.refresh()
         library = LibraryModel(model: self)
         search = SearchModel(model: self)
         downloads = DownloadsModel(model: self)
@@ -71,6 +73,12 @@ final class AppModel {
         internet.onAdded = { [weak self] action, result in
             self?.showAdded(action, result: result)
         }
+    }
+
+    /// Whether Downloads is On this phone, with the music kept on the phone: when Clementine syncs
+    /// songs to it, or something is kept already.
+    var isOnThisPhone: Bool {
+        session.syncing.supported || !syncer.kept.isEmpty
     }
 
     /// Where synced songs go: beside the downloaded ones, so the Files app shows them too.

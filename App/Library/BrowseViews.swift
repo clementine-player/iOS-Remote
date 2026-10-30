@@ -17,6 +17,9 @@ struct BrowseRows: View {
     /// Splits artists, albums and genres into sections by their first letter, with an index.
     var alphabetical = false
     var descending = false
+    /// Keeps an item on this phone, for the items it can.
+    var keep: ((BrowseItem) -> Void)?
+    var canKeep: (BrowseItem) -> Bool = { _ in false }
     /// Adds the songs of the items to a playlist, doing an action.
     let add: ([BrowseItem], PlaylistTarget, AddAction) -> Void
 
@@ -90,6 +93,10 @@ struct BrowseRows: View {
             .contextMenu {
                 if !isEditing {
                     BrowseAddActions(item: item) { add([item], $0, $1) }
+                    if let keep, canKeep(item) {
+                        Divider()
+                        KeepButton { keep(item) }
+                    }
                 }
             }
             .listRowBackground(selection.contains(index) ? Palette.secondaryContainer : Palette.surface)
@@ -123,6 +130,19 @@ struct BrowseRow: View {
                     IconTile(systemImage: item.kind.systemImage)
                 }
             }
+        }
+    }
+}
+
+/// Keeps something on this phone.
+struct KeepButton: View {
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Label(
+                String(localized: "Keep on this phone", comment: "Saves the music on the phone and keeps it up to date."),
+                systemImage: "iphone")
         }
     }
 }

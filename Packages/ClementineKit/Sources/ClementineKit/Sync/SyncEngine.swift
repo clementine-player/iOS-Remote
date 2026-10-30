@@ -69,6 +69,12 @@ public struct SyncEngine: Sendable {
         }
 
         // Only once every rule has had its say: a song moving from one rule to another stays.
+        return SyncResult(rules: results, removed: try await Self.removeUnwanted(store: store, serverID: serverID, folder: folder))
+    }
+
+    /// Deletes [serverID]'s songs in [folder] that no rule wants, as after a rule is removed.
+    /// Returns how many.
+    public static func removeUnwanted(store: SyncStore, serverID: String, folder: URL) async throws -> Int {
         var removed = 0
         for item in try await store.unwantedItems(serverID: serverID) {
             // Already gone, say if the user deleted it: forget it all the same.
@@ -76,7 +82,7 @@ public struct SyncEngine: Sendable {
             try await store.removeItem(serverID: serverID, itemKey: item.itemKey)
             removed += 1
         }
-        return SyncResult(rules: results, removed: removed)
+        return removed
     }
 
     private func sync(_ rule: SyncRule, over connection: some SyncConnection) async throws -> RuleResult {

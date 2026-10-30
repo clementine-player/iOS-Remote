@@ -92,6 +92,19 @@ public actor LibraryStore {
         SongBrowser(query: SongQuery(fields: grouping.fields, sorting: sorting, table: "songs"))
     }
 
+    /// The albums of the songs [item] groups, by album artist (the artist where there's none), as
+    /// Clementine files them for syncing: one album here can be several there.
+    public func albums(of item: BrowseItem, grouping: LibraryGrouping) throws -> [(albumArtist: String, album: String)] {
+        let fields = grouping.fields.prefix(item.level + 1)
+        guard fields.count == item.selection.count else { return [] }
+        let conditions = fields.map { " AND \($0) = ?" }.joined()
+        return try open().query("""
+            SELECT DISTINCT \(Self.groupArtist) AS album_artist, album FROM songs
+            WHERE album <> '' AND album_artist <> ''\(conditions)
+            ORDER BY album_artist, album
+            """, item.selection).map { ($0[0] ?? "", $0[1] ?? "") }
+    }
+
     // MARK: - Searching
 
     /// Songs are grouped by their album artist, else their artist, as Clementine groups albums.

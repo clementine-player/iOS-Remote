@@ -42,6 +42,19 @@ struct SampleLibrary {
 
 struct LibraryTests {
 
+    @Test func findsTheAlbumsToKeep() async throws {
+        let library = try await SampleLibrary().store()
+        let artists = try await library.level(below: nil, grouping: .artistAlbum, sorting: .ascending)
+        let debussy = artists.items[1]
+        #expect(try await library.albums(of: debussy, grouping: .artistAlbum).map { [$0.albumArtist, $0.album] }
+            == [["Claude Debussy", "Suite bergamasque"]])
+
+        let albums = try await library.level(below: nil, grouping: .album, sorting: .ascending)
+        let gymnopedies = try #require(albums.items.first { $0.value == "Gymnopédies" })
+        #expect(try await library.albums(of: gymnopedies, grouping: .album).map { [$0.albumArtist, $0.album] }
+            == [["Erik Satie", "Gymnopédies"]])
+    }
+
     @Test func groupsByArtistThenAlbum() async throws {
         let library = try await SampleLibrary().store()
         let artists = try await library.level(below: nil, grouping: .artistAlbum, sorting: .ascending)
