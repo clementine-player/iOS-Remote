@@ -19,40 +19,42 @@ final class NowPlaying {
         let center = MPRemoteCommandCenter.shared()
         let session = model.session
         let phone = model.phonePlayer
+        // Songs kept on this phone while the app plays from there, otherwise Clementine.
+        let onPhone = { [unowned model] in model.isPlayingFromPhone }
         center.playCommand.addTarget { _ in
-            MainActor.assumeIsolated { phone.song != nil ? phone.play() : session.play() }
+            MainActor.assumeIsolated { onPhone() ? phone.play() : session.play() }
             return .success
         }
         center.pauseCommand.addTarget { _ in
-            MainActor.assumeIsolated { phone.song != nil ? phone.pause() : session.pause() }
+            MainActor.assumeIsolated { onPhone() ? phone.pause() : session.pause() }
             return .success
         }
         center.togglePlayPauseCommand.addTarget { _ in
-            MainActor.assumeIsolated { phone.song != nil ? phone.togglePlayPause() : session.playPause() }
+            MainActor.assumeIsolated { onPhone() ? phone.togglePlayPause() : session.playPause() }
             return .success
         }
         center.nextTrackCommand.addTarget { _ in
-            MainActor.assumeIsolated { phone.song != nil ? phone.next() : session.next() }
+            MainActor.assumeIsolated { onPhone() ? phone.next() : session.next() }
             return .success
         }
         center.previousTrackCommand.addTarget { _ in
-            MainActor.assumeIsolated { phone.song != nil ? phone.previous() : session.previous() }
+            MainActor.assumeIsolated { onPhone() ? phone.previous() : session.previous() }
             return .success
         }
         center.changePlaybackPositionCommand.addTarget { event in
             guard let event = event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
             let seconds = event.positionTime
-            MainActor.assumeIsolated { phone.song != nil ? phone.seek(to: seconds) : session.seek(to: Int(seconds)) }
+            MainActor.assumeIsolated { onPhone() ? phone.seek(to: seconds) : session.seek(to: Int(seconds)) }
             return .success
         }
         setCommandsEnabled(false)
     }
 
-    /// Shows what plays on this phone: songs kept on it, else what the renderer plays, or nothing
-    /// once it stops.
+    /// Shows what plays on this phone: songs kept on it while the app plays from there, else what
+    /// the renderer plays, or nothing once it stops.
     func update() {
         let phone = model.phonePlayer
-        if let song = phone.song {
+        if model.isPlayingFromPhone, let song = phone.song {
             var info: [String: Any] = [
                 MPMediaItemPropertyTitle: song.title,
                 MPMediaItemPropertyArtist: song.artist,

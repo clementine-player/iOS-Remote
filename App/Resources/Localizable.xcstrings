@@ -15238,6 +15238,9 @@
     "On phone" : {
       "comment" : "The tab with the music saved on the phone, as opposed to Clementine on the computer. Keep it short: it's a tab label, under an icon, beside four others."
     },
+    "On this iPad" : {
+      "comment" : "As \"On this phone\", on an iPad: music saved on the iPad, as opposed to Clementine on the computer."
+    },
     "On this phone" : {
       "localizations" : {
         "et" : {
@@ -16010,6 +16013,9 @@
         }
       }
     },
+    "Paused · %@" : {
+      "comment" : "In Play from, under Clementine or On this phone: it's paused on the song the placeholder names."
+    },
     "Pauses Clementine." : {
       "localizations" : {
         "et" : {
@@ -16431,6 +16437,9 @@
           }
         }
       }
+    },
+    "Play from" : {
+      "comment" : "Title of a sheet, and a button's label: choose where the music plays from, Clementine or this phone."
     },
     "Play next" : {
       "localizations" : {
@@ -17042,6 +17051,9 @@
     },
     "Playing what's on this phone" : {
       "comment" : "Banner, under \"Clementine isn't reachable\"."
+    },
+    "Playing · %@" : {
+      "comment" : "In Play from, under Clementine or On this phone: it's playing the song the placeholder names."
     },
     "Playlist" : {
       "localizations" : {
@@ -22982,6 +22994,9 @@
           }
         }
       }
+    },
+    "Switching pauses the one you leave." : {
+      "comment" : "At the bottom of Play from."
     },
     "Switching…" : {
       "localizations" : {
