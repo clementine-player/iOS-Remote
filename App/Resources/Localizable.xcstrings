@@ -2164,6 +2164,29 @@
         }
       }
     },
+    "%lld songs, %@" : {
+      "comment" : "How much of something kept is on the phone: the number of songs, and their size, such as \"180 MB\".",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld song, %@"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld songs, %@"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld%%" : {
       "localizations" : {
         "cs" : {
@@ -7740,6 +7763,9 @@
         }
       }
     },
+    "Couldn't finish syncing. It tries again when you connect." : {
+      "comment" : "Something kept on the phone whose sync was cut short, such as by losing the connection."
+    },
     "Couldn't reach Clementine" : {
       "localizations" : {
         "ca" : {
@@ -11316,6 +11342,12 @@
         }
       }
     },
+    "Every time I connect" : {
+      "comment" : "A choice under Update it: what's kept is updated each time the phone connects to Clementine."
+    },
+    "Every time you connect" : {
+      "comment" : "How often something kept on the phone is updated from Clementine, short: each time the phone connects to it."
+    },
     "File" : {
       "localizations" : {
         "ca" : {
@@ -12523,6 +12555,9 @@
         }
       }
     },
+    "Keep on this phone" : {
+      "comment" : "Saves the music on the phone and keeps it up to date."
+    },
     "Keep the screen on" : {
       "localizations" : {
         "ca" : {
@@ -12670,6 +12705,18 @@
           }
         }
       }
+    },
+    "Keep the songs it has now" : {
+      "comment" : "Under Never, in the Keep on this phone sheet."
+    },
+    "Keeping %@ on this phone" : {
+      "comment" : "Shown for a moment after choosing Keep on this phone; the placeholder is an album, an artist or a playlist."
+    },
+    "Kept as it is" : {
+      "comment" : "How often something kept on the phone is updated from Clementine, short: never, so it keeps the songs it has."
+    },
+    "Kept on this phone" : {
+      "comment" : "Heading of the things you chose to keep on the phone."
     },
     "Last.fm" : {
       "localizations" : {
@@ -14179,6 +14226,9 @@
         }
       }
     },
+    "Never" : {
+      "comment" : "A choice under Update it: what's kept is never updated from Clementine."
+    },
     "New playlist" : {
       "localizations" : {
         "et" : {
@@ -14634,6 +14684,9 @@
           }
         }
       }
+    },
+    "No longer in Clementine" : {
+      "comment" : "Something kept on the phone that Clementine doesn't have any more, such as a deleted playlist. Its songs stay on the phone."
     },
     "No lyrics found." : {
       "localizations" : {
@@ -15164,6 +15217,12 @@
           }
         }
       }
+    },
+    "On iPad" : {
+      "comment" : "The tab with the music saved on the iPad, as opposed to Clementine on the computer. Keep it short: it's a tab label, under an icon, beside four others."
+    },
+    "On phone" : {
+      "comment" : "The tab with the music saved on the phone, as opposed to Clementine on the computer. Keep it short: it's a tab label, under an icon, beside four others."
     },
     "On this phone" : {
       "localizations" : {
@@ -17674,6 +17733,9 @@
         }
       }
     },
+    "Preparing…" : {
+      "comment" : "Something kept on the phone, while Clementine makes the list of its songs."
+    },
     "Previous" : {
       "localizations" : {
         "es" : {
@@ -18838,6 +18900,12 @@
         }
       }
     },
+    "Remove" : {
+      "comment" : "The button that removes something kept on the phone, after asking."
+    },
+    "Remove %@? Its songs are deleted from this phone, unless something else you keep has them." : {
+      "comment" : "Asks before removing something kept on the phone; the placeholder is its name."
+    },
     "Remove from list" : {
       "localizations" : {
         "et" : {
@@ -19037,6 +19105,9 @@
           }
         }
       }
+    },
+    "Remove from this phone…" : {
+      "comment" : "Menu item on something kept on the phone; asks first."
     },
     "Repeat album" : {
       "localizations" : {
@@ -21020,6 +21091,9 @@
         }
       }
     },
+    "Shuffle" : {
+      "comment" : "Button: plays, on the phone, the songs of something kept on it, in random order."
+    },
     "Shuffle albums" : {
       "localizations" : {
         "ca" : {
@@ -22890,6 +22964,9 @@
         }
       }
     },
+    "Sync now" : {
+      "comment" : "Menu item: syncs what's kept on the phone with Clementine now."
+    },
     "System" : {
       "localizations" : {
         "et" : {
@@ -24287,6 +24364,9 @@
         }
       }
     },
+    "Update it" : {
+      "comment" : "Heading in the Keep on this phone sheet, over how often what's kept is updated from Clementine."
+    },
     "Update library" : {
       "localizations" : {
         "et" : {
@@ -24736,6 +24816,9 @@
           }
         }
       }
+    },
+    "Waiting for Clementine" : {
+      "comment" : "Something kept on the phone that hasn't synced yet, because Clementine isn't reachable."
     },
     "While connected to Clementine." : {
       "localizations" : {

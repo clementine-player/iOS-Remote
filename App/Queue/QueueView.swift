@@ -10,6 +10,7 @@ struct QueueView: View {
     @State private var editMode = EditMode.inactive
     @State private var isClearConfirmationPresented = false
     @State private var isNamingPlaylist = false
+    @State private var isKeeping = false
     /// The song last tapped to play: the list stays where it is when it starts playing.
     @State private var tappedIndex: Int32?
 
@@ -100,6 +101,14 @@ struct QueueView: View {
                 }
             } message: {
                 Text("This removes every song from the playlist in Clementine.")
+            }
+            .sheet(isPresented: $isKeeping) {
+                if let shown {
+                    // Playlists change: kept up to date, unless asked.
+                    KeepSheet(title: shown.name, refreshPolicy: .onConnect) { policy in
+                        keep(shown, refreshPolicy: policy)
+                    }
+                }
             }
         }
         .onAppear { session.loadPlaylistSongs() }
@@ -228,6 +237,10 @@ struct QueueView: View {
                             model.downloads.download(playlist: shown)
                         }
                     }
+                    if session.syncing.available {
+                        KeepButton { isKeeping = true }
+                            .accessibilityIdentifier("queueKeep")
+                    }
                     Button("Close playlist", systemImage: "xmark.rectangle") {
                         if let shown {
                             session.close(playlistID: shown.id)
@@ -252,6 +265,16 @@ struct QueueView: View {
             ? String(localized: "\(minutes / 60) h \(minutes % 60) min")
             : String(localized: "\(minutes) min")
         return String(localized: "\(count) songs") + " · " + length
+    }
+
+    /// Keeps [playlist] on this phone, updated from Clementine as [refreshPolicy] says.
+    private func keep(_ playlist: Playlist, refreshPolicy: RefreshPolicy) {
+        let syncing = session.syncing
+        guard syncing.available else { return }
+        model.keep(
+            [SyncSources.playlistRule(
+                serverID: syncing.serverID, id: playlist.id, name: playlist.name, refreshPolicy: refreshPolicy)],
+            title: playlist.name)
     }
 
     private func toggle(_ song: Song) {

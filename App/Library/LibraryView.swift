@@ -36,6 +36,8 @@ private struct LibraryLevelView: View {
     @State private var level: BrowseLevel?
     @State private var selection = Set<Int>()
     @State private var editMode = EditMode.inactive
+    /// What the Keep sheet is open for.
+    @State private var keeping: BrowseItem?
 
     private var library: LibraryModel { model.library }
 
@@ -89,7 +91,8 @@ private struct LibraryLevelView: View {
             if let level {
                 BrowseRows(
                     level: level, selection: $selection, isEditing: editMode.isEditing,
-                    alphabetical: true, descending: sorting == LibrarySorting.descending.rawValue
+                    alphabetical: true, descending: sorting == LibrarySorting.descending.rawValue,
+                    keep: { keeping = $0 }, canKeep: { library.canKeep($0) }
                 ) { items, target, action in
                     Task { await library.add(items, to: target, action: action) }
                 }
@@ -99,6 +102,14 @@ private struct LibraryLevelView: View {
         .listSectionIndexVisibility(.visible)
         .surfaceBackground()
         .environment(\.editMode, $editMode)
+        .sheet(isPresented: Binding { keeping != nil } set: { if !$0 { keeping = nil } }) {
+            if let item = keeping {
+                // Albums and artists change rarely: kept as they are, unless asked.
+                KeepSheet(title: item.displayTitle, refreshPolicy: .never) { policy in
+                    Task { await library.keep(item, refreshPolicy: policy) }
+                }
+            }
+        }
     }
 
     private struct LoadKey: Equatable {

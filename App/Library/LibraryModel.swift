@@ -116,6 +116,34 @@ final class LibraryModel {
         let settings = model.settings
         return (try? await store.songURLs(of: items, grouping: settings.libraryGrouping, sorting: settings.librarySorting)) ?? []
     }
+
+    /// Whether [item] can be kept on this phone, when Clementine syncs: an artist or an album, by
+    /// name. Albums are kept by album artist, as Clementine files them; artists by artist.
+    func canKeep(_ item: BrowseItem) -> Bool {
+        let fields = model.settings.libraryGrouping.fields
+        return model.session.syncing.available && !item.value.isEmpty && item.level < fields.count
+            && SyncSources.keepableFields.contains(fields[item.level])
+    }
+
+    /// Keeps [item] on this phone ([canKeep]): its albums, or the artist's songs, updated from
+    /// Clementine as [refreshPolicy] says.
+    func keep(_ item: BrowseItem, refreshPolicy: RefreshPolicy = .never) async {
+        guard canKeep(item) else { return }
+        let serverID = model.session.syncing.serverID
+        let grouping = model.settings.libraryGrouping
+        let rules: [SyncRule]
+        if grouping.fields[item.level] == "artist" {
+            rules = [SyncSources.artistRule(serverID: serverID, artist: item.value, refreshPolicy: refreshPolicy)]
+        } else {
+            // One album here can be several in Clementine, filed under different album artists:
+            // keep each.
+            rules = ((try? await store.albums(of: item, grouping: grouping)) ?? []).map {
+                SyncSources.albumRule(
+                    serverID: serverID, albumArtist: $0.albumArtist, album: $0.album, refreshPolicy: refreshPolicy)
+            }
+        }
+        model.keep(rules, title: item.displayTitle)
+    }
 }
 
 /// Searching the library on the phone. It matches as Clementine's global search does, and its

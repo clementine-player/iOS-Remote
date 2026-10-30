@@ -24,6 +24,10 @@ final class AppModel {
     let renderer: Renderer
     /// Clementine's internet services.
     let internet: InternetBrowser
+    /// Syncs songs from Clementine to the phone, while connected to it.
+    let syncer: Syncer
+    /// Plays the songs kept on this phone, without Clementine.
+    let phonePlayer = PhonePlayer()
     @ObservationIgnored private var nowPlaying: NowPlaying?
     @ObservationIgnored private var scenePhase = ScenePhase.active
 
@@ -50,12 +54,17 @@ final class AppModel {
         self.session = session
         renderer = Renderer(playback: AVPlayback(), server: { session.endpoint }) { session.send($0) }
         internet = InternetBrowser { session.send($0) }
+        syncer = Syncer(
+            session: session, store: TestingFeatures.enabled ? Self.openSyncStore() : nil, folder: Self.syncedFolder)
+        // What's kept shows before connecting, for the Clementine last connected.
+        syncer.refresh()
         library = LibraryModel(model: self)
         search = SearchModel(model: self)
         downloads = DownloadsModel(model: self)
         let nowPlaying = NowPlaying(model: self)
         self.nowPlaying = nowPlaying
         renderer.onUpdate = { nowPlaying.update() }
+        phonePlayer.onUpdate = { nowPlaying.update() }
         session.addObserver { [renderer, internet] message in
             renderer.handle(message)
             internet.handle(message)
@@ -67,6 +76,40 @@ final class AppModel {
         internet.onAdded = { [weak self] action, result in
             self?.showAdded(action, result: result)
         }
+    }
+
+    /// Whether Downloads is On this phone, with the music kept on the phone: when Clementine syncs
+    /// songs to it, or something is kept already.
+    var isOnThisPhone: Bool {
+        session.syncing.supported || !syncer.kept.isEmpty
+    }
+
+    /// Keeps [rules] on this phone, and says so, naming what's kept: [title].
+    func keep(_ rules: [SyncRule], title: String) {
+        guard !rules.isEmpty else { return }
+        syncer.keep(rules)
+        toasts.show(LocalizedStringResource(
+            "Keeping \(title) on this phone",
+            comment: "Shown for a moment after choosing Keep on this phone; the placeholder is an album, an artist or a playlist."))
+    }
+
+    /// Plays [songs] kept on this phone from the one at [index], or all of them at random. Pauses
+    /// Clementine, so only one plays.
+    func playOnPhone(_ songs: [KeptSong], from index: Int, shuffled: Bool = false) {
+        if session.playState == .playing {
+            session.pause()
+        }
+        phonePlayer.play(songs, from: index, shuffled: shuffled)
+    }
+
+    /// Where synced songs go: beside the downloaded ones, so the Files app shows them too.
+    static let syncedFolder = URL.documentsDirectory.appending(path: "Clementine/Synced", directoryHint: .isDirectory)
+
+    /// The synced songs and their rules, in the app's own files; nil if it can't be opened.
+    private static func openSyncStore() -> SyncStore? {
+        let folder = URL.applicationSupportDirectory
+        try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        return try? SyncStore(url: folder.appending(path: "sync.sqlite"))
     }
 
     /// Says how putting internet service nodes on the playlist went, where the player doesn't show it.
