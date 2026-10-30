@@ -26,9 +26,20 @@ public struct Syncing: Sendable, Equatable {
     }
 }
 
+/// A rule, with the songs of it on the phone, and how its last sync went.
+public struct KeptRule: Sendable, Equatable, Identifiable {
+    public var rule: SyncRule
+    public var songs: Int
+    public var bytes: Int64
+    /// Nil until it syncs while the app runs.
+    public var result: RuleResult?
+
+    public var id: Int64 { rule.id }
+}
+
 /// Syncs the rules for the connected Clementine while the app is connected to it: each time it
-/// connects, and when asked ([syncNow]), such as after a rule is made or removed. Background sync
-/// comes later.
+/// connects, and when asked ([syncNow]), such as after a rule is made ([keep]) or removed
+/// ([remove]). Background sync comes later.
 @MainActor
 @Observable
 public final class Syncer {
@@ -42,21 +53,26 @@ public final class Syncer {
     }
 
     public private(set) var status = Status()
+    /// The rules for the Clementine connected, or the last one, in their order: read again when
+    /// one is made or removed, and after each sync.
+    public private(set) var kept: [KeptRule] = []
     /// The rules and synced songs; nil if it couldn't be opened.
     public let store: SyncStore?
     /// The synced songs' folder.
     public let folder: URL
     @ObservationIgnored private let session: RemoteSession
+    @ObservationIgnored private let settings: Settings
     @ObservationIgnored private let manifests = SyncManifests()
     @ObservationIgnored private let timeout: Duration
     @ObservationIgnored private var task: Task<Void, Never>?
     @ObservationIgnored private var again = false
 
     public init(
-        session: RemoteSession, store: SyncStore?, folder: URL,
+        session: RemoteSession, store: SyncStore?, folder: URL, settings: Settings = Settings(),
         timeout: Duration = ClementineSyncConnection.manifestTimeout
     ) {
         self.session = session
+        self.settings = settings
         self.store = store
         self.folder = folder
         self.timeout = timeout
@@ -68,8 +84,64 @@ public final class Syncer {
     private func handle(_ message: RemoteMessage) {
         manifests.handle(message)
         // Clementine says what it can do each time the app connects.
-        if message.type == .info, session.syncing.available {
+        guard message.type == .info else { return }
+        if session.syncing.supported {
+            settings.syncServerID = session.syncing.serverID
+            refresh()
+        }
+        if session.syncing.available {
             syncNow()
+        }
+    }
+
+    /// The Clementine the rules shown are for: the one connected, or the last one that synced.
+    private var serverID: String {
+        session.syncing.supported ? session.syncing.serverID : settings.syncServerID
+    }
+
+    /// Reads the rules again, for [kept], such as when they're first shown.
+    public func refresh() {
+        Task { await readKept() }
+    }
+
+    private func readKept() async {
+        let serverID = serverID
+        guard let store, !serverID.isEmpty, let rules = try? await store.rules(serverID: serverID) else { return }
+        var kept: [KeptRule] = []
+        for rule in rules {
+            let songs = (try? await store.ruleItems(ruleID: rule.id)) ?? []
+            kept.append(KeptRule(
+                rule: rule, songs: songs.count, bytes: songs.reduce(0) { $0 + $1.sizeBytes },
+                result: status.results[rule.id]))
+        }
+        self.kept = kept
+    }
+
+    /// Keeps [rules] on the phone, and syncs them. A rule for a source already kept is left as it
+    /// is.
+    public func keep(_ rules: [SyncRule]) {
+        guard let store else { return }
+        Task {
+            for var rule in rules {
+                let existing = (try? await store.rules(serverID: rule.serverID)) ?? []
+                guard !existing.contains(where: { $0.sourceID == rule.sourceID }) else { continue }
+                rule.position = (existing.map(\.position).max() ?? -1) + 1
+                _ = try? await store.addRule(rule)
+            }
+            await readKept()
+            syncNow()
+        }
+    }
+
+    /// Stops keeping a rule, and deletes its songs that nothing else kept has.
+    public func remove(_ ruleID: Int64) {
+        guard let store else { return }
+        Task {
+            guard let rule = try? await store.rule(id: ruleID) else { return }
+            try? await store.removeRule(id: ruleID)
+            _ = try? await SyncEngine.removeUnwanted(store: store, serverID: rule.serverID, folder: folder)
+            status.results[ruleID] = nil
+            await readKept()
         }
     }
 
@@ -115,5 +187,6 @@ public final class Syncer {
             status.unavailable = true
         }
         status.running = false
+        await readKept()
     }
 }
