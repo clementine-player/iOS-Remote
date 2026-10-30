@@ -88,9 +88,9 @@ public final class RemoteSession {
     /// Whether songs can be synced from this Clementine to the phone; set from each INFO.
     public private(set) var syncing = Syncing()
 
-    /// Clementine's smart playlists, which can be kept on this phone: asked for on each INFO when
-    /// it syncs, and empty until it answers.
-    public private(set) var smartPlaylists: [Pb_Remote_SyncSource] = []
+    /// Clementine's smart playlists, which can be played, and kept on this phone when it syncs:
+    /// asked for on each INFO when Clementine has them, and empty until it answers.
+    public private(set) var smartPlaylists: [Pb_Remote_SmartPlaylist] = []
 
     // MARK: Playing
 
@@ -293,12 +293,11 @@ public final class RemoteSession {
             if canChooseOutput {
                 send(RemoteMessage(.requestOutputs))
             }
-            if syncing.supported {
-                send(RemoteMessage(.requestSyncSources))
+            if info.features.contains(.smartPlaylists) {
+                send(RemoteMessage(.requestSmartPlaylists))
             }
-        case .syncSources:
-            // Its playlists come with the queue.
-            smartPlaylists = message.responseSyncSources.sources.filter { $0.kind == .smartPlaylist }
+        case .smartPlaylists:
+            smartPlaylists = message.responseSmartPlaylists.smartPlaylists
         case .outputs:
             outputs = message.responseOutputs.outputs.map(Output.init)
         case .firstDataSentComplete:
