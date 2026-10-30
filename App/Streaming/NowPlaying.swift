@@ -3,7 +3,8 @@ import MediaPlayer
 import UIKit
 
 /// The lock screen and Control Center while Clementine plays on this phone: what's playing, and
-/// buttons that control Clementine, which decides what the phone plays next.
+/// buttons that control Clementine, which decides what the phone plays next. While songs kept on
+/// this phone play without Clementine, they show instead, and the buttons control them.
 @MainActor
 final class NowPlaying {
     private unowned let model: AppModel
@@ -17,37 +18,57 @@ final class NowPlaying {
         self.model = model
         let center = MPRemoteCommandCenter.shared()
         let session = model.session
+        let phone = model.phonePlayer
         center.playCommand.addTarget { _ in
-            MainActor.assumeIsolated { session.play() }
+            MainActor.assumeIsolated { phone.song != nil ? phone.play() : session.play() }
             return .success
         }
         center.pauseCommand.addTarget { _ in
-            MainActor.assumeIsolated { session.pause() }
+            MainActor.assumeIsolated { phone.song != nil ? phone.pause() : session.pause() }
             return .success
         }
         center.togglePlayPauseCommand.addTarget { _ in
-            MainActor.assumeIsolated { session.playPause() }
+            MainActor.assumeIsolated { phone.song != nil ? phone.togglePlayPause() : session.playPause() }
             return .success
         }
         center.nextTrackCommand.addTarget { _ in
-            MainActor.assumeIsolated { session.next() }
+            MainActor.assumeIsolated { phone.song != nil ? phone.next() : session.next() }
             return .success
         }
         center.previousTrackCommand.addTarget { _ in
-            MainActor.assumeIsolated { session.previous() }
+            MainActor.assumeIsolated { phone.song != nil ? phone.previous() : session.previous() }
             return .success
         }
         center.changePlaybackPositionCommand.addTarget { event in
             guard let event = event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
-            let seconds = Int(event.positionTime)
-            MainActor.assumeIsolated { session.seek(to: seconds) }
+            let seconds = event.positionTime
+            MainActor.assumeIsolated { phone.song != nil ? phone.seek(to: seconds) : session.seek(to: Int(seconds)) }
             return .success
         }
         setCommandsEnabled(false)
     }
 
-    /// Shows what the renderer plays, or nothing once it stops.
+    /// Shows what plays on this phone: songs kept on it, else what the renderer plays, or nothing
+    /// once it stops.
     func update() {
+        let phone = model.phonePlayer
+        if let song = phone.song {
+            var info: [String: Any] = [
+                MPMediaItemPropertyTitle: song.title,
+                MPMediaItemPropertyArtist: song.artist,
+                MPMediaItemPropertyAlbumTitle: song.album,
+                MPNowPlayingInfoPropertyElapsedPlaybackTime: phone.position,
+                MPNowPlayingInfoPropertyPlaybackRate: phone.isPlaying ? 1.0 : 0.0,
+            ]
+            if let duration = phone.duration {
+                info[MPMediaItemPropertyPlaybackDuration] = duration
+            }
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+            cover = nil
+            setCommandsEnabled(true)
+            setSeekEnabled(phone.duration != nil)
+            return
+        }
         let renderer = model.renderer
         guard let item = renderer.item else {
             MPNowPlayingInfoCenter.default().nowPlayingInfo = nil

@@ -258,3 +258,42 @@ struct SyncEngineTests {
         #expect(SyncFiles.fileName(song, mimeType: "audio/flac") == "12 What_Ever_.flac")
     }
 }
+
+/// Playing what's kept on this phone.
+struct PhonePlayerTests {
+    static func item(_ key: String, title: String = "", artist: String = "", albumartist: String = "") throws -> SyncedItem {
+        var song = SongMetadata()
+        song.title = title
+        song.artist = artist
+        song.albumartist = albumartist
+        song.album = "Doolittle"
+        song.prettyLength = "2:52"
+        return SyncedItem(
+            serverID: "s", itemKey: key, version: "1", path: "Pixies/Doolittle/01 \(key).flac", mimeType: "audio/flac",
+            sizeBytes: 1, delivery: .original, artKey: nil, metadata: try song.serializedData(), added: .now)
+    }
+
+    @Test func readsAKeptSongsTags() throws {
+        let folder = URL(filePath: "/synced", directoryHint: .isDirectory)
+        let song = KeptSong(try Self.item("a", title: "Debaser", artist: "Pixies"), in: folder)
+        #expect(song.title == "Debaser")
+        #expect(song.artist == "Pixies")
+        #expect(song.album == "Doolittle")
+        #expect(song.length == "2:52")
+        #expect(song.file.path == "/synced/Pixies/Doolittle/01 a.flac")
+
+        // Without a title, the file's name; without an artist, the album artist.
+        let untitled = KeptSong(try Self.item("b", albumartist: "Pixies"), in: folder)
+        #expect(untitled.title == "01 b")
+        #expect(untitled.artist == "Pixies")
+    }
+
+    @Test func playsFromASongOrAtRandom() throws {
+        let folder = URL(filePath: "/synced", directoryHint: .isDirectory)
+        let songs = try ["a", "b", "c"].map { KeptSong(try Self.item($0, title: $0), in: folder) }
+        #expect(PhonePlayer.order(songs, from: 1, shuffled: false).map(\.itemKey) == ["b", "c"])
+        #expect(PhonePlayer.order(songs, from: 9, shuffled: false).map(\.itemKey) == ["c"])
+        #expect(Set(PhonePlayer.order(songs, from: 1, shuffled: true).map(\.itemKey)) == ["a", "b", "c"])
+        #expect(PhonePlayer.order([], from: 0, shuffled: true).isEmpty)
+    }
+}

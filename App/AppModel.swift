@@ -26,6 +26,8 @@ final class AppModel {
     let internet: InternetBrowser
     /// Syncs songs from Clementine to the phone, while connected to it.
     let syncer: Syncer
+    /// Plays the songs kept on this phone, without Clementine.
+    let phonePlayer = PhonePlayer()
     @ObservationIgnored private var nowPlaying: NowPlaying?
     @ObservationIgnored private var scenePhase = ScenePhase.active
 
@@ -62,6 +64,7 @@ final class AppModel {
         let nowPlaying = NowPlaying(model: self)
         self.nowPlaying = nowPlaying
         renderer.onUpdate = { nowPlaying.update() }
+        phonePlayer.onUpdate = { nowPlaying.update() }
         session.addObserver { [renderer, internet] message in
             renderer.handle(message)
             internet.handle(message)
@@ -79,6 +82,15 @@ final class AppModel {
     /// songs to it, or something is kept already.
     var isOnThisPhone: Bool {
         session.syncing.supported || !syncer.kept.isEmpty
+    }
+
+    /// Plays [songs] kept on this phone from the one at [index], or all of them at random. Pauses
+    /// Clementine, so only one plays.
+    func playOnPhone(_ songs: [KeptSong], from index: Int, shuffled: Bool = false) {
+        if session.playState == .playing {
+            session.pause()
+        }
+        phonePlayer.play(songs, from: index, shuffled: shuffled)
     }
 
     /// Where synced songs go: beside the downloaded ones, so the Files app shows them too.
