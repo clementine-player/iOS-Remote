@@ -177,6 +177,31 @@ struct SyncerTests {
     }
 }
 
+extension SyncerTests {
+    @Test func doesntSyncOverANetworkDownloadOverDoesntAllow() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        clementine.respondLikeClementine(extra: [Self.syncingInfo()])
+        let store = try SyncStore(url: nil)
+        _ = try await store.addRule(
+            SyncRule(serverID: Self.server, sourceID: "playlist/1", title: "Playlist 1", kind: .playlist, refreshPolicy: .onConnect))
+        let settings = Settings(suiteName: "SyncerTests-\(UUID().uuidString)")
+        settings.store.set(DownloadNetwork.wifiOnly.rawValue, forKey: SettingKey.downloadNetwork)
+        var asked: [DownloadNetwork] = []
+        let session = RemoteSession()
+        let syncer = Syncer(session: session, store: store, folder: FileManager.default.temporaryDirectory, settings: settings)
+        syncer.networkAllows = { asked.append($0); return false }
+        session.connect(to: clementine.endpoint, authCode: 0)
+
+        try await eventually { syncer.status.networkNotAllowed }
+        await syncer.finish()
+        #expect(asked.first == .wifiOnly)
+        #expect(syncer.status.results.isEmpty)
+        #expect(!clementine.received.contains { $0.type == .requestSyncManifest })
+        session.disconnect()
+    }
+}
+
 /// Rules keeping music on the phone.
 @MainActor
 struct KeepTests {
