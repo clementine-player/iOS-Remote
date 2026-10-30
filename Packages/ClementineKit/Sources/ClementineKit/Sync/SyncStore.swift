@@ -26,17 +26,16 @@ public struct SyncRule: Sendable, Equatable {
     public var serverID: String
     public var sourceID: String
     public var title: String
-    /// SyncSourceKind's number, for the rule's icon.
-    public var kind: Int
+    /// What the source is, for the rule's icon.
+    public var kind: Pb_Remote_SyncSourceKind
     public var refreshPolicy: RefreshPolicy
     public var refreshIntervalHours: Int
     public var refreshAfterPercent: Int
     /// 0: no limit.
     public var limitItems: Int
     public var limitBytes: Int64
-    /// SyncQuality and SyncLossless numbers.
-    public var quality: Int?
-    public var lossless: Int?
+    public var quality: Pb_Remote_SyncQuality?
+    public var lossless: Pb_Remote_SyncLossless?
     public var maxBitrateKbps: Int?
     public var preferredMIMEType: String?
     /// For random sources: sent with each request until the rule refreshes.
@@ -47,9 +46,10 @@ public struct SyncRule: Sendable, Equatable {
     public var lastSynced: Date?
 
     public init(
-        id: Int64 = 0, serverID: String, sourceID: String, title: String, kind: Int,
+        id: Int64 = 0, serverID: String, sourceID: String, title: String, kind: Pb_Remote_SyncSourceKind,
         refreshPolicy: RefreshPolicy, refreshIntervalHours: Int = 0, refreshAfterPercent: Int = 0,
-        limitItems: Int = 0, limitBytes: Int64 = 0, quality: Int? = nil, lossless: Int? = nil,
+        limitItems: Int = 0, limitBytes: Int64 = 0, quality: Pb_Remote_SyncQuality? = nil,
+        lossless: Pb_Remote_SyncLossless? = nil,
         maxBitrateKbps: Int? = nil, preferredMIMEType: String? = nil, seed: Int64 = 0,
         position: Int = 0, lastSynced: Date? = nil
     ) {
@@ -84,8 +84,7 @@ public struct SyncedItem: Sendable, Equatable {
     public var path: String
     public var mimeType: String
     public var sizeBytes: Int64
-    /// SyncDelivery's number.
-    public var delivery: Int
+    public var delivery: Pb_Remote_SyncDelivery
     /// The cover's `SyncedArt.artKey`, or nil for none.
     public var artKey: String?
     public var metadata: Data
@@ -94,7 +93,7 @@ public struct SyncedItem: Sendable, Equatable {
 
     public init(
         serverID: String, itemKey: String, version: String, path: String, mimeType: String,
-        sizeBytes: Int64, delivery: Int, artKey: String?, metadata: Data, pinned: Bool = false,
+        sizeBytes: Int64, delivery: Pb_Remote_SyncDelivery, artKey: String?, metadata: Data, pinned: Bool = false,
         added: Date
     ) {
         self.serverID = serverID
@@ -446,6 +445,12 @@ public actor SyncStore {
         value.map { .integer(Int64($0)) } ?? .null
     }
 
+    /// One of the protocol's enums, saved as its number: nil when there's none, or it's one this
+    /// version doesn't know.
+    private static func enumValue<Value: RawRepresentable>(_ value: Database.Value) -> Value? where Value.RawValue == Int {
+        value.integer.flatMap { Value(rawValue: Int($0)) }
+    }
+
     private static func milliseconds(_ date: Date?) -> Int64 {
         date.map { Int64(($0.timeIntervalSince1970 * 1000).rounded()) } ?? 0
     }
@@ -456,10 +461,10 @@ public actor SyncStore {
     }
 
     private static func values(_ rule: SyncRule) -> [Database.Value] {
-        [.text(rule.serverID), .text(rule.sourceID), .text(rule.title), .integer(Int64(rule.kind)),
+        [.text(rule.serverID), .text(rule.sourceID), .text(rule.title), .integer(Int64(rule.kind.rawValue)),
          .text(rule.refreshPolicy.rawValue), .integer(Int64(rule.refreshIntervalHours)),
          .integer(Int64(rule.refreshAfterPercent)), .integer(Int64(rule.limitItems)),
-         .integer(rule.limitBytes), optional(rule.quality), optional(rule.lossless),
+         .integer(rule.limitBytes), optional(rule.quality?.rawValue), optional(rule.lossless?.rawValue),
          optional(rule.maxBitrateKbps), rule.preferredMIMEType.map { .text($0) } ?? .null,
          .integer(rule.seed), .integer(Int64(rule.position)), .integer(milliseconds(rule.lastSynced))]
     }
@@ -467,19 +472,19 @@ public actor SyncStore {
     private static func rule(_ row: [Database.Value]) -> SyncRule {
         SyncRule(
             id: row[0].integer ?? 0, serverID: row[1].text ?? "", sourceID: row[2].text ?? "",
-            title: row[3].text ?? "", kind: Int(row[4].integer ?? 0),
+            title: row[3].text ?? "", kind: Self.enumValue(row[4]) ?? .unspecified,
             refreshPolicy: RefreshPolicy(rawValue: row[5].text ?? "") ?? .never,
             refreshIntervalHours: Int(row[6].integer ?? 0),
             refreshAfterPercent: Int(row[7].integer ?? 0), limitItems: Int(row[8].integer ?? 0),
-            limitBytes: row[9].integer ?? 0, quality: row[10].integer.map { Int($0) },
-            lossless: row[11].integer.map { Int($0) }, maxBitrateKbps: row[12].integer.map { Int($0) },
+            limitBytes: row[9].integer ?? 0, quality: Self.enumValue(row[10]),
+            lossless: Self.enumValue(row[11]), maxBitrateKbps: row[12].integer.map { Int($0) },
             preferredMIMEType: row[13].text, seed: row[14].integer ?? 0,
             position: Int(row[15].integer ?? 0), lastSynced: date(row[16]))
     }
 
     private static func values(_ item: SyncedItem) -> [Database.Value] {
         [.text(item.serverID), .text(item.itemKey), .text(item.version), .text(item.path),
-         .text(item.mimeType), .integer(item.sizeBytes), .integer(Int64(item.delivery)),
+         .text(item.mimeType), .integer(item.sizeBytes), .integer(Int64(item.delivery.rawValue)),
          item.artKey.map { .text($0) } ?? .null, .blob(item.metadata),
          .integer(item.pinned ? 1 : 0), .integer(milliseconds(item.added))]
     }
@@ -488,7 +493,7 @@ public actor SyncStore {
         SyncedItem(
             serverID: row[0].text ?? "", itemKey: row[1].text ?? "", version: row[2].text ?? "",
             path: row[3].text ?? "", mimeType: row[4].text ?? "", sizeBytes: row[5].integer ?? 0,
-            delivery: Int(row[6].integer ?? 0), artKey: row[7].text, metadata: row[8].blob ?? Data(),
+            delivery: Self.enumValue(row[6]) ?? .unspecified, artKey: row[7].text, metadata: row[8].blob ?? Data(),
             pinned: row[9].integer == 1, added: date(row[10]) ?? Date(timeIntervalSince1970: 0))
     }
 
