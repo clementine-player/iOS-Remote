@@ -168,9 +168,27 @@ struct DownloadTests {
 
         let songs = DownloadedSong.saved(in: directory)
         #expect(songs.map(\.title) == ["Spiegel im Spiegel", "Für Alina", "2 Menuet", "10 Passepied"])
-        #expect(songs.map(\.artist) == ["", "Arvo Pärt", "Claude Debussy / Suite bergamasque", "Claude Debussy / Suite bergamasque"])
+        #expect(songs.map(\.artist) == ["", "Arvo Pärt", "Claude Debussy", "Claude Debussy"])
+        #expect(songs.map(\.album) == ["", "", "Suite bergamasque", "Suite bergamasque"])
         #expect(songs.map(\.file.lastPathComponent) == ["Spiegel im Spiegel.m4a", "Für Alina.mp3", "2 Menuet.FLAC", "10 Passepied.ogg"])
         #expect(try Data(contentsOf: songs[0].file) == Data("x".utf8))
+    }
+
+    @Test func groupsSongsByAlbumAndArtist() {
+        func song(_ title: String, _ artist: String, _ album: String) -> DownloadedSong {
+            DownloadedSong(title: title, artist: artist, album: album, file: URL(filePath: "/\(title).mp3"))
+        }
+        let songs = [
+            song("Gnossienne No. 1", "Erik Satie", "Gnossiennes"),
+            song("Gymnopédie No. 1", "Erik Satie", "Gymnopédies"),
+            song("Gymnopédie No. 2", "Erik Satie", "Gymnopédies"),
+            song("Für Alina", "Arvo Pärt", ""),
+            song("Spiegel im Spiegel", "", ""),
+        ]
+        let albums = DownloadedSong.albums(of: songs)
+        #expect(albums.map(\.title) == ["Gnossiennes", "Gymnopédies"])
+        #expect(albums[1].songs.map(\.title) == ["Gymnopédie No. 1", "Gymnopédie No. 2"])
+        #expect(DownloadedSong.artists(of: songs) == ["Arvo Pärt", "Erik Satie"])
     }
 
     @Test func leavesOutTheSyncedSongs() throws {
@@ -202,7 +220,8 @@ struct DownloadTests {
 
         let songs = DownloadedSong.saved(in: directory)
         #expect(songs.map(\.title) == ["Clair de lune"])
-        #expect(songs.map(\.artist) == ["Claude Debussy / Suite bergamasque"])
+        #expect(songs.map(\.artist) == ["Claude Debussy"])
+        #expect(songs.map(\.album) == ["Suite bergamasque"])
     }
 
     @Test func playlistFolder() {
