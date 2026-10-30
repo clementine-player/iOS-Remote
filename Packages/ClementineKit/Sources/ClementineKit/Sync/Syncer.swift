@@ -117,6 +117,12 @@ public final class Syncer {
         self.kept = kept
     }
 
+    /// The songs of a rule on this phone, in its order.
+    public func songs(_ ruleID: Int64) async -> [KeptSong] {
+        guard let store else { return [] }
+        return ((try? await store.ruleItems(ruleID: ruleID)) ?? []).map { KeptSong($0, in: folder) }
+    }
+
     /// Keeps [rules] on the phone, and syncs them. A rule for a source already kept is left as it
     /// is.
     public func keep(_ rules: [SyncRule]) {

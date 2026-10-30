@@ -21079,6 +21079,9 @@
         }
       }
     },
+    "Shuffle" : {
+      "comment" : "Button: plays, on the phone, the songs of something kept on it, in random order."
+    },
     "Shuffle albums" : {
       "localizations" : {
         "ca" : {
