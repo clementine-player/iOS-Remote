@@ -30,6 +30,8 @@ final class AppModel {
     let phonePlayer = PhonePlayer()
     @ObservationIgnored private var nowPlaying: NowPlaying?
     @ObservationIgnored private var scenePhase = ScenePhase.active
+    /// The smart playlists being put on the playlist, by source id, with what was asked.
+    @ObservationIgnored private var smartPlaylistAdds: [String: BrowseAddAction] = [:]
 
     var selectedTab = Tab.queue
     /// The playlist picked in the queue, if any.
@@ -80,9 +82,12 @@ final class AppModel {
         renderer.onUpdate = { nowPlaying.update() }
         phonePlayer.onUpdate = { nowPlaying.update() }
         syncer.networkAllows = { [network] in network.allows($0) }
-        session.addObserver { [renderer, internet] message in
+        session.addObserver { [weak self, renderer, internet] message in
             renderer.handle(message)
             internet.handle(message)
+            if message.type == .syncSourceAddResult {
+                self?.smartPlaylistAdded(message.responseSyncSourceAdd)
+            }
             // The cover comes with the song, which can arrive after the item it's for.
             if message.type == .currentMetainfo {
                 nowPlaying.update()
@@ -206,6 +211,27 @@ final class AppModel {
     }
 
     /// Says how putting internet service nodes on the playlist went, where the player doesn't show it.
+    /// Puts [smartPlaylist] on the playlist playing, doing [action], as Clementine does with a smart
+    /// playlist double-clicked in its library: a dynamic one makes the playlist dynamic. Clementine
+    /// can't queue one, so that just adds it.
+    func play(smartPlaylist: Pb_Remote_SyncSource, action: AddAction) {
+        let add: BrowseAddAction =
+            switch action {
+            case .playNow: .playNow
+            case .playIfStopped: session.playState == .playing ? .append : .playNow
+            case .playNext: .playNext
+            case .replace: .replace
+            case .append, .queue: .append
+            }
+        smartPlaylistAdds[smartPlaylist.sourceID] = add
+        session.send(Messages.addSyncSource(smartPlaylist.sourceID, action: add))
+    }
+
+    private func smartPlaylistAdded(_ response: Pb_Remote_ResponseSyncSourceAdd) {
+        guard let action = smartPlaylistAdds.removeValue(forKey: response.sourceID) else { return }
+        showAdded(action, result: response.result)
+    }
+
     private func showAdded(_ action: BrowseAddAction, result: BrowseAddResult) {
         switch result {
         case .added:

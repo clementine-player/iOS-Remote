@@ -21,6 +21,27 @@ struct FramingTests {
         #expect(decoded.version == 21)
     }
 
+    @Test func putsASmartPlaylistOnThePlaylist() throws {
+        let message = Messages.addSyncSource("smart/library/0b6e", action: .replace)
+        let body = try message.serializedData()
+        // REQUEST_SYNC_SOURCE_ADD, with the request in field 80.
+        #expect(message.type == .requestSyncSourceAdd)
+        #expect(message.type.rawValue == 383)
+        #expect(body.firstRange(of: Data([0x82, 0x05])) != nil)
+        let decoded = try Framing.decode(body)
+        #expect(decoded == message)
+        #expect(decoded.requestSyncSourceAdd.sourceID == "smart/library/0b6e")
+        #expect(decoded.requestSyncSourceAdd.action == .replace)
+
+        var answer = RemoteMessage(.syncSourceAddResult)
+        answer.responseSyncSourceAdd.sourceID = "smart/library/0b6e"
+        answer.responseSyncSourceAdd.result = .gone
+        let answered = try Framing.decode(try answer.serializedData())
+        #expect(answered.type.rawValue == 393)
+        #expect(answered.responseSyncSourceAdd.sourceID == "smart/library/0b6e")
+        #expect(answered.responseSyncSourceAdd.result == .gone)
+    }
+
     @Test func refusesNegativeAndHugeLengths() {
         #expect(throws: ProtocolError.invalidLength) {
             try Framing.length(ofHeader: Data([0xff, 0xff, 0xff, 0xff]))
