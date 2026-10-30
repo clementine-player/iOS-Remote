@@ -147,6 +147,85 @@ struct KeepButton: View {
     }
 }
 
+/// Keep on this phone, in a sheet: how to keep [title] up to date, starting at the policy given,
+/// then the button that keeps it ([keep]).
+struct KeepSheet: View {
+    /// The ways to keep something up to date that the sheet offers, for now.
+    private static let choices: [RefreshPolicy] = [.never, .onConnect]
+
+    let title: String
+    let keep: (RefreshPolicy) -> Void
+    @State private var chosen: RefreshPolicy
+    @Environment(\.dismiss) private var dismiss
+
+    init(title: String, refreshPolicy: RefreshPolicy, keep: @escaping (RefreshPolicy) -> Void) {
+        self.title = title
+        self.keep = keep
+        _chosen = State(initialValue: refreshPolicy)
+    }
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    Picker(selection: $chosen) {
+                        ForEach(Self.choices, id: \.self) { policy in
+                            choice(policy).tag(policy)
+                        }
+                    } label: {
+                        Text("Update it", comment: "Heading in the Keep on this phone sheet, over how often what's kept is updated from Clementine.")
+                    }
+                    .pickerStyle(.inline)
+                    .labelsHidden()
+                    .accessibilityIdentifier("keepRefresh")
+                } header: {
+                    Text("Update it", comment: "Heading in the Keep on this phone sheet, over how often what's kept is updated from Clementine.")
+                }
+            }
+            .navigationTitle(
+                String(localized: "Keep on this phone", comment: "Saves the music on the phone and keeps it up to date."))
+            .navigationSubtitle(title)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", systemImage: "xmark", role: .cancel) { dismiss() }
+                }
+            }
+            .safeAreaInset(edge: .bottom) {
+                Button {
+                    keep(chosen)
+                    dismiss()
+                } label: {
+                    Text("Keep on this phone", comment: "Saves the music on the phone and keeps it up to date.")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .filledButtonTint()
+                .controlSize(.large)
+                .padding(Metrics.space4)
+                .accessibilityIdentifier("keepConfirm")
+            }
+        }
+        .presentationDetents([.medium, .large])
+    }
+
+    @ViewBuilder
+    private func choice(_ policy: RefreshPolicy) -> some View {
+        if policy == .never {
+            VStack(alignment: .leading) {
+                Text("Never", comment: "A choice under Update it: what's kept is never updated from Clementine.")
+                Text("Keep the songs it has now", comment: "Under Never, in the Keep on this phone sheet.")
+                    .font(.subheadline)
+                    .foregroundStyle(Palette.onSurfaceVariant)
+            }
+        } else {
+            Text(
+                "Every time I connect",
+                comment: "A choice under Update it: what's kept is updated each time the phone connects to Clementine.")
+        }
+    }
+}
+
 /// What can be done with an item of the library or search results, as Clementine's own library
 /// offers.
 struct BrowseAddActions: View {

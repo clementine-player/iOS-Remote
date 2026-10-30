@@ -189,6 +189,11 @@ struct KeepTests {
         #expect(rule.title == "Doolittle")
         #expect(rule.kind == Pb_Remote_SyncSourceKind.album)
         #expect(rule.refreshPolicy == .never)
+        let playlist = SyncSources.playlistRule(serverID: SyncerTests.server, id: 7, name: "Satie")
+        #expect(playlist.sourceID == "playlist/7")
+        #expect(playlist.title == "Satie")
+        #expect(playlist.kind == Pb_Remote_SyncSourceKind.playlist)
+        #expect(playlist.refreshPolicy == .onConnect)
     }
 
     @Test func keepsEachSourceOnceAndRemovesItsSongs() async throws {

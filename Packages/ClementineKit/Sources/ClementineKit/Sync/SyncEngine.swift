@@ -59,6 +59,9 @@ public struct SyncEngine: Sendable {
         var results: [Int64: RuleResult] = [:]
         for rule in try await store.rules(serverID: serverID) {
             try Task.checkCancellation()
+            // A rule kept as it is has its songs once it has synced. The other policies refresh
+            // on every sync for now; intervals and listening come later.
+            if rule.refreshPolicy == .never, rule.lastSynced != nil { continue }
             do {
                 results[rule.id] = try await sync(rule, over: connection)
             } catch is CancellationError {
