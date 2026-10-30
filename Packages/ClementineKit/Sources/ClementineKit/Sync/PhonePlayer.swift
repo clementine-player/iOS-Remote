@@ -25,6 +25,16 @@ public struct KeptSong: Sendable, Hashable, Identifiable {
         length = song.prettyLength
         self.file = file
     }
+
+    /// [song], downloaded to this phone, to play with what's kept; its file is its key.
+    public init(_ song: DownloadedSong) {
+        itemKey = song.file.absoluteString
+        title = song.title
+        artist = song.artist
+        album = song.album
+        length = ""
+        file = song.file
+    }
 }
 
 /// Plays songs kept on this phone, without Clementine, and says which is playing. It plays as
