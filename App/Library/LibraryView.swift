@@ -89,7 +89,8 @@ private struct LibraryLevelView: View {
             if let level {
                 BrowseRows(
                     level: level, selection: $selection, isEditing: editMode.isEditing,
-                    alphabetical: true, descending: sorting == LibrarySorting.descending.rawValue
+                    alphabetical: true, descending: sorting == LibrarySorting.descending.rawValue,
+                    keep: { item in Task { await library.keep(item) } }, canKeep: { library.canKeep($0) }
                 ) { items, target, action in
                     Task { await library.add(items, to: target, action: action) }
                 }

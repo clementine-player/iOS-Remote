@@ -32,6 +32,7 @@ public enum SettingKey {
     public static let lastAuthCode = "last_auth_code"
     public static let libraryHost = "library_ip"
     public static let rendererID = "renderer_id"
+    public static let syncServerID = "sync_server_id"
 }
 
 /// Reads the settings, with their defaults.
@@ -125,6 +126,12 @@ public struct Settings: Sendable {
     public var libraryHost: String {
         get { store.string(forKey: SettingKey.libraryHost) ?? "" }
         nonmutating set { store.set(newValue, forKey: SettingKey.libraryHost) }
+    }
+
+    /// The server_id of the Clementine last connected that syncs, whose rules show offline.
+    public var syncServerID: String {
+        get { store.string(forKey: SettingKey.syncServerID) ?? "" }
+        nonmutating set { store.set(newValue, forKey: SettingKey.syncServerID) }
     }
 
     /// Remembers an address connected to, and the Clementine's network name if it was found there.
