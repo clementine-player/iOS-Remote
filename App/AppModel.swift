@@ -47,7 +47,7 @@ final class AppModel {
     }
 
     /// Where the app plays from: this phone from when it starts playing there until Play from
-    /// switches back to Clementine.
+    /// switches back to Clementine, or Clementine starts playing.
     private(set) var playFrom = PlayFrom.clementine
 
     /// Why connecting failed, to explain on the connect screen.
@@ -87,6 +87,11 @@ final class AppModel {
             internet.handle(message)
             if message.type == .syncSourceAddResult {
                 self?.smartPlaylistAdded(message.responseSyncSourceAdd)
+            }
+            // Clementine started playing, such as a song from the library: the app plays from it
+            // again, pausing this phone, so the player controls what's playing.
+            if message.type == .play {
+                self?.play(from: .clementine)
             }
             // The cover comes with the song, which can arrive after the item it's for.
             if message.type == .currentMetainfo {
