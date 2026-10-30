@@ -122,6 +122,15 @@ public enum Messages {
         }
     }
 
+    /// Puts a sync source on the current playlist, as double-clicking it in Clementine does: only
+    /// smart playlists, for now.
+    public static func addSyncSource(_ sourceID: String, action: BrowseAddAction) -> RemoteMessage {
+        RemoteMessage(.requestSyncSourceAdd) {
+            $0.requestSyncSourceAdd.sourceID = sourceID
+            $0.requestSyncSourceAdd.action = action
+        }
+    }
+
     public static func volume(_ percent: Int) -> RemoteMessage {
         RemoteMessage(.setVolume) { $0.requestSetVolume.volume = Int32(percent) }
     }

@@ -152,11 +152,13 @@ public nonisolated enum Pb_Remote_MsgType: Int, SwiftProtobuf.Enum, Swift.CaseIt
 
   /// Behind SERVER_FEATURE_PLAY_REPORTS.
   case reportPlays = 382
+  case requestSyncSourceAdd = 383
 
   /// Server -> client
   case syncSources = 390
   case syncManifest = 391
   case reportPlaysResult = 392
+  case syncSourceAddResult = 393
 
   public init() {
     self = .unknown
@@ -3207,6 +3209,73 @@ public nonisolated struct Pb_Remote_ResponseSyncSources: Sendable {
   public init() {}
 }
 
+/// Puts a source on the current playlist, as double-clicking it in Clementine
+/// does. Only smart playlists for now: a dynamic one makes the playlist
+/// dynamic. Answered with SYNC_SOURCE_ADD_RESULT.
+public nonisolated struct Pb_Remote_RequestSyncSourceAdd: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var sourceID: String {
+    get {_sourceID ?? String()}
+    set {_sourceID = newValue}
+  }
+  /// Returns true if `sourceID` has been explicitly set.
+  public var hasSourceID: Bool {self._sourceID != nil}
+  /// Clears the value of `sourceID`. Subsequent reads from it will return its default value.
+  public mutating func clearSourceID() {self._sourceID = nil}
+
+  /// Unset: what the user's settings say double-clicking does.
+  public var action: Pb_Remote_BrowseAddAction {
+    get {_action ?? .unspecified}
+    set {_action = newValue}
+  }
+  /// Returns true if `action` has been explicitly set.
+  public var hasAction: Bool {self._action != nil}
+  /// Clears the value of `action`. Subsequent reads from it will return its default value.
+  public mutating func clearAction() {self._action = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _sourceID: String? = nil
+  fileprivate var _action: Pb_Remote_BrowseAddAction? = nil
+}
+
+public nonisolated struct Pb_Remote_ResponseSyncSourceAdd: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var sourceID: String {
+    get {_sourceID ?? String()}
+    set {_sourceID = newValue}
+  }
+  /// Returns true if `sourceID` has been explicitly set.
+  public var hasSourceID: Bool {self._sourceID != nil}
+  /// Clears the value of `sourceID`. Subsequent reads from it will return its default value.
+  public mutating func clearSourceID() {self._sourceID = nil}
+
+  /// BROWSE_ADD_RESULT_NOT_PLAYABLE for a kind of source that can't be added.
+  public var result: Pb_Remote_BrowseAddResult {
+    get {_result ?? .unspecified}
+    set {_result = newValue}
+  }
+  /// Returns true if `result` has been explicitly set.
+  public var hasResult: Bool {self._result != nil}
+  /// Clears the value of `result`. Subsequent reads from it will return its default value.
+  public mutating func clearResult() {self._result = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _sourceID: String? = nil
+  fileprivate var _result: Pb_Remote_BrowseAddResult? = nil
+}
+
 /// Asks for the songs a source holds now, ready to download.
 public nonisolated struct Pb_Remote_RequestSyncManifest: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -4126,6 +4195,24 @@ public nonisolated struct Pb_Remote_Message: @unchecked Sendable {
   /// Clears the value of `responseReportPlays`. Subsequent reads from it will return its default value.
   public mutating func clearResponseReportPlays() {_uniqueStorage()._responseReportPlays = nil}
 
+  public var requestSyncSourceAdd: Pb_Remote_RequestSyncSourceAdd {
+    get {_storage._requestSyncSourceAdd ?? Pb_Remote_RequestSyncSourceAdd()}
+    set {_uniqueStorage()._requestSyncSourceAdd = newValue}
+  }
+  /// Returns true if `requestSyncSourceAdd` has been explicitly set.
+  public var hasRequestSyncSourceAdd: Bool {_storage._requestSyncSourceAdd != nil}
+  /// Clears the value of `requestSyncSourceAdd`. Subsequent reads from it will return its default value.
+  public mutating func clearRequestSyncSourceAdd() {_uniqueStorage()._requestSyncSourceAdd = nil}
+
+  public var responseSyncSourceAdd: Pb_Remote_ResponseSyncSourceAdd {
+    get {_storage._responseSyncSourceAdd ?? Pb_Remote_ResponseSyncSourceAdd()}
+    set {_uniqueStorage()._responseSyncSourceAdd = newValue}
+  }
+  /// Returns true if `responseSyncSourceAdd` has been explicitly set.
+  public var hasResponseSyncSourceAdd: Bool {_storage._responseSyncSourceAdd != nil}
+  /// Clears the value of `responseSyncSourceAdd`. Subsequent reads from it will return its default value.
+  public mutating func clearResponseSyncSourceAdd() {_uniqueStorage()._responseSyncSourceAdd = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -4138,7 +4225,7 @@ public nonisolated struct Pb_Remote_Message: @unchecked Sendable {
 fileprivate nonisolated let _protobuf_package = "pb.remote"
 
 nonisolated extension Pb_Remote_MsgType: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}CONNECT\0\u{1}DISCONNECT\0\u{1}REQUEST_PLAYLISTS\0\u{1}REQUEST_PLAYLIST_SONGS\0\u{1}CHANGE_SONG\0\u{1}SET_VOLUME\0\u{1}SET_TRACK_POSITION\0\u{1}INSERT_URLS\0\u{1}REMOVE_SONGS\0\u{1}OPEN_PLAYLIST\0\u{1}CLOSE_PLAYLIST\0\u{1}LOVE\0\u{1}BAN\0\u{1}GET_LYRICS\0\u{1}DOWNLOAD_SONGS\0\u{1}SONG_OFFER_RESPONSE\0\u{1}STOP_AFTER\0\u{1}GET_LIBRARY\0\u{1}RATE_SONG\0\u{1}PLAY\0\u{1}PLAYPAUSE\0\u{1}PAUSE\0\u{1}STOP\0\u{1}NEXT\0\u{1}PREVIOUS\0\u{1}SHUFFLE_PLAYLIST\0\u{1}REPEAT\0\u{1}SHUFFLE\0\u{2}\u{c}INFO\0\u{1}CURRENT_METAINFO\0\u{1}PLAYLISTS\0\u{1}PLAYLIST_SONGS\0\u{1}ENGINE_STATE_CHANGED\0\u{1}KEEP_ALIVE\0\u{1}UPDATE_TRACK_POSITION\0\u{1}ACTIVE_PLAYLIST_CHANGED\0\u{1}FIRST_DATA_SENT_COMPLETE\0\u{1}LYRICS\0\u{1}SONG_FILE_CHUNK\0\u{1}DOWNLOAD_QUEUE_EMPTY\0\u{1}LIBRARY_CHUNK\0\u{1}DOWNLOAD_TOTAL_SIZE\0\u{1}GLOBAL_SEARCH_RESULT\0\u{1}TRANSCODING_FILES\0\u{1}GLOBAL_SEARCH_STATUS\0\u{2}\u{4}UPDATE_PLAYLIST\0\u{2}(GLOBAL_SEARCH\0\u{2}\u{a}REQUEST_SAVED_RADIOS\0\u{2}Z\u{1}REQUEST_FILES\0\u{1}APPEND_FILES\0\u{1}LIST_FILES\0\u{2}d\u{1}RENDERER_STATUS\0\u{1}RENDERER_TRACK_ENDED\0\u{1}RENDERER_ERROR\0\u{1}REQUEST_OUTPUTS\0\u{1}SET_OUTPUT\0\u{2}\u{e}RENDER_LOAD\0\u{1}RENDER_PRELOAD\0\u{1}RENDER_PLAY\0\u{1}RENDER_PAUSE\0\u{1}RENDER_STOP\0\u{1}RENDER_SEEK\0\u{1}RENDER_SET_VOLUME\0\u{2}\u{e}OUTPUTS\0\u{2}\u{14}REQUEST_BROWSE\0\u{1}REQUEST_BROWSE_ADD\0\u{2}\u{9}BROWSE\0\u{1}BROWSE_ADD_RESULT\0\u{2}\u{9}REQUEST_SYNC_SOURCES\0\u{1}REQUEST_SYNC_MANIFEST\0\u{1}REPORT_PLAYS\0\u{2}\u{8}SYNC_SOURCES\0\u{1}SYNC_MANIFEST\0\u{1}REPORT_PLAYS_RESULT\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}CONNECT\0\u{1}DISCONNECT\0\u{1}REQUEST_PLAYLISTS\0\u{1}REQUEST_PLAYLIST_SONGS\0\u{1}CHANGE_SONG\0\u{1}SET_VOLUME\0\u{1}SET_TRACK_POSITION\0\u{1}INSERT_URLS\0\u{1}REMOVE_SONGS\0\u{1}OPEN_PLAYLIST\0\u{1}CLOSE_PLAYLIST\0\u{1}LOVE\0\u{1}BAN\0\u{1}GET_LYRICS\0\u{1}DOWNLOAD_SONGS\0\u{1}SONG_OFFER_RESPONSE\0\u{1}STOP_AFTER\0\u{1}GET_LIBRARY\0\u{1}RATE_SONG\0\u{1}PLAY\0\u{1}PLAYPAUSE\0\u{1}PAUSE\0\u{1}STOP\0\u{1}NEXT\0\u{1}PREVIOUS\0\u{1}SHUFFLE_PLAYLIST\0\u{1}REPEAT\0\u{1}SHUFFLE\0\u{2}\u{c}INFO\0\u{1}CURRENT_METAINFO\0\u{1}PLAYLISTS\0\u{1}PLAYLIST_SONGS\0\u{1}ENGINE_STATE_CHANGED\0\u{1}KEEP_ALIVE\0\u{1}UPDATE_TRACK_POSITION\0\u{1}ACTIVE_PLAYLIST_CHANGED\0\u{1}FIRST_DATA_SENT_COMPLETE\0\u{1}LYRICS\0\u{1}SONG_FILE_CHUNK\0\u{1}DOWNLOAD_QUEUE_EMPTY\0\u{1}LIBRARY_CHUNK\0\u{1}DOWNLOAD_TOTAL_SIZE\0\u{1}GLOBAL_SEARCH_RESULT\0\u{1}TRANSCODING_FILES\0\u{1}GLOBAL_SEARCH_STATUS\0\u{2}\u{4}UPDATE_PLAYLIST\0\u{2}(GLOBAL_SEARCH\0\u{2}\u{a}REQUEST_SAVED_RADIOS\0\u{2}Z\u{1}REQUEST_FILES\0\u{1}APPEND_FILES\0\u{1}LIST_FILES\0\u{2}d\u{1}RENDERER_STATUS\0\u{1}RENDERER_TRACK_ENDED\0\u{1}RENDERER_ERROR\0\u{1}REQUEST_OUTPUTS\0\u{1}SET_OUTPUT\0\u{2}\u{e}RENDER_LOAD\0\u{1}RENDER_PRELOAD\0\u{1}RENDER_PLAY\0\u{1}RENDER_PAUSE\0\u{1}RENDER_STOP\0\u{1}RENDER_SEEK\0\u{1}RENDER_SET_VOLUME\0\u{2}\u{e}OUTPUTS\0\u{2}\u{14}REQUEST_BROWSE\0\u{1}REQUEST_BROWSE_ADD\0\u{2}\u{9}BROWSE\0\u{1}BROWSE_ADD_RESULT\0\u{2}\u{9}REQUEST_SYNC_SOURCES\0\u{1}REQUEST_SYNC_MANIFEST\0\u{1}REPORT_PLAYS\0\u{1}REQUEST_SYNC_SOURCE_ADD\0\u{2}\u{7}SYNC_SOURCES\0\u{1}SYNC_MANIFEST\0\u{1}REPORT_PLAYS_RESULT\0\u{1}SYNC_SOURCE_ADD_RESULT\0")
 }
 
 nonisolated extension Pb_Remote_EngineState: SwiftProtobuf._ProtoNameProviding {
@@ -7074,6 +7161,84 @@ nonisolated extension Pb_Remote_ResponseSyncSources: SwiftProtobuf.Message, Swif
   }
 }
 
+nonisolated extension Pb_Remote_RequestSyncSourceAdd: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".RequestSyncSourceAdd"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}source_id\0\u{1}action\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self._sourceID) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self._action) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._sourceID {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._action {
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 2)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Pb_Remote_RequestSyncSourceAdd, rhs: Pb_Remote_RequestSyncSourceAdd) -> Bool {
+    if lhs._sourceID != rhs._sourceID {return false}
+    if lhs._action != rhs._action {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+nonisolated extension Pb_Remote_ResponseSyncSourceAdd: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ResponseSyncSourceAdd"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}source_id\0\u{1}result\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self._sourceID) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self._result) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._sourceID {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._result {
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 2)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Pb_Remote_ResponseSyncSourceAdd, rhs: Pb_Remote_ResponseSyncSourceAdd) -> Bool {
+    if lhs._sourceID != rhs._sourceID {return false}
+    if lhs._result != rhs._result {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 nonisolated extension Pb_Remote_RequestSyncManifest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".RequestSyncManifest"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}source_id\0\u{3}limit_items\0\u{3}limit_bytes\0\u{3}supported_formats\0\u{1}quality\0\u{3}max_bitrate_kbps\0\u{1}seed\0\u{3}preferred_mime_type\0\u{1}lossless\0")
@@ -7430,7 +7595,7 @@ nonisolated extension Pb_Remote_ResponseReportPlays: SwiftProtobuf.Message, Swif
 
 nonisolated extension Pb_Remote_Message: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Message"
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}version\0\u{1}type\0\u{4}\u{8}request_playlist_songs\0\u{3}request_change_song\0\u{3}request_set_volume\0\u{1}repeat\0\u{1}shuffle\0\u{3}response_clementine_info\0\u{3}response_current_metadata\0\u{3}response_playlists\0\u{3}response_playlist_songs\0\u{3}response_engine_state_changed\0\u{3}response_update_track_position\0\u{3}request_connect\0\u{3}response_disconnect\0\u{3}request_set_track_position\0\u{3}response_active_changed\0\u{3}request_insert_urls\0\u{3}request_remove_songs\0\u{3}request_playlists\0\u{3}request_open_playlist\0\u{3}request_close_playlist\0\u{3}response_lyrics\0\u{3}request_download_songs\0\u{3}response_song_file_chunk\0\u{3}response_song_offer\0\u{3}response_library_chunk\0\u{3}request_rate_song\0\u{3}response_download_total_size\0\u{3}request_global_search\0\u{3}response_global_search\0\u{3}response_transcoder_status\0\u{3}response_global_search_status\0\u{4}\u{a}request_list_files\0\u{3}request_append_files\0\u{3}response_list_files\0\u{3}request_update_playlist\0\u{3}response_saved_radios\0\u{4}\u{7}response_outputs\0\u{3}request_set_output\0\u{3}request_render_load\0\u{3}request_render_preload\0\u{3}request_render_seek\0\u{3}request_render_volume\0\u{3}renderer_status\0\u{3}renderer_error\0\u{3}renderer_track_ended\0\u{3}request_browse\0\u{3}response_browse\0\u{3}request_browse_add\0\u{3}response_browse_add\0\u{3}request_sync_sources\0\u{3}response_sync_sources\0\u{3}request_sync_manifest\0\u{3}response_sync_manifest\0\u{3}request_report_plays\0\u{3}response_report_plays\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}version\0\u{1}type\0\u{4}\u{8}request_playlist_songs\0\u{3}request_change_song\0\u{3}request_set_volume\0\u{1}repeat\0\u{1}shuffle\0\u{3}response_clementine_info\0\u{3}response_current_metadata\0\u{3}response_playlists\0\u{3}response_playlist_songs\0\u{3}response_engine_state_changed\0\u{3}response_update_track_position\0\u{3}request_connect\0\u{3}response_disconnect\0\u{3}request_set_track_position\0\u{3}response_active_changed\0\u{3}request_insert_urls\0\u{3}request_remove_songs\0\u{3}request_playlists\0\u{3}request_open_playlist\0\u{3}request_close_playlist\0\u{3}response_lyrics\0\u{3}request_download_songs\0\u{3}response_song_file_chunk\0\u{3}response_song_offer\0\u{3}response_library_chunk\0\u{3}request_rate_song\0\u{3}response_download_total_size\0\u{3}request_global_search\0\u{3}response_global_search\0\u{3}response_transcoder_status\0\u{3}response_global_search_status\0\u{4}\u{a}request_list_files\0\u{3}request_append_files\0\u{3}response_list_files\0\u{3}request_update_playlist\0\u{3}response_saved_radios\0\u{4}\u{7}response_outputs\0\u{3}request_set_output\0\u{3}request_render_load\0\u{3}request_render_preload\0\u{3}request_render_seek\0\u{3}request_render_volume\0\u{3}renderer_status\0\u{3}renderer_error\0\u{3}renderer_track_ended\0\u{3}request_browse\0\u{3}response_browse\0\u{3}request_browse_add\0\u{3}response_browse_add\0\u{3}request_sync_sources\0\u{3}response_sync_sources\0\u{3}request_sync_manifest\0\u{3}response_sync_manifest\0\u{3}request_report_plays\0\u{3}response_report_plays\0\u{3}request_sync_source_add\0\u{3}response_sync_source_add\0")
 
   fileprivate class _StorageClass {
     var _version: Int32? = nil
@@ -7490,6 +7655,8 @@ nonisolated extension Pb_Remote_Message: SwiftProtobuf.Message, SwiftProtobuf._M
     var _responseSyncManifest: Pb_Remote_ResponseSyncManifest? = nil
     var _requestReportPlays: Pb_Remote_RequestReportPlays? = nil
     var _responseReportPlays: Pb_Remote_ResponseReportPlays? = nil
+    var _requestSyncSourceAdd: Pb_Remote_RequestSyncSourceAdd? = nil
+    var _responseSyncSourceAdd: Pb_Remote_ResponseSyncSourceAdd? = nil
 
       // This property is used as the initial default value for new instances of the type.
       // The type itself is protecting the reference to its storage via CoW semantics.
@@ -7557,6 +7724,8 @@ nonisolated extension Pb_Remote_Message: SwiftProtobuf.Message, SwiftProtobuf._M
       _responseSyncManifest = source._responseSyncManifest
       _requestReportPlays = source._requestReportPlays
       _responseReportPlays = source._responseReportPlays
+      _requestSyncSourceAdd = source._requestSyncSourceAdd
+      _responseSyncSourceAdd = source._responseSyncSourceAdd
     }
   }
 
@@ -7632,6 +7801,8 @@ nonisolated extension Pb_Remote_Message: SwiftProtobuf.Message, SwiftProtobuf._M
         case 77: try { try decoder.decodeSingularMessageField(value: &_storage._responseSyncManifest) }()
         case 78: try { try decoder.decodeSingularMessageField(value: &_storage._requestReportPlays) }()
         case 79: try { try decoder.decodeSingularMessageField(value: &_storage._responseReportPlays) }()
+        case 80: try { try decoder.decodeSingularMessageField(value: &_storage._requestSyncSourceAdd) }()
+        case 81: try { try decoder.decodeSingularMessageField(value: &_storage._responseSyncSourceAdd) }()
         default: break
         }
       }
@@ -7815,6 +7986,12 @@ nonisolated extension Pb_Remote_Message: SwiftProtobuf.Message, SwiftProtobuf._M
       try { if let v = _storage._responseReportPlays {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 79)
       } }()
+      try { if let v = _storage._requestSyncSourceAdd {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 80)
+      } }()
+      try { if let v = _storage._responseSyncSourceAdd {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 81)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -7881,6 +8058,8 @@ nonisolated extension Pb_Remote_Message: SwiftProtobuf.Message, SwiftProtobuf._M
         if _storage._responseSyncManifest != rhs_storage._responseSyncManifest {return false}
         if _storage._requestReportPlays != rhs_storage._requestReportPlays {return false}
         if _storage._responseReportPlays != rhs_storage._responseReportPlays {return false}
+        if _storage._requestSyncSourceAdd != rhs_storage._requestSyncSourceAdd {return false}
+        if _storage._responseSyncSourceAdd != rhs_storage._responseSyncSourceAdd {return false}
         return true
       }
       if !storagesAreEqual {return false}

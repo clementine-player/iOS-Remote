@@ -83,9 +83,7 @@ private struct LibraryLevelView: View {
 
     private var list: some View {
         List(selection: editMode.isEditing ? $selection : nil) {
-            if opened == nil, !editMode.isEditing, model.session.syncing.available,
-                !model.session.smartPlaylists.isEmpty
-            {
+            if opened == nil, !editMode.isEditing, !model.session.smartPlaylists.isEmpty {
                 smartPlaylists
             }
             if let opened, let level, !editMode.isEditing {
@@ -130,21 +128,43 @@ private struct LibraryLevelView: View {
     }
 
     /// Clementine's smart playlists, in a folder at the top, as Clementine's own library shows
-    /// them. Tapping one keeps it on this phone.
+    /// them. Tapping one plays it, or adds it if Clementine is playing, as tapping a song does; its
+    /// menu offers the other ways to put it on the playlist, and keeping it on this phone.
     private var smartPlaylists: some View {
         DisclosureGroup(isExpanded: $showsSmartPlaylists) {
             ForEach(model.session.smartPlaylists, id: \.sourceID) { smartPlaylist in
                 Button {
-                    keepingSmartPlaylist = smartPlaylist
+                    model.play(smartPlaylist: smartPlaylist, action: .playIfStopped)
                 } label: {
-                    MediaRow(
-                        title: smartPlaylist.title,
-                        meta: String(localized: "Keep on this phone", comment: "Saves the music on the phone and keeps it up to date.")
-                    ) {
+                    MediaRow(title: smartPlaylist.title, meta: "") {
                         IconTile(systemImage: "wand.and.stars")
                     }
                 }
                 .buttonStyle(.plain)
+                .accessibilityHint("Adds it to the playlist")
+                .contextMenu {
+                    // Clementine puts a smart playlist on the playlist, or makes it dynamic: it
+                    // can't queue one, or open it in a new playlist.
+                    Button("Play now", systemImage: "play.fill") {
+                        model.play(smartPlaylist: smartPlaylist, action: .playNow)
+                    }
+                    if model.session.canEnqueueNext {
+                        Button("Play next", systemImage: "text.line.first.and.arrowtriangle.forward") {
+                            model.play(smartPlaylist: smartPlaylist, action: .playNext)
+                        }
+                    }
+                    Divider()
+                    Button("Add to playlist", systemImage: "plus") {
+                        model.play(smartPlaylist: smartPlaylist, action: .append)
+                    }
+                    Button("Replace playlist", systemImage: "arrow.triangle.2.circlepath") {
+                        model.play(smartPlaylist: smartPlaylist, action: .replace)
+                    }
+                    if model.session.syncing.available {
+                        Divider()
+                        KeepButton { keepingSmartPlaylist = smartPlaylist }
+                    }
+                }
                 .listRowBackground(Palette.surface)
                 .listRowSeparator(.hidden)
             }
