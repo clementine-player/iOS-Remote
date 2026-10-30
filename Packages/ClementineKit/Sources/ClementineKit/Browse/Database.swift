@@ -73,24 +73,104 @@ final class Database {
     func run(_ sql: String, _ arguments: [Value]) throws {
         let statement = try prepare(sql, [])
         defer { sqlite3_finalize(statement) }
+        bind(statement, arguments)
+        guard sqlite3_step(statement) == SQLITE_DONE else { throw lastError }
+    }
+
+    /// Runs a query with [arguments] of any SQLite type, returning each row's columns with their
+    /// own types.
+    func rows(_ sql: String, _ arguments: [Value] = []) throws -> [[Value]] {
+        let statement = try prepare(sql, [])
+        defer { sqlite3_finalize(statement) }
+        bind(statement, arguments)
+        var rows: [[Value]] = []
+        let columns = sqlite3_column_count(statement)
+        while true {
+            let step = sqlite3_step(statement)
+            if step == SQLITE_DONE {
+                break
+            }
+            guard step == SQLITE_ROW else { throw lastError }
+            rows.append((0..<columns).map { column in
+                switch sqlite3_column_type(statement, column) {
+                case SQLITE_INTEGER:
+                    return .integer(sqlite3_column_int64(statement, column))
+                case SQLITE_FLOAT:
+                    return .real(sqlite3_column_double(statement, column))
+                case SQLITE_TEXT:
+                    return .text(String(cString: sqlite3_column_text(statement, column)))
+                case SQLITE_BLOB:
+                    let count = Int(sqlite3_column_bytes(statement, column))
+                    guard let bytes = sqlite3_column_blob(statement, column), count > 0 else {
+                        return .blob(Data())
+                    }
+                    return .blob(Data(bytes: bytes, count: count))
+                default:
+                    return .null
+                }
+            })
+        }
+        return rows
+    }
+
+    /// The rowid of the last row inserted.
+    var lastInsertRowID: Int64 { sqlite3_last_insert_rowid(handle) }
+
+    /// How many rows the last statement changed.
+    var changes: Int { Int(sqlite3_changes(handle)) }
+
+    enum Value: Equatable {
+        case null
+        case text(String)
+        case integer(Int64)
+        case real(Double)
+        case blob(Data)
+
+        var text: String? {
+            if case .text(let text) = self { return text }
+            return nil
+        }
+
+        var integer: Int64? {
+            if case .integer(let value) = self { return value }
+            return nil
+        }
+
+        var real: Double? {
+            switch self {
+            case .real(let value): value
+            case .integer(let value): Double(value)
+            default: nil
+            }
+        }
+
+        var blob: Data? {
+            if case .blob(let data) = self { return data }
+            return nil
+        }
+    }
+
+    private func bind(_ statement: OpaquePointer?, _ arguments: [Value]) {
         for (index, argument) in arguments.enumerated() {
             let position = Int32(index + 1)
             switch argument {
+            case .null:
+                sqlite3_bind_null(statement, position)
             case .text(let text):
                 sqlite3_bind_text(statement, position, text, -1, Self.transient)
             case .integer(let value):
                 sqlite3_bind_int64(statement, position, value)
             case .real(let value):
                 sqlite3_bind_double(statement, position, value)
+            case .blob(let data) where data.isEmpty:
+                // A null pointer would bind NULL rather than an empty blob.
+                sqlite3_bind_zeroblob(statement, position, 0)
+            case .blob(let data):
+                _ = data.withUnsafeBytes { bytes in
+                    sqlite3_bind_blob(statement, position, bytes.baseAddress, Int32(data.count), Self.transient)
+                }
             }
         }
-        guard sqlite3_step(statement) == SQLITE_DONE else { throw lastError }
-    }
-
-    enum Value {
-        case text(String)
-        case integer(Int64)
-        case real(Double)
     }
 
     private func prepare(_ sql: String, _ arguments: [String]) throws -> OpaquePointer? {
