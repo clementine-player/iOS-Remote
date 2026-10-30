@@ -65,6 +65,7 @@ final class AppModel {
         self.nowPlaying = nowPlaying
         renderer.onUpdate = { nowPlaying.update() }
         phonePlayer.onUpdate = { nowPlaying.update() }
+        syncer.networkAllows = { [network] in network.allows($0) }
         session.addObserver { [renderer, internet] message in
             renderer.handle(message)
             internet.handle(message)
