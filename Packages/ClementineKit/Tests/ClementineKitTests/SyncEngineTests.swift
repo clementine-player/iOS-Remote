@@ -328,4 +328,12 @@ struct PhonePlayerTests {
         #expect(Set(PhonePlayer.order(songs, from: 1, shuffled: true).map(\.itemKey)) == ["a", "b", "c"])
         #expect(PhonePlayer.order([], from: 0, shuffled: true).isEmpty)
     }
+
+    @Test func shufflesWhatsLeftOrPutsItBackInOrder() throws {
+        let folder = URL(filePath: "/synced", directoryHint: .isDirectory)
+        let chosen = try ["a", "b", "c", "d"].map { KeptSong(try Self.item($0, title: $0), in: folder) }
+        let left = [chosen[3], chosen[1]]
+        #expect(PhonePlayer.upcoming(left, chosen: chosen, shuffled: false).map(\.itemKey) == ["b", "d"])
+        #expect(Set(PhonePlayer.upcoming(left, chosen: chosen, shuffled: true).map(\.itemKey)) == ["b", "d"])
+    }
 }

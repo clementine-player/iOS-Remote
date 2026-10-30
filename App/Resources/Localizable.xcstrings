@@ -17034,6 +17034,12 @@
         }
       }
     },
+    "Playing on this iPad" : {
+      "comment" : "As \"Playing on this phone\", on an iPad."
+    },
+    "Playing on this phone" : {
+      "comment" : "At the top of the player while it plays the music saved on the phone, where it otherwise says which playlist Clementine plays from."
+    },
     "Playing what's on this phone" : {
       "comment" : "Banner, under \"Clementine isn't reachable\"."
     },

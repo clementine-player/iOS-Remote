@@ -13,6 +13,9 @@ struct PlayerView: View {
     @State private var detailsPage = SongDetailsView.Page.details
     @State private var isOutputSheetPresented = false
 
+    /// Clementine, or the songs kept on this phone while they play.
+    private var playback: any PlayerSource { model.playback }
+
     var body: some View {
         GeometryReader { geometry in
             switch geometry.fold(layoutDirection: layoutDirection) {
@@ -117,20 +120,30 @@ struct PlayerView: View {
                 .font(.title3)
                 .frame(width: 48, height: 48)
             Spacer()
-            VStack(spacing: 0) {
-                Text("Playing from", comment: "Small heading at the top of the player, above the name of the playlist the song is playing from.")
-                    .textStyle(.labelMedium)
-                    .foregroundStyle(Palette.onSurfaceVariant)
-                Text(session.activePlaylist?.name ?? "")
+            if playback.isOnPhone {
+                Label(playingOnThisDevice, systemImage: UIDevice.current.userInterfaceIdiom == .pad ? "ipad" : "iphone")
                     .textStyle(.labelLarge)
-                    .foregroundStyle(Palette.onSurface)
+                    .foregroundStyle(Palette.primary)
                     .lineLimit(1)
+                    .accessibilityIdentifier("playingOnPhone")
+            } else {
+                VStack(spacing: 0) {
+                    Text("Playing from", comment: "Small heading at the top of the player, above the name of the playlist the song is playing from.")
+                        .textStyle(.labelMedium)
+                        .foregroundStyle(Palette.onSurfaceVariant)
+                    Text(session.activePlaylist?.name ?? "")
+                        .textStyle(.labelLarge)
+                        .foregroundStyle(Palette.onSurface)
+                        .lineLimit(1)
+                }
+                .accessibilityElement(children: .combine)
             }
-            .accessibilityElement(children: .combine)
             Spacer()
             Menu {
-                Button("Stop", systemImage: "stop.fill") { session.stop() }
-                DownloadMenu()
+                Button("Stop", systemImage: "stop.fill") { playback.stop() }
+                if !playback.isOnPhone {
+                    DownloadMenu()
+                }
             } label: {
                 Image(systemName: "ellipsis")
                     .font(.title3)
@@ -143,13 +156,21 @@ struct PlayerView: View {
         .frame(height: Self.topBarHeight)
     }
 
+    /// Where the player says it plays the songs kept on the device.
+    private var playingOnThisDevice: String {
+        UIDevice.current.userInterfaceIdiom == .pad
+            ? String(localized: "Playing on this iPad", comment: "As \"Playing on this phone\", on an iPad.")
+            : String(localized: "Playing on this phone", comment: "At the top of the player while it plays the music saved on the phone, where it otherwise says which playlist Clementine plays from.")
+    }
+
     private var artwork: some View {
         Button {
             showLyrics()
         } label: {
-            Artwork(song: session.song)
+            Artwork(song: playback.song)
         }
         .buttonStyle(.plain)
+        .disabled(playback.isOnPhone)
         .accessibilityLabel("Cover art")
         .accessibilityHint("Shows the lyrics")
         .accessibilityIdentifier("artwork")
@@ -172,8 +193,8 @@ struct PlayerView: View {
 
     private var songInfo: some View {
         HStack(alignment: .top, spacing: Metrics.space2) {
-            SongInfo(song: session.song)
-            if showLastFM, session.song != nil {
+            SongInfo(song: playback.song)
+            if showLastFM, !playback.isOnPhone, session.song != nil {
                 Button {
                     session.love()
                     model.toasts.show("Loved on Last.fm")
@@ -190,41 +211,50 @@ struct PlayerView: View {
         }
     }
 
+    /// Playing the songs kept on this phone, only the queue button: it opens them.
     private var actions: some View {
         HStack {
             Spacer()
-            ActionButton(title: "Lyrics and details", systemImage: "quote.bubble") {
-                detailsPage = .details
-                isDetailsPresented = true
-            }
-            Spacer()
-            ActionButton(title: "Queue", systemImage: "list.bullet") {
-                if let playing = session.activePlaylistID {
-                    model.selectedPlaylistID = playing
+            if !playback.isOnPhone {
+                ActionButton(title: "Lyrics and details", systemImage: "quote.bubble") {
+                    detailsPage = .details
+                    isDetailsPresented = true
                 }
-                model.selectedTab = .queue
+                Spacer()
+            }
+            ActionButton(title: "Queue", systemImage: "list.bullet") {
+                if playback.isOnPhone {
+                    model.selectedTab = .downloads
+                } else {
+                    if let playing = session.activePlaylistID {
+                        model.selectedPlaylistID = playing
+                    }
+                    model.selectedTab = .queue
+                }
                 dismiss()
             }
             Spacer()
-            if session.hasOtherOutputs {
-                OutputButton { isOutputSheetPresented = true }
+            if !playback.isOnPhone {
+                if session.hasOtherOutputs {
+                    OutputButton { isOutputSheetPresented = true }
+                    Spacer()
+                }
+                Menu {
+                    DownloadMenu()
+                } label: {
+                    Image(systemName: "arrow.down.circle")
+                        .font(.title3)
+                        .foregroundStyle(Palette.onSurfaceVariant)
+                        .frame(width: 48, height: 48)
+                }
+                .accessibilityLabel("Download")
                 Spacer()
             }
-            Menu {
-                DownloadMenu()
-            } label: {
-                Image(systemName: "arrow.down.circle")
-                    .font(.title3)
-                    .foregroundStyle(Palette.onSurfaceVariant)
-                    .frame(width: 48, height: 48)
-            }
-            .accessibilityLabel("Download")
-            Spacer()
         }
     }
 
     private func showLyrics() {
-        guard session.song != nil else { return }
+        guard session.song != nil, !playback.isOnPhone else { return }
         detailsPage = .lyrics
         isDetailsPresented = true
     }
@@ -288,15 +318,16 @@ struct SongInfo: View {
 /// The song's position; it follows the finger while dragging, and Clementine is told on release.
 /// While playing it moves on every frame, rather than once a second when Clementine reports it.
 struct SeekBar: View {
-    @Environment(RemoteSession.self) private var session
+    @Environment(AppModel.self) private var model
     @State private var dragging: Double?
     @State private var position = SongPosition()
 
     var body: some View {
-        TimelineView(.animation(paused: session.playState != .playing)) { _ in
-            let song = session.song
+        let playback = model.playback
+        TimelineView(.animation(paused: playback.playState != .playing)) { _ in
+            let song = playback.song
             let length = song?.length ?? 0
-            let seconds = position.seconds(for: session)
+            let seconds = position.seconds(for: playback)
             // The time shown ticks over with each whole second, as a clock does.
             let shown = dragging.map { Int($0.rounded()) } ?? Int(seconds)
             VStack(spacing: 0) {
@@ -308,7 +339,7 @@ struct SeekBar: View {
                 ) { editing in
                     if !editing, let dragging {
                         position.seek(to: Int(dragging.rounded()))
-                        session.seek(to: Int(dragging.rounded()))
+                        playback.seek(to: Int(dragging.rounded()))
                         self.dragging = nil
                     }
                 }
@@ -334,25 +365,26 @@ struct SeekBar: View {
     }
 }
 
-/// Where the song is, from what Clementine last said and this phone's clock since
-/// ([PositionClock]).
+/// Where the song is, from what Clementine (or the phone's player) last said and this phone's
+/// clock since ([PositionClock]).
 @MainActor
 final class SongPosition {
     private var clock = PositionClock()
     private var song: Song?
     private var reported: Int?
 
-    /// In seconds; takes in what `session` says, when that has changed.
-    func seconds(for session: RemoteSession) -> Double {
-        let stopped = session.playState == .stopped
-        let seconds = stopped ? 0 : session.position
-        if reported == nil || session.song != song || stopped {
+    /// In seconds; takes in what `playback` says, when that has changed.
+    func seconds(for playback: any PlayerSource) -> Double {
+        let stopped = playback.playState == .stopped
+        let seconds = stopped ? 0 : playback.position
+        let playing = playback.song
+        if reported == nil || playing != song || stopped {
             clock.seek(to: seconds)
         } else if seconds != reported {
             clock.report(seconds)
         }
-        clock.setPlaying(session.playState == .playing)
-        song = session.song
+        clock.setPlaying(playback.playState == .playing)
+        song = playing
         reported = seconds
         return clock.position()
     }
@@ -366,33 +398,36 @@ final class SongPosition {
 /// Shuffle · previous · play/pause · next · repeat, always left to right.
 struct TransportControls: View {
     @Environment(AppModel.self) private var model
-    @Environment(RemoteSession.self) private var session
 
     var body: some View {
+        let playback = model.playback
         HStack {
             ModeToggle(
                 systemImage: "shuffle",
-                isOn: session.shuffleMode != .off,
-                label: session.shuffleMode.label
+                isOn: playback.shuffleMode != .off,
+                label: playback.shuffleMode.label
             ) {
-                model.toasts.show(session.cycleShuffle().label)
+                model.toasts.show(playback.cycleShuffle().label)
             }
             Spacer()
-            TransportButton(title: "Previous", systemImage: "backward.end.fill", action: session.previous)
+            TransportButton(title: "Previous", systemImage: "backward.end.fill", action: playback.previous)
             Spacer()
-            PlayPauseButton(playing: session.playState == .playing, action: session.playPause) {
-                session.stopAfterCurrent()
-                model.toasts.show("Stop after this song")
+            PlayPauseButton(playing: playback.playState == .playing, action: playback.playPause) {
+                // Only Clementine stops after a song.
+                if !playback.isOnPhone {
+                    model.session.stopAfterCurrent()
+                    model.toasts.show("Stop after this song")
+                }
             }
             Spacer()
-            TransportButton(title: "Next", systemImage: "forward.end.fill", action: session.next)
+            TransportButton(title: "Next", systemImage: "forward.end.fill", action: playback.next)
             Spacer()
             ModeToggle(
-                systemImage: session.repeatMode == .track ? "repeat.1" : "repeat",
-                isOn: session.repeatMode != .off,
-                label: session.repeatMode.label
+                systemImage: playback.repeatMode == .track ? "repeat.1" : "repeat",
+                isOn: playback.repeatMode != .off,
+                label: playback.repeatMode.label
             ) {
-                model.toasts.show(session.cycleRepeat().label)
+                model.toasts.show(playback.cycleRepeat().label)
             }
         }
         .environment(\.layoutDirection, .leftToRight)
@@ -418,14 +453,15 @@ private struct TransportButton: View {
 }
 
 /// Clementine's volume, not the phone's. While dragging, Clementine follows the thumb. While
-/// Clementine plays on this phone, it's the phone's volume instead.
+/// Clementine plays on this phone, or the songs kept on it play, it's the phone's volume instead.
 struct VolumeSlider: View {
+    @Environment(AppModel.self) private var model
     @Environment(RemoteSession.self) private var session
 
     var body: some View {
         HStack(spacing: Metrics.space3) {
             Image(systemName: "speaker.fill")
-            if session.isPlayingHere {
+            if session.isPlayingHere || model.playback.isOnPhone {
                 PhoneVolumeSlider()
                     .frame(height: 34)
                     .accessibilityLabel("Phone volume")
