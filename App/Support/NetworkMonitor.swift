@@ -1,3 +1,4 @@
+import ClementineKit
 import Foundation
 import Network
 
@@ -11,6 +12,10 @@ final class NetworkMonitor {
     }
 
     private(set) var isOnWiFi = true
+    /// Whether the network is mobile data, or a hotspot, as iOS sees it.
+    private(set) var isExpensive = false
+    /// Whether Low Data Mode is on for the network.
+    private(set) var isConstrained = false
     private var monitor: NWPathMonitor?
 
     init() {
@@ -22,10 +27,21 @@ final class NetworkMonitor {
         let monitor = NWPathMonitor()
         monitor.pathUpdateHandler = { [weak self] path in
             let wifi = path.usesInterfaceType(.wifi) || path.usesInterfaceType(.wiredEthernet)
-            Task { @MainActor in self?.isOnWiFi = wifi }
+            let expensive = path.isExpensive
+            let constrained = path.isConstrained
+            Task { @MainActor in
+                self?.isOnWiFi = wifi
+                self?.isExpensive = expensive
+                self?.isConstrained = constrained
+            }
         }
         monitor.start(queue: .main)
         self.monitor = monitor
+    }
+
+    /// Whether songs can download over the network the phone is on, as [network] says.
+    func allows(_ network: DownloadNetwork) -> Bool {
+        network.allows(expensive: isExpensive, constrained: isConstrained)
     }
 
     /// What's wrong with the network for reaching Clementine, if anything.

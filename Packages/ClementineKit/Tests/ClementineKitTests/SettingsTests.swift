@@ -23,4 +23,27 @@ struct SettingsTests {
         #expect(settings.lastServerName == "")
         #expect(settings.knownHosts == ["10.0.0.5", "192.168.1.20"])
     }
+
+    @Test func theWifiOnlySwitchDecidesTheNetworkUntilOneIsChosen() {
+        let settings = Settings(suiteName: UUID().uuidString)
+        #expect(settings.downloadNetwork == .any)
+
+        settings.store.set(true, forKey: SettingKey.wifiOnly)
+        #expect(settings.downloadNetwork == .wifiOnly)
+
+        settings.store.set(DownloadNetwork.mobileData.rawValue, forKey: SettingKey.downloadNetwork)
+        #expect(settings.downloadNetwork == .mobileData)
+
+        settings.store.set("satellite", forKey: SettingKey.downloadNetwork)
+        #expect(settings.downloadNetwork == .wifiOnly)
+    }
+
+    @Test func eachNetworkChoiceAllowsItsNetworks() {
+        #expect(DownloadNetwork.wifiOnly.allows(expensive: false, constrained: false))
+        #expect(!DownloadNetwork.wifiOnly.allows(expensive: true, constrained: false))
+        #expect(!DownloadNetwork.wifiOnly.allows(expensive: false, constrained: true))
+        #expect(DownloadNetwork.mobileData.allows(expensive: true, constrained: false))
+        #expect(!DownloadNetwork.mobileData.allows(expensive: true, constrained: true))
+        #expect(DownloadNetwork.any.allows(expensive: true, constrained: true))
+    }
 }
