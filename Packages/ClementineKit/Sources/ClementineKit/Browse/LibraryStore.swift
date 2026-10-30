@@ -3,8 +3,8 @@ import OSLog
 
 /// Why downloading the library or songs failed.
 public enum DownloadFailure: Error, Sendable, Equatable {
-    /// Downloads are allowed only on Wi-Fi, and the phone isn't on it.
-    case onlyOnWiFi
+    /// Download over, in Settings, doesn't allow the network the phone is on.
+    case networkNotAllowed
     /// Couldn't connect, or the connection dropped.
     case connection
     /// Clementine doesn't allow downloads.

@@ -95,10 +95,10 @@ final class DownloadsModel {
         let id = nextID
         nextID += 1
         var job = Job(id: id, kind: kind)
-        if model.settings.wifiOnly, !model.network.isOnWiFi {
-            job.status.state = .finished(.onlyOnWiFi)
+        if !model.network.allows(model.settings.downloadNetwork) {
+            job.status.state = .finished(.networkNotAllowed)
             jobs.append(job)
-            model.toasts.show(DownloadFailure.onlyOnWiFi.message)
+            model.toasts.show(DownloadFailure.networkNotAllowed.message)
             return
         }
         jobs.append(job)

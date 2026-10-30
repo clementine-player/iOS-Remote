@@ -47,8 +47,8 @@ final class LibraryModel {
 
     func download() {
         guard downloadTask == nil, let endpoint = model.session.endpoint else { return }
-        if model.settings.wifiOnly, !model.network.isOnWiFi {
-            model.toasts.show(DownloadFailure.onlyOnWiFi.message)
+        if !model.network.allows(model.settings.downloadNetwork) {
+            model.toasts.show(DownloadFailure.networkNotAllowed.message)
             return
         }
         status = .downloading(nil)
@@ -172,7 +172,10 @@ final class LibrarySearch: SearchResults {
 extension DownloadFailure {
     var message: LocalizedStringResource {
         switch self {
-        case .onlyOnWiFi: "Downloads are only allowed on Wi-Fi"
+        case .networkNotAllowed:
+            LocalizedStringResource(
+                "Downloads aren't allowed on this network",
+                comment: "A download didn't start, because Download over, in Settings, doesn't allow the network the phone is on.")
         case .connection: "Couldn't connect to Clementine"
         case .forbidden: "Clementine doesn't allow downloads. Turn them on in its Network Remote settings."
         case .wrongAuthCode: "Enter the auth code shown in Clementine's Network Remote settings."
