@@ -8,6 +8,7 @@ import SwiftUI
 struct DownloadsView: View {
     @Environment(AppModel.self) private var model
     @AppStorage(SettingKey.wifiOnly) private var wifiOnly = false
+    @AppStorage(SettingKey.downloadNetwork) private var downloadNetwork: String?
     @State private var opened: DownloadsModel.Job?
     @State private var previewed: URL?
     @Environment(\.scenePhase) private var scenePhase
@@ -65,7 +66,7 @@ struct DownloadsView: View {
                         SectionTitle("Finished")
                     }
                 }
-                if wifiOnly {
+                if DownloadNetwork.chosen(downloadNetwork, wifiOnly: wifiOnly) == .wifiOnly {
                     Section {
                         HStack(spacing: Metrics.space3) {
                             Image(systemName: "wifi")
