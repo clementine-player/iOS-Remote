@@ -3342,6 +3342,9 @@
         }
       }
     },
+    "Any network" : {
+      "comment" : "A choice under Download over."
+    },
     "Appearance" : {
       "localizations" : {
         "cs" : {
@@ -9956,6 +9959,9 @@
         }
       }
     },
+    "Download over" : {
+      "comment" : "A setting: which networks songs download over, for downloads and for what's kept on this phone. Its choices follow."
+    },
     "Download playlist" : {
       "localizations" : {
         "ca" : {
@@ -10123,6 +10129,7 @@
       }
     },
     "Download songs only when connected to Wi-Fi." : {
+      "extractionState" : "stale",
       "localizations" : {
         "ca" : {
           "stringUnit" : {
@@ -11043,6 +11050,7 @@
       }
     },
     "Downloads are only allowed on Wi-Fi" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ca" : {
           "stringUnit" : {
@@ -11207,6 +11215,9 @@
           }
         }
       }
+    },
+    "Downloads aren't allowed on this network" : {
+      "comment" : "A download didn't start, because Download over, in Settings, doesn't allow the network the phone is on."
     },
     "Downloads only run on Wi-Fi." : {
       "localizations" : {
@@ -15240,6 +15251,7 @@
       }
     },
     "Only on Wi-Fi" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ca" : {
           "stringUnit" : {
@@ -24770,6 +24782,12 @@
           }
         }
       }
+    },
+    "Wi-Fi and mobile data, not in Low Data Mode" : {
+      "comment" : "A choice under Download over: Wi-Fi, and mobile data unless Low Data Mode is on."
+    },
+    "Wi-Fi only" : {
+      "comment" : "A choice under Download over. A metered Wi-Fi, such as another phone's hotspot, counts as mobile data."
     },
     "Without Local Network access, Clementine Remote can't find Clementine on your network. Enter its address below, or turn on Local Network in Settings." : {
       "localizations" : {

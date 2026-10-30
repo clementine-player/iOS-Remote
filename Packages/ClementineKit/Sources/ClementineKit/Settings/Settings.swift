@@ -13,7 +13,10 @@ public enum SettingKey {
     public static let libraryGrouping = "pref_library_grouping"
     public static let librarySorting = "pref_library_sorting"
     // Downloads
+    /// The switch for Wi-Fi only downloads that Download over replaced, read until it's set.
     public static let wifiOnly = "pref_dl_wifi_only"
+    /// The networks songs download over: a DownloadNetwork.
+    public static let downloadNetwork = "pref_dl_network"
     public static let replaceExisting = "pref_dl_override"
     public static let playlistFolder = "pref_dl_pl_save_own_dir"
     public static let artistFolder = "pref_dl_artist_dir"
@@ -78,7 +81,10 @@ public struct Settings: Sendable {
     public var librarySorting: LibrarySorting {
         LibrarySorting(rawValue: store.string(forKey: SettingKey.librarySorting) ?? "") ?? .ascending
     }
-    public var wifiOnly: Bool { store.bool(forKey: SettingKey.wifiOnly) }
+    public var downloadNetwork: DownloadNetwork {
+        DownloadNetwork.chosen(
+            store.string(forKey: SettingKey.downloadNetwork), wifiOnly: store.bool(forKey: SettingKey.wifiOnly))
+    }
     public var replaceExisting: Bool { store.bool(forKey: SettingKey.replaceExisting) }
     public var playlistFolder: Bool { store.bool(forKey: SettingKey.playlistFolder) }
     public var artistFolder: Bool { store.bool(forKey: SettingKey.artistFolder) }
@@ -164,6 +170,33 @@ public enum LibraryGrouping: String, Sendable, CaseIterable {
         case .album: ["album", "title"]
         case .genreAlbum: ["genre", "album", "title"]
         case .genreArtistAlbum: ["genre", "artist", "album", "title"]
+        }
+    }
+}
+
+/// The networks songs download over, chosen under Download over in Settings. The values are the
+/// Android app's.
+public enum DownloadNetwork: String, Sendable, CaseIterable {
+    /// Networks that are neither expensive nor constrained: a Wi-Fi that's another phone's hotspot
+    /// counts as mobile data, as iOS reports it.
+    case wifiOnly = "wifi"
+    /// Wi-Fi and mobile data, but not in Low Data Mode. The Android app leaves out roaming
+    /// instead, which iOS doesn't tell apps about.
+    case mobileData = "mobile"
+    case any = "any"
+
+    /// The choice [stored], or before there was one, the switch for Wi-Fi only.
+    public static func chosen(_ stored: String?, wifiOnly: Bool) -> DownloadNetwork {
+        stored.flatMap(DownloadNetwork.init(rawValue:)) ?? (wifiOnly ? .wifiOnly : .any)
+    }
+
+    /// Whether this allows a network that's [expensive], such as mobile data, or not, and
+    /// [constrained], in Low Data Mode, or not.
+    public func allows(expensive: Bool, constrained: Bool) -> Bool {
+        switch self {
+        case .wifiOnly: !expensive && !constrained
+        case .mobileData: !constrained
+        case .any: true
         }
     }
 }
