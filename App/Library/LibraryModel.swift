@@ -144,6 +144,16 @@ final class LibraryModel {
         }
         model.keep(rules, title: item.displayTitle)
     }
+
+    /// Keeps the songs [smartPlaylist] makes on this phone, made again as [refreshPolicy] says.
+    func keep(smartPlaylist: Pb_Remote_SyncSource, refreshPolicy: RefreshPolicy = .onConnect) {
+        guard model.session.syncing.available else { return }
+        model.keep(
+            [SyncSources.smartPlaylistRule(
+                serverID: model.session.syncing.serverID, sourceID: smartPlaylist.sourceID,
+                name: smartPlaylist.title, refreshPolicy: refreshPolicy)],
+            title: smartPlaylist.title)
+    }
 }
 
 /// Searching the library on the phone. It matches as Clementine's global search does, and its

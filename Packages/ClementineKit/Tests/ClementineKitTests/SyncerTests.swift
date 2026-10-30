@@ -58,6 +58,38 @@ struct SyncerTests {
         #expect(session.syncing == Syncing())
     }
 
+    @Test func theSessionListsClementinesSmartPlaylists() {
+        let session = RemoteSession()
+        session.apply(Self.syncingInfo())
+        session.apply(RemoteMessage(.syncSources) {
+            $0.responseSyncSources.sources = [
+                .with {
+                    $0.sourceID = "playlist/1"
+                    $0.title = "Party"
+                    $0.kind = .playlist
+                },
+                .with {
+                    $0.sourceID = "smart/library/0b6e"
+                    $0.title = "Newest tracks"
+                    $0.kind = .smartPlaylist
+                },
+            ]
+        })
+        // Its playlists come with the queue.
+        #expect(session.smartPlaylists.map(\.title) == ["Newest tracks"])
+
+        // Asked for again on each INFO.
+        session.apply(Self.syncingInfo())
+        #expect(session.smartPlaylists.isEmpty)
+    }
+
+    @Test func smartPlaylistsAreKeptAsTheyChange() {
+        let rule = SyncSources.smartPlaylistRule(serverID: Self.server, sourceID: "smart/library/0b6e", name: "Newest tracks")
+        #expect(rule.sourceID == "smart/library/0b6e")
+        #expect(rule.kind == .smartPlaylist)
+        #expect(rule.refreshPolicy == .onConnect)
+    }
+
     @Test func waitsForTheManifestOfItsOwnSource() async throws {
         let manifests = SyncManifests()
         let sent = Sent()

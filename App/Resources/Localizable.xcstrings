@@ -21852,6 +21852,9 @@
         }
       }
     },
+    "Smart playlists" : {
+      "comment" : "A folder at the top of the library holding Clementine's smart playlists, such as Newest tracks, as Clementine's own library shows them."
+    },
     "Song" : {
       "localizations" : {
         "ca" : {

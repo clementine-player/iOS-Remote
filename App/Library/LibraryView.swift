@@ -38,6 +38,8 @@ private struct LibraryLevelView: View {
     @State private var editMode = EditMode.inactive
     /// What the Keep sheet is open for.
     @State private var keeping: BrowseItem?
+    @State private var keepingSmartPlaylist: Pb_Remote_SyncSource?
+    @State private var showsSmartPlaylists = false
 
     private var library: LibraryModel { model.library }
 
@@ -81,6 +83,11 @@ private struct LibraryLevelView: View {
 
     private var list: some View {
         List(selection: editMode.isEditing ? $selection : nil) {
+            if opened == nil, !editMode.isEditing, model.session.syncing.available,
+                !model.session.smartPlaylists.isEmpty
+            {
+                smartPlaylists
+            }
             if let opened, let level, !editMode.isEditing {
                 BrowseHeader(item: opened, count: level.items.count) { target in
                     Task { await library.add([opened], to: target) }
@@ -110,6 +117,50 @@ private struct LibraryLevelView: View {
                 }
             }
         }
+        .sheet(
+            isPresented: Binding { keepingSmartPlaylist != nil } set: { if !$0 { keepingSmartPlaylist = nil } }
+        ) {
+            if let smartPlaylist = keepingSmartPlaylist {
+                // Made again each time, so it follows what it picks, such as songs added lately.
+                KeepSheet(title: smartPlaylist.title, refreshPolicy: .onConnect) { policy in
+                    library.keep(smartPlaylist: smartPlaylist, refreshPolicy: policy)
+                }
+            }
+        }
+    }
+
+    /// Clementine's smart playlists, in a folder at the top, as Clementine's own library shows
+    /// them. Tapping one keeps it on this phone.
+    private var smartPlaylists: some View {
+        DisclosureGroup(isExpanded: $showsSmartPlaylists) {
+            ForEach(model.session.smartPlaylists, id: \.sourceID) { smartPlaylist in
+                Button {
+                    keepingSmartPlaylist = smartPlaylist
+                } label: {
+                    MediaRow(
+                        title: smartPlaylist.title,
+                        meta: String(localized: "Keep on this phone", comment: "Saves the music on the phone and keeps it up to date.")
+                    ) {
+                        IconTile(systemImage: "wand.and.stars")
+                    }
+                }
+                .buttonStyle(.plain)
+                .listRowBackground(Palette.surface)
+                .listRowSeparator(.hidden)
+            }
+        } label: {
+            MediaRow(
+                title: String(
+                    localized: "Smart playlists",
+                    comment: "A folder at the top of the library holding Clementine's smart playlists, such as Newest tracks, as Clementine's own library shows them."),
+                meta: String(localized: "\(model.session.smartPlaylists.count) items")
+            ) {
+                IconTile(systemImage: "wand.and.stars")
+            }
+        }
+        .listRowBackground(Palette.surface)
+        .listRowSeparator(.hidden)
+        .accessibilityIdentifier("librarySmartPlaylists")
     }
 
     private struct LoadKey: Equatable {

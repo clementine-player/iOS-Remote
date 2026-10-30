@@ -88,6 +88,10 @@ public final class RemoteSession {
     /// Whether songs can be synced from this Clementine to the phone; set from each INFO.
     public private(set) var syncing = Syncing()
 
+    /// Clementine's smart playlists, which can be kept on this phone: asked for on each INFO when
+    /// it syncs, and empty until it answers.
+    public private(set) var smartPlaylists: [Pb_Remote_SyncSource] = []
+
     // MARK: Playing
 
     public private(set) var song: Song?
@@ -242,6 +246,7 @@ public final class RemoteSession {
         canBrowse = false
         canEnqueueNext = false
         syncing = Syncing()
+        smartPlaylists = []
     }
 
     private func handle(_ event: ClementineConnection.Event, from source: ClementineConnection) {
@@ -284,9 +289,16 @@ public final class RemoteSession {
             canBrowse = info.features.contains(.browse)
             canEnqueueNext = info.features.contains(.enqueueNext)
             syncing = Syncing(info)
+            smartPlaylists = []
             if canChooseOutput {
                 send(RemoteMessage(.requestOutputs))
             }
+            if syncing.supported {
+                send(RemoteMessage(.requestSyncSources))
+            }
+        case .syncSources:
+            // Its playlists come with the queue.
+            smartPlaylists = message.responseSyncSources.sources.filter { $0.kind == .smartPlaylist }
         case .outputs:
             outputs = message.responseOutputs.outputs.map(Output.init)
         case .firstDataSentComplete:
