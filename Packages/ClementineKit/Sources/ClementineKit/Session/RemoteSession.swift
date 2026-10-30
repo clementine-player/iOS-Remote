@@ -83,6 +83,11 @@ public final class RemoteSession {
     /// Whether this Clementine can queue added songs to play next ([AddAction.playNext]).
     public private(set) var canEnqueueNext = false
 
+    // MARK: Syncing
+
+    /// Whether songs can be synced from this Clementine to the phone; set from each INFO.
+    public private(set) var syncing = Syncing()
+
     // MARK: Playing
 
     public private(set) var song: Song?
@@ -236,6 +241,7 @@ public final class RemoteSession {
         outputs = []
         canBrowse = false
         canEnqueueNext = false
+        syncing = Syncing()
     }
 
     private func handle(_ event: ClementineConnection.Event, from source: ClementineConnection) {
@@ -277,6 +283,7 @@ public final class RemoteSession {
             canChooseOutput = info.features.contains(.rendering)
             canBrowse = info.features.contains(.browse)
             canEnqueueNext = info.features.contains(.enqueueNext)
+            syncing = Syncing(info)
             if canChooseOutput {
                 send(RemoteMessage(.requestOutputs))
             }

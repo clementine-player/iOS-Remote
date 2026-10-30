@@ -173,6 +173,17 @@ struct DownloadTests {
         #expect(try Data(contentsOf: songs[0].file) == Data("x".utf8))
     }
 
+    @Test func leavesOutTheSyncedSongs() throws {
+        let directory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        for path in ["Arvo Pärt/Für Alina.mp3", "Synced/Pixies/Doolittle/01 Debaser.flac"] {
+            let file = directory.appending(path: path)
+            try FileManager.default.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try Data("x".utf8).write(to: file)
+        }
+        let songs = DownloadedSong.saved(in: directory, skipping: directory.appending(path: "Synced"))
+        #expect(songs.map(\.title) == ["Für Alina"])
+    }
+
     @Test func listsNothingWithoutTheFolder() {
         let directory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
         #expect(DownloadedSong.saved(in: directory).isEmpty)

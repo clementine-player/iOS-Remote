@@ -11,8 +11,10 @@ extension DownloadedSong {
     /// with the folder settings' defaults, by artist and album, then by file name.
     ///
     /// Their tags aren't read, as that means opening every file: each is named after its file,
-    /// with the folders it's in (its artist and album) as its second line.
-    public static func saved(in directory: URL) -> [DownloadedSong] {
+    /// with the folders it's in (its artist and album) as its second line. The songs in [skipping],
+    /// such as the synced songs' folder, are left out.
+    public static func saved(in directory: URL, skipping: URL? = nil) -> [DownloadedSong] {
+        let skipped = skipping?.resolvingSymlinksInPath().pathComponents
         var found: [(folders: [String], name: String, file: URL)] = []
         func add(_ folder: URL, _ folders: [String]) {
             guard let items = try? FileManager.default.contentsOfDirectory(
@@ -21,7 +23,9 @@ extension DownloadedSong {
             for item in items {
                 let name = item.lastPathComponent
                 if (try? item.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory == true {
-                    add(item, folders + [name])
+                    if item.resolvingSymlinksInPath().pathComponents != skipped {
+                        add(item, folders + [name])
+                    }
                 } else if isAudio(name) {
                     found.append((folders, name, item))
                 }
