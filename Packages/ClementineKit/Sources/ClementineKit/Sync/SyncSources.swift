@@ -16,18 +16,29 @@ public enum SyncSources {
         "playlist/\(id)"
     }
 
-    /// A rule keeping everything an album has, now and later.
-    public static func albumRule(serverID: String, albumArtist: String, album: String) -> SyncRule {
+    /// A rule keeping everything an album has.
+    public static func albumRule(
+        serverID: String, albumArtist: String, album: String, refreshPolicy: RefreshPolicy = .never
+    ) -> SyncRule {
         SyncRule(
             serverID: serverID, sourceID: self.album(albumArtist: albumArtist, album: album), title: album,
-            kind: Pb_Remote_SyncSourceKind.album, refreshPolicy: .never)
+            kind: Pb_Remote_SyncSourceKind.album, refreshPolicy: refreshPolicy)
     }
 
     /// A rule keeping every song by an artist.
-    public static func artistRule(serverID: String, artist: String) -> SyncRule {
+    public static func artistRule(serverID: String, artist: String, refreshPolicy: RefreshPolicy = .never) -> SyncRule {
         SyncRule(
             serverID: serverID, sourceID: self.artist(artist), title: artist,
-            kind: Pb_Remote_SyncSourceKind.artist, refreshPolicy: .never)
+            kind: Pb_Remote_SyncSourceKind.artist, refreshPolicy: refreshPolicy)
+    }
+
+    /// A rule keeping the songs of one of Clementine's playlists, as it changes.
+    public static func playlistRule(
+        serverID: String, id: Int32, name: String, refreshPolicy: RefreshPolicy = .onConnect
+    ) -> SyncRule {
+        SyncRule(
+            serverID: serverID, sourceID: playlist(id), title: name,
+            kind: Pb_Remote_SyncSourceKind.playlist, refreshPolicy: refreshPolicy)
     }
 
     /// The library's fields whose items can be kept: an artist's songs, or an album.

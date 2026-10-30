@@ -84,6 +84,15 @@ final class AppModel {
         session.syncing.supported || !syncer.kept.isEmpty
     }
 
+    /// Keeps [rules] on this phone, and says so, naming what's kept: [title].
+    func keep(_ rules: [SyncRule], title: String) {
+        guard !rules.isEmpty else { return }
+        syncer.keep(rules)
+        toasts.show(LocalizedStringResource(
+            "Keeping \(title) on this phone",
+            comment: "Shown for a moment after choosing Keep on this phone; the placeholder is an album, an artist or a playlist."))
+    }
+
     /// Plays [songs] kept on this phone from the one at [index], or all of them at random. Pauses
     /// Clementine, so only one plays.
     func playOnPhone(_ songs: [KeptSong], from index: Int, shuffled: Bool = false) {
