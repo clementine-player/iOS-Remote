@@ -496,9 +496,14 @@ extension KeptRule {
         }
     }
 
-    /// How it stands: why it didn't sync, or what it keeps and, for a rule that's updated, when it
-    /// last was, as of `now`.
+    /// How it stands: how far its download has got, why it didn't sync, or what it keeps and, for
+    /// a rule that's updated, when it last was, as of `now`.
     func details(running: Bool, now: Date = Date()) -> String {
+        if running, let downloading, !isProblem {
+            return String(
+                localized: "Downloading \(downloading.done) of \(downloading.total) songs…",
+                comment: "Something kept on the phone, while its songs download from Clementine: how many have, of how many there are to download, such as \"Downloading 12 of 140 songs…\".")
+        }
         switch result {
         case .needsSetup(let message):
             return message
