@@ -1,7 +1,8 @@
 import ClementineKit
 import SwiftUI
 
-/// Clementine's tabs, with the mini player above them.
+/// Clementine's tabs, with the mini player above them. Without Clementine, to play what's on this
+/// phone, On this phone says so, and the other tabs say they need Clementine.
 struct MainView: View {
     @Environment(AppModel.self) private var model
     @Environment(RemoteSession.self) private var session
@@ -11,22 +12,27 @@ struct MainView: View {
         @Bindable var model = model
         TabView(selection: $model.selectedTab) {
             Tab("Queue", systemImage: "list.bullet", value: AppModel.Tab.queue) {
-                QueueView()
+                NeedsClementine { QueueView() }
             }
             Tab("Library", systemImage: "square.stack", value: AppModel.Tab.library) {
-                LibraryView()
+                NeedsClementine { LibraryView() }
             }
             // Only Clementine that can be browsed has it.
             if session.canBrowse {
                 Tab("Internet", systemImage: "globe", value: AppModel.Tab.internet) {
-                    InternetView()
+                    NeedsClementine { InternetView() }
                 }
             }
             Tab("Search", systemImage: "magnifyingglass", value: AppModel.Tab.search, role: .search) {
-                SearchView()
+                NeedsClementine { SearchView() }
             }
             Tab(downloadsTitle, systemImage: downloadsImage, value: AppModel.Tab.downloads) {
                 DownloadsView()
+                    .safeAreaInset(edge: .top) {
+                        if model.isWithoutClementine {
+                            NotReachableBanner()
+                        }
+                    }
             }
         }
         .tabViewBottomAccessory {
@@ -72,6 +78,62 @@ struct MainView: View {
     private var downloadsImage: String {
         guard model.isOnThisPhone else { return "arrow.down.circle" }
         return UIDevice.current.userInterfaceIdiom == .pad ? "ipad" : "iphone"
+    }
+}
+
+/// A tab that needs Clementine: without it, says so, with Connect.
+private struct NeedsClementine<Content: View>: View {
+    @Environment(AppModel.self) private var model
+    @ViewBuilder let content: Content
+
+    var body: some View {
+        if model.isWithoutClementine {
+            ContentUnavailableView {
+                Label(notReachable, systemImage: "desktopcomputer")
+            } actions: {
+                Button("Connect", action: model.connectFromPhone)
+                    .buttonStyle(.borderedProminent)
+                    .filledButtonTint()
+            }
+            .surfaceBackground()
+        } else {
+            content
+        }
+    }
+}
+
+private var notReachable: String {
+    String(localized: "Clementine isn't reachable", comment: "Banner: the app can't connect to Clementine on the computer.")
+}
+
+/// Says Clementine isn't connected, so what's on this phone plays, with Connect.
+private struct NotReachableBanner: View {
+    @Environment(AppModel.self) private var model
+
+    var body: some View {
+        HStack(spacing: Metrics.space3) {
+            Image(systemName: "desktopcomputer")
+                .foregroundStyle(Palette.onSurfaceVariant)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 0) {
+                Text(notReachable)
+                    .textStyle(.labelLarge)
+                Text(String(localized: "Playing what's on this phone", comment: "Banner, under \"Clementine isn't reachable\"."))
+                    .textStyle(.bodyMedium)
+                    .foregroundStyle(Palette.onSurfaceVariant)
+            }
+            Spacer(minLength: 0)
+            Button("Connect", action: model.connectFromPhone)
+                .buttonStyle(.borderless)
+                .accessibilityIdentifier("notReachableConnect")
+        }
+        .padding(.vertical, Metrics.space3)
+        .padding(.leading, Metrics.space4)
+        .padding(.trailing, Metrics.space3)
+        .background(Palette.surfaceContainerHigh, in: .rect(cornerRadius: Metrics.shapeMedium))
+        .padding(.horizontal, Metrics.space4)
+        .padding(.bottom, Metrics.space2)
+        .background(Palette.surface)
     }
 }
 

@@ -3,6 +3,7 @@ import SwiftUI
 
 @main
 struct ClementineRemoteApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @State private var model: AppModel
 
     init() {
@@ -21,7 +22,39 @@ struct ClementineRemoteApp: App {
     }
 }
 
-/// The connect screen until connected, then Clementine's tabs.
+/// Takes the app's icon's shortcuts, at launch and while running.
+@MainActor
+final class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(
+        _ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession,
+        options: UIScene.ConnectionOptions
+    ) -> UISceneConfiguration {
+        if let shortcut = options.shortcutItem {
+            SceneDelegate.perform(shortcut)
+        }
+        let configuration = UISceneConfiguration(name: nil, sessionRole: connectingSceneSession.role)
+        configuration.delegateClass = SceneDelegate.self
+        return configuration
+    }
+}
+
+@MainActor
+final class SceneDelegate: NSObject, UIWindowSceneDelegate {
+    func windowScene(_ windowScene: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem) async -> Bool {
+        Self.perform(shortcutItem)
+        return true
+    }
+
+    /// Play on this phone plays what's on it without connecting, even with Connect automatically on.
+    static func perform(_ shortcut: UIApplicationShortcutItem) {
+        if shortcut.type == AppModel.playOnPhoneShortcut {
+            AppModel.shared?.playWithoutClementine()
+        }
+    }
+}
+
+/// The connect screen until connected, then Clementine's tabs; or the tabs without Clementine, to
+/// play what's on this phone.
 struct RootView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.scenePhase) private var scenePhase
@@ -30,7 +63,7 @@ struct RootView: View {
     var body: some View {
         let session = model.session
         ZStack {
-            if session.status.isActive {
+            if session.status.isActive || model.isWithoutClementine {
                 MainView()
                     .transition(.opacity)
             } else {
@@ -38,7 +71,10 @@ struct RootView: View {
                     .transition(.opacity)
             }
         }
-        .animation(.default, value: session.status.isActive)
+        .animation(.default, value: session.status.isActive || model.isWithoutClementine)
+        .onChange(of: model.songsOnPhone, initial: true) { _, _ in
+            model.updateShortcuts()
+        }
         .toasts(model.toasts)
         .onChange(of: session.status) { old, _ in
             model.statusChanged(from: old)
