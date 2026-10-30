@@ -146,13 +146,13 @@ final class LibraryModel {
     }
 
     /// Keeps the songs [smartPlaylist] makes on this phone, made again as [refreshPolicy] says.
-    func keep(smartPlaylist: Pb_Remote_SyncSource, refreshPolicy: RefreshPolicy = .onConnect) {
+    func keep(smartPlaylist: Pb_Remote_SmartPlaylist, refreshPolicy: RefreshPolicy = .onConnect) {
         guard model.session.syncing.available else { return }
         model.keep(
             [SyncSources.smartPlaylistRule(
-                serverID: model.session.syncing.serverID, sourceID: smartPlaylist.sourceID,
-                name: smartPlaylist.title, refreshPolicy: refreshPolicy)],
-            title: smartPlaylist.title)
+                serverID: model.session.syncing.serverID, sourceID: smartPlaylist.id,
+                name: smartPlaylist.name, refreshPolicy: refreshPolicy)],
+            title: smartPlaylist.name)
     }
 }
 

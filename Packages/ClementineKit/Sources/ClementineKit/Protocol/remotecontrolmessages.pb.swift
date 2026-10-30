@@ -158,6 +158,15 @@ public nonisolated enum Pb_Remote_MsgType: Int, SwiftProtobuf.Enum, Swift.CaseIt
   case syncManifest = 391
   case reportPlaysResult = 392
 
+  /// The library's smart playlists, behind SERVER_FEATURE_SMART_PLAYLISTS.
+  /// Client -> server
+  case requestSmartPlaylists = 400
+  case requestSmartPlaylistAdd = 401
+
+  /// Server -> client
+  case smartPlaylists = 410
+  case smartPlaylistAddResult = 411
+
   public init() {
     self = .unknown
   }
@@ -269,6 +278,10 @@ public nonisolated enum Pb_Remote_ServerFeature: Int, SwiftProtobuf.Enum, Swift.
 
   /// The server applies plays sent with REPORT_PLAYS.
   case playReports = 5
+
+  /// The server answers REQUEST_SMART_PLAYLISTS and
+  /// REQUEST_SMART_PLAYLIST_ADD.
+  case smartPlaylists = 6
 
   public init() {
     self = .unspecified
@@ -3114,6 +3127,130 @@ public nonisolated struct Pb_Remote_ResponseBrowseAdd: Sendable {
   fileprivate var _result: Pb_Remote_BrowseAddResult? = nil
 }
 
+/// Asks for the library's smart playlists. Answered with SMART_PLAYLISTS.
+public nonisolated struct Pb_Remote_RequestSmartPlaylists: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public nonisolated struct Pb_Remote_SmartPlaylist: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Stays the same for as long as the smart playlist exists. It's also the
+  /// smart playlist's SyncSource.id, so a client that syncs can keep it.
+  public var id: String {
+    get {_id ?? String()}
+    set {_id = newValue}
+  }
+  /// Returns true if `id` has been explicitly set.
+  public var hasID: Bool {self._id != nil}
+  /// Clears the value of `id`. Subsequent reads from it will return its default value.
+  public mutating func clearID() {self._id = nil}
+
+  public var name: String {
+    get {_name ?? String()}
+    set {_name = newValue}
+  }
+  /// Returns true if `name` has been explicitly set.
+  public var hasName: Bool {self._name != nil}
+  /// Clears the value of `name`. Subsequent reads from it will return its default value.
+  public mutating func clearName() {self._name = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _id: String? = nil
+  fileprivate var _name: String? = nil
+}
+
+public nonisolated struct Pb_Remote_ResponseSmartPlaylists: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// In the order the library shows them.
+  public var smartPlaylists: [Pb_Remote_SmartPlaylist] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+/// Adds a smart playlist to the current playlist, as double-clicking it in the
+/// library does: Clementine generates its songs, and a dynamic one makes the
+/// playlist dynamic. Answered with SMART_PLAYLIST_ADD_RESULT.
+public nonisolated struct Pb_Remote_RequestSmartPlaylistAdd: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var smartPlaylistID: String {
+    get {_smartPlaylistID ?? String()}
+    set {_smartPlaylistID = newValue}
+  }
+  /// Returns true if `smartPlaylistID` has been explicitly set.
+  public var hasSmartPlaylistID: Bool {self._smartPlaylistID != nil}
+  /// Clears the value of `smartPlaylistID`. Subsequent reads from it will return its default value.
+  public mutating func clearSmartPlaylistID() {self._smartPlaylistID = nil}
+
+  /// Unset: what the user's settings say double-clicking does.
+  public var action: Pb_Remote_BrowseAddAction {
+    get {_action ?? .unspecified}
+    set {_action = newValue}
+  }
+  /// Returns true if `action` has been explicitly set.
+  public var hasAction: Bool {self._action != nil}
+  /// Clears the value of `action`. Subsequent reads from it will return its default value.
+  public mutating func clearAction() {self._action = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _smartPlaylistID: String? = nil
+  fileprivate var _action: Pb_Remote_BrowseAddAction? = nil
+}
+
+public nonisolated struct Pb_Remote_ResponseSmartPlaylistAdd: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var smartPlaylistID: String {
+    get {_smartPlaylistID ?? String()}
+    set {_smartPlaylistID = newValue}
+  }
+  /// Returns true if `smartPlaylistID` has been explicitly set.
+  public var hasSmartPlaylistID: Bool {self._smartPlaylistID != nil}
+  /// Clears the value of `smartPlaylistID`. Subsequent reads from it will return its default value.
+  public mutating func clearSmartPlaylistID() {self._smartPlaylistID = nil}
+
+  /// BROWSE_ADD_RESULT_GONE when there's no smart playlist with that id.
+  public var result: Pb_Remote_BrowseAddResult {
+    get {_result ?? .unspecified}
+    set {_result = newValue}
+  }
+  /// Returns true if `result` has been explicitly set.
+  public var hasResult: Bool {self._result != nil}
+  /// Clears the value of `result`. Subsequent reads from it will return its default value.
+  public mutating func clearResult() {self._result = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _smartPlaylistID: String? = nil
+  fileprivate var _result: Pb_Remote_BrowseAddResult? = nil
+}
+
 /// Something a sync rule can point at.
 public nonisolated struct Pb_Remote_SyncSource: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -4126,6 +4263,42 @@ public nonisolated struct Pb_Remote_Message: @unchecked Sendable {
   /// Clears the value of `responseReportPlays`. Subsequent reads from it will return its default value.
   public mutating func clearResponseReportPlays() {_uniqueStorage()._responseReportPlays = nil}
 
+  public var requestSmartPlaylistAdd: Pb_Remote_RequestSmartPlaylistAdd {
+    get {_storage._requestSmartPlaylistAdd ?? Pb_Remote_RequestSmartPlaylistAdd()}
+    set {_uniqueStorage()._requestSmartPlaylistAdd = newValue}
+  }
+  /// Returns true if `requestSmartPlaylistAdd` has been explicitly set.
+  public var hasRequestSmartPlaylistAdd: Bool {_storage._requestSmartPlaylistAdd != nil}
+  /// Clears the value of `requestSmartPlaylistAdd`. Subsequent reads from it will return its default value.
+  public mutating func clearRequestSmartPlaylistAdd() {_uniqueStorage()._requestSmartPlaylistAdd = nil}
+
+  public var responseSmartPlaylistAdd: Pb_Remote_ResponseSmartPlaylistAdd {
+    get {_storage._responseSmartPlaylistAdd ?? Pb_Remote_ResponseSmartPlaylistAdd()}
+    set {_uniqueStorage()._responseSmartPlaylistAdd = newValue}
+  }
+  /// Returns true if `responseSmartPlaylistAdd` has been explicitly set.
+  public var hasResponseSmartPlaylistAdd: Bool {_storage._responseSmartPlaylistAdd != nil}
+  /// Clears the value of `responseSmartPlaylistAdd`. Subsequent reads from it will return its default value.
+  public mutating func clearResponseSmartPlaylistAdd() {_uniqueStorage()._responseSmartPlaylistAdd = nil}
+
+  public var requestSmartPlaylists: Pb_Remote_RequestSmartPlaylists {
+    get {_storage._requestSmartPlaylists ?? Pb_Remote_RequestSmartPlaylists()}
+    set {_uniqueStorage()._requestSmartPlaylists = newValue}
+  }
+  /// Returns true if `requestSmartPlaylists` has been explicitly set.
+  public var hasRequestSmartPlaylists: Bool {_storage._requestSmartPlaylists != nil}
+  /// Clears the value of `requestSmartPlaylists`. Subsequent reads from it will return its default value.
+  public mutating func clearRequestSmartPlaylists() {_uniqueStorage()._requestSmartPlaylists = nil}
+
+  public var responseSmartPlaylists: Pb_Remote_ResponseSmartPlaylists {
+    get {_storage._responseSmartPlaylists ?? Pb_Remote_ResponseSmartPlaylists()}
+    set {_uniqueStorage()._responseSmartPlaylists = newValue}
+  }
+  /// Returns true if `responseSmartPlaylists` has been explicitly set.
+  public var hasResponseSmartPlaylists: Bool {_storage._responseSmartPlaylists != nil}
+  /// Clears the value of `responseSmartPlaylists`. Subsequent reads from it will return its default value.
+  public mutating func clearResponseSmartPlaylists() {_uniqueStorage()._responseSmartPlaylists = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -4138,7 +4311,7 @@ public nonisolated struct Pb_Remote_Message: @unchecked Sendable {
 fileprivate nonisolated let _protobuf_package = "pb.remote"
 
 nonisolated extension Pb_Remote_MsgType: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}CONNECT\0\u{1}DISCONNECT\0\u{1}REQUEST_PLAYLISTS\0\u{1}REQUEST_PLAYLIST_SONGS\0\u{1}CHANGE_SONG\0\u{1}SET_VOLUME\0\u{1}SET_TRACK_POSITION\0\u{1}INSERT_URLS\0\u{1}REMOVE_SONGS\0\u{1}OPEN_PLAYLIST\0\u{1}CLOSE_PLAYLIST\0\u{1}LOVE\0\u{1}BAN\0\u{1}GET_LYRICS\0\u{1}DOWNLOAD_SONGS\0\u{1}SONG_OFFER_RESPONSE\0\u{1}STOP_AFTER\0\u{1}GET_LIBRARY\0\u{1}RATE_SONG\0\u{1}PLAY\0\u{1}PLAYPAUSE\0\u{1}PAUSE\0\u{1}STOP\0\u{1}NEXT\0\u{1}PREVIOUS\0\u{1}SHUFFLE_PLAYLIST\0\u{1}REPEAT\0\u{1}SHUFFLE\0\u{2}\u{c}INFO\0\u{1}CURRENT_METAINFO\0\u{1}PLAYLISTS\0\u{1}PLAYLIST_SONGS\0\u{1}ENGINE_STATE_CHANGED\0\u{1}KEEP_ALIVE\0\u{1}UPDATE_TRACK_POSITION\0\u{1}ACTIVE_PLAYLIST_CHANGED\0\u{1}FIRST_DATA_SENT_COMPLETE\0\u{1}LYRICS\0\u{1}SONG_FILE_CHUNK\0\u{1}DOWNLOAD_QUEUE_EMPTY\0\u{1}LIBRARY_CHUNK\0\u{1}DOWNLOAD_TOTAL_SIZE\0\u{1}GLOBAL_SEARCH_RESULT\0\u{1}TRANSCODING_FILES\0\u{1}GLOBAL_SEARCH_STATUS\0\u{2}\u{4}UPDATE_PLAYLIST\0\u{2}(GLOBAL_SEARCH\0\u{2}\u{a}REQUEST_SAVED_RADIOS\0\u{2}Z\u{1}REQUEST_FILES\0\u{1}APPEND_FILES\0\u{1}LIST_FILES\0\u{2}d\u{1}RENDERER_STATUS\0\u{1}RENDERER_TRACK_ENDED\0\u{1}RENDERER_ERROR\0\u{1}REQUEST_OUTPUTS\0\u{1}SET_OUTPUT\0\u{2}\u{e}RENDER_LOAD\0\u{1}RENDER_PRELOAD\0\u{1}RENDER_PLAY\0\u{1}RENDER_PAUSE\0\u{1}RENDER_STOP\0\u{1}RENDER_SEEK\0\u{1}RENDER_SET_VOLUME\0\u{2}\u{e}OUTPUTS\0\u{2}\u{14}REQUEST_BROWSE\0\u{1}REQUEST_BROWSE_ADD\0\u{2}\u{9}BROWSE\0\u{1}BROWSE_ADD_RESULT\0\u{2}\u{9}REQUEST_SYNC_SOURCES\0\u{1}REQUEST_SYNC_MANIFEST\0\u{1}REPORT_PLAYS\0\u{2}\u{8}SYNC_SOURCES\0\u{1}SYNC_MANIFEST\0\u{1}REPORT_PLAYS_RESULT\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}CONNECT\0\u{1}DISCONNECT\0\u{1}REQUEST_PLAYLISTS\0\u{1}REQUEST_PLAYLIST_SONGS\0\u{1}CHANGE_SONG\0\u{1}SET_VOLUME\0\u{1}SET_TRACK_POSITION\0\u{1}INSERT_URLS\0\u{1}REMOVE_SONGS\0\u{1}OPEN_PLAYLIST\0\u{1}CLOSE_PLAYLIST\0\u{1}LOVE\0\u{1}BAN\0\u{1}GET_LYRICS\0\u{1}DOWNLOAD_SONGS\0\u{1}SONG_OFFER_RESPONSE\0\u{1}STOP_AFTER\0\u{1}GET_LIBRARY\0\u{1}RATE_SONG\0\u{1}PLAY\0\u{1}PLAYPAUSE\0\u{1}PAUSE\0\u{1}STOP\0\u{1}NEXT\0\u{1}PREVIOUS\0\u{1}SHUFFLE_PLAYLIST\0\u{1}REPEAT\0\u{1}SHUFFLE\0\u{2}\u{c}INFO\0\u{1}CURRENT_METAINFO\0\u{1}PLAYLISTS\0\u{1}PLAYLIST_SONGS\0\u{1}ENGINE_STATE_CHANGED\0\u{1}KEEP_ALIVE\0\u{1}UPDATE_TRACK_POSITION\0\u{1}ACTIVE_PLAYLIST_CHANGED\0\u{1}FIRST_DATA_SENT_COMPLETE\0\u{1}LYRICS\0\u{1}SONG_FILE_CHUNK\0\u{1}DOWNLOAD_QUEUE_EMPTY\0\u{1}LIBRARY_CHUNK\0\u{1}DOWNLOAD_TOTAL_SIZE\0\u{1}GLOBAL_SEARCH_RESULT\0\u{1}TRANSCODING_FILES\0\u{1}GLOBAL_SEARCH_STATUS\0\u{2}\u{4}UPDATE_PLAYLIST\0\u{2}(GLOBAL_SEARCH\0\u{2}\u{a}REQUEST_SAVED_RADIOS\0\u{2}Z\u{1}REQUEST_FILES\0\u{1}APPEND_FILES\0\u{1}LIST_FILES\0\u{2}d\u{1}RENDERER_STATUS\0\u{1}RENDERER_TRACK_ENDED\0\u{1}RENDERER_ERROR\0\u{1}REQUEST_OUTPUTS\0\u{1}SET_OUTPUT\0\u{2}\u{e}RENDER_LOAD\0\u{1}RENDER_PRELOAD\0\u{1}RENDER_PLAY\0\u{1}RENDER_PAUSE\0\u{1}RENDER_STOP\0\u{1}RENDER_SEEK\0\u{1}RENDER_SET_VOLUME\0\u{2}\u{e}OUTPUTS\0\u{2}\u{14}REQUEST_BROWSE\0\u{1}REQUEST_BROWSE_ADD\0\u{2}\u{9}BROWSE\0\u{1}BROWSE_ADD_RESULT\0\u{2}\u{9}REQUEST_SYNC_SOURCES\0\u{1}REQUEST_SYNC_MANIFEST\0\u{1}REPORT_PLAYS\0\u{2}\u{8}SYNC_SOURCES\0\u{1}SYNC_MANIFEST\0\u{1}REPORT_PLAYS_RESULT\0\u{2}\u{8}REQUEST_SMART_PLAYLISTS\0\u{1}REQUEST_SMART_PLAYLIST_ADD\0\u{2}\u{9}SMART_PLAYLISTS\0\u{1}SMART_PLAYLIST_ADD_RESULT\0")
 }
 
 nonisolated extension Pb_Remote_EngineState: SwiftProtobuf._ProtoNameProviding {
@@ -4166,7 +4339,7 @@ nonisolated extension Pb_Remote_GlobalSearchStatus: SwiftProtobuf._ProtoNameProv
 }
 
 nonisolated extension Pb_Remote_ServerFeature: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0SERVER_FEATURE_UNSPECIFIED\0\u{1}SERVER_FEATURE_RENDERING\0\u{1}SERVER_FEATURE_BROWSE\0\u{1}SERVER_FEATURE_ENQUEUE_NEXT\0\u{1}SERVER_FEATURE_SYNC\0\u{1}SERVER_FEATURE_PLAY_REPORTS\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0SERVER_FEATURE_UNSPECIFIED\0\u{1}SERVER_FEATURE_RENDERING\0\u{1}SERVER_FEATURE_BROWSE\0\u{1}SERVER_FEATURE_ENQUEUE_NEXT\0\u{1}SERVER_FEATURE_SYNC\0\u{1}SERVER_FEATURE_PLAY_REPORTS\0\u{1}SERVER_FEATURE_SMART_PLAYLISTS\0")
 }
 
 nonisolated extension Pb_Remote_RendererFeature: SwiftProtobuf._ProtoNameProviding {
@@ -6971,6 +7144,172 @@ nonisolated extension Pb_Remote_ResponseBrowseAdd: SwiftProtobuf.Message, SwiftP
   }
 }
 
+nonisolated extension Pb_Remote_RequestSmartPlaylists: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".RequestSmartPlaylists"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    // Load everything into unknown fields
+    while try decoder.nextFieldNumber() != nil {}
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Pb_Remote_RequestSmartPlaylists, rhs: Pb_Remote_RequestSmartPlaylists) -> Bool {
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+nonisolated extension Pb_Remote_SmartPlaylist: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".SmartPlaylist"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}name\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self._id) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self._name) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._id {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._name {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 2)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Pb_Remote_SmartPlaylist, rhs: Pb_Remote_SmartPlaylist) -> Bool {
+    if lhs._id != rhs._id {return false}
+    if lhs._name != rhs._name {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+nonisolated extension Pb_Remote_ResponseSmartPlaylists: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ResponseSmartPlaylists"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}smart_playlists\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.smartPlaylists) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.smartPlaylists.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.smartPlaylists, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Pb_Remote_ResponseSmartPlaylists, rhs: Pb_Remote_ResponseSmartPlaylists) -> Bool {
+    if lhs.smartPlaylists != rhs.smartPlaylists {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+nonisolated extension Pb_Remote_RequestSmartPlaylistAdd: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".RequestSmartPlaylistAdd"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}smart_playlist_id\0\u{1}action\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self._smartPlaylistID) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self._action) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._smartPlaylistID {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._action {
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 2)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Pb_Remote_RequestSmartPlaylistAdd, rhs: Pb_Remote_RequestSmartPlaylistAdd) -> Bool {
+    if lhs._smartPlaylistID != rhs._smartPlaylistID {return false}
+    if lhs._action != rhs._action {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+nonisolated extension Pb_Remote_ResponseSmartPlaylistAdd: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ResponseSmartPlaylistAdd"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}smart_playlist_id\0\u{1}result\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self._smartPlaylistID) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self._result) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._smartPlaylistID {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._result {
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 2)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Pb_Remote_ResponseSmartPlaylistAdd, rhs: Pb_Remote_ResponseSmartPlaylistAdd) -> Bool {
+    if lhs._smartPlaylistID != rhs._smartPlaylistID {return false}
+    if lhs._result != rhs._result {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 nonisolated extension Pb_Remote_SyncSource: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".SyncSource"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}source_id\0\u{1}title\0\u{1}kind\0\u{3}item_count\0\u{3}approx_bytes\0")
@@ -7430,7 +7769,7 @@ nonisolated extension Pb_Remote_ResponseReportPlays: SwiftProtobuf.Message, Swif
 
 nonisolated extension Pb_Remote_Message: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Message"
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}version\0\u{1}type\0\u{4}\u{8}request_playlist_songs\0\u{3}request_change_song\0\u{3}request_set_volume\0\u{1}repeat\0\u{1}shuffle\0\u{3}response_clementine_info\0\u{3}response_current_metadata\0\u{3}response_playlists\0\u{3}response_playlist_songs\0\u{3}response_engine_state_changed\0\u{3}response_update_track_position\0\u{3}request_connect\0\u{3}response_disconnect\0\u{3}request_set_track_position\0\u{3}response_active_changed\0\u{3}request_insert_urls\0\u{3}request_remove_songs\0\u{3}request_playlists\0\u{3}request_open_playlist\0\u{3}request_close_playlist\0\u{3}response_lyrics\0\u{3}request_download_songs\0\u{3}response_song_file_chunk\0\u{3}response_song_offer\0\u{3}response_library_chunk\0\u{3}request_rate_song\0\u{3}response_download_total_size\0\u{3}request_global_search\0\u{3}response_global_search\0\u{3}response_transcoder_status\0\u{3}response_global_search_status\0\u{4}\u{a}request_list_files\0\u{3}request_append_files\0\u{3}response_list_files\0\u{3}request_update_playlist\0\u{3}response_saved_radios\0\u{4}\u{7}response_outputs\0\u{3}request_set_output\0\u{3}request_render_load\0\u{3}request_render_preload\0\u{3}request_render_seek\0\u{3}request_render_volume\0\u{3}renderer_status\0\u{3}renderer_error\0\u{3}renderer_track_ended\0\u{3}request_browse\0\u{3}response_browse\0\u{3}request_browse_add\0\u{3}response_browse_add\0\u{3}request_sync_sources\0\u{3}response_sync_sources\0\u{3}request_sync_manifest\0\u{3}response_sync_manifest\0\u{3}request_report_plays\0\u{3}response_report_plays\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}version\0\u{1}type\0\u{4}\u{8}request_playlist_songs\0\u{3}request_change_song\0\u{3}request_set_volume\0\u{1}repeat\0\u{1}shuffle\0\u{3}response_clementine_info\0\u{3}response_current_metadata\0\u{3}response_playlists\0\u{3}response_playlist_songs\0\u{3}response_engine_state_changed\0\u{3}response_update_track_position\0\u{3}request_connect\0\u{3}response_disconnect\0\u{3}request_set_track_position\0\u{3}response_active_changed\0\u{3}request_insert_urls\0\u{3}request_remove_songs\0\u{3}request_playlists\0\u{3}request_open_playlist\0\u{3}request_close_playlist\0\u{3}response_lyrics\0\u{3}request_download_songs\0\u{3}response_song_file_chunk\0\u{3}response_song_offer\0\u{3}response_library_chunk\0\u{3}request_rate_song\0\u{3}response_download_total_size\0\u{3}request_global_search\0\u{3}response_global_search\0\u{3}response_transcoder_status\0\u{3}response_global_search_status\0\u{4}\u{a}request_list_files\0\u{3}request_append_files\0\u{3}response_list_files\0\u{3}request_update_playlist\0\u{3}response_saved_radios\0\u{4}\u{7}response_outputs\0\u{3}request_set_output\0\u{3}request_render_load\0\u{3}request_render_preload\0\u{3}request_render_seek\0\u{3}request_render_volume\0\u{3}renderer_status\0\u{3}renderer_error\0\u{3}renderer_track_ended\0\u{3}request_browse\0\u{3}response_browse\0\u{3}request_browse_add\0\u{3}response_browse_add\0\u{3}request_sync_sources\0\u{3}response_sync_sources\0\u{3}request_sync_manifest\0\u{3}response_sync_manifest\0\u{3}request_report_plays\0\u{3}response_report_plays\0\u{3}request_smart_playlist_add\0\u{3}response_smart_playlist_add\0\u{3}request_smart_playlists\0\u{3}response_smart_playlists\0")
 
   fileprivate class _StorageClass {
     var _version: Int32? = nil
@@ -7490,6 +7829,10 @@ nonisolated extension Pb_Remote_Message: SwiftProtobuf.Message, SwiftProtobuf._M
     var _responseSyncManifest: Pb_Remote_ResponseSyncManifest? = nil
     var _requestReportPlays: Pb_Remote_RequestReportPlays? = nil
     var _responseReportPlays: Pb_Remote_ResponseReportPlays? = nil
+    var _requestSmartPlaylistAdd: Pb_Remote_RequestSmartPlaylistAdd? = nil
+    var _responseSmartPlaylistAdd: Pb_Remote_ResponseSmartPlaylistAdd? = nil
+    var _requestSmartPlaylists: Pb_Remote_RequestSmartPlaylists? = nil
+    var _responseSmartPlaylists: Pb_Remote_ResponseSmartPlaylists? = nil
 
       // This property is used as the initial default value for new instances of the type.
       // The type itself is protecting the reference to its storage via CoW semantics.
@@ -7557,6 +7900,10 @@ nonisolated extension Pb_Remote_Message: SwiftProtobuf.Message, SwiftProtobuf._M
       _responseSyncManifest = source._responseSyncManifest
       _requestReportPlays = source._requestReportPlays
       _responseReportPlays = source._responseReportPlays
+      _requestSmartPlaylistAdd = source._requestSmartPlaylistAdd
+      _responseSmartPlaylistAdd = source._responseSmartPlaylistAdd
+      _requestSmartPlaylists = source._requestSmartPlaylists
+      _responseSmartPlaylists = source._responseSmartPlaylists
     }
   }
 
@@ -7632,6 +7979,10 @@ nonisolated extension Pb_Remote_Message: SwiftProtobuf.Message, SwiftProtobuf._M
         case 77: try { try decoder.decodeSingularMessageField(value: &_storage._responseSyncManifest) }()
         case 78: try { try decoder.decodeSingularMessageField(value: &_storage._requestReportPlays) }()
         case 79: try { try decoder.decodeSingularMessageField(value: &_storage._responseReportPlays) }()
+        case 80: try { try decoder.decodeSingularMessageField(value: &_storage._requestSmartPlaylistAdd) }()
+        case 81: try { try decoder.decodeSingularMessageField(value: &_storage._responseSmartPlaylistAdd) }()
+        case 82: try { try decoder.decodeSingularMessageField(value: &_storage._requestSmartPlaylists) }()
+        case 83: try { try decoder.decodeSingularMessageField(value: &_storage._responseSmartPlaylists) }()
         default: break
         }
       }
@@ -7815,6 +8166,18 @@ nonisolated extension Pb_Remote_Message: SwiftProtobuf.Message, SwiftProtobuf._M
       try { if let v = _storage._responseReportPlays {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 79)
       } }()
+      try { if let v = _storage._requestSmartPlaylistAdd {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 80)
+      } }()
+      try { if let v = _storage._responseSmartPlaylistAdd {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 81)
+      } }()
+      try { if let v = _storage._requestSmartPlaylists {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 82)
+      } }()
+      try { if let v = _storage._responseSmartPlaylists {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 83)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -7881,6 +8244,10 @@ nonisolated extension Pb_Remote_Message: SwiftProtobuf.Message, SwiftProtobuf._M
         if _storage._responseSyncManifest != rhs_storage._responseSyncManifest {return false}
         if _storage._requestReportPlays != rhs_storage._requestReportPlays {return false}
         if _storage._responseReportPlays != rhs_storage._responseReportPlays {return false}
+        if _storage._requestSmartPlaylistAdd != rhs_storage._requestSmartPlaylistAdd {return false}
+        if _storage._responseSmartPlaylistAdd != rhs_storage._responseSmartPlaylistAdd {return false}
+        if _storage._requestSmartPlaylists != rhs_storage._requestSmartPlaylists {return false}
+        if _storage._responseSmartPlaylists != rhs_storage._responseSmartPlaylists {return false}
         return true
       }
       if !storagesAreEqual {return false}
