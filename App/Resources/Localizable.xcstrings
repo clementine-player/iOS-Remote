@@ -2172,6 +2172,12 @@
             "value" : "%lld%%"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld %%"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3350,6 +3356,12 @@
             "value" : "Vzhled"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apariencia"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3391,6 +3403,12 @@
     "Arnaud Bienner (Clementine)" : {
       "localizations" : {
         "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arnaud Bienner (Clementine)"
+          }
+        },
+        "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Arnaud Bienner (Clementine)"
@@ -4912,6 +4930,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zrušit stahování"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar descarga"
           }
         },
         "et" : {
@@ -6455,6 +6479,12 @@
             "value" : "Zavřít přehrávač"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerrar reproductor"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7354,6 +7384,12 @@
             "value" : "Připojuje se..."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conectando…"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7960,6 +7996,12 @@
             "value" : "Nepodařilo se uložit soubor"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo guardar el archivo."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8038,6 +8080,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vytvořit"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crear"
           }
         },
         "et" : {
@@ -9924,6 +9972,12 @@
     },
     "Download library" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descargar fonoteca"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10484,6 +10538,12 @@
     },
     "Downloaded songs" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Canciones descargadas"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12491,6 +12551,12 @@
     },
     "John Maguire (Clementine)" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "John Maguire (Clementine)"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14113,6 +14179,12 @@
     },
     "Name" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nombre"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15441,6 +15513,12 @@
     },
     "Open Settings" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir configuración"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15673,6 +15751,12 @@
     },
     "Opens the player" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre el reproductor"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15935,6 +16019,12 @@
     },
     "Pauses Clementine." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pone en pausa Clementine."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15969,6 +16059,12 @@
     },
     "Phone volume" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volumen del teléfono"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17482,6 +17578,12 @@
     },
     "Position" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Posición"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20184,6 +20286,12 @@
     },
     "Search the library" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar la fonoteca"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20430,6 +20538,12 @@
     },
     "See All" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver todo"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20498,6 +20612,12 @@
     },
     "Select" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleccionar"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20772,6 +20892,12 @@
     },
     "Show" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22734,6 +22860,12 @@
     },
     "Stops Clementine." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detiene Clementine."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22892,6 +23024,12 @@
     },
     "System" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistema"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24289,6 +24427,12 @@
     },
     "Update library" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizar fonoteca"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24483,6 +24627,12 @@
     },
     "Version %@" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versión %@"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
