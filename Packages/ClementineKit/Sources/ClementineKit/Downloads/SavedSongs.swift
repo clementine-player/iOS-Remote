@@ -10,8 +10,8 @@ extension DownloadedSong {
     /// The songs saved under [directory], whenever they were downloaded, by folder and file name:
     /// with the folder settings' defaults, by artist and album, then by file name.
     ///
-    /// Their tags aren't read, as that means opening every file: each is named after its file,
-    /// with the folders it's in (its artist and album) as its second line. The songs in [skipping],
+    /// Their tags aren't read, as that means opening every file: each is named after its file, and
+    /// its artist and album after the folders it's in ("Artist/Album/"). The songs in [skipping],
     /// such as the synced songs' folder, are left out.
     public static func saved(in directory: URL, skipping: URL? = nil) -> [DownloadedSong] {
         let skipped = skipping?.resolvingSymlinksInPath().pathComponents
@@ -43,10 +43,33 @@ extension DownloadedSong {
             .map { song in
                 DownloadedSong(
                     title: (song.name as NSString).deletingPathExtension,
-                    artist: song.folders.joined(separator: " / "),
-                    album: "",
+                    artist: song.folders.first ?? "",
+                    album: song.folders.count > 1 ? song.folders[1] : "",
                     file: song.file)
             }
+    }
+
+    /// The albums [songs] are on, by title, with their songs in the order given. Songs on no album
+    /// aren't on any.
+    public static func albums(of songs: [DownloadedSong]) -> [PhoneAlbum] {
+        var albums: [PhoneAlbum] = []
+        var indexes: [PhoneAlbum.ID: Int] = [:]
+        for song in songs where !song.album.isEmpty {
+            let id = PhoneAlbum.ID(title: song.album, artist: song.artist)
+            if let index = indexes[id] {
+                albums[index].songs.append(song)
+            } else {
+                indexes[id] = albums.count
+                albums.append(PhoneAlbum(id: id, songs: [song]))
+            }
+        }
+        return albums.sorted { $0.title.localizedStandardCompare($1.title) == .orderedAscending }
+    }
+
+    /// The artists of [songs], by name.
+    public static func artists(of songs: [DownloadedSong]) -> [String] {
+        Set(songs.map(\.artist).filter { !$0.isEmpty })
+            .sorted { $0.localizedStandardCompare($1) == .orderedAscending }
     }
 
     /// Whether a file is of a kind Clementine plays, by its extension.
@@ -54,4 +77,24 @@ extension DownloadedSong {
         let fileExtension = (name as NSString).pathExtension.lowercased()
         return audioExtensions.contains(fileExtension)
     }
+}
+
+
+/// An album on this phone: its songs there, with its title and artist.
+public struct PhoneAlbum: Identifiable, Hashable, Sendable {
+    public struct ID: Hashable, Sendable {
+        public var title: String
+        public var artist: String
+
+        public init(title: String, artist: String) {
+            self.title = title
+            self.artist = artist
+        }
+    }
+
+    public var id: ID
+    public var songs: [DownloadedSong]
+
+    public var title: String { id.title }
+    public var artist: String { id.artist }
 }
