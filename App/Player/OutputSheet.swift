@@ -119,3 +119,111 @@ struct OutputRow: View {
         session.renderer?.rendererID == output.id
     }
 }
+
+/// Where the app plays from: Clementine, or the songs kept on this phone. Picking one pauses the
+/// other.
+struct PlayFromSheet: View {
+    @Environment(AppModel.self) private var model
+    @Environment(RemoteSession.self) private var session
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        NavigationStack {
+            List {
+                Section {
+                    PlayFromRow(
+                        name: String(localized: "Clementine on \(session.computerName)"),
+                        systemImage: "desktopcomputer",
+                        song: session.song,
+                        isPlaying: session.playState == .playing,
+                        isChosen: model.playFrom == .clementine
+                    ) { pick(.clementine) }
+                    .accessibilityIdentifier("playFromClementine")
+                    PlayFromRow(
+                        name: isPad
+                            ? String(localized: "On this iPad", comment: "As \"On this phone\", on an iPad: music saved on the iPad, as opposed to Clementine on the computer.")
+                            : String(localized: "On this phone"),
+                        systemImage: isPad ? "ipad" : "iphone",
+                        song: model.phonePlayer.playingSong,
+                        isPlaying: model.phonePlayer.isPlaying,
+                        isChosen: model.playFrom == .phone
+                    ) { pick(.phone) }
+                    .accessibilityIdentifier("playFromPhone")
+                } footer: {
+                    Text("Switching pauses the one you leave.", comment: "At the bottom of Play from.")
+                }
+            }
+            .scrollContentBackground(.hidden)
+            .navigationTitle(Text(
+                "Play from",
+                comment: "Title of a sheet, and a button's label: choose where the music plays from, Clementine or this phone."))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done", systemImage: "checkmark") { dismiss() }
+                        .filledButtonTint()
+                }
+            }
+        }
+        // Nothing to choose between any more, such as when Clementine disconnects.
+        .onChange(of: model.canChoosePlayFrom) { _, canChoose in
+            if !canChoose {
+                dismiss()
+            }
+        }
+    }
+
+    private func pick(_ place: AppModel.PlayFrom) {
+        model.play(from: place)
+        dismiss()
+    }
+}
+
+/// One place to play from, with whether it plays or is paused, and its song.
+private struct PlayFromRow: View {
+    let name: String
+    let systemImage: String
+    let song: Song?
+    let isPlaying: Bool
+    let isChosen: Bool
+    let pick: () -> Void
+
+    var body: some View {
+        Button(action: pick) {
+            HStack(spacing: Metrics.space4) {
+                IconTile(systemImage: systemImage)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(name)
+                        .textStyle(.bodyLarge)
+                        .foregroundStyle(Palette.onSurface)
+                    if let title = song?.title, !title.isEmpty {
+                        Group {
+                            if isPlaying {
+                                Text(
+                                    "Playing · \(title)",
+                                    comment: "In Play from, under Clementine or On this phone: it's playing the song the placeholder names.")
+                            } else {
+                                Text(
+                                    "Paused · \(title)",
+                                    comment: "In Play from, under Clementine or On this phone: it's paused on the song the placeholder names.")
+                            }
+                        }
+                        .textStyle(.bodyMedium)
+                        .foregroundStyle(Palette.onSurfaceVariant)
+                    }
+                }
+                .lineLimit(1)
+                Spacer(minLength: 0)
+                if isChosen {
+                    Image(systemName: "checkmark")
+                        .font(.body.weight(.semibold))
+                        .foregroundStyle(Palette.primary)
+                }
+            }
+            .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isChosen ? .isSelected : [])
+    }
+}
