@@ -60,23 +60,25 @@ struct SyncerTests {
 
     @Test func theSessionListsClementinesSmartPlaylists() {
         let session = RemoteSession()
-        session.apply(Self.syncingInfo())
-        session.apply(RemoteMessage(.syncSources) {
-            $0.responseSyncSources.sources = [
+        // Without syncing: playing them only needs Clementine to have them.
+        session.apply(RemoteMessage(.info) {
+            $0.responseClementineInfo.version = "1.4.4"
+            $0.responseClementineInfo.features = [.smartPlaylists]
+        })
+        #expect(!session.syncing.supported)
+        session.apply(RemoteMessage(.smartPlaylists) {
+            $0.responseSmartPlaylists.smartPlaylists = [
                 .with {
-                    $0.sourceID = "playlist/1"
-                    $0.title = "Party"
-                    $0.kind = .playlist
+                    $0.id = "smart/library/0b6e"
+                    $0.name = "Newest tracks"
                 },
                 .with {
-                    $0.sourceID = "smart/library/0b6e"
-                    $0.title = "Newest tracks"
-                    $0.kind = .smartPlaylist
+                    $0.id = "smart/library/7d21"
+                    $0.name = "Dynamic random mix"
                 },
             ]
         })
-        // Its playlists come with the queue.
-        #expect(session.smartPlaylists.map(\.title) == ["Newest tracks"])
+        #expect(session.smartPlaylists.map(\.name) == ["Newest tracks", "Dynamic random mix"])
 
         // Asked for again on each INFO.
         session.apply(Self.syncingInfo())
