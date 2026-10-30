@@ -4,7 +4,8 @@ import SwiftUI
 
 /// What's kept on this phone, when Clementine syncs songs to it (the screen is then On this
 /// phone), songs downloading, those downloaded, and every song on the phone, downloaded now or
-/// before. Songs play in the app, with testing features.
+/// before. Songs play in the app, with testing features, where the songs on the phone are listed
+/// by artist, as the library is.
 struct DownloadsView: View {
     @Environment(AppModel.self) private var model
     @AppStorage(SettingKey.wifiOnly) private var wifiOnly = false
@@ -84,7 +85,18 @@ struct DownloadsView: View {
                         .listRowBackground(Palette.surface)
                     }
                 }
-                if let songs = downloads.onPhone, !songs.isEmpty {
+                if let songs = downloads.onPhone, !songs.isEmpty, TestingFeatures.enabled {
+                    // Headed only when other sections show above it; else it's the screen's title.
+                    if syncer.kept.isEmpty, downloads.active.isEmpty, downloads.finished.isEmpty {
+                        PhoneArtistRows(songs: songs)
+                    } else {
+                        Section {
+                            PhoneArtistRows(songs: songs)
+                        } header: {
+                            SectionTitle("On this phone")
+                        }
+                    }
+                } else if let songs = downloads.onPhone, !songs.isEmpty {
                     Section {
                         ForEach(Array(songs.enumerated()), id: \.element.file) { index, song in
                             Button {
@@ -116,6 +128,9 @@ struct DownloadsView: View {
             .connectionToolbar()
             .navigationDestination(for: KeptRoute.self) { route in
                 KeptRuleView(ruleID: route.ruleID)
+            }
+            .navigationDestination(for: BrowseRoute.self) { route in
+                PhoneBrowseView(route: route)
             }
             .task {
                 downloads.readOnPhone()
@@ -166,6 +181,163 @@ struct DownloadsView: View {
 /// The songs of something kept on this phone, opened from Downloads.
 private struct KeptRoute: Hashable {
     let ruleID: Int64
+}
+
+/// A level of the songs on this phone, under the artists at the top, as the library has.
+private enum BrowseRoute: Hashable {
+    /// An artist's albums, then their songs on no album.
+    case artist(String)
+    case album(PhoneAlbum.ID)
+}
+
+/// The top level of the songs on this phone, as the library's: its artists to open, then the
+/// songs by no artist, to play.
+private struct PhoneArtistRows: View {
+    let songs: [DownloadedSong]
+
+    var body: some View {
+        let albums = DownloadedSong.albums(of: songs)
+        ForEach(DownloadedSong.artists(of: songs), id: \.self) { artist in
+            // Counted as the library counts: albums, and songs on none.
+            let count = albums.filter { $0.artist == artist }.count
+                + songs.filter { $0.artist == artist && $0.album.isEmpty }.count
+            NavigationLink(value: BrowseRoute.artist(artist)) {
+                MediaRow(title: artist, meta: String(localized: "\(count) items")) {
+                    IconTile(systemImage: ItemKind.artist.systemImage)
+                }
+            }
+            .buttonStyle(.plain)
+            .listRowBackground(Palette.surface)
+            .listRowSeparator(.hidden)
+        }
+        PhoneSongRows(songs: songs.filter(\.artist.isEmpty))
+    }
+}
+
+/// A level of the songs on this phone, laid out as the library's: its name, what's in it, Play
+/// and Shuffle, then the albums to open or the songs to play on the phone.
+private struct PhoneBrowseView: View {
+    let route: BrowseRoute
+    @Environment(AppModel.self) private var model
+
+    private var songs: [DownloadedSong] { model.downloads.onPhone ?? [] }
+
+    var body: some View {
+        let albums = DownloadedSong.albums(of: songs)
+        List {
+            switch route {
+            case .artist(let name):
+                let own = albums.filter { $0.artist == name }
+                // The albums' songs in their order, then those on no album.
+                let loose = songs.filter { $0.artist == name && $0.album.isEmpty }
+                let inOrder = own.flatMap(\.songs) + loose
+                PhoneBrowseHeader(title: name, count: own.count + loose.count, songs: inOrder)
+                ForEach(own) { album in
+                    NavigationLink(value: BrowseRoute.album(album.id)) {
+                        MediaRow(title: album.title, meta: String(localized: "\(album.songs.count) items")) {
+                            IconTile(systemImage: ItemKind.album.systemImage)
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    .listRowBackground(Palette.surface)
+                    .listRowSeparator(.hidden)
+                }
+                PhoneSongRows(songs: loose, playing: inOrder, from: inOrder.count - loose.count)
+            case .album(let id):
+                let albumSongs = albums.first { $0.id == id }?.songs ?? []
+                PhoneBrowseHeader(title: id.title, count: albumSongs.count, songs: albumSongs)
+                PhoneSongRows(songs: albumSongs)
+            }
+        }
+        .listStyle(.plain)
+        .surfaceBackground()
+        .navigationTitle(Text(verbatim: ""))
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+/// The header of what's open, as the library's: its name, how many items, and Play and Shuffle.
+private struct PhoneBrowseHeader: View {
+    let title: String
+    let count: Int
+    let songs: [DownloadedSong]
+    @Environment(AppModel.self) private var model
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Metrics.space3) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .textStyle(.headlineSmall)
+                    .foregroundStyle(Palette.onSurface)
+                    .lineLimit(2)
+                    .accessibilityAddTraits(.isHeader)
+                Text("\(count) items")
+                    .textStyle(.bodyMedium)
+                    .foregroundStyle(Palette.onSurfaceVariant)
+            }
+            if !songs.isEmpty {
+                HStack(spacing: Metrics.space2) {
+                    Button {
+                        model.playOnPhone(songs.map(KeptSong.init), from: 0)
+                    } label: {
+                        Label("Play", systemImage: "play.fill")
+                    }
+                    .buttonStyle(.borderedProminent)
+                    Button {
+                        model.playOnPhone(songs.map(KeptSong.init), from: 0, shuffled: true)
+                    } label: {
+                        Label(
+                            String(
+                                localized: "Shuffle",
+                                comment: "Button: plays, on the phone, the songs of something kept on it, in random order."),
+                            systemImage: "shuffle")
+                    }
+                    .buttonStyle(.bordered)
+                }
+                .controlSize(.regular)
+            }
+        }
+        .padding(.vertical, Metrics.space2)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .listRowBackground(Palette.surface)
+        .listRowSeparator(.hidden)
+    }
+}
+
+/// Songs on this phone, to play there from the one tapped: of [playing], from [offset] in it,
+/// when they're part of a longer list. The song playing is marked.
+private struct PhoneSongRows: View {
+    let songs: [DownloadedSong]
+    var playing: [DownloadedSong]?
+    var offset = 0
+    @Environment(AppModel.self) private var model
+
+    init(songs: [DownloadedSong], playing: [DownloadedSong]? = nil, from offset: Int = 0) {
+        self.songs = songs
+        self.playing = playing
+        self.offset = offset
+    }
+
+    var body: some View {
+        ForEach(Array(songs.enumerated()), id: \.element.file) { index, song in
+            Button {
+                model.playOnPhone((playing ?? songs).map(KeptSong.init), from: offset + index)
+            } label: {
+                MediaRow(title: song.title, meta: meta(song), playing: model.phonePlayer.playing == song.file.absoluteString) {
+                    SongThumbnail()
+                }
+            }
+            .buttonStyle(.plain)
+            .listRowBackground(Palette.surface)
+            .listRowSeparator(.hidden)
+        }
+    }
+
+    /// A song's artist and album, as the library shows them.
+    private func meta(_ song: DownloadedSong) -> String {
+        let unknown = String(localized: "Unknown")
+        return "\(song.artist.isEmpty ? unknown : song.artist) / \(song.album.isEmpty ? unknown : song.album)"
+    }
 }
 
 /// Something kept on this phone, saying how its last sync went, with a menu to sync now and to
