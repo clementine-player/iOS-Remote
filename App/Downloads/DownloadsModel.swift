@@ -160,8 +160,9 @@ final class DownloadsModel {
         onPhoneReads += 1
         let read = onPhoneReads
         let directory = directory
+        let synced = AppModel.syncedFolder
         Task {
-            let songs = await Task.detached { DownloadedSong.saved(in: directory) }.value
+            let songs = await Task.detached { DownloadedSong.saved(in: directory, skipping: synced) }.value
             // An earlier read that finishes later is out of date.
             if read == onPhoneReads {
                 onPhone = songs
