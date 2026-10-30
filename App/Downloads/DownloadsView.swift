@@ -4,7 +4,7 @@ import SwiftUI
 
 /// What's kept on this phone, when Clementine syncs songs to it (the screen is then On this
 /// phone), songs downloading, those downloaded, and every song on the phone, downloaded now or
-/// before.
+/// before. Songs play in the app, with testing features.
 struct DownloadsView: View {
     @Environment(AppModel.self) private var model
     @AppStorage(SettingKey.wifiOnly) private var wifiOnly = false
@@ -86,9 +86,9 @@ struct DownloadsView: View {
                 }
                 if let songs = downloads.onPhone, !songs.isEmpty {
                     Section {
-                        ForEach(songs, id: \.file) { song in
+                        ForEach(Array(songs.enumerated()), id: \.element.file) { index, song in
                             Button {
-                                previewed = song.file
+                                play(songs, from: index)
                             } label: {
                                 MediaRow(title: song.title, meta: song.artist) {
                                     SongThumbnail(systemImage: "play.fill")
@@ -149,6 +149,16 @@ struct DownloadsView: View {
                         }
                 }
             }
+        }
+    }
+
+    /// Plays [songs] from the one at [index]: on this phone, with testing features, or else in
+    /// Quick Look, until playing on this phone is released.
+    private func play(_ songs: [DownloadedSong], from index: Int) {
+        if TestingFeatures.enabled {
+            model.playOnPhone(songs.map(KeptSong.init), from: index)
+        } else {
+            previewed = songs[index].file
         }
     }
 }
@@ -392,14 +402,20 @@ private struct JobRow: View {
 /// The songs of a finished download: tap one to play it, or share them.
 private struct DownloadedSongs: View {
     let job: DownloadsModel.Job
+    @Environment(AppModel.self) private var model
     @State private var previewed: URL?
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
-            List(job.status.songs, id: \.file) { song in
+            List(Array(job.status.songs.enumerated()), id: \.element.file) { index, song in
                 Button {
-                    previewed = song.file
+                    if TestingFeatures.enabled {
+                        dismiss()
+                        model.playOnPhone(job.status.songs.map(KeptSong.init), from: index)
+                    } else {
+                        previewed = song.file
+                    }
                 } label: {
                     MediaRow(title: song.title, meta: song.artist) {
                         SongThumbnail(systemImage: "play.fill")

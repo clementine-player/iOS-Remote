@@ -310,6 +310,16 @@ struct PhonePlayerTests {
         #expect(untitled.artist == "Pixies")
     }
 
+    @Test func playsADownloadedSongWithWhatsKept() {
+        let file = URL(filePath: "/Documents/Clementine/Pixies/Debaser.mp3")
+        let song = KeptSong(DownloadedSong(title: "Debaser", artist: "Pixies", album: "Doolittle", file: file))
+        #expect(song.itemKey == file.absoluteString)
+        #expect(song.title == "Debaser")
+        #expect(song.album == "Doolittle")
+        #expect(song.length.isEmpty)
+        #expect(song.file == file)
+    }
+
     @Test func playsFromASongOrAtRandom() throws {
         let folder = URL(filePath: "/synced", directoryHint: .isDirectory)
         let songs = try ["a", "b", "c"].map { KeptSong(try Self.item($0, title: $0), in: folder) }
