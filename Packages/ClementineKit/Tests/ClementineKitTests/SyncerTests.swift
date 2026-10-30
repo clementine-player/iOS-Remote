@@ -177,6 +177,72 @@ struct SyncerTests {
     }
 }
 
+/// Rules keeping music on the phone.
+@MainActor
+struct KeepTests {
+    @Test func namesSourcesAsClementineDoes() {
+        #expect(SyncSources.album(albumArtist: "AC/DC", album: "Back in Black") == "library/album/AC%2FDC/Back%20in%20Black")
+        #expect(SyncSources.artist("Sigur Rós") == "library/artist/Sigur%20R%C3%B3s")
+        #expect(SyncSources.artist("a-b.c_d~e") == "library/artist/a-b.c_d~e")
+        #expect(SyncSources.playlist(3) == "playlist/3")
+        let rule = SyncSources.albumRule(serverID: SyncerTests.server, albumArtist: "Pixies", album: "Doolittle")
+        #expect(rule.title == "Doolittle")
+        #expect(rule.kind == Pb_Remote_SyncSourceKind.album)
+        #expect(rule.refreshPolicy == .never)
+    }
+
+    @Test func keepsEachSourceOnceAndRemovesItsSongs() async throws {
+        let settings = Settings(suiteName: "KeepTests-\(UUID().uuidString)")
+        settings.syncServerID = SyncerTests.server
+        let store = try SyncStore(url: nil)
+        let folder = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let syncer = Syncer(session: RemoteSession(), store: store, folder: folder, settings: settings)
+
+        let album = SyncSources.albumRule(serverID: SyncerTests.server, albumArtist: "Pixies", album: "Doolittle")
+        syncer.keep([album, album, SyncSources.artistRule(serverID: SyncerTests.server, artist: "Pixies")])
+        try await eventually { syncer.kept.count == 2 }
+        #expect(syncer.kept.map(\.rule.sourceID) == ["library/album/Pixies/Doolittle", "library/artist/Pixies"])
+        #expect(syncer.kept.map(\.rule.position) == [0, 1])
+        syncer.keep([album])
+        syncer.refresh()
+        try await Task.sleep(for: .milliseconds(100))
+        #expect(syncer.kept.count == 2)
+
+        // A song only the album has goes with it.
+        let file = folder.appending(path: "Pixies/Doolittle/01 Debaser.flac")
+        try FileManager.default.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try Data("song".utf8).write(to: file)
+        try await store.putItem(SyncedItem(
+            serverID: SyncerTests.server, itemKey: "a", version: "1", path: "Pixies/Doolittle/01 Debaser.flac",
+            mimeType: "audio/flac", sizeBytes: 4, delivery: .original, artKey: nil, metadata: Data(), added: .now))
+        try await store.setRuleItems(ruleID: syncer.kept[0].id, serverID: SyncerTests.server, itemKeys: ["a"])
+        syncer.refresh()
+        try await eventually { syncer.kept.first?.songs == 1 }
+        #expect(syncer.kept[0].bytes == 4)
+
+        syncer.remove(syncer.kept[0].id)
+        try await eventually { syncer.kept.count == 1 }
+        #expect(syncer.kept[0].rule.sourceID == "library/artist/Pixies")
+        #expect(!FileManager.default.fileExists(atPath: file.path))
+        #expect(try await store.item(serverID: SyncerTests.server, itemKey: "a") == nil)
+    }
+
+    @Test func showsNothingWithoutAClementineThatSyncs() async throws {
+        let settings = Settings(suiteName: "KeepTests-\(UUID().uuidString)")
+        let store = try SyncStore(url: nil)
+        _ = try await store.addRule(SyncSources.artistRule(serverID: SyncerTests.server, artist: "Pixies"))
+        let syncer = Syncer(session: RemoteSession(), store: store, folder: FileManager.default.temporaryDirectory, settings: settings)
+        syncer.refresh()
+        try await Task.sleep(for: .milliseconds(100))
+        #expect(syncer.kept.isEmpty)
+
+        settings.syncServerID = SyncerTests.server
+        syncer.refresh()
+        try await eventually { syncer.kept.count == 1 }
+    }
+}
+
 /// Answers every HTTP request with [status] and [body], on a local port.
 final class FakeHTTPServer: Sendable {
     private let listener: NWListener
