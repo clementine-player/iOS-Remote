@@ -16,7 +16,7 @@ struct SyncStoreTests {
 
     func rule(_ sourceID: String, serverID: String = server, position: Int = 0) -> SyncRule {
         SyncRule(
-            serverID: serverID, sourceID: sourceID, title: sourceID, kind: 2, refreshPolicy: .never,
+            serverID: serverID, sourceID: sourceID, title: sourceID, kind: .album, refreshPolicy: .never,
             position: position)
     }
 
@@ -26,7 +26,7 @@ struct SyncStoreTests {
     ) -> SyncedItem {
         SyncedItem(
             serverID: serverID, itemKey: itemKey, version: version, path: "\(itemKey).flac",
-            mimeType: "audio/flac", sizeBytes: sizeBytes, delivery: 1, artKey: artKey,
+            mimeType: "audio/flac", sizeBytes: sizeBytes, delivery: .original, artKey: artKey,
             metadata: Data([1, 2, 3]), added: Date(timeIntervalSince1970: 1_700_000_000))
     }
 
@@ -38,9 +38,9 @@ struct SyncStoreTests {
 
     @Test func keepsRulesWithEveryField() async throws {
         let added = SyncRule(
-            serverID: Self.server, sourceID: "smart/songs/0b6e", title: "Newest tracks", kind: 5,
+            serverID: Self.server, sourceID: "smart/songs/0b6e", title: "Newest tracks", kind: .smartPlaylist,
             refreshPolicy: .afterListening, refreshIntervalHours: 24, refreshAfterPercent: 80,
-            limitItems: 50, limitBytes: 2_000_000_000, quality: 3, lossless: 2, maxBitrateKbps: 160,
+            limitItems: 50, limitBytes: 2_000_000_000, quality: .alwaysConvert, lossless: .convert, maxBitrateKbps: 160,
             preferredMIMEType: "audio/ogg; codecs=opus", seed: 42, position: 3,
             lastSynced: Date(timeIntervalSince1970: 1_700_000_000))
         let id = try await store.addRule(added)
