@@ -46,6 +46,12 @@ public final class PhonePlayer {
     /// The song playing on this phone, or paused there; nil when nothing is.
     public private(set) var song: KeptSong?
     public private(set) var isPlaying = false
+    /// Whether the songs after this one play in random order.
+    public private(set) var isShuffled = false
+    /// Nothing (.off), all the songs (.playlist) or the one playing (.track).
+    public private(set) var repeatMode = RepeatMode.off
+    /// The cover in the song's file, once read, if it has one.
+    public private(set) var artwork: Data?
     @ObservationIgnored public var onUpdate: (() -> Void)?
 
     @ObservationIgnored private var player: AVQueuePlayer?
@@ -54,6 +60,11 @@ public final class PhonePlayer {
     /// Each item's place in [songs].
     @ObservationIgnored private var places: [ObjectIdentifier: Int] = [:]
     @ObservationIgnored private var observations: [NSKeyValueObservation] = []
+    /// The songs as they were chosen, for the order to go back to when shuffling stops.
+    @ObservationIgnored private var chosen: [KeptSong] = []
+    @ObservationIgnored private var endObserver: NSObjectProtocol?
+    /// The song [artwork] is, or is being read, for.
+    @ObservationIgnored private var artworkFor: String?
 
     public init() {}
 
@@ -84,6 +95,8 @@ public final class PhonePlayer {
 
     /// Plays [songs] from the one at [index], or all of them at random.
     public func play(_ songs: [KeptSong], from index: Int, shuffled: Bool = false) {
+        chosen = songs
+        isShuffled = shuffled
         self.songs = Self.order(songs, from: index, shuffled: shuffled)
         guard !self.songs.isEmpty else { return }
         start(at: 0)
@@ -122,6 +135,37 @@ public final class PhonePlayer {
         onUpdate?()
     }
 
+    /// Plays the songs after this one at random, or, shuffled, in the order they were chosen.
+    public func toggleShuffle() {
+        guard let current = player?.currentItem, let place = places[ObjectIdentifier(current)] else { return }
+        isShuffled.toggle()
+        let upcoming = Self.upcoming(Array(songs[(place + 1)...]), chosen: chosen, shuffled: isShuffled)
+        songs = Array(songs[...place]) + upcoming
+        queue(after: current, at: place)
+        update()
+    }
+
+    /// Moves to the next repeat mode: off, then all the songs, then the one playing.
+    public func cycleRepeat() -> RepeatMode {
+        repeatMode = switch repeatMode {
+        case .off: .playlist
+        case .playlist: .track
+        default: .off
+        }
+        onUpdate?()
+        return repeatMode
+    }
+
+    /// The songs still to play, [remaining], in random order, or in the order they were
+    /// [chosen].
+    nonisolated static func upcoming(_ remaining: [KeptSong], chosen: [KeptSong], shuffled: Bool) -> [KeptSong] {
+        if shuffled {
+            return remaining.shuffled()
+        }
+        let keys = Set(remaining.map(\.itemKey))
+        return chosen.filter { keys.contains($0.itemKey) }
+    }
+
     /// Stops, and forgets the songs.
     public func stop() {
         player?.pause()
@@ -145,9 +189,44 @@ public final class PhonePlayer {
         update()
     }
 
+    /// Queues the songs after [place] behind [current], which plays on.
+    private func queue(after current: AVPlayerItem, at place: Int) {
+        guard let player else { return }
+        for item in player.items() where item !== current {
+            player.remove(item)
+        }
+        places = [ObjectIdentifier(current): place]
+        var last = current
+        for index in (place + 1)..<songs.count {
+            let item = AVPlayerItem(url: songs[index].file)
+            places[ObjectIdentifier(item)] = index
+            player.insert(item, after: last)
+            last = item
+        }
+    }
+
+    /// A song ended: repeats it, or all the songs after the last, as [repeatMode] says.
+    private func ended(_ item: AVPlayerItem) {
+        guard let place = places[ObjectIdentifier(item)] else { return }
+        switch repeatMode {
+        case .track:
+            start(at: place)
+        case .playlist where place == songs.count - 1:
+            start(at: 0)
+        default:
+            break
+        }
+    }
+
     private func makePlayer() -> AVQueuePlayer {
         let player = AVQueuePlayer()
         self.player = player
+        endObserver = NotificationCenter.default.addObserver(
+            forName: AVPlayerItem.didPlayToEndTimeNotification, object: nil, queue: .main
+        ) { [weak self] notification in
+            guard let item = notification.object as? AVPlayerItem else { return }
+            MainActor.assumeIsolated { self?.ended(item) }
+        }
         // KVO can call back on any thread: the handlers hop to the main actor.
         observations = [
             player.observe(\.currentItem) { @Sendable [weak self] _, _ in
@@ -164,7 +243,51 @@ public final class PhonePlayer {
         let place = player?.currentItem.flatMap { places[ObjectIdentifier($0)] }
         song = place.map { songs[$0] }
         isPlaying = song != nil && player?.timeControlStatus != .paused
+        readArtwork()
         onUpdate?()
+    }
+
+    /// Reads the cover in the playing song's file, when the song changes.
+    private func readArtwork() {
+        guard song?.itemKey != artworkFor else { return }
+        artworkFor = song?.itemKey
+        artwork = nil
+        guard let key = artworkFor, let file = song?.file else { return }
+        Task {
+            let data = await Self.artwork(in: file)
+            guard artworkFor == key, let data else { return }
+            artwork = data
+            onUpdate?()
+        }
+    }
+
+    nonisolated private static func artwork(in file: URL) async -> Data? {
+        guard let metadata = try? await AVURLAsset(url: file).load(.commonMetadata) else { return nil }
+        for item in AVMetadataItem.metadataItems(from: metadata, filteredByIdentifier: .commonIdentifierArtwork) {
+            if let data = try? await item.load(.dataValue) {
+                return data
+            }
+        }
+        return nil
+    }
+
+    /// The song playing, or paused, as the app's player shows a song, with its cover.
+    public var playingSong: Song? {
+        guard let song else { return nil }
+        var metadata = SongMetadata()
+        metadata.title = song.title
+        metadata.artist = song.artist
+        metadata.album = song.album
+        metadata.filename = song.file.path
+        metadata.isLocal = true
+        if let duration {
+            metadata.length = Int32(duration.rounded())
+        }
+        metadata.prettyLength = song.length
+        if let artwork {
+            metadata.art = artwork
+        }
+        return Song(metadata)
     }
 
     private func activateSession() {
