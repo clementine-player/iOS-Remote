@@ -8,6 +8,7 @@ import SwiftUI
 struct DownloadsView: View {
     @Environment(AppModel.self) private var model
     @AppStorage(SettingKey.wifiOnly) private var wifiOnly = false
+    @AppStorage(SettingKey.downloadNetwork) private var downloadNetwork: String?
     @State private var opened: DownloadsModel.Job?
     @State private var previewed: URL?
     @Environment(\.scenePhase) private var scenePhase
@@ -65,7 +66,7 @@ struct DownloadsView: View {
                         SectionTitle("Finished")
                     }
                 }
-                if wifiOnly {
+                if DownloadNetwork.chosen(downloadNetwork, wifiOnly: wifiOnly) == .wifiOnly {
                     Section {
                         HStack(spacing: Metrics.space3) {
                             Image(systemName: "wifi")
@@ -119,6 +120,12 @@ struct DownloadsView: View {
             .task {
                 downloads.readOnPhone()
                 syncer.refresh()
+            }
+            .onChange(of: syncer.status.networkNotAllowed) { _, notAllowed in
+                // Says why syncing didn't start, while this is shown.
+                if notAllowed {
+                    model.toasts.show(DownloadFailure.networkNotAllowed.message)
+                }
             }
             .onChange(of: scenePhase) { _, phase in
                 // Songs may have been deleted, or added, in the Files app meanwhile.

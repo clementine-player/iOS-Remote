@@ -10,6 +10,7 @@ struct SettingsView: View {
     @AppStorage(SettingKey.libraryGrouping) private var grouping = LibraryGrouping.artistAlbum.rawValue
     @AppStorage(SettingKey.librarySorting) private var sorting = LibrarySorting.ascending.rawValue
     @AppStorage(SettingKey.wifiOnly) private var wifiOnly = false
+    @AppStorage(SettingKey.downloadNetwork) private var downloadNetwork: String?
     @AppStorage(SettingKey.replaceExisting) private var replaceExisting = false
     @AppStorage(SettingKey.playlistFolder) private var playlistFolder = false
     @AppStorage(SettingKey.artistFolder) private var artistFolder = true
@@ -18,6 +19,15 @@ struct SettingsView: View {
     @AppStorage(SettingKey.port) private var port = Int(RemoteProtocol.defaultPort)
     @AppStorage(SettingKey.keepScreenOn) private var keepScreenOn = false
     @AppStorage(SettingKey.renderer) private var renderer = true
+
+    /// Download over: the choice made, or the Wi-Fi only switch before there was one.
+    private var networkChoice: Binding<DownloadNetwork> {
+        Binding {
+            DownloadNetwork.chosen(downloadNetwork, wifiOnly: wifiOnly)
+        } set: {
+            downloadNetwork = $0.rawValue
+        }
+    }
 
     var body: some View {
         Form {
@@ -58,9 +68,14 @@ struct SettingsView: View {
             }
 
             Section {
-                Toggle(isOn: $wifiOnly) {
-                    Text("Only on Wi-Fi")
-                    Text("Download songs only when connected to Wi-Fi.")
+                Picker(selection: networkChoice) {
+                    ForEach(DownloadNetwork.allCases, id: \.self) { network in
+                        Text(network.title).tag(network)
+                    }
+                } label: {
+                    Text(
+                        "Download over",
+                        comment: "A setting: which networks songs download over, for downloads and for what's kept on this phone. Its choices follow.")
                 }
                 Toggle(isOn: $replaceExisting) {
                     Text("Replace existing files")
@@ -143,6 +158,22 @@ extension Appearance {
         case .system: .unspecified
         case .light: .light
         case .dark: .dark
+        }
+    }
+}
+
+extension DownloadNetwork {
+    var title: LocalizedStringResource {
+        switch self {
+        case .wifiOnly:
+            LocalizedStringResource(
+                "Wi-Fi only",
+                comment: "A choice under Download over. A metered Wi-Fi, such as another phone's hotspot, counts as mobile data.")
+        case .mobileData:
+            LocalizedStringResource(
+                "Wi-Fi and mobile data, not in Low Data Mode",
+                comment: "A choice under Download over: Wi-Fi, and mobile data unless Low Data Mode is on.")
+        case .any: LocalizedStringResource("Any network", comment: "A choice under Download over.")
         }
     }
 }

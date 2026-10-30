@@ -39,7 +39,7 @@ public struct KeptRule: Sendable, Equatable, Identifiable {
 
 /// Syncs the rules for the connected Clementine while the app is connected to it: each time it
 /// connects, and when asked ([syncNow]), such as after a rule is made ([keep]) or removed
-/// ([remove]). Background sync comes later.
+/// ([remove]), over the networks Download over allows. Background sync comes later.
 @MainActor
 @Observable
 public final class Syncer {
@@ -50,6 +50,8 @@ public final class Syncer {
         public var results: [Int64: RuleResult] = [:]
         /// The last sync couldn't start or finish: there's nowhere to save songs, say.
         public var unavailable = false
+        /// The last sync didn't start, because Download over doesn't allow the phone's network.
+        public var networkNotAllowed = false
     }
 
     public private(set) var status = Status()
@@ -64,6 +66,8 @@ public final class Syncer {
     @ObservationIgnored private let settings: Settings
     @ObservationIgnored private let manifests = SyncManifests()
     @ObservationIgnored private let timeout: Duration
+    /// Whether the phone's network is one that Download over allows.
+    @ObservationIgnored public var networkAllows: @MainActor (DownloadNetwork) -> Bool = { _ in true }
     @ObservationIgnored private var task: Task<Void, Never>?
     @ObservationIgnored private var again = false
 
@@ -174,6 +178,10 @@ public final class Syncer {
     private func runOnce() async {
         let syncing = session.syncing
         guard syncing.available else { return }
+        guard networkAllows(settings.downloadNetwork) else {
+            status.networkNotAllowed = true
+            return
+        }
         guard let store, (try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)) != nil
         else {
             status.unavailable = true
@@ -181,6 +189,7 @@ public final class Syncer {
         }
         status.running = true
         status.unavailable = false
+        status.networkNotAllowed = false
         let engine = SyncEngine(store: store, folder: folder, supportedFormats: Renderer.formats)
         let connection = ClementineSyncConnection(
             serverID: syncing.serverID, manifests: manifests,
