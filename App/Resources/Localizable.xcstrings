@@ -2230,6 +2230,12 @@
             "value" : "(%1$lld/%2$lld) Please wait"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(%1$lld/%2$lld) Espere"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2658,6 +2664,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Přidá do seznamu skladeb"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo añade a la lista"
           }
         },
         "et" : {
@@ -21114,6 +21126,12 @@
     },
     "Shows the lyrics" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra la letra"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
