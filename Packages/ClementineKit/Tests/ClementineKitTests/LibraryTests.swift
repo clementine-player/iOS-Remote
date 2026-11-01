@@ -14,7 +14,8 @@ struct SampleLibrary {
         let database = try Database(path: file.path)
         try database.execute("""
             CREATE TABLE songs (title TEXT, album TEXT, artist TEXT, albumartist TEXT, track INTEGER,
-                disc INTEGER, year INTEGER, genre TEXT, filename BLOB, unavailable INTEGER DEFAULT 0);
+                disc INTEGER, year INTEGER, genre TEXT, filename BLOB, unavailable INTEGER DEFAULT 0,
+                effective_compilation INTEGER DEFAULT 0);
             """)
         let songs: [(String, String, String, Int, Int, String, String, Int)] = [
             ("Clair de lune", "Suite bergamasque", "Claude Debussy", 3, 1905, "Classical", "file:///m/Debussy/03%20Clair.ogg", 0),
@@ -113,6 +114,60 @@ struct LibraryTests {
             == ["ZZ Top", "Various", "Érik Satie", "Blondie", "abba"])
         #expect(try descending.items(in: database, level: 1, selection: ["Various"]).map(\.value)
             == ["zebra", "Été", "apple", "Apple"])
+    }
+
+    /// Songs by album artist, and on compilations, as Clementine has them.
+    private func compilationsLibrary() throws -> Database {
+        let database = try Database(path: nil)
+        try database.execute("""
+            CREATE TABLE songs (artist TEXT, albumartist TEXT, album TEXT, title TEXT, filename TEXT,
+                disc INTEGER, track INTEGER, effective_compilation INTEGER)
+            """)
+        let songs: [(String, String, String, String, Int64, Int64)] = [
+            ("Blur", "", "Parklife", "Girls & Boys", 1, 0),
+            ("David Bowie", "Queen", "Hot Space", "Under Pressure", 11, 0),
+            ("Queen", "Queen", "Hot Space", "Staying Power", 1, 0),
+            // A compilation, with an album artist, that Clementine finds is one.
+            ("Blur", "Various", "Now 30", "Country House", 1, 1),
+            // Songs whose tags Clementine took from their file names ("01 - Title.mp3"), so each
+            // has an artist of its own, and Clementine finds their album is a compilation.
+            ("01", "", "Powerage", "Rock n Roll Damnation", 1, 1),
+            ("02", "", "Powerage", "Down Payment Blues", 2, 1),
+        ]
+        for song in songs {
+            try database.run("INSERT INTO songs VALUES (?, ?, ?, ?, 'file:///song', 1, ?, ?)",
+                             [.text(song.0), .text(song.1), .text(song.2), .text(song.3), .integer(song.4), .integer(song.5)])
+        }
+        return database
+    }
+
+    private func groupedQuery(_ grouping: LibraryGrouping) -> SongQuery {
+        SongQuery(fields: grouping.fields, sorting: .ascending, table: "songs", expressions: LibraryStore.groupExpressions)
+    }
+
+    @Test func groupsByAlbumArtistWithCompilationsUnderVariousArtistsFirst() throws {
+        let database = try compilationsLibrary()
+        let query = groupedQuery(.albumArtistAlbum)
+        let artists = try query.items(in: database, level: 0, selection: [])
+        #expect(artists.map(\.value) == [BrowseItem.variousArtists, "Blur", "Queen"])
+        #expect(artists.map(\.isVariousArtists) == [true, false, false])
+        #expect(try query.items(in: database, level: 1, selection: [BrowseItem.variousArtists]).map(\.value)
+            == ["Now 30", "Powerage"])
+        #expect(try query.items(in: database, level: 1, selection: ["Blur"]).map(\.value) == ["Parklife"])
+        #expect(try query.items(in: database, level: 2, selection: [BrowseItem.variousArtists, "Powerage"]).map(\.value)
+            == ["Rock n Roll Damnation", "Down Payment Blues"])
+    }
+
+    @Test func groupsByArtistWithCompilationsUnderVariousArtists() throws {
+        let database = try compilationsLibrary()
+        let query = groupedQuery(.artistAlbum)
+        #expect(try query.items(in: database, level: 0, selection: []).map(\.value)
+            == [BrowseItem.variousArtists, "Blur", "David Bowie", "Queen"])
+        #expect(try query.items(in: database, level: 1, selection: ["Blur"]).map(\.value) == ["Parklife"])
+    }
+
+    @Test func groupsAsClementineDoesUnlessToldOtherwise() {
+        #expect(LibraryGrouping.standard == .albumArtistAlbum)
     }
 
     @Test func groupsByYear() async throws {

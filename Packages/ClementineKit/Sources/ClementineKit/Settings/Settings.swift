@@ -41,7 +41,7 @@ public struct Settings: Sendable {
         SettingKey.volumeButtons: true,
         SettingKey.volumeStep: 10,
         SettingKey.showLastFM: true,
-        SettingKey.libraryGrouping: LibraryGrouping.artistAlbum.rawValue,
+        SettingKey.libraryGrouping: LibraryGrouping.standard.rawValue,
         SettingKey.librarySorting: LibrarySorting.ascending.rawValue,
         SettingKey.wifiOnly: false,
         SettingKey.replaceExisting: false,
@@ -73,7 +73,7 @@ public struct Settings: Sendable {
     public var volumeStep: Int { max(1, min(20, store.integer(forKey: SettingKey.volumeStep))) }
     public var showLastFM: Bool { store.bool(forKey: SettingKey.showLastFM) }
     public var libraryGrouping: LibraryGrouping {
-        LibraryGrouping(rawValue: store.string(forKey: SettingKey.libraryGrouping) ?? "") ?? .artistAlbum
+        LibraryGrouping(rawValue: store.string(forKey: SettingKey.libraryGrouping) ?? "") ?? .standard
     }
     public var librarySorting: LibrarySorting {
         LibrarySorting(rawValue: store.string(forKey: SettingKey.librarySorting) ?? "") ?? .ascending
@@ -153,6 +153,9 @@ public enum LibraryGrouping: String, Sendable, CaseIterable {
     case album = "album"
     case genreAlbum = "genre-album"
     case genreArtistAlbum = "genre-artist-album"
+
+    /// As Clementine groups its library unless told otherwise.
+    public static let standard = LibraryGrouping.albumArtistAlbum
 
     /// The fields grouped by, top down, then the songs' titles.
     public var fields: [String] {
