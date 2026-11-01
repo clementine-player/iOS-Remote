@@ -31,7 +31,7 @@ private struct LibraryLevelView: View {
     var query = ""
 
     @Environment(AppModel.self) private var model
-    @AppStorage(SettingKey.libraryGrouping) private var grouping = LibraryGrouping.artistAlbum.rawValue
+    @AppStorage(SettingKey.libraryGrouping) private var grouping = LibraryGrouping.standard.rawValue
     @AppStorage(SettingKey.librarySorting) private var sorting = LibrarySorting.ascending.rawValue
     @State private var level: BrowseLevel?
     @State private var selection = Set<Int>()

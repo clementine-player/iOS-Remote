@@ -192,6 +192,10 @@ extension BrowseItem {
         if value.isEmpty {
             return String(localized: "Unknown")
         }
+        if isVariousArtists {
+            return String(localized: "Various artists",
+                          comment: "In the library, the artist that albums by several artists (compilations) are listed under, as Clementine lists them.")
+        }
         if kind == .year, !album.isEmpty {
             return "\(value) - \(album)"
         }

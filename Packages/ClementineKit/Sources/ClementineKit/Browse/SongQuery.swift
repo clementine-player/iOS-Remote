@@ -26,6 +26,15 @@ public struct BrowseItem: Sendable, Hashable {
     public var value: String {
         selection.last ?? ""
     }
+
+    /// The artist songs on compilations are grouped under, as Clementine groups them: shown as
+    /// "Various artists", and listed first. It's char(1) in SQL.
+    public static let variousArtists = "\u{1}"
+
+    /// Whether this is the artist songs on compilations are grouped under.
+    public var isVariousArtists: Bool {
+        kind == .artist && value == Self.variousArtists
+    }
 }
 
 /// A level of items, below [opened] (the top level when nil).
@@ -52,6 +61,12 @@ struct SongQuery {
     var hiddenWhere = ""
     /// Whether the table's URLs are encoded, as the library's are.
     var decodesURLs = true
+    /// The SQL a field stands for, when it isn't the column of that name.
+    var expressions: [String: String] = [:]
+
+    private func sql(_ field: String) -> String {
+        expressions[field] ?? field
+    }
 
     var songLevel: Int { fields.count - 1 }
 
@@ -73,17 +88,19 @@ struct SongQuery {
         let isSongLevel = level == songLevel
         var sql = "SELECT 0 AS _id"
         for field in fields {
-            sql += ", \(field)"
+            sql += ", \(self.sql(field))"
         }
         sql += ", CAST(filename AS TEXT), artist, album FROM \(table)"
         sql += whereClause(selection)
         // Names in order for the phone's language, whatever their case or accents (Database), then
         // by their bytes, so names differing only in case are always in the same order.
-        let field = fields[level]
+        // Various artists first, as Clementine lists them.
+        let field = self.sql(fields[level])
         if isSongLevel {
             sql += " ORDER BY album COLLATE LOCALIZED, album, disc, track \(sorting.rawValue)"
         } else {
-            sql += " GROUP BY \(field) ORDER BY \(field) COLLATE LOCALIZED \(sorting.rawValue), \(field) \(sorting.rawValue)"
+            sql += " GROUP BY \(field) ORDER BY (\(field)) IS char(1) DESC, "
+                + "\(field) COLLATE LOCALIZED \(sorting.rawValue), \(field) \(sorting.rawValue)"
         }
 
         return try database.query(sql, selection).map { row in
@@ -105,13 +122,13 @@ struct SongQuery {
 
     /// How many distinct items are below [selection].
     func count(in database: Database, selection: [String]) throws -> Int {
-        let sql = "SELECT COUNT(DISTINCT(\(fields[selection.count]))) FROM \(table)" + whereClause(selection)
+        let sql = "SELECT COUNT(DISTINCT(\(self.sql(fields[selection.count])))) FROM \(table)" + whereClause(selection)
         let value = try database.query(sql, selection).first?.first ?? nil
         return value.flatMap { Int($0) } ?? 0
     }
 
     private func whereClause(_ selection: [String]) -> String {
-        var conditions = selection.indices.map { "\(fields[$0]) = ?" }
+        var conditions = selection.indices.map { "\(sql(fields[$0])) = ?" }
         if !hiddenWhere.isEmpty {
             conditions.append(hiddenWhere)
         }

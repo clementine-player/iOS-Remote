@@ -7,7 +7,7 @@ struct SettingsView: View {
     @AppStorage(SettingKey.volumeButtons) private var volumeButtons = true
     @AppStorage(SettingKey.volumeStep) private var volumeStep = 10
     @AppStorage(SettingKey.showLastFM) private var showLastFM = true
-    @AppStorage(SettingKey.libraryGrouping) private var grouping = LibraryGrouping.artistAlbum.rawValue
+    @AppStorage(SettingKey.libraryGrouping) private var grouping = LibraryGrouping.standard.rawValue
     @AppStorage(SettingKey.librarySorting) private var sorting = LibrarySorting.ascending.rawValue
     @AppStorage(SettingKey.wifiOnly) private var wifiOnly = false
     @AppStorage(SettingKey.replaceExisting) private var replaceExisting = false

@@ -89,8 +89,17 @@ public actor LibraryStore {
     }
 
     private func browser(_ grouping: LibraryGrouping, _ sorting: LibrarySorting) -> SongBrowser {
-        SongBrowser(query: SongQuery(fields: grouping.fields, sorting: sorting, table: "songs"))
+        SongBrowser(query: SongQuery(
+            fields: grouping.fields, sorting: sorting, table: "songs", expressions: Self.groupExpressions))
     }
+
+    /// As Clementine groups its library: songs it finds are on compilations (a various artists
+    /// album) are under [BrowseItem.variousArtists], not their artist, and an album artist is the
+    /// artist where a song has none.
+    static let groupExpressions = [
+        "artist": "CASE WHEN effective_compilation = 1 THEN char(1) ELSE artist END",
+        "albumartist": "CASE WHEN effective_compilation = 1 THEN char(1) WHEN albumartist <> '' THEN albumartist ELSE artist END",
+    ]
 
     // MARK: - Searching
 
