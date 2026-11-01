@@ -102,7 +102,9 @@ public struct SyncEngine: Sendable {
         }
 
         var wanted: [(item: Pb_Remote_SyncItem, have: SyncedItem?)] = []
-        for item in manifest.items {
+        // A song a playlist has twice is kept once, where it first comes.
+        var seen = Set<String>()
+        for item in manifest.items where seen.insert(item.itemKey).inserted {
             wanted.append((item, try await store.item(serverID: rule.serverID, itemKey: item.itemKey)))
         }
         let total = wanted.count { $0.have?.version != $0.item.version }
