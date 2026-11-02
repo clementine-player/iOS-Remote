@@ -2430,6 +2430,12 @@
             "value" : "O Clementine Remote"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acerca del Mando a distancia de Clementine"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7754,6 +7760,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nepodařilo se stáhnout sbírku: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo descargar la fonoteca: %@"
           }
         },
         "et" : {
@@ -14231,6 +14243,12 @@
     },
     "Needs Clementine %@ or later, with Tools → Preferences → Network Remote turned on." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Requiere Clementine %@ o una versión posterior, con la opción Herramientas ▸ Preferencias ▸ Mando de red."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15251,6 +15269,12 @@
     },
     "On this phone" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En este teléfono"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20664,6 +20688,12 @@
     },
     "Select songs" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleccionar canciones"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23961,6 +23991,12 @@
     },
     "Top Result" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mejor resultado"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
