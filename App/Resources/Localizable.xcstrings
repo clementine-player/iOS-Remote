@@ -2528,6 +2528,12 @@
     },
     "Add to queue" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir a cola"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12987,6 +12993,12 @@
     },
     "Let Clementine play on this phone" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permitir que Clementine reproduzca en este teléfono"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15589,6 +15601,12 @@
     },
     "Open in new playlist" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir en lista nueva"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23957,6 +23975,12 @@
     "Too many wrong auth codes. Clementine won't check another from this phone for %@." : {
       "comment" : "The placeholder is how long Clementine said to wait before it checks another auth code from this phone: \"10 seconds\", \"1 minute\", \"3 minutes\", \"2 hours\", or \"a while\" if it didn't say. The iOS app shows the same sentence with the duration in iOS's own words, which can't take another grammatical form, so write the sentence so the duration reads right as it is.",
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demasiados códigos de autenticación erróneos. Clementine no comprobará otro de este teléfono por %@."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24520,7 +24544,15 @@
       }
     },
     "Various artists" : {
-      "comment" : "In the library, the artist that albums by several artists (compilations) are listed under, as Clementine lists them."
+      "comment" : "In the library, the artist that albums by several artists (compilations) are listed under, as Clementine lists them.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Varios artistas"
+          }
+        }
+      }
     },
     "Version" : {
       "localizations" : {
