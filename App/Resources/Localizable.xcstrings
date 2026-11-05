@@ -48,7 +48,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ (spelar)"
+            "value" : "%@ (aktiv spellista)"
           }
         }
       }
@@ -100,7 +100,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ (denna iPad)"
+            "value" : "%@ (den här iPaden)"
           }
         }
       }
@@ -152,7 +152,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ (denna telefon)"
+            "value" : "%@ (den här telefonen)"
           }
         }
       }
@@ -198,7 +198,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ ledigt på denna telefon"
+            "value" : "%@ ledigt på den här telefonen"
           }
         }
       }
@@ -244,7 +244,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ stjärnor"
+            "value" : "%@ av 5 stjärnor"
           }
         }
       }
@@ -2211,7 +2211,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld%%"
+            "value" : "%lld %%"
           }
         }
       }
@@ -2717,7 +2717,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lägger till i spellistan"
+            "value" : "Lägger till valet i spellistan"
           }
         }
       }
@@ -2763,7 +2763,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lägger till i den spellista som är vald i kön. Tryck och håll ned för att välja en annan."
+            "value" : "Lägger till i den spellista du har valt i uppspelningskön. Håll ned för att välja en annan spellista."
           }
         }
       }
@@ -3373,7 +3373,21 @@
       }
     },
     "Any network" : {
-      "comment" : "A choice under Download over."
+      "comment" : "A choice under Download over.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cualquier red"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alla nätverk"
+          }
+        }
+      }
     },
     "Appearance" : {
       "localizations" : {
@@ -4626,7 +4640,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uteslut"
+            "value" : "Blockera"
           }
         },
         "tr" : {
@@ -4792,7 +4806,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Utesluten på Last.fm"
+            "value" : "Låten har blockerats på Last.fm"
           }
         },
         "tr" : {
@@ -5296,7 +5310,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Töm spellistan?"
+            "value" : "Vill du tömma spellistan?"
           }
         }
       }
@@ -5518,7 +5532,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Clementine Remote styr musikspelaren Clementine på din dator. Appen samlar inte in några data: den kommunicerar bara med din egen Clementine i ditt eget nätverk."
+            "value" : "Clementine Remote styr musikspelaren Clementine på din dator. Appen samlar inte in några uppgifter och kommunicerar bara med Clementine på ditt eget nätverk."
           }
         }
       }
@@ -5558,7 +5572,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Clementine kan skicka sin musik hit när uppspelningen sker på andra enheter. Gäller nästa gång appen ansluter."
+            "value" : "Du kan välja den här telefonen som uppspelningsenhet i Clementine. Ändringen gäller nästa gång appen ansluter."
           }
         }
       }
@@ -7145,7 +7159,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Anslut till senast använda Clementine när appen startar."
+            "value" : "Anslut till samma dator som förra gången när appen startar."
           }
         }
       }
@@ -8946,7 +8960,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ej ansluten"
+            "value" : "Frånkopplad"
           }
         },
         "tr" : {
@@ -8998,7 +9012,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kopplar från Clementine Remote från Clementine."
+            "value" : "Kopplar bort Clementine Remote från Clementine."
           }
         }
       }
@@ -10038,13 +10052,27 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hämta musikbibliotek"
+            "value" : "Hämta musikbiblioteket"
           }
         }
       }
     },
     "Download over" : {
-      "comment" : "A setting: which networks songs download over, for downloads and for what's kept on this phone. Its choices follow."
+      "comment" : "A setting: which networks songs download over, for downloads and for what's kept on this phone. Its choices follow.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descargar por"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hämta via"
+          }
+        }
+      }
     },
     "Download playlist" : {
       "localizations" : {
@@ -11307,7 +11335,21 @@
       }
     },
     "Downloads aren't allowed on this network" : {
-      "comment" : "A download didn't start, because Download over, in Settings, doesn't allow the network the phone is on."
+      "comment" : "A download didn't start, because Download over, in Settings, doesn't allow the network the phone is on.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las descargas no están permitidas en esta red"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hämtningar är inte tillåtna på det här nätverket"
+          }
+        }
+      }
     },
     "Downloads only run on Wi-Fi." : {
       "localizations" : {
@@ -11384,7 +11426,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hämtar låtar igen när de skiljer sig från dem på denna telefon."
+            "value" : "Hämtar låtar på nytt om de skiljer sig från de kopior som finns på telefonen."
           }
         }
       }
@@ -11754,7 +11796,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Slutfört"
+            "value" : "Avslutade hämtningar"
           }
         }
       }
@@ -12511,7 +12553,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spara varje låt i en mapp med albumets namn inuti artistens mapp."
+            "value" : "Spara varje låt i en undermapp till artistmappen. Undermappen får albumets namn."
           }
         }
       }
@@ -12585,7 +12627,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Körs Clementine? Är det version %@ eller senare, med nätverksfjärrkontrollen aktiverad i inställningarna? Är adressen rätt?"
+            "value" : "Körs Clementine? Har du version %@ eller senare? Är nätverksfjärrkontrollen aktiverad i inställningarna? Stämmer adressen?"
           }
         }
       }
@@ -13037,7 +13079,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Låt Clementine spela upp på denna telefon"
+            "value" : "Låt Clementine spela musik på den här telefonen"
           }
         }
       }
@@ -13631,7 +13673,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Åtkomst till lokalt nätverk är avstängd"
+            "value" : "Åtkomst till det lokala nätverket är avstängd"
           }
         }
       }
@@ -13933,7 +13975,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Markera som favorit på Last.fm"
+            "value" : "Gilla på Last.fm"
           }
         }
       }
@@ -14081,7 +14123,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Markerad som favorit på Last.fm"
+            "value" : "Du gillar nu låten på Last.fm"
           }
         },
         "tr" : {
@@ -14299,7 +14341,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kräver Clementine %@ eller senare, med Verktyg → Inställningar → Nätverksfjärrkontroll aktiverad."
+            "value" : "Kräver Clementine %@ eller senare. Aktivera nätverksfjärrkontrollen under Verktyg → Inställningar → Nätverksfjärrkontroll."
           }
         }
       }
@@ -15125,7 +15167,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ej ansluten"
+            "value" : "Inte ansluten"
           }
         },
         "tr" : {
@@ -15177,7 +15219,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Söker inte i detta nätverk"
+            "value" : "Söker inte i det här nätverket"
           }
         }
       }
@@ -15325,7 +15367,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "På denna telefon"
+            "value" : "På den här telefonen"
           }
         }
       }
@@ -15810,7 +15852,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Öppnar Clementine Remote och ansluter till senast använda Clementine."
+            "value" : "Öppnar Clementine Remote och ansluter till samma dator som förra gången."
           }
         }
       }
@@ -16198,7 +16240,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Välj den Clementine du vill styra. Den måste vara ansluten till samma wifi-nätverk som denna telefon."
+            "value" : "Välj vilken dator med Clementine du vill ansluta till. Datorn och telefonen måste vara anslutna till samma wifi-nätverk."
           }
         }
       }
@@ -17371,7 +17413,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spelar upp det eller lägger till det i spellistan om Clementine redan spelar"
+            "value" : "Spelar upp det valda innehållet eller lägger till det i spellistan om Clementine redan spelar musik"
           }
         }
       }
@@ -20539,7 +20581,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sök i denna spellista"
+            "value" : "Sök i den här spellistan"
           }
         },
         "tr" : {
@@ -20671,7 +20713,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Visa alla %@"
+            "value" : "Visa alla träffar under %@"
           }
         }
       }
@@ -21133,7 +21175,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Visa knappar för att markera låtar som favoriter eller utesluta dem."
+            "value" : "Visa knappar för att gilla och blockera låtar."
           }
         },
         "tr" : {
@@ -21717,7 +21759,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Blanda låtarna i detta album"
+            "value" : "Blanda låtarna i det här albumet"
           }
         },
         "tr" : {
@@ -22213,7 +22255,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Låtar sparas i mappen för Clementine Remote i appen Filer."
+            "value" : "Låtarna sparas i Clementine Remotes mapp i appen Filer."
           }
         }
       }
@@ -22919,7 +22961,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stoppa efter denna låt"
+            "value" : "Stoppa efter den här låten"
           }
         },
         "tr" : {
@@ -23061,7 +23103,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Byt Clementine"
+            "value" : "Byt dator"
           }
         }
       }
@@ -23203,7 +23245,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adressen finns i ditt nätverk och Clementine Remote behöver åtkomst till lokalt nätverk för att nå den. Aktivera Lokalt nätverk i Inställningar."
+            "value" : "Adressen finns i ditt lokala nätverk. För att Clementine Remote ska kunna nå den behöver du ge appen åtkomst till Lokalt nätverk i Inställningar."
           }
         }
       }
@@ -23631,7 +23673,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Det finns inte tillräckligt med utrymme på denna telefon"
+            "value" : "Det finns inte tillräckligt med utrymme på den här telefonen"
           }
         },
         "tr" : {
@@ -23853,7 +23895,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spellistan är tom!"
+            "value" : "Spellistan är tom"
           }
         },
         "tr" : {
@@ -23939,7 +23981,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Detta tar bort alla låtar från spellistan i Clementine."
+            "value" : "Alla låtar tas bort från spellistan i Clementine."
           }
         }
       }
@@ -24550,7 +24592,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uppdatera musikbibliotek"
+            "value" : "Uppdatera musikbiblioteket"
           }
         }
       }
@@ -24562,6 +24604,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Varios artistas"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diverse artister"
           }
         }
       }
@@ -24795,7 +24843,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Volym %lld%%"
+            "value" : "Volym %lld %%"
           }
         }
       }
@@ -25026,7 +25074,21 @@
       "comment" : "A choice under Download over: Wi-Fi, and mobile data unless Low Data Mode is on."
     },
     "Wi-Fi only" : {
-      "comment" : "A choice under Download over. A metered Wi-Fi, such as another phone's hotspot, counts as mobile data."
+      "comment" : "A choice under Download over. A metered Wi-Fi, such as another phone's hotspot, counts as mobile data.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wifi solamente"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Endast wifi"
+          }
+        }
+      }
     },
     "Without Local Network access, Clementine Remote can't find Clementine on your network. Enter its address below, or turn on Local Network in Settings." : {
       "localizations" : {
@@ -25051,7 +25113,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Utan åtkomst till lokalt nätverk kan Clementine Remote inte hitta Clementine i ditt nätverk. Ange adressen nedan eller aktivera Lokalt nätverk i Inställningar."
+            "value" : "Clementine Remote behöver åtkomst till det lokala nätverket för att hitta Clementine. Ange datorns adress nedan eller ge appen åtkomst till Lokalt nätverk i Inställningar."
           }
         }
       }
@@ -25251,7 +25313,7 @@
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ditt musikbibliotek finns inte på denna telefon ännu. Hämta det från Clementine för att kunna bläddra i det här."
+            "value" : "Hämta uppgifter om ditt musikbibliotek från Clementine för att kunna bläddra bland låtarna på den här telefonen."
           }
         }
       }
