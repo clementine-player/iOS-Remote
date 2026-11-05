@@ -46,10 +46,11 @@ struct ConnectionTests {
     }
 
     @Test func nobodyThere() async throws {
-        let clementine = try await FakeClementine()
-        let endpoint = clementine.endpoint
-        clementine.stop()
-        try await Task.sleep(for: .milliseconds(100))
+        // A port nothing listens on, and never handed out for listening on any port. A stopped
+        // FakeClementine's port isn't: its listener can still take the connection while it
+        // closes, or another test's can be given the port, and the session then waits for an
+        // answer that never comes.
+        let endpoint = Endpoint(host: "127.0.0.1", port: 1)
 
         let session = RemoteSession()
         session.connect(to: endpoint, authCode: 0)
