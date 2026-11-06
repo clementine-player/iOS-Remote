@@ -9,6 +9,7 @@ struct ClementineRemoteApp: App {
     init() {
         let model = AppModel()
         AppModel.shared = model
+        model.registerBackgroundSync()
         _model = State(initialValue: model)
     }
 

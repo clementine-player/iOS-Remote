@@ -1,3 +1,4 @@
+import BackgroundTasks
 import ClementineKit
 import SwiftUI
 
@@ -299,6 +300,7 @@ final class AppModel {
             if !session.isPlayingHere {
                 session.suspend()
             }
+            scheduleBackgroundSync()
         case .active:
             session.resume()
         default:
@@ -327,6 +329,70 @@ final class AppModel {
 
     func updateIdleTimer() {
         UIApplication.shared.isIdleTimerDisabled = settings.keepScreenOn && session.status.isActive
+    }
+}
+
+// MARK: Background sync
+
+extension AppModel {
+    /// The background task that updates what's kept on the phone: one of the
+    /// BGTaskSchedulerPermittedIdentifiers in Info.plist.
+    nonisolated static let backgroundSyncID = (Bundle.main.bundleIdentifier ?? "org.clementine-player.remote") + ".sync"
+
+    /// Lets iOS start background syncs. iOS needs this before the app finishes launching.
+    func registerBackgroundSync() {
+        guard TestingFeatures.enabled else { return }
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: Self.backgroundSyncID, using: .main) { [weak self] task in
+            // On the main queue, as asked, so only the main actor uses it.
+            nonisolated(unsafe) let task = task
+            MainActor.assumeIsolated {
+                if let self {
+                    self.runBackgroundSync(task)
+                } else {
+                    task.setTaskCompleted(success: false)
+                }
+            }
+        }
+    }
+
+    /// Asks iOS to start a background sync, while the phone is on power, no sooner than
+    /// [BackgroundSync.interval] from now; or not to, with Update kept music in the background off.
+    func scheduleBackgroundSync() {
+        guard TestingFeatures.enabled else { return }
+        guard settings.backgroundSync else {
+            BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: Self.backgroundSyncID)
+            return
+        }
+        let request = BGProcessingTaskRequest(identifier: Self.backgroundSyncID)
+        request.requiresExternalPower = true
+        request.requiresNetworkConnectivity = true
+        request.earliestBeginDate = Date(timeIntervalSinceNow: BackgroundSync.interval)
+        try? BGTaskScheduler.shared.submit(request)
+    }
+
+    /// Syncs for [task], over a network Download over allows, and asks for the next one.
+    private func runBackgroundSync(_ task: BGTask) {
+        scheduleBackgroundSync()
+        let run = Task {
+            guard let path = await NetworkMonitor.currentPath(),
+                  BackgroundSync.allows(
+                      settings.downloadNetwork, expensive: path.expensive, constrained: path.constrained)
+            else { return }
+            await BackgroundSync.run(session: session, syncer: syncer, settings: settings) {
+                UIApplication.shared.applicationState == .background
+            }
+        }
+        // iOS ends the task: what's downloaded so far stays, and the next sync carries on.
+        task.expirationHandler = { [syncer] in
+            Task { @MainActor in
+                syncer.stop()
+                run.cancel()
+            }
+        }
+        Task {
+            await run.value
+            task.setTaskCompleted(success: true)
+        }
     }
 }
 
