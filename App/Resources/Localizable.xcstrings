@@ -9,6 +9,12 @@
             "value" : "%@ (přehrává)"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (αναπαράγεται)"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -59,6 +65,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ (tento iPad)"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (αυτό το iPad)"
           }
         },
         "es" : {
@@ -113,6 +125,12 @@
             "value" : "%@ (tento telefon)"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (αυτό το τηλέφωνο)"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -165,6 +183,12 @@
             "value" : "%@ zdarma na tomto telefonu"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ελεύθερα σε αυτό το τηλέφωνο"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -211,6 +235,12 @@
             "value" : "%@ hvězdiček"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ αστέρια"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -255,6 +285,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ · port %2$@"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · θύρα %2$@"
           }
         },
         "en" : {
@@ -334,6 +370,24 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld alba"
+                }
+              }
+            }
+          }
+        },
+        "el" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld άλμπουμ"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld άλμπουμ"
                 }
               }
             }
@@ -511,6 +565,12 @@
             "value" : "%1$lld h %2$lld min"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld ώρ. %2$lld λεπ."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -624,6 +684,24 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld Elemente"
+                }
+              }
+            }
+          }
+        },
+        "el" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld στοιχείο"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld στοιχεία"
                 }
               }
             }
@@ -1101,6 +1179,12 @@
             "value" : "%lld min"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld λεπ."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1147,6 +1231,24 @@
     },
     "%lld selected" : {
       "localizations" : {
+        "el" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld επιλεγμένο"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld επιλεγμένα"
+                }
+              }
+            }
+          }
+        },
         "en" : {
           "variations" : {
             "plural" : {
@@ -1313,6 +1415,24 @@
     },
     "%lld songs" : {
       "localizations" : {
+        "el" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld τραγούδι"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld τραγούδια"
+                }
+              }
+            }
+          }
+        },
         "en" : {
           "variations" : {
             "plural" : {
@@ -1479,6 +1599,24 @@
     },
     "%lld songs added to %@" : {
       "localizations" : {
+        "el" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Προστέθηκε %lld τραγούδι στο %@"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Προστέθηκαν %lld τραγούδια στο %@"
+                }
+              }
+            }
+          }
+        },
         "en" : {
           "variations" : {
             "plural" : {
@@ -1707,6 +1845,24 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld Lieder wurden zur aktuellen Wiedergabeliste hinzugefügt"
+                }
+              }
+            }
+          }
+        },
+        "el" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Προστέθηκε %lld τραγούδι στη λίστα αναπαραγωγής"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Προστέθηκαν %lld τραγούδια στη λίστα αναπαραγωγής"
                 }
               }
             }
@@ -2167,6 +2323,24 @@
     "%lld songs, %@" : {
       "comment" : "How much of something kept is on the phone: the number of songs, and their size, such as \"180 MB\".",
       "localizations" : {
+        "el" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld τραγούδι, %@"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld τραγούδια, %@"
+                }
+              }
+            }
+          }
+        },
         "en" : {
           "variations" : {
             "plural" : {
@@ -2190,6 +2364,12 @@
     "%lld%%" : {
       "localizations" : {
         "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld%%"
+          }
+        },
+        "el" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld%%"
@@ -2245,6 +2425,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "(%1$lld/%2$lld) Prosím, počkejte"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(%1$lld/%2$lld) Περιμένετε"
           }
         },
         "en" : {
@@ -2453,6 +2639,12 @@
             "value" : "O Clementine Remote"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Σχετικά με το Clementine Remote"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2505,6 +2697,12 @@
             "value" : "Přidat do seznamu skladeb"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Προσθήκη στη λίστα αναπαραγωγής"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2551,6 +2749,12 @@
     },
     "Add to queue" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Προσθήκη στη λίστα αναμονής"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2595,6 +2799,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Přidáno do seznamu skladeb"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Προστέθηκε στη λίστα αναπαραγωγής"
           }
         },
         "es" : {
@@ -2649,6 +2859,12 @@
             "value" : "Adresa"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Διεύθυνση"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2701,6 +2917,12 @@
             "value" : "Přidá do seznamu skladeb"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το προσθέτει στη λίστα αναπαραγωγής"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2751,6 +2973,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Přidá do seznamu skladeb vybranou skladbu z řady. Chcete-li vybrat jinou, podržte prst na obrazovce."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Προσθέτει στη λίστα αναπαραγωγής που έχει επιλεγεί στη λίστα αναμονής. Αγγίξτε παρατεταμένα για να επιλέξετε άλλη."
           }
         },
         "et" : {
@@ -3071,6 +3299,12 @@
             "value" : "Album %@"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Άλμπουμ %@"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3127,6 +3361,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Interpret / Jahr"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Καλλιτέχνης άλμπουμ / Άλμπουμ"
           }
         },
         "es" : {
@@ -3259,6 +3499,12 @@
             "value" : "Složky alb"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Φάκελοι άλμπουμ"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3305,6 +3551,12 @@
             "value" : "Album · %@"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Άλμπουμ · %@"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3349,6 +3601,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alba"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Άλμπουμ"
           }
         },
         "es" : {
@@ -3398,6 +3656,12 @@
     "Any network" : {
       "comment" : "A choice under Download over.",
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Οποιοδήποτε δίκτυο"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3418,6 +3682,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vzhled"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Εμφάνιση"
           }
         },
         "es" : {
@@ -3467,6 +3737,12 @@
     "Arnaud Bienner (Clementine)" : {
       "localizations" : {
         "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arnaud Bienner (Clementine)"
+          }
+        },
+        "el" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Arnaud Bienner (Clementine)"
@@ -3534,6 +3810,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Interpret"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Καλλιτέχνης"
           }
         },
         "es" : {
@@ -3678,6 +3960,12 @@
             "value" : "Interpret / Album"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Καλλιτέχνης / Άλμπουμ"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3820,6 +4108,12 @@
             "value" : "Album"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Καλλιτέχνης / Χρονολογία"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3950,6 +4244,12 @@
             "value" : "Složky umělců"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Φάκελοι καλλιτεχνών"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3994,6 +4294,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Umělci"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Καλλιτέχνες"
           }
         },
         "es" : {
@@ -4058,6 +4364,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aufsteigend"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αύξουσα σειρά"
           }
         },
         "es" : {
@@ -4872,6 +5184,12 @@
             "value" : "Abbrechen"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ακύρωση"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4996,6 +5314,12 @@
             "value" : "Zrušit stahování"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ακύρωση λήψης"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5048,6 +5372,12 @@
             "value" : "Změnit"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αλλαγή"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5098,6 +5428,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vybrat, kde přehrávat"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Επιλογή συσκευής αναπαραγωγής"
           }
         },
         "es" : {
@@ -5300,6 +5636,12 @@
             "value" : "Smazat seznam skladeb"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Να εκκαθαριστεί η λίστα αναπαραγωγής;"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5341,6 +5683,12 @@
     "Clementine" : {
       "localizations" : {
         "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine"
+          }
+        },
+        "el" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clementine"
@@ -5420,6 +5768,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clementine-Fernbedienung"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine Remote"
           }
         },
         "es" : {
@@ -5528,6 +5882,12 @@
             "value" : "Aplikace Clementine Remote ovládá hudební přehrávač Clementine ve vašem počítači. Neshromažďuje žádná data: komunikuje pouze s vaším vlastním přehrávačem Clementine ve vaší vlastní síti."
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το Clementine Remote ελέγχει το πρόγραμμα αναπαραγωγής μουσικής Clementine στον υπολογιστή σας. Δεν συλλέγει δεδομένα: επικοινωνεί μόνο με το δικό σας Clementine, στο δικό σας δίκτυο."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5568,6 +5928,12 @@
             "value" : "Aplikace Clementine sem může odesílat svou hudbu, když se přehrává na jiných zařízeních. Nastavení se projeví při příštím připojení aplikace."
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το Clementine μπορεί να στέλνει τη μουσική του εδώ όταν αναπαράγει μουσική σε άλλες συσκευές. Η αλλαγή θα ισχύσει την επόμενη φορά που θα συνδεθεί η εφαρμογή."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5606,6 +5972,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clementine nemůže přidávat do seznamu skladeb"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το Clementine δεν μπορεί να το προσθέσει στη λίστα αναπαραγωγής"
           }
         },
         "es" : {
@@ -5658,6 +6030,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clementine vytvoří seznam skladeb a zobrazí ho."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το Clementine δημιουργεί τη λίστα αναπαραγωγής και την εμφανίζει."
           }
         },
         "et" : {
@@ -6180,6 +6558,12 @@
             "value" : "Clementine přijímá pouze připojení z vlastní místní sítě."
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το Clementine δέχεται συνδέσεις μόνο από το τοπικό του δίκτυο."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6232,6 +6616,12 @@
             "value" : "Aplikace Clementine přijímá pouze připojení z místní sítě. Chcete-li se připojit z jiného místa, vypněte v nastavení pro síťové vzdálené ovládání volbu Povolit spojení pouze z místní sítě."
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το Clementine δέχεται συνδέσεις μόνο από το τοπικό του δίκτυο. Για να συνδεθείτε από αλλού, απενεργοποιήστε την επιλογή «Να επιτρέπονται μόνο συνδέσεις από το τοπικό δίκτυο» στις ρυθμίσεις τηλεχειριστηρίου δικτύου του."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6272,6 +6662,12 @@
             "value" : "Clementine přehrává hudbu v počítači nebo ji odesílá do zařízení, které je k němu připojeno."
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το Clementine αναπαράγει μουσική στον υπολογιστή του ή τη στέλνει σε μια συσκευή που είναι συνδεδεμένη σε αυτό."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6310,6 +6706,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clementine odmítla spojení"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το Clementine αρνήθηκε τη σύνδεση"
           }
         },
         "es" : {
@@ -6364,6 +6766,12 @@
             "value" : "Clementine přestala odpovídat. Prověřte, zda je zařízení stále v provozu, a pak je znovu připojte."
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το Clementine σταμάτησε να απαντά. Βεβαιωθείτε ότι εκτελείται ακόμη και συνδεθείτε ξανά."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6408,6 +6816,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hlasitost Clementine"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ένταση ήχου Clementine"
           }
         },
         "et" : {
@@ -6457,6 +6871,12 @@
             "value" : "Clementine z tohoto telefonu již nebude ověřovat žádný další autorizační kód po %@. Poté zadejte kód zobrazený v nastavení pro síťové vzdálené ovládání."
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το Clementine δεν θα ελέγξει άλλον κωδικό πιστοποίησης από αυτό το τηλέφωνο για %@. Έπειτα, εισαγάγετε τον κωδικό που εμφανίζεται στις ρυθμίσεις τηλεχειριστηρίου δικτύου του."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6495,6 +6915,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Protokol dálkového ovládání Clementine"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το πρωτόκολλο τηλεχειρισμού του Clementine"
           }
         },
         "et" : {
@@ -6541,6 +6967,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zavřít přehrávač"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κλείσιμο προβολής αναπαραγωγής"
           }
         },
         "es" : {
@@ -7063,6 +7495,12 @@
             "value" : "Připojit se ke Clementine"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Σύνδεση στο Clementine"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7107,6 +7545,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nejprve se připojit ke Clementine v aplikaci Clementine Remote."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Συνδεθείτε πρώτα στο Clementine μέσω του Clementine Remote."
           }
         },
         "et" : {
@@ -7155,6 +7599,12 @@
             "value" : "Při spuštění aplikace se připojit k poslednímu zařízení Clementine."
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Σύνδεση στο τελευταίο Clementine κατά την εκκίνηση της εφαρμογής."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7193,6 +7643,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Připojeno"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Συνδεδεμένο"
           }
         },
         "et" : {
@@ -7234,6 +7690,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Připojeno po"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Διάρκεια σύνδεσης"
           }
         },
         "et" : {
@@ -7448,6 +7910,12 @@
             "value" : "Připojuje se..."
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Σύνδεση…"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7654,6 +8122,12 @@
     },
     "Copyright Apple Inc. and the SwiftProtobuf project authors. Licensed under the Apache License, Version 2.0." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Πνευματικά δικαιώματα Apple Inc. και των δημιουργών του έργου SwiftProtobuf. Διατίθεται υπό την άδεια Apache, έκδοση 2.0."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7692,6 +8166,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Autorské právo David Sansome a Andreas Muttscheller. Licencováno pod licencí Apache, verze 2.0."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Πνευματικά δικαιώματα David Sansome και Andreas Muttscheller. Διατίθεται υπό την άδεια Apache, έκδοση 2.0."
           }
         },
         "et" : {
@@ -7734,6 +8214,12 @@
             "value" : "Nepodařilo se připojit ke Clementine"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν ήταν δυνατή η σύνδεση στο Clementine"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7768,6 +8254,12 @@
     },
     "Couldn't create the playlist. Creating playlists needs Clementine 1.4 or later." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν ήταν δυνατή η δημιουργία της λίστας αναπαραγωγής. Η δημιουργία λιστών αναπαραγωγής απαιτεί Clementine 1.4 ή νεότερο."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7806,6 +8298,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nepodařilo se stáhnout sbírku: %@"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν ήταν δυνατή η λήψη της βιβλιοθήκης: %@"
           }
         },
         "es" : {
@@ -7847,7 +8345,21 @@
       }
     },
     "Couldn't finish syncing. It tries again when you connect." : {
-      "comment" : "Something kept on the phone whose sync was cut short, such as by losing the connection."
+      "comment" : "Something kept on the phone whose sync was cut short, such as by losing the connection.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν ήταν δυνατή η ολοκλήρωση του συγχρονισμού. Θα γίνει νέα προσπάθεια όταν συνδεθείτε."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synkroniseringen kunde inte slutföras. Appen försöker igen nästa gång du ansluter."
+          }
+        }
+      }
     },
     "Couldn't reach Clementine" : {
       "localizations" : {
@@ -8029,6 +8541,12 @@
             "value" : "Nepodařilo se spojit se s Clementine."
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν ήταν δυνατή η επικοινωνία με το Clementine."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8067,6 +8585,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nepodařilo se uložit soubor"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν ήταν δυνατή η αποθήκευση του αρχείου"
           }
         },
         "es" : {
@@ -8115,6 +8639,12 @@
             "value" : "Obálka"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Εξώφυλλο"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8153,6 +8683,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vytvořit"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δημιουργία"
           }
         },
         "es" : {
@@ -8201,6 +8737,12 @@
             "value" : "Tmavý"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Σκούρο"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8235,6 +8777,12 @@
     },
     "Data sent / received" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Απεσταλμένα / ληφθέντα δεδομένα"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8270,6 +8818,12 @@
     "David Sansome (Clementine)" : {
       "localizations" : {
         "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "David Sansome (Clementine)"
+          }
+        },
+        "el" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "David Sansome (Clementine)"
@@ -8325,6 +8879,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Absteigend"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Φθίνουσα σειρά"
           }
         },
         "es" : {
@@ -8455,6 +9015,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Podrobnosti"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Λεπτομέρειες"
           }
         },
         "es" : {
@@ -8805,6 +9371,12 @@
     },
     "Disconnect from Clementine" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αποσύνδεση από το Clementine"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9011,6 +9583,12 @@
     },
     "Disconnects Clementine Remote from Clementine." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αποσυνδέει το Clementine Remote από το Clementine."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10011,6 +10589,12 @@
     },
     "Download finished" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η λήψη ολοκληρώθηκε"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10045,6 +10629,12 @@
     },
     "Download library" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Λήψη βιβλιοθήκης"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10086,6 +10676,12 @@
     "Download over" : {
       "comment" : "A setting: which networks songs download over, for downloads and for what's kept on this phone. Its choices follow.",
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Λήψη μέσω"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10435,6 +11031,12 @@
     },
     "Download songs, albums and playlists from the player, the queue and the library. They're saved in the Files app." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κάντε λήψη τραγουδιών, άλμπουμ και λιστών αναπαραγωγής από την προβολή αναπαραγωγής, τη λίστα αναμονής και τη βιβλιοθήκη. Αποθηκεύονται στην εφαρμογή «Αρχεία»."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10629,6 +11231,12 @@
     },
     "Downloaded songs" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ληφθέντα τραγούδια"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10669,6 +11277,12 @@
     },
     "Downloading" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Λήψη σε εξέλιξη"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11363,6 +11977,12 @@
     "Downloads aren't allowed on this network" : {
       "comment" : "A download didn't start, because Download over, in Settings, doesn't allow the network the phone is on.",
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν επιτρέπονται λήψεις σε αυτό το δίκτυο"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11379,6 +11999,12 @@
     },
     "Downloads only run on Wi-Fi." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Οι λήψεις εκτελούνται μόνο μέσω Wi-Fi."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11419,6 +12045,12 @@
     },
     "Downloads songs again when they differ from those on this phone." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Πραγματοποιεί νέα λήψη των τραγουδιών όταν διαφέρουν από εκείνα σε αυτό το τηλέφωνο."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11459,6 +12091,12 @@
     },
     "Enter the auth code shown in Clementine's Network Remote settings." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Εισαγάγετε τον κωδικό πιστοποίησης που εμφανίζεται στις ρυθμίσεις τηλεχειριστηρίου δικτύου του Clementine."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11671,6 +12309,12 @@
             "value" : "Oben Suchbegriffe eingeben, um Musik auf Ihrem Rechner oder im Internet zu finden"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Βρείτε μουσική στη βιβλιοθήκη σας και στις διαδικτυακές υπηρεσίες του Clementine."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11795,6 +12439,12 @@
     },
     "Finished" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ολοκληρώθηκε"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12144,6 +12794,12 @@
             "value" : "Genre / Interpret / Album"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Είδος μουσικής / Άλμπουμ"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12284,6 +12940,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Genre / Interpret / Album"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Είδος μουσικής / Καλλιτέχνης / Άλμπουμ"
           }
         },
         "es" : {
@@ -12558,6 +13220,12 @@
     },
     "Inside the artist's folder, save each song in a folder named after its album." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Μέσα στον φάκελο του καλλιτέχνη, αποθήκευση κάθε τραγουδιού σε φάκελο με το όνομα του άλμπουμ του."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12586,6 +13254,12 @@
     },
     "Internet" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Διαδίκτυο"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12626,6 +13300,12 @@
     },
     "Is Clementine running? Is it version %@ or later, with the network remote turned on in its settings? Is the address right?" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Εκτελείται το Clementine; Είναι έκδοση %@ ή νεότερη, με ενεργοποιημένο το τηλεχειριστήριο δικτύου στις ρυθμίσεις του; Είναι σωστή η διεύθυνση;"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12660,6 +13340,12 @@
     },
     "John Maguire (Clementine)" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "John Maguire (Clementine)"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12699,7 +13385,21 @@
       }
     },
     "Keep on this phone" : {
-      "comment" : "Saves the music on the phone and keeps it up to date."
+      "comment" : "Saves the music on the phone and keeps it up to date.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Διατήρηση σε αυτό το τηλέφωνο"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spara på den här telefonen"
+          }
+        }
+      }
     },
     "Keep the screen on" : {
       "localizations" : {
@@ -12850,17 +13550,59 @@
       }
     },
     "Keeping %@ on this phone" : {
-      "comment" : "Shown for a moment after choosing Keep on this phone; the placeholder is an album or an artist."
+      "comment" : "Shown for a moment after choosing Keep on this phone; the placeholder is an album or an artist.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Διατήρηση στο τηλέφωνο: %@"
+          }
+        }
+      }
     },
     "Kept as it is" : {
-      "comment" : "How often something kept on the phone is updated from Clementine, short: never, so it keeps the songs it has."
+      "comment" : "How often something kept on the phone is updated from Clementine, short: never, so it keeps the songs it has.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Διατήρηση ως έχει"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Behålls oförändrat"
+          }
+        }
+      }
     },
     "Kept on this phone" : {
-      "comment" : "Heading of the things you chose to keep on the phone."
+      "comment" : "Heading of the things you chose to keep on the phone.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Διατηρούνται σε αυτό το τηλέφωνο"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sparat på den här telefonen"
+          }
+        }
+      }
     },
     "Last.fm" : {
       "localizations" : {
         "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last.fm"
+          }
+        },
+        "el" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Last.fm"
@@ -13084,6 +13826,12 @@
     },
     "Let Clementine play on this phone" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Να επιτρέπεται στο Clementine η αναπαραγωγή σε αυτό το τηλέφωνο"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13444,6 +14192,12 @@
     },
     "Light" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ανοιχτό"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13650,6 +14404,12 @@
     },
     "Loading…" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Φόρτωση…"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13690,6 +14450,12 @@
     },
     "Local Network is off" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η πρόσβαση στο τοπικό δίκτυο είναι ανενεργή"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13718,6 +14484,12 @@
     },
     "Looking for Clementine…" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναζήτηση του Clementine…"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13758,6 +14530,12 @@
     },
     "Looking for lyrics…" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναζήτηση στίχων…"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13792,6 +14570,12 @@
     },
     "Lost the connection to Clementine" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Χάθηκε η σύνδεση με το Clementine"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13986,6 +14770,12 @@
     },
     "Love on Last.fm" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Προσθήκη στα αγαπημένα του Last.fm"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14186,6 +14976,12 @@
     },
     "Lyrics" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Στίχοι"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14226,6 +15022,12 @@
     },
     "Lyrics and details" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Στίχοι και λεπτομέρειες"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14266,6 +15068,12 @@
     },
     "More options" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Περισσότερες επιλογές"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14306,6 +15114,12 @@
     },
     "Name" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Όνομα"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14346,6 +15160,12 @@
     },
     "Needs Clementine %@ or later, with Tools → Preferences → Network Remote turned on." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Απαιτείται Clementine %@ ή νεότερο, με ενεργοποιημένο το τηλεχειριστήριο δικτύου από τα Εργαλεία → Προτιμήσεις → Τηλεχειριστήριο δικτύου."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14386,6 +15206,12 @@
     },
     "New playlist" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Νέα λίστα αναπαραγωγής"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14420,6 +15246,12 @@
     },
     "New playlist…" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Νέα λίστα αναπαραγωγής…"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14454,6 +15286,12 @@
     },
     "Next" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Επόμενο"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14808,6 +15646,12 @@
     },
     "No library yet" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν υπάρχει ακόμη βιβλιοθήκη"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14841,7 +15685,21 @@
       }
     },
     "No longer in Clementine" : {
-      "comment" : "Something kept on the phone that Clementine doesn't have any more, such as a deleted playlist. Its songs stay on the phone."
+      "comment" : "Something kept on the phone that Clementine doesn't have any more, such as a deleted playlist. Its songs stay on the phone.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν υπάρχει πλέον στο Clementine"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finns inte längre i Clementine"
+          }
+        }
+      }
     },
     "No lyrics found." : {
       "localizations" : {
@@ -15011,6 +15869,12 @@
     },
     "No song playing" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν αναπαράγεται τραγούδι"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15045,6 +15909,12 @@
     },
     "No songs" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν υπάρχουν τραγούδια"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15227,6 +16097,12 @@
     },
     "Not looking on this network" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν γίνεται αναζήτηση σε αυτό το δίκτυο"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15267,6 +16143,12 @@
     },
     "Not showing up? Check that its network remote is turned on, or enter its address below." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν εμφανίζεται; Βεβαιωθείτε ότι το τηλεχειριστήριο δικτύου του είναι ενεργοποιημένο ή εισαγάγετε τη διεύθυνσή του παρακάτω."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15307,6 +16189,12 @@
     },
     "Nothing here" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν υπάρχει τίποτα εδώ"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15341,6 +16229,12 @@
     },
     "OK" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Εντάξει"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15374,13 +16268,41 @@
       }
     },
     "On iPad" : {
-      "comment" : "The tab with the music saved on the iPad, as opposed to Clementine on the computer. Keep it short: it's a tab label, under an icon, beside four others."
+      "comment" : "The tab with the music saved on the iPad, as opposed to Clementine on the computer. Keep it short: it's a tab label, under an icon, beside four others.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Στο iPad"
+          }
+        }
+      }
     },
     "On phone" : {
-      "comment" : "The tab with the music saved on the phone, as opposed to Clementine on the computer. Keep it short: it's a tab label, under an icon, beside four others."
+      "comment" : "The tab with the music saved on the phone, as opposed to Clementine on the computer. Keep it short: it's a tab label, under an icon, beside four others.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Στο τηλέφωνο"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "På telefonen"
+          }
+        }
+      }
     },
     "On this phone" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Σε αυτό το τηλέφωνο"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15421,6 +16343,12 @@
     },
     "On your network" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Στο δίκτυό σας"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15628,6 +16556,12 @@
     },
     "Open Clementine Remote to connect" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ανοίξτε το Clementine Remote για να συνδεθείτε"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15662,6 +16596,12 @@
     },
     "Open Settings" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Άνοιγμα ρυθμίσεων"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15702,6 +16642,12 @@
     },
     "Open in new playlist" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Άνοιγμα σε νέα λίστα αναπαραγωγής"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15872,6 +16818,12 @@
     },
     "Opens Clementine Remote and connects to the last Clementine." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ανοίγει το Clementine Remote και συνδέεται στο τελευταίο Clementine."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15906,6 +16858,12 @@
     },
     "Opens the player" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ανοίγει την προβολή αναπαραγωγής"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15946,6 +16904,12 @@
     },
     "Or enter its address" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ή εισαγάγετε τη διεύθυνσή του"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15986,6 +16950,12 @@
     },
     "Other matches" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Άλλα αποτελέσματα"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16174,6 +17144,12 @@
     },
     "Pauses Clementine." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Θέτει την αναπαραγωγή του Clementine σε παύση."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16214,6 +17190,12 @@
     },
     "Phone volume" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ένταση ήχου τηλεφώνου"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16254,6 +17236,12 @@
     },
     "Pick the Clementine you want to control. It needs to be on the same Wi-Fi as this phone." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Επιλέξτε το Clementine που θέλετε να ελέγχετε. Πρέπει να βρίσκεται στο ίδιο δίκτυο Wi-Fi με αυτό το τηλέφωνο."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16608,6 +17596,12 @@
     },
     "Play next" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναπαραγωγή στη συνέχεια"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16648,6 +17642,12 @@
     },
     "Play now" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναπαραγωγή τώρα"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16688,6 +17688,12 @@
     },
     "Play on" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναπαραγωγή σε"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16876,6 +17882,12 @@
     },
     "Play, pause and skip songs in Clementine." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναπαραγωγή, παύση και παράλειψη τραγουδιών στο Clementine."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16926,6 +17938,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Musikspieler"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναπαραγωγή"
           }
         },
         "es" : {
@@ -17070,6 +18088,12 @@
     },
     "Playing" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναπαράγεται"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17105,6 +18129,12 @@
     "Playing from" : {
       "comment" : "Small heading at the top of the player, above the name of the playlist the song is playing from.",
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναπαραγωγή από"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17139,6 +18169,12 @@
     },
     "Playing next" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Επόμενα προς αναπαραγωγή"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17173,6 +18209,12 @@
     },
     "Playing on %@" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναπαραγωγή στη συσκευή %@"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17223,6 +18265,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wiedergabeliste"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Λίστα αναπαραγωγής"
           }
         },
         "es" : {
@@ -17343,6 +18391,12 @@
     },
     "Playlist %@" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Λίστα αναπαραγωγής %@"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17377,6 +18431,12 @@
     },
     "Playlist folder" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Φάκελος λίστας αναπαραγωγής"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17411,6 +18471,12 @@
     },
     "Plays Clementine if it's paused, and pauses it if it's playing." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ξεκινά την αναπαραγωγή στο Clementine αν είναι σε παύση και τη θέτει σε παύση αν αναπαράγει μουσική."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17439,6 +18505,12 @@
     },
     "Plays it, or adds it to the playlist if Clementine is playing" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το αναπαράγει ή το προσθέτει στη λίστα αναπαραγωγής αν το Clementine αναπαράγει ήδη μουσική"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17483,6 +18555,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bitte Clementine aktualisieren! Sie benötigen Clementine %1$@ oder höher."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ενημερώστε το Clementine. Απαιτείται Clementine %@ ή νεότερο."
           }
         },
         "es" : {
@@ -17733,6 +18811,12 @@
     },
     "Position" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Θέση"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17932,10 +19016,36 @@
       }
     },
     "Preparing…" : {
-      "comment" : "Something kept on the phone, while Clementine makes the list of its songs."
+      "comment" : "Something kept on the phone, while Clementine makes the list of its songs.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Προετοιμασία…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparando…"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Förbereder…"
+          }
+        }
+      }
     },
     "Previous" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Προηγούμενο"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17976,6 +19086,12 @@
     },
     "Queue" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Λίστα αναμονής"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18016,6 +19132,12 @@
     },
     "Rate %@ stars" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αξιολόγηση με %@ αστέρια"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18063,6 +19185,24 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "Hodnotit %lld hvězdičky"
+                }
+              }
+            }
+          }
+        },
+        "el" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Αξιολόγηση με %lld αστέρι"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Αξιολόγηση με %lld αστέρια"
                 }
               }
             }
@@ -18234,6 +19374,12 @@
     },
     "Rated %@ stars" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αξιολογήθηκε με %@ αστέρια"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18340,13 +19486,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Τραγούδι βαθμολογία %lld αστέρια"
+                  "value" : "Αξιολογήθηκε με %lld αστέρι"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Τραγούδι βαθμολογία %lld αστέρια"
+                  "value" : "Αξιολογήθηκε με %lld αστέρια"
                 }
               }
             }
@@ -19032,6 +20178,12 @@
     },
     "Reconnecting to Clementine" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Επανασύνδεση στο Clementine"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19066,6 +20218,12 @@
     },
     "Reconnecting…" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Επανασύνδεση…"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19099,13 +20257,41 @@
       }
     },
     "Remove" : {
-      "comment" : "The button that removes something kept on the phone, after asking."
+      "comment" : "The button that removes something kept on the phone, after asking.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αφαίρεση"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta bort"
+          }
+        }
+      }
     },
     "Remove %@? Its songs are deleted from this phone, unless something else you keep has them." : {
-      "comment" : "Asks before removing something kept on the phone; the placeholder is its name."
+      "comment" : "Asks before removing something kept on the phone; the placeholder is its name.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Να αφαιρεθεί το %@; Τα τραγούδια του θα διαγραφούν από αυτό το τηλέφωνο, εκτός αν περιλαμβάνονται και σε άλλο στοιχείο που διατηρείτε."
+          }
+        }
+      }
     },
     "Remove from list" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αφαίρεση από τη λίστα"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19305,7 +20491,21 @@
       }
     },
     "Remove from this phone…" : {
-      "comment" : "Menu item on something kept on the phone; asks first."
+      "comment" : "Menu item on something kept on the phone; asks first.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αφαίρεση από αυτό το τηλέφωνο…"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta bort från den här telefonen…"
+          }
+        }
+      }
     },
     "Repeat album" : {
       "localizations" : {
@@ -19991,6 +21191,12 @@
     },
     "Replace playlist" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αντικατάσταση λίστας αναπαραγωγής"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20031,6 +21237,12 @@
     },
     "Save a playlist's songs in a folder named after it." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αποθήκευση των τραγουδιών μιας λίστας αναπαραγωγής σε φάκελο με το όνομά της."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20065,6 +21277,12 @@
     },
     "Save each song in a folder named after its artist." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αποθήκευση κάθε τραγουδιού σε φάκελο με το όνομα του καλλιτέχνη του."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20289,6 +21507,12 @@
             "value" : "Nach etwas suchen"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναζήτηση στο Clementine"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20413,6 +21637,12 @@
     },
     "Search again" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Νέα αναζήτηση"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20453,6 +21683,12 @@
     },
     "Search the library" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναζήτηση στη βιβλιοθήκη"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20665,6 +21901,12 @@
     },
     "Searching for “%@”…" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναζήτηση για «%@»…"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20705,6 +21947,12 @@
     },
     "See All" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Προβολή όλων"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20745,6 +21993,12 @@
     },
     "See all %@" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Προβολή όλων των %@"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20779,6 +22033,12 @@
     },
     "Select" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Επιλογή"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20819,6 +22079,12 @@
     },
     "Select songs" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Επιλογή τραγουδιών"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20859,6 +22125,12 @@
     },
     "Set up in Clementine" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ρύθμιση στο Clementine"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21065,6 +22337,12 @@
     },
     "Show" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Προβολή"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21253,6 +22531,12 @@
     },
     "Shows the cover full size" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Εμφανίζει το εξώφυλλο σε πλήρες μέγεθος"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21287,6 +22571,12 @@
     },
     "Shows the lyrics" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Εμφανίζει τους στίχους"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21326,7 +22616,27 @@
       }
     },
     "Shuffle" : {
-      "comment" : "Button: plays, on the phone, the songs of something kept on it, in random order."
+      "comment" : "Button: plays, on the phone, the songs of something kept on it, in random order.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Τυχαία αναπαραγωγή"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aleatorizar"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blanda och spela"
+          }
+        }
+      }
     },
     "Shuffle albums" : {
       "localizations" : {
@@ -22012,6 +23322,12 @@
     },
     "Skips to Clementine's next song." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Μεταβαίνει στο επόμενο τραγούδι του Clementine."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22062,6 +23378,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lied"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Τραγούδι"
           }
         },
         "es" : {
@@ -22182,6 +23504,12 @@
     },
     "Song %@" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Τραγούδι %@"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22216,6 +23544,12 @@
     },
     "Song · %@" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Τραγούδι · %@"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22250,6 +23584,12 @@
     },
     "Songs" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Τραγούδια"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22290,6 +23630,12 @@
     },
     "Songs are saved in Clementine Remote's folder, in the Files app." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Τα τραγούδια αποθηκεύονται στον φάκελο του Clementine Remote, στην εφαρμογή «Αρχεία»."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22638,6 +23984,12 @@
     },
     "Starts Clementine playing." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ξεκινά την αναπαραγωγή στο Clementine."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22672,6 +24024,12 @@
     },
     "Station · %@" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Σταθμός · %@"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22706,6 +24064,12 @@
     },
     "Stations" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Σταθμοί"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23042,6 +24406,12 @@
     },
     "Stops Clementine." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Σταματά την αναπαραγωγή στο Clementine."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23082,6 +24452,12 @@
     },
     "Stream" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ροή"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23110,6 +24486,12 @@
     },
     "Streams can't be downloaded" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν είναι δυνατή η λήψη ροών"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23138,6 +24520,12 @@
     },
     "Switch Clementine" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αλλαγή Clementine"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23172,6 +24560,12 @@
     },
     "Switching…" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αλλαγή…"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23205,10 +24599,36 @@
       }
     },
     "Sync now" : {
-      "comment" : "Menu item: syncs what's kept on the phone with Clementine now."
+      "comment" : "Menu item: syncs what's kept on the phone with Clementine now.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Συγχρονισμός τώρα"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincronizar ahora"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synkronisera nu"
+          }
+        }
+      }
     },
     "System" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Σύστημα"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23249,6 +24669,12 @@
     },
     "Thanks to all the [contributors](https://github.com/clementine-player/Android-Remote/graphs/contributors) and [translators](https://app.transifex.com/davidsansome/clementine-remot/)!" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ευχαριστούμε όλους τους [συντελεστές](https://github.com/clementine-player/Android-Remote/graphs/contributors) και τους [μεταφραστές](https://app.transifex.com/davidsansome/clementine-remot/)!"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23283,6 +24709,12 @@
     },
     "That address is on your network, and Clementine Remote needs Local Network access to reach it. Turn on Local Network in Settings." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αυτή η διεύθυνση βρίσκεται στο δίκτυό σας και το Clementine Remote χρειάζεται πρόσβαση στο τοπικό δίκτυο για να συνδεθεί σε αυτήν. Ενεργοποιήστε το «Τοπικό δίκτυο» στις Ρυθμίσεις."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23489,6 +24921,12 @@
     },
     "That's no longer in Clementine" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αυτό δεν υπάρχει πλέον στο Clementine"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23529,6 +24967,12 @@
     },
     "The library Clementine sent is damaged" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η βιβλιοθήκη που έστειλε το Clementine είναι κατεστραμμένη"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23563,6 +25007,12 @@
     },
     "The phone's volume buttons change Clementine's volume while the app is open." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Τα κουμπιά έντασης ήχου του τηλεφώνου αλλάζουν την ένταση του Clementine όσο η εφαρμογή είναι ανοιχτή."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23763,6 +25213,12 @@
     },
     "This phone doesn't have a local network address. Try turning off \"Use only local IP addresses\" in Clementine's settings." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αυτό το τηλέφωνο δεν έχει διεύθυνση τοπικού δικτύου. Δοκιμάστε να απενεργοποιήσετε την επιλογή «Χρήση μόνο τοπικών διευθύνσεων IP» στις ρυθμίσεις του Clementine."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23791,6 +25247,12 @@
     },
     "This phone isn't on Wi-Fi. Connect to the same network as Clementine. To reach Clementine over the internet, forward its port and turn off \"Use only local IP addresses\" in Clementine's settings." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αυτό το τηλέφωνο δεν είναι συνδεδεμένο σε Wi-Fi. Συνδεθείτε στο ίδιο δίκτυο με το Clementine. Για να συνδεθείτε στο Clementine μέσω του διαδικτύου, προωθήστε τη θύρα του και απενεργοποιήστε την επιλογή «Χρήση μόνο τοπικών διευθύνσεων IP» στις ρυθμίσεις του."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23985,6 +25447,12 @@
     },
     "This program is distributed in the hope that it will be useful, but without any warranty." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αυτό το πρόγραμμα διανέμεται με την ελπίδα ότι θα είναι χρήσιμο, αλλά χωρίς καμία εγγύηση."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24019,6 +25487,12 @@
     },
     "This removes every song from the playlist in Clementine." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αυτό αφαιρεί όλα τα τραγούδια από τη λίστα αναπαραγωγής στο Clementine."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24053,6 +25527,12 @@
     },
     "Too many wrong auth codes" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Πάρα πολλοί λανθασμένοι κωδικοί πιστοποίησης"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24094,6 +25574,12 @@
     "Too many wrong auth codes. Clementine won't check another from this phone for %@." : {
       "comment" : "The placeholder is how long Clementine said to wait before it checks another auth code from this phone: \"10 seconds\", \"1 minute\", \"3 minutes\", \"2 hours\", or \"a while\" if it didn't say. The iOS app shows the same sentence with the duration in iOS's own words, which can't take another grammatical form, so write the sentence so the duration reads right as it is.",
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Πάρα πολλοί λανθασμένοι κωδικοί πιστοποίησης. Το Clementine δεν θα ελέγξει άλλον κωδικό από αυτό το τηλέφωνο για %@."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24134,6 +25620,12 @@
     },
     "Top Result" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κορυφαίο αποτέλεσμα"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24506,6 +25998,12 @@
             "value" : "Unbekannt"
           }
         },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Άγνωστο"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24624,6 +26122,12 @@
     },
     "Update library" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ενημέρωση βιβλιοθήκης"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24665,6 +26169,12 @@
     "Various artists" : {
       "comment" : "In the library, the artist that albums by several artists (compilations) are listed under, as Clementine lists them.",
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Διάφοροι καλλιτέχνες"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24841,6 +26351,12 @@
     },
     "Version %@" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Έκδοση %@"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24881,6 +26397,12 @@
     },
     "Volume %lld%%" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ένταση ήχου %lld%%"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24915,6 +26437,12 @@
     },
     "Volume buttons control Clementine" : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Τα κουμπιά έντασης ήχου ελέγχουν το Clementine"
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -25102,10 +26630,30 @@
       }
     },
     "Waiting for Clementine" : {
-      "comment" : "Something kept on the phone that hasn't synced yet, because Clementine isn't reachable."
+      "comment" : "Something kept on the phone that hasn't synced yet, because Clementine isn't reachable.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναμονή για το Clementine"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Väntar på Clementine"
+          }
+        }
+      }
     },
     "While connected to Clementine." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Όσο υπάρχει σύνδεση με το Clementine."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -25139,11 +26687,25 @@
       }
     },
     "Wi-Fi and mobile data, not in Low Data Mode" : {
-      "comment" : "A choice under Download over: Wi-Fi, and mobile data unless Low Data Mode is on."
+      "comment" : "A choice under Download over: Wi-Fi, and mobile data unless Low Data Mode is on.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wi-Fi και δεδομένα κινητού, όταν η «Χαμηλή κατανάλωση δεδομένων» είναι ανενεργή"
+          }
+        }
+      }
     },
     "Wi-Fi only" : {
       "comment" : "A choice under Download over. A metered Wi-Fi, such as another phone's hotspot, counts as mobile data.",
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Μόνο Wi-Fi"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -25160,6 +26722,12 @@
     },
     "Without Local Network access, Clementine Remote can't find Clementine on your network. Enter its address below, or turn on Local Network in Settings." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Χωρίς πρόσβαση στο τοπικό δίκτυο, το Clementine Remote δεν μπορεί να βρει το Clementine στο δίκτυό σας. Εισαγάγετε τη διεύθυνσή του παρακάτω ή ενεργοποιήστε το «Τοπικό δίκτυο» στις Ρυθμίσεις."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -25354,6 +26922,12 @@
     },
     "Your library isn't on this phone yet. Download it from Clementine to browse it here." : {
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η βιβλιοθήκη σας δεν βρίσκεται ακόμη σε αυτό το τηλέφωνο. Κάντε λήψη της από το Clementine για να περιηγηθείτε σε αυτήν εδώ."
+          }
+        },
         "et" : {
           "stringUnit" : {
             "state" : "translated",
@@ -25389,6 +26963,12 @@
     "a while" : {
       "comment" : "Shown instead of a duration when Clementine doesn't say how long to wait, in the sentences about too many wrong auth codes.",
       "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "λίγο"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
