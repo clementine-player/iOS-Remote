@@ -12,6 +12,7 @@ struct PlayerView: View {
     @State private var isDetailsPresented = false
     @State private var detailsPage = SongDetailsView.Page.details
     @State private var isOutputSheetPresented = false
+    @State private var isPlayFromSheetPresented = false
 
     /// Clementine, or the songs kept on this phone while they play.
     private var playback: any PlayerSource { model.playback }
@@ -110,6 +111,11 @@ struct PlayerView: View {
                 .presentationDetents([.medium, .large])
                 .presentationBackground(Palette.surfaceContainerLow)
         }
+        .sheet(isPresented: $isPlayFromSheetPresented) {
+            PlayFromSheet()
+                .presentationDetents([.medium])
+                .presentationBackground(Palette.surfaceContainerLow)
+        }
         .toasts(model.toasts)
     }
 
@@ -120,26 +126,28 @@ struct PlayerView: View {
                 .font(.title3)
                 .frame(width: 48, height: 48)
             Spacer()
-            if playback.isOnPhone {
-                Label(playingOnThisDevice, systemImage: UIDevice.current.userInterfaceIdiom == .pad ? "ipad" : "iphone")
-                    .textStyle(.labelLarge)
-                    .foregroundStyle(Palette.primary)
-                    .lineLimit(1)
-                    .accessibilityIdentifier("playingOnPhone")
-            } else {
-                VStack(spacing: 0) {
-                    Text("Playing from", comment: "Small heading at the top of the player, above the name of the playlist the song is playing from.")
-                        .textStyle(.labelMedium)
-                        .foregroundStyle(Palette.onSurfaceVariant)
-                    Text(session.activePlaylist?.name ?? "")
-                        .textStyle(.labelLarge)
-                        .foregroundStyle(Palette.onSurface)
-                        .lineLimit(1)
+            // Where it plays from: tapping it switches, when there's a choice.
+            if model.canChoosePlayFrom {
+                Button {
+                    isPlayFromSheetPresented = true
+                } label: {
+                    playingFrom
                 }
-                .accessibilityElement(children: .combine)
+                .buttonStyle(.plain)
+                .accessibilityHint(Text(
+                    "Play from",
+                    comment: "Title of a sheet, and a button's label: choose where the music plays from, Clementine or this phone."))
+            } else {
+                playingFrom
             }
             Spacer()
             Menu {
+                if model.canChoosePlayFrom {
+                    Button(
+                        String(localized: "Play from", comment: "Title of a sheet, and a button's label: choose where the music plays from, Clementine or this phone."),
+                        systemImage: UIDevice.current.userInterfaceIdiom == .pad ? "ipad" : "iphone"
+                    ) { isPlayFromSheetPresented = true }
+                }
                 Button("Stop", systemImage: "stop.fill") { playback.stop() }
                 if !playback.isOnPhone {
                     DownloadMenu()
@@ -154,6 +162,28 @@ struct PlayerView: View {
         .foregroundStyle(Palette.onSurface)
         .padding(.horizontal, Metrics.space1)
         .frame(height: Self.topBarHeight)
+    }
+
+    /// Where the player plays from: the songs kept on the device, or Clementine's playlist.
+    @ViewBuilder private var playingFrom: some View {
+        if playback.isOnPhone {
+            Label(playingOnThisDevice, systemImage: UIDevice.current.userInterfaceIdiom == .pad ? "ipad" : "iphone")
+                .textStyle(.labelLarge)
+                .foregroundStyle(Palette.primary)
+                .lineLimit(1)
+                .accessibilityIdentifier("playingOnPhone")
+        } else {
+            VStack(spacing: 0) {
+                Text("Playing from", comment: "Small heading at the top of the player, above the name of the playlist the song is playing from.")
+                    .textStyle(.labelMedium)
+                    .foregroundStyle(Palette.onSurfaceVariant)
+                Text(session.activePlaylist?.name ?? "")
+                    .textStyle(.labelLarge)
+                    .foregroundStyle(Palette.onSurface)
+                    .lineLimit(1)
+            }
+            .accessibilityElement(children: .combine)
+        }
     }
 
     /// Where the player says it plays the songs kept on the device.
