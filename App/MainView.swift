@@ -137,7 +137,8 @@ private struct NotReachableBanner: View {
     }
 }
 
-/// The now-playing strip above the tab bar; tapping it opens the player.
+/// The now-playing strip above the tab bar; tapping it opens the player. It shows the songs kept
+/// on this phone while they play.
 struct MiniPlayer: View {
     @Environment(AppModel.self) private var model
     @Environment(RemoteSession.self) private var session
@@ -145,7 +146,8 @@ struct MiniPlayer: View {
     let open: () -> Void
 
     var body: some View {
-        let song = session.song
+        let playback = model.playback
+        let song = playback.song
         HStack(spacing: Metrics.space3) {
             Button(action: open) {
                 HStack(spacing: Metrics.space3) {
@@ -171,21 +173,21 @@ struct MiniPlayer: View {
             .accessibilityHint("Opens the player")
             .accessibilityIdentifier("miniPlayer")
 
-            if session.hasOtherOutputs, placement != .inline {
+            if session.hasOtherOutputs, !playback.isOnPhone, placement != .inline {
                 OutputButton(size: 32) { model.isOutputSheetPresented = true }
             }
 
-            Button(action: session.playPause) {
-                Image(systemName: session.playState == .playing ? "pause.fill" : "play.fill")
+            Button(action: playback.playPause) {
+                Image(systemName: playback.playState == .playing ? "pause.fill" : "play.fill")
                     .contentTransition(.symbolEffect(.replace))
                     .foregroundStyle(Palette.onPrimaryContainer)
                     .frame(width: 36, height: 32)
                     .background(Palette.primaryContainer, in: .rect(cornerRadius: 12))
             }
             .buttonStyle(.plain)
-            .accessibilityLabel(session.playState == .playing ? "Pause" : "Play")
+            .accessibilityLabel(playback.playState == .playing ? "Pause" : "Play")
             if placement != .inline {
-                Button(action: session.next) {
+                Button(action: playback.next) {
                     Image(systemName: "forward.end.fill")
                         .foregroundStyle(Palette.onSurface)
                         .frame(width: 32, height: 32)
