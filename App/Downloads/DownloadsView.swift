@@ -324,8 +324,9 @@ extension KeptRule {
         }
     }
 
-    /// How it stands: why it didn't sync, or what it keeps.
-    func details(running: Bool) -> String {
+    /// How it stands: why it didn't sync, or what it keeps and, for a rule that's updated, when it
+    /// last was, as of `now`.
+    func details(running: Bool, now: Date = Date()) -> String {
         switch result {
         case .needsSetup(let message):
             return message
@@ -344,7 +345,7 @@ extension KeptRule {
                     localized: "Waiting for Clementine",
                     comment: "Something kept on the phone that hasn't synced yet, because Clementine isn't reachable.")
         default:
-            return [
+            let parts: [String?] = [
                 rule.refreshPolicy == .never
                     ? String(
                         localized: "Kept as it is",
@@ -352,11 +353,28 @@ extension KeptRule {
                     : String(
                         localized: "Every time you connect",
                         comment: "How often something kept on the phone is updated from Clementine, short: each time the phone connects to it."),
+                rule.refreshPolicy == .never ? nil : rule.lastSynced.map { updated($0, now: now) },
                 String(
                     localized: "\(songs) songs, \(formatBytes(bytes))",
                     comment: "How much of something kept is on the phone: the number of songs, and their size, such as \"180 MB\"."),
-            ].joined(separator: " · ")
+            ]
+            return parts.compactMap { $0 }.joined(separator: " · ")
         }
+    }
+
+    /// "Updated 2 hours ago", for a sync at `date` as of `now`.
+    private func updated(_ date: Date, now: Date) -> String {
+        if now.timeIntervalSince(date) < 60 {
+            return String(
+                localized: "Updated just now",
+                comment: "When something kept on the phone was last updated from Clementine: less than a minute ago.")
+        }
+        let formatter = RelativeDateTimeFormatter()
+        formatter.dateTimeStyle = .named
+        let ago = formatter.localizedString(for: date, relativeTo: now)
+        return String(
+            localized: "Updated \(ago)",
+            comment: "When something kept on the phone was last updated from Clementine. The placeholder is a relative time, such as \"2 hours ago\" or \"yesterday\". iOS and Android write it in their own words, so the sentence must read right with it as it is.")
     }
 }
 
