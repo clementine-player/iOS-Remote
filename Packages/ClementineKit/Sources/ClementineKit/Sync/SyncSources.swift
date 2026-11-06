@@ -32,6 +32,16 @@ public enum SyncSources {
             kind: Pb_Remote_SyncSourceKind.artist, refreshPolicy: refreshPolicy)
     }
 
+    /// A rule keeping the songs one of Clementine's smart playlists makes, made again each time it
+    /// refreshes. [sourceID] is as Clementine sent it ("smart/library/<uuid>").
+    public static func smartPlaylistRule(
+        serverID: String, sourceID: String, name: String, refreshPolicy: RefreshPolicy = .onConnect
+    ) -> SyncRule {
+        SyncRule(
+            serverID: serverID, sourceID: sourceID, title: name,
+            kind: Pb_Remote_SyncSourceKind.smartPlaylist, refreshPolicy: refreshPolicy)
+    }
+
     /// A rule keeping the songs of one of Clementine's playlists, as it changes.
     public static func playlistRule(
         serverID: String, id: Int32, name: String, refreshPolicy: RefreshPolicy = .onConnect
