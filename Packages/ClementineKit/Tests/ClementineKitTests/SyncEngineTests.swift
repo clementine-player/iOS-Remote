@@ -167,6 +167,18 @@ struct SyncEngineTests {
         #expect(await progress.heard.isEmpty)
     }
 
+    @Test func keepsASongAPlaylistHasTwiceOnce() async throws {
+        let playlist = try await rule("playlist/1")
+        await clementine.serve("playlist/1", [await song("a"), await song("b"), await song("a")])
+
+        let result = try await engine.sync(clementine)
+
+        #expect(result.rules[playlist] == .synced(songs: 2, downloaded: 2, skipped: 0))
+        #expect(try await store.ruleItems(ruleID: playlist).map(\.itemKey) == ["a", "b"])
+        #expect(await clementine.opened == ["/d/token/a-1", "/d/token/b-1"])
+        #expect(try await store.rule(id: playlist)?.lastSynced == Self.synced)
+    }
+
     @Test func aRuleKeptAsItIsSyncsOnceUntilItHasItsSongs() async throws {
         let album = try await rule("library/album/Pixies/Doolittle", refreshPolicy: .never)
         // The first sync fails, so the next one asks again.
