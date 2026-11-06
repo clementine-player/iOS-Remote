@@ -44,6 +44,15 @@ final class NetworkMonitor {
         network.allows(expensive: isExpensive, constrained: isConstrained)
     }
 
+    /// The network the phone is on now, as iOS first says: whether it's [expensive] and
+    /// [constrained]. Nil if iOS doesn't say, as when the task is cancelled.
+    nonisolated static func currentPath() async -> (expensive: Bool, constrained: Bool)? {
+        for await path in NWPathMonitor() {
+            return (expensive: path.isExpensive, constrained: path.isConstrained)
+        }
+        return nil
+    }
+
     /// What's wrong with the network for reaching Clementine, if anything.
     var problem: Problem? {
         if !isOnWiFi {
