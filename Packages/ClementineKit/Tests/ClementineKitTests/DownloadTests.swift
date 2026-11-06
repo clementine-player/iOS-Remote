@@ -216,6 +216,17 @@ struct DownloadTests {
         #expect(downloader.file(for: song).path == "/d/MyPlaylist/J. S. Bach/Goldberg Variations/Aria.ogg")
     }
 
+    @Test func savesNothingOutsideTheFolder() {
+        var options = DownloadOptions(directory: URL(filePath: "/d"))
+        options.playlistFolder = true
+        var song = song("Aria", artist: "..", album: " .. ")
+        song.filename = ".."
+        let downloader = SongDownloader(
+            endpoint: Endpoint(host: "x"), authCode: 0, request: RemoteMessage(.downloadSongs),
+            playlistName: "...", options: options)
+        #expect(downloader.file(for: song).path == "/d/Aria")
+    }
+
     @Test func forbidden() async throws {
         let clementine = try await FakeClementine()
         defer { clementine.stop() }

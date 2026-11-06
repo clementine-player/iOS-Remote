@@ -244,7 +244,9 @@ public struct SongDownloader: Sendable {
     }
 
     /// Drops the characters the Android app keeps out of file names, except "-", which is harmless.
+    /// A name of only dots, such as "..", is dropped too, so no song is saved outside the folder.
     static func clean(_ name: String) -> String {
-        name.filter { !"\\~#%&*{}/:<>?|\"".contains($0) }
+        let clean = name.filter { !"\\~#%&*{}/:<>?|\"".contains($0) }
+        return clean.trimmingCharacters(in: .whitespaces).allSatisfy { $0 == "." } ? "" : clean
     }
 }
