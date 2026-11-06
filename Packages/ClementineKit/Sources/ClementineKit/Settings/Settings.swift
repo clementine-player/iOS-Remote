@@ -21,6 +21,8 @@ public enum SettingKey {
     public static let playlistFolder = "pref_dl_pl_save_own_dir"
     public static let artistFolder = "pref_dl_artist_dir"
     public static let albumFolder = "pref_dl_album_dir"
+    /// Whether what's kept on the phone is updated in the background (BackgroundSync).
+    public static let backgroundSync = "pref_background_sync"
     // Connection
     public static let autoConnect = "pref_autoconnect"
     public static let port = "pref_port"
@@ -52,6 +54,7 @@ public struct Settings: Sendable {
         SettingKey.playlistFolder: false,
         SettingKey.artistFolder: true,
         SettingKey.albumFolder: true,
+        SettingKey.backgroundSync: true,
         SettingKey.autoConnect: true,
         SettingKey.port: Int(RemoteProtocol.defaultPort),
         SettingKey.keepScreenOn: false,
@@ -90,6 +93,7 @@ public struct Settings: Sendable {
     public var playlistFolder: Bool { store.bool(forKey: SettingKey.playlistFolder) }
     public var artistFolder: Bool { store.bool(forKey: SettingKey.artistFolder) }
     public var albumFolder: Bool { store.bool(forKey: SettingKey.albumFolder) }
+    public var backgroundSync: Bool { store.bool(forKey: SettingKey.backgroundSync) }
     public var autoConnect: Bool { store.bool(forKey: SettingKey.autoConnect) }
     public var port: UInt16 {
         UInt16(exactly: store.integer(forKey: SettingKey.port)) ?? RemoteProtocol.defaultPort

@@ -60,7 +60,8 @@ public struct SyncProgress: Sendable, Equatable {
 
 /// Syncs the rules for the connected Clementine while the app is connected to it: each time it
 /// connects, and when asked ([syncNow]), such as after a rule is made ([keep]) or removed
-/// ([remove]), over the networks Download over allows. Background sync comes later.
+/// ([remove]), over the networks Download over allows. [BackgroundSync] connects in the
+/// background for it.
 @MainActor
 @Observable
 public final class Syncer {
@@ -89,6 +90,9 @@ public final class Syncer {
     @ObservationIgnored private let timeout: Duration
     /// Whether the phone's network is one that Download over allows.
     @ObservationIgnored public var networkAllows: @MainActor (DownloadNetwork) -> Bool = { _ in true }
+    /// While set, as during a background sync, only this Clementine syncs: another that connects
+    /// is left alone, and doesn't become the one the rules shown are for.
+    @ObservationIgnored public var onlyServerID: String?
     @ObservationIgnored private var task: Task<Void, Never>?
     @ObservationIgnored private var again = false
     /// The rules the sync running is downloading songs for, by rule id.
@@ -112,6 +116,7 @@ public final class Syncer {
         manifests.handle(message)
         // Clementine says what it can do each time the app connects.
         guard message.type == .info else { return }
+        if let onlyServerID, session.syncing.serverID != onlyServerID { return }
         if session.syncing.supported {
             settings.syncServerID = session.syncing.serverID
             refresh()
@@ -198,6 +203,13 @@ public final class Syncer {
         await task?.value
     }
 
+    /// Stops the sync that's running, as when iOS ends a background sync. The songs downloaded
+    /// so far stay, and the next sync carries on.
+    public func stop() {
+        again = false
+        task?.cancel()
+    }
+
     private func runOnce() async {
         let syncing = session.syncing
         guard syncing.available else { return }
@@ -222,6 +234,8 @@ public final class Syncer {
             timeout: timeout)
         do {
             status.results = try await engine.sync(connection).rules
+        } catch is CancellationError {
+            // Stopped: what finished stays, and the next sync carries on.
         } catch {
             // The store failing, say: tried again next time.
             status.unavailable = true

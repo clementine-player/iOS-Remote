@@ -11,6 +11,7 @@ struct SettingsView: View {
     @AppStorage(SettingKey.librarySorting) private var sorting = LibrarySorting.ascending.rawValue
     @AppStorage(SettingKey.wifiOnly) private var wifiOnly = false
     @AppStorage(SettingKey.downloadNetwork) private var downloadNetwork: String?
+    @AppStorage(SettingKey.backgroundSync) private var backgroundSync = true
     @AppStorage(SettingKey.replaceExisting) private var replaceExisting = false
     @AppStorage(SettingKey.playlistFolder) private var playlistFolder = false
     @AppStorage(SettingKey.artistFolder) private var artistFolder = true
@@ -76,6 +77,16 @@ struct SettingsView: View {
                     Text(
                         "Download over",
                         comment: "A setting: which networks songs download over, for downloads and for what's kept on this phone. Its choices follow.")
+                }
+                if TestingFeatures.enabled {
+                    Toggle(isOn: $backgroundSync) {
+                        Text(
+                            "Update kept music in the background",
+                            comment: "A switch, under Download over: lets the phone update what's kept on it from Clementine by itself.")
+                        Text(
+                            "While the phone is charging, on a network Download over allows, music set to Every time I connect is updated from the last Clementine you connected to, if it's on.",
+                            comment: "Under the switch above. \"Every time I connect\" is the choice in the Keep on this phone sheet.")
+                    }
                 }
                 Toggle(isOn: $replaceExisting) {
                     Text("Replace existing files")

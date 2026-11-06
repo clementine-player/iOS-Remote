@@ -26359,6 +26359,9 @@
         }
       }
     },
+    "Update kept music in the background" : {
+      "comment" : "A switch, under Download over: lets the phone update what's kept on it from Clementine by itself."
+    },
     "Update library" : {
       "localizations" : {
         "el" : {
@@ -26930,6 +26933,9 @@
           }
         }
       }
+    },
+    "While the phone is charging, on a network Download over allows, music set to Every time I connect is updated from the last Clementine you connected to, if it's on." : {
+      "comment" : "Under the switch above. \"Every time I connect\" is the choice in the Keep on this phone sheet."
     },
     "Wi-Fi and mobile data, not in Low Data Mode" : {
       "comment" : "A choice under Download over: Wi-Fi, and mobile data unless Low Data Mode is on.",

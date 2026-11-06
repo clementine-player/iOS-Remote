@@ -131,9 +131,11 @@ public final class RemoteSession {
     // MARK: Connecting
 
     /// Connects to Clementine at [endpoint], called [name] (its address if nil). With [renderer],
-    /// this device offers itself as somewhere Clementine can play.
+    /// this device offers itself as somewhere Clementine can play. Without [sendPlaylistSongs], as
+    /// for a background sync, Clementine sends the playlists but not their songs.
     public func connect(
-        to endpoint: Endpoint, name: String? = nil, authCode: Int32, renderer: RendererCapabilities? = nil
+        to endpoint: Endpoint, name: String? = nil, authCode: Int32, renderer: RendererCapabilities? = nil,
+        sendPlaylistSongs: Bool = true
     ) {
         drop()
         reset()
@@ -145,7 +147,7 @@ public final class RemoteSession {
         connectedSince = nil
         trafficAtConnect = Traffic.byteCounts
         status = .connecting
-        open(sendPlaylistSongs: true)
+        open(sendPlaylistSongs: sendPlaylistSongs, renderer: renderer)
     }
 
     /// Disconnects, and forgets Clementine's state.
@@ -165,14 +167,16 @@ public final class RemoteSession {
         status = .suspended
     }
 
-    /// Reconnects after [suspend], then refreshes the playlists.
-    public func resume() {
+    /// Reconnects after [suspend], then refreshes the playlists. Without [offeringRenderer], as
+    /// for a background sync, this connection doesn't offer the phone for Clementine to play on,
+    /// so nothing can start playing on it unasked; the next connection offers it again.
+    public func resume(offeringRenderer: Bool = true) {
         guard status == .suspended, endpoint != nil else { return }
         status = .reconnecting
         requestedPlaylists = []
         playlistsLoading = nil
         refreshPlaylistsWhenReady = true
-        open(sendPlaylistSongs: false)
+        open(sendPlaylistSongs: false, renderer: offeringRenderer ? renderer : nil)
     }
 
     /// Everything the app has sent and received since connecting: to Clementine, and audio streamed
@@ -196,7 +200,7 @@ public final class RemoteSession {
         observers[id] = nil
     }
 
-    private func open(sendPlaylistSongs: Bool) {
+    private func open(sendPlaylistSongs: Bool, renderer: RendererCapabilities?) {
         guard let endpoint else { return }
         let connection = ClementineConnection(endpoint: endpoint, authCode: authCode, renderer: renderer)
         self.connection = connection
