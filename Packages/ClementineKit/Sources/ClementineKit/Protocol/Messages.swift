@@ -122,6 +122,15 @@ public enum Messages {
         }
     }
 
+    /// Adds a smart playlist to Clementine's current playlist, as double-clicking it in Clementine
+    /// does. `smartPlaylistID` is its id, from the smart playlists Clementine lists.
+    public static func addSmartPlaylist(_ smartPlaylistID: String, action: BrowseAddAction) -> RemoteMessage {
+        RemoteMessage(.requestSmartPlaylistAdd) {
+            $0.requestSmartPlaylistAdd.smartPlaylistID = smartPlaylistID
+            $0.requestSmartPlaylistAdd.action = action
+        }
+    }
+
     public static func volume(_ percent: Int) -> RemoteMessage {
         RemoteMessage(.setVolume) { $0.requestSetVolume.volume = Int32(percent) }
     }
