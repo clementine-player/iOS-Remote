@@ -138,6 +138,35 @@ struct SyncEngineTests {
         #expect(try files()["Pixies/Doolittle/01 b.flac"] == "b 2")
     }
 
+    /// What a sync says about how far it has got.
+    actor Progress {
+        var heard: [(ruleID: Int64, done: Int, total: Int)] = []
+        func hear(_ ruleID: Int64, _ progress: SyncProgress) { heard.append((ruleID, progress.done, progress.total)) }
+        func clear() { heard = [] }
+    }
+
+    @Test func saysHowManySongsItHasDownloaded() async throws {
+        let progress = Progress()
+        let engine = SyncEngine(
+            store: store, folder: folder, supportedFormats: ["audio/flac"],
+            progress: { await progress.hear($0, $1) })
+        let playlist = try await rule("playlist/1")
+        await clementine.serve("playlist/1", [await song("a")])
+        _ = try await engine.sync(clementine)
+        await progress.clear()
+
+        // Only the songs it has to download count.
+        await clementine.serve("playlist/1", [await song("a"), await song("b"), await song("c")])
+        _ = try await engine.sync(clementine)
+        #expect(await progress.heard.map { [$0.ruleID, Int64($0.done), Int64($0.total)] }
+            == [[playlist, 0, 2], [playlist, 1, 2], [playlist, 2, 2]])
+
+        // With nothing to download, it says nothing.
+        await progress.clear()
+        _ = try await engine.sync(clementine)
+        #expect(await progress.heard.isEmpty)
+    }
+
     @Test func aRuleKeptAsItIsSyncsOnceUntilItHasItsSongs() async throws {
         let album = try await rule("library/album/Pixies/Doolittle", refreshPolicy: .never)
         // The first sync fails, so the next one asks again.

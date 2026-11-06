@@ -37,21 +37,26 @@ public enum RuleResult: Sendable, Equatable {
 /// later.
 ///
 /// `supportedFormats` are the types the phone plays, as for streaming (`Renderer.formats`).
+/// `progress` hears how many of a rule's songs to download have been, before the first and after
+/// each one.
 public struct SyncEngine: Sendable {
     public let store: SyncStore
     /// The synced songs' folder, which songs' paths are relative to.
     public let folder: URL
     public let supportedFormats: [String]
     private let now: @Sendable () -> Date
+    private let progress: @Sendable (_ ruleID: Int64, SyncProgress) async -> Void
 
     public init(
         store: SyncStore, folder: URL, supportedFormats: [String],
-        now: @escaping @Sendable () -> Date = { Date() }
+        now: @escaping @Sendable () -> Date = { Date() },
+        progress: @escaping @Sendable (_ ruleID: Int64, SyncProgress) async -> Void = { _, _ in }
     ) {
         self.store = store
         self.folder = folder
         self.supportedFormats = supportedFormats
         self.now = now
+        self.progress = progress
     }
 
     public func sync(_ connection: some SyncConnection) async throws -> SyncResult {
@@ -96,14 +101,20 @@ public struct SyncEngine: Sendable {
         default: break
         }
 
+        var wanted: [(item: Pb_Remote_SyncItem, have: SyncedItem?)] = []
+        for item in manifest.items {
+            wanted.append((item, try await store.item(serverID: rule.serverID, itemKey: item.itemKey)))
+        }
+        let total = wanted.count { $0.have?.version != $0.item.version }
+        if total > 0 { await progress(rule.id, SyncProgress(done: 0, total: total)) }
         var downloaded = 0
         var keys: [String] = []
         do {
-            for item in manifest.items {
-                let have = try await store.item(serverID: rule.serverID, itemKey: item.itemKey)
+            for (item, have) in wanted {
                 if have?.version != item.version {
                     try await download(item, serverID: rule.serverID, replacing: have, over: connection)
                     downloaded += 1
+                    await progress(rule.id, SyncProgress(done: downloaded, total: total))
                 }
                 keys.append(item.itemKey)
             }

@@ -33,8 +33,29 @@ public struct KeptRule: Sendable, Equatable, Identifiable {
     public var bytes: Int64
     /// Nil until it syncs while the app runs.
     public var result: RuleResult?
+    /// How far the sync running has got with downloading its songs, if it has started.
+    public var downloading: SyncProgress?
 
     public var id: Int64 { rule.id }
+
+    public init(rule: SyncRule, songs: Int, bytes: Int64, result: RuleResult?, downloading: SyncProgress? = nil) {
+        self.rule = rule
+        self.songs = songs
+        self.bytes = bytes
+        self.result = result
+        self.downloading = downloading
+    }
+}
+
+/// `done` of the `total` songs a sync has to download.
+public struct SyncProgress: Sendable, Equatable {
+    public var done: Int
+    public var total: Int
+
+    public init(done: Int, total: Int) {
+        self.done = done
+        self.total = total
+    }
 }
 
 /// Syncs the rules for the connected Clementine while the app is connected to it: each time it
@@ -70,6 +91,8 @@ public final class Syncer {
     @ObservationIgnored public var networkAllows: @MainActor (DownloadNetwork) -> Bool = { _ in true }
     @ObservationIgnored private var task: Task<Void, Never>?
     @ObservationIgnored private var again = false
+    /// The rules the sync running is downloading songs for, by rule id.
+    @ObservationIgnored private var progress: [Int64: SyncProgress] = [:]
 
     public init(
         session: RemoteSession, store: SyncStore?, folder: URL, settings: Settings = Settings(),
@@ -116,7 +139,7 @@ public final class Syncer {
             let songs = (try? await store.ruleItems(ruleID: rule.id)) ?? []
             kept.append(KeptRule(
                 rule: rule, songs: songs.count, bytes: songs.reduce(0) { $0 + $1.sizeBytes },
-                result: status.results[rule.id]))
+                result: status.results[rule.id], downloading: progress[rule.id]))
         }
         self.kept = kept
     }
@@ -190,7 +213,9 @@ public final class Syncer {
         status.running = true
         status.unavailable = false
         status.networkNotAllowed = false
-        let engine = SyncEngine(store: store, folder: folder, supportedFormats: Renderer.formats)
+        let engine = SyncEngine(
+            store: store, folder: folder, supportedFormats: Renderer.formats,
+            progress: { [weak self] ruleID, now in await self?.show(now, for: ruleID) })
         let connection = ClementineSyncConnection(
             serverID: syncing.serverID, manifests: manifests,
             send: { [weak session] in session?.send($0) }, server: { [weak session] in session?.endpoint },
@@ -202,6 +227,14 @@ public final class Syncer {
             status.unavailable = true
         }
         status.running = false
+        progress = [:]
         await readKept()
+    }
+
+    private func show(_ now: SyncProgress, for ruleID: Int64) {
+        progress[ruleID] = now
+        if let index = kept.firstIndex(where: { $0.id == ruleID }) {
+            kept[index].downloading = now
+        }
     }
 }
