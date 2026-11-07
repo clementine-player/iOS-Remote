@@ -6415,7 +6415,21 @@
       }
     },
     "Clementine isn't reachable" : {
-      "comment" : "Banner: the app can't connect to Clementine on the computer."
+      "comment" : "Banner: the app can't connect to Clementine on the computer.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν είναι δυνατή η επικοινωνία με το Clementine"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det går inte att nå Clementine"
+          }
+        }
+      }
     },
     "Clementine on %@" : {
       "localizations" : {
@@ -12127,10 +12141,38 @@
       }
     },
     "Every time I connect" : {
-      "comment" : "A choice under Update it: what's kept is updated each time the phone connects to Clementine."
+      "comment" : "A choice under Update it: what's kept is updated each time the phone connects to Clementine.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Σε κάθε σύνδεσή μου"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Varje gång jag ansluter"
+          }
+        }
+      }
     },
     "Every time you connect" : {
-      "comment" : "How often something kept on the phone is updated from Clementine, short: each time the phone connects to it."
+      "comment" : "How often something kept on the phone is updated from Clementine, short: each time the phone connects to it.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Σε κάθε σύνδεση"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uppdateras vid varje anslutning"
+          }
+        }
+      }
     },
     "File" : {
       "localizations" : {
@@ -13559,7 +13601,21 @@
       }
     },
     "Keep the songs it has now" : {
-      "comment" : "Under Never, in the Keep on this phone sheet."
+      "comment" : "Under Never, in the Keep on this phone sheet.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Διατήρηση των τραγουδιών που περιέχει τώρα"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Behåll de låtar som finns nu"
+          }
+        }
+      }
     },
     "Keeping %@ on this phone" : {
       "comment" : "Shown for a moment after choosing Keep on this phone; the placeholder is an album, an artist or a playlist.",
@@ -15217,7 +15273,27 @@
       }
     },
     "Never" : {
-      "comment" : "A choice under Update it: what's kept is never updated from Clementine."
+      "comment" : "A choice under Update it: what's kept is never updated from Clementine.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ποτέ"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nunca"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aldrig"
+          }
+        }
+      }
     },
     "New playlist" : {
       "localizations" : {
@@ -16964,7 +17040,21 @@
       }
     },
     "Or play what's on this phone" : {
-      "comment" : "On the connect screen, under \"Or enter its address\": instead of connecting, play the music saved on the phone."
+      "comment" : "On the connect screen, under \"Or enter its address\": instead of connecting, play the music saved on the phone.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ή αναπαραγάγετε τη μουσική αυτού του τηλεφώνου"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eller spela musik som finns på telefonen"
+          }
+        }
+      }
     },
     "Other matches" : {
       "localizations" : {
@@ -17751,7 +17841,21 @@
       }
     },
     "Play on this phone" : {
-      "comment" : "A button in the dialog when connecting fails, and a shortcut on the app's icon: play the music saved on the phone instead of connecting."
+      "comment" : "A button in the dialog when connecting fails, and a shortcut on the app's icon: play the music saved on the phone instead of connecting.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναπαραγωγή σε αυτό το τηλέφωνο"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spela på den här telefonen"
+          }
+        }
+      }
     },
     "Play or pause" : {
       "localizations" : {
@@ -18269,7 +18373,21 @@
       }
     },
     "Playing what's on this phone" : {
-      "comment" : "Banner, under \"Clementine isn't reachable\"."
+      "comment" : "Banner, under \"Clementine isn't reachable\".",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναπαραγωγή της μουσικής αυτού του τηλεφώνου"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spelar musik som finns på telefonen"
+          }
+        }
+      }
     },
     "Playlist" : {
       "localizations" : {
@@ -26168,7 +26286,21 @@
       }
     },
     "Update it" : {
-      "comment" : "Heading in the Keep on this phone sheet, over how often what's kept is updated from Clementine."
+      "comment" : "Heading in the Keep on this phone sheet, over how often what's kept is updated from Clementine.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ενημέρωση"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uppdatera innehållet"
+          }
+        }
+      }
     },
     "Update library" : {
       "localizations" : {
