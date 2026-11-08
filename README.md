@@ -73,10 +73,13 @@ the release workflow, which also takes the App Store's screenshots. See
 ## Scripts
 
 `scripts/generate-proto.sh` regenerates the protocol code from
-`Packages/ClementineKit/Proto/remotecontrolmessages.proto`, and
-`scripts/merge-transifex-translations.py` merges translations pulled from Transifex (see
-[RELEASING.md](RELEASING.md#translations)). `scripts/import-android-translations.py` imported the
-Android remote's translations, before the app was on Transifex.
+`Packages/ClementineKit/Proto/remotecontrolmessages.proto`, and `scripts/transifex.py` sends the
+String Catalog to Transifex and merges its translations back (see
+[RELEASING.md](RELEASING.md#translations)).
+
+The Python scripts run with [uv](https://docs.astral.sh/uv/): `uv run scripts/transifex.py pull`.
+CI checks them with `uv run ruff check`, `uv run ruff format --check`, `uv run ty check` and
+`uv run pytest`.
 
 ## Licence
 

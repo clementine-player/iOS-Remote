@@ -1,15 +1,16 @@
-# Keeps the app's translations in step with Transifex, as Clementine and the Android remote do:
+# Keeps the app's translations in step with Transifex, as Clementine and the Android remote do,
+# with scripts/transifex.py, which talks to Transifex's API:
 #   - push: when the String Catalog changes on main, sends it to Transifex for the translators.
 #     Transifex takes a catalog's translations along with its strings, replacing its own (the
 #     catalog has every language), so the push first pulls the translations made on Transifex
 #     since the last pull into the catalog: without that, it would erase them.
-#   - pull: every night, brings the translations back into the catalog
-#     (scripts/merge-transifex-translations.py), and commits them to main when they changed.
-#     Each such commit has a release note, so new translations make the next release.
+#   - pull: every night, brings the translations back into the catalog, and commits them to main
+#     when they changed. Each such commit has a release note, so new translations make the next
+#     release.
 #
-# The Transifex resource is in .tx/config. Needs two secrets (see RELEASING.md): TX_TOKEN, a
-# Transifex API token, and TX_KEY, the private half of a deploy key with write access, which
-# pushes the translations to main. Until they're set, each job is skipped with a notice.
+# Needs two secrets (see RELEASING.md): TX_TOKEN, a Transifex API token, and TX_KEY, the private
+# half of a deploy key with write access, which pushes the translations to main. Until they're
+# set, each job is skipped with a notice.
 #
 # Run it by hand (Actions → translations → Run workflow) to pull now. With "Push translations"
 # ticked, it first sends the catalog's translations to Transifex: once, to fill a new Transifex
@@ -19,9 +20,9 @@ on:
   push:
     branches: [main]
     paths:
-      - .tx/config
       - .github/workflows/translations.yml
       - App/Resources/Localizable.xcstrings
+      - scripts/transifex.py
   schedule:
     - cron: "37 2 * * *" # Every night, 02:37 UTC
   workflow_dispatch:
@@ -38,12 +39,6 @@ concurrency:
 permissions:
   contents: read
 
-env:
-  TX_VERSION: 1.6.17
-
-# Every tx command is --silent: otherwise the client cuts each line, errors included, to the
-# terminal's width, 80 columns in CI, which hides why Transifex refused a file.
-
 jobs:
   push:
     name: Push strings to Transifex
@@ -53,27 +48,17 @@ jobs:
       TX_TOKEN: ${{ secrets.TX_TOKEN }}
     steps:
       - uses: actions/checkout@v5
-      - name: Install the Transifex client
+      - uses: astral-sh/setup-uv@v10.2.0
         if: env.TX_TOKEN != ''
-        run: |
-          mkdir -p "$RUNNER_TEMP/tx"
-          curl -fsSL "https://github.com/transifex/cli/releases/download/v$TX_VERSION/tx-linux-amd64.tar.gz" \
-            | tar -xz -C "$RUNNER_TEMP/tx" tx
-          echo "$RUNNER_TEMP/tx" >> "$GITHUB_PATH"
       - name: Pull the translations made since the last pull
         if: env.TX_TOKEN != ''
-        run: scripts/pull-transifex-translations.sh
+        run: uv run scripts/transifex.py pull
       - name: Push the English strings
         if: env.TX_TOKEN != ''
-        run: tx push --source --silent
-      # The catalog has every language, and Transifex takes them all from a file uploaded as
-      # any one of them.
+        run: uv run scripts/transifex.py push-source
       - name: Push the translations
         if: env.TX_TOKEN != '' && inputs.push_translations
-        run: |
-          mkdir -p build/transifex
-          cp App/Resources/Localizable.xcstrings build/transifex/de.xcstrings
-          tx push --translation --languages de --silent
+        run: uv run scripts/transifex.py push-translations
       - name: No Transifex token
         if: env.TX_TOKEN == ''
         run: echo "::notice::The TX_TOKEN secret isn't set, so nothing was sent to Transifex. See RELEASING.md."
@@ -100,18 +85,13 @@ jobs:
         with:
           ref: main
           ssh-key: ${{ secrets.TX_KEY }}
-      - name: Install the Transifex client
+      - uses: astral-sh/setup-uv@v10.2.0
         if: env.TX_TOKEN != '' && env.HAS_TX_KEY == 'true'
-        run: |
-          mkdir -p "$RUNNER_TEMP/tx"
-          curl -fsSL "https://github.com/transifex/cli/releases/download/v$TX_VERSION/tx-linux-amd64.tar.gz" \
-            | tar -xz -C "$RUNNER_TEMP/tx" tx
-          echo "$RUNNER_TEMP/tx" >> "$GITHUB_PATH"
       - name: Pull the translations
         id: pull
         if: env.TX_TOKEN != '' && env.HAS_TX_KEY == 'true'
         run: |
-          scripts/pull-transifex-translations.sh
+          uv run scripts/transifex.py pull
           if git diff --quiet -- App/Resources/Localizable.xcstrings; then
             echo "Translations are up to date."
           else

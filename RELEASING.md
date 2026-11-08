@@ -111,10 +111,12 @@ Android remote's does:
   pushed to Transifex for the translators. Transifex takes the translations in it too, replacing
   its own, so the translations made on Transifex since the last pull are pulled into it first.
 - Every night, the translations are pulled back and merged into the catalog
-  (`scripts/merge-transifex-translations.py`), and committed to `main` when they changed, as
-  "Automatic merge of translations from Transifex". Only translated strings come back, reviewed and
-  not reviewed yet alike (each pulled on its own, as one Transifex mode can leave the other
-  out), and a translation whose placeholders don't match the English is left out, with a warning. Xcode
+  (`scripts/transifex.py pull`), and committed to `main` when they changed, as
+  "Automatic merge of translations from Transifex". They're read from Transifex's API as data,
+  not as files, because Transifex fails to make a String Catalog file while a string with
+  substitutions (a plural of one of its numbers) isn't translated. Only translated strings come
+  back, reviewed and not reviewed yet alike, and a translation whose placeholders don't match the
+  English is left out, with a warning. Xcode
   still decides which strings the app has. The commit has a release note, so new translations
   make the next release; however many nights they changed, the release notes say so once.
 - Transifex fills in strings whose English it has translated already, for this app or the
