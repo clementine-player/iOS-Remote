@@ -15,3 +15,9 @@ DerivedData/
 # What fastlane writes when it runs
 /fastlane/README.md
 /fastlane/report.xml
+
+# Python: uv run scripts/<script>.py
+/.venv/
+__pycache__/
+/.ruff_cache/
+/.pytest_cache/

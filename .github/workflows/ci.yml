@@ -26,6 +26,23 @@ jobs:
         working-directory: Packages/ClementineKit
         run: swift test
 
+  # The Python scripts in scripts/. ruff and ty are pinned in pyproject.toml's dev
+  # group, so uv runs the versions uv.lock has.
+  python:
+    name: Python
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v10.2.0
+      - name: ruff check
+        run: uv run ruff check --output-format github
+      - name: ruff format
+        run: uv run ruff format --check
+      - name: ty
+        run: uv run ty check --output-format github
+      - name: Unit tests
+        run: uv run pytest -v
+
   # The app built for the simulator, with ClementineKit's and the UI tests.
   app:
     runs-on: xcode-27
@@ -100,7 +117,7 @@ jobs:
   # it needs fails, because GitHub treats a skipped required check as passing.
   ci:
     name: CI
-    needs: [package, app]
+    needs: [package, app, python]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -108,5 +125,7 @@ jobs:
         run: |
           echo "package: ${{ needs.package.result }}"
           echo "app: ${{ needs.app.result }}"
+          echo "python: ${{ needs.python.result }}"
           test "${{ needs.package.result }}" = success
           test "${{ needs.app.result }}" = success
+          test "${{ needs.python.result }}" = success

@@ -460,8 +460,8 @@ Android remote does.
 
 Plain, short, sentence case, as the design system says: "Connect", "Add to playlist", "No song
 playing", "Clementine on studio-pc". Mode feedback names the new mode. Where a string says what an
-Android string says, `scripts/import-android-translations.py` copies that string's translations into
-the String Catalog; the rest are English until translated.
+Android string says, it has the same English, so that Transifex's translation memory offers the
+Android string's translations for it.
 
 ## Behaviour
 
