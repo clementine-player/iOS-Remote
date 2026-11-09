@@ -17742,7 +17742,21 @@
       }
     },
     "Play from" : {
-      "comment" : "Title of a sheet, and a button's label: choose where the music plays from, Clementine or this phone."
+      "comment" : "Title of a sheet, and a button's label: choose where the music plays from, Clementine or this phone.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναπαραγωγή από"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spela från"
+          }
+        }
+      }
     },
     "Play next" : {
       "localizations" : {
@@ -18418,7 +18432,21 @@
       "comment" : "As \"Playing on this phone\", on an iPad."
     },
     "Playing on this phone" : {
-      "comment" : "At the top of the player while it plays the music saved on the phone, where it otherwise says which playlist Clementine plays from."
+      "comment" : "At the top of the player while it plays the music saved on the phone, where it otherwise says which playlist Clementine plays from.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναπαραγωγή σε αυτό το τηλέφωνο"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spelar på den här telefonen"
+          }
+        }
+      }
     },
     "Playing what's on this phone" : {
       "comment" : "Banner, under \"Clementine isn't reachable\".",
@@ -23554,7 +23582,27 @@
       }
     },
     "Smart playlists" : {
-      "comment" : "A folder at the top of the library holding Clementine's smart playlists, such as Newest tracks, as Clementine's own library shows them."
+      "comment" : "A folder at the top of the library holding Clementine's smart playlists, such as Newest tracks, as Clementine's own library shows them.",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Έξυπνες λίστες αναπαραγωγής"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listas inteligentes"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Smarta spellistor"
+          }
+        }
+      }
     },
     "Song" : {
       "localizations" : {
