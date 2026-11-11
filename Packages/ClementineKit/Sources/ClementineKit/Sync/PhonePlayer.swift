@@ -11,6 +11,9 @@ public struct KeptSong: Sendable, Hashable, Identifiable {
     /// As Clementine writes it, such as "5:36"; empty if it didn't say.
     public var length: String
     public var file: URL
+    /// The cover Clementine sent with the song, if it did. Otherwise the cover is the one in
+    /// [file], if it has one.
+    public var artFile: URL?
 
     public var id: String { itemKey }
 
@@ -24,6 +27,7 @@ public struct KeptSong: Sendable, Hashable, Identifiable {
         album = song.album
         length = song.prettyLength
         self.file = file
+        artFile = item.artKey.flatMap(SyncFiles.artPath(key:)).map { folder.appending(path: $0) }
     }
 
     /// [song], downloaded to this phone, to play with what's kept; its file is its key.
@@ -50,7 +54,7 @@ public final class PhonePlayer {
     public private(set) var isShuffled = false
     /// Nothing (.off), all the songs (.playlist) or the one playing (.track).
     public private(set) var repeatMode = RepeatMode.off
-    /// The cover in the song's file, once read, if it has one.
+    /// The song's cover, once read, if it has one.
     public private(set) var artwork: Data?
     @ObservationIgnored public var onUpdate: (() -> Void)?
 
@@ -247,18 +251,27 @@ public final class PhonePlayer {
         onUpdate?()
     }
 
-    /// Reads the cover in the playing song's file, when the song changes.
+    /// Reads the playing song's cover, when the song changes: the one Clementine sent, or else the
+    /// one in its file.
     private func readArtwork() {
         guard song?.itemKey != artworkFor else { return }
         artworkFor = song?.itemKey
         artwork = nil
         guard let key = artworkFor, let file = song?.file else { return }
+        let artFile = song?.artFile
         Task {
-            let data = await Self.artwork(in: file)
+            let data = await Self.artwork(artFile, orIn: file)
             guard artworkFor == key, let data else { return }
             artwork = data
             onUpdate?()
         }
+    }
+
+    nonisolated private static func artwork(_ artFile: URL?, orIn file: URL) async -> Data? {
+        if let artFile, let data = try? Data(contentsOf: artFile), !data.isEmpty {
+            return data
+        }
+        return await artwork(in: file)
     }
 
     nonisolated private static func artwork(in file: URL) async -> Data? {
