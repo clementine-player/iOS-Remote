@@ -83,7 +83,10 @@ private struct LibraryLevelView: View {
 
     private var list: some View {
         List(selection: editMode.isEditing ? $selection : nil) {
-            if opened == nil, !editMode.isEditing, !model.session.smartPlaylists.isEmpty {
+            // Only once the library is on the phone: before that, the list is the library's
+            // empty state or download progress.
+            if opened == nil, !editMode.isEditing, library.status == .ready,
+               !model.session.smartPlaylists.isEmpty {
                 smartPlaylists
             }
             if let opened, let level, !editMode.isEditing {
