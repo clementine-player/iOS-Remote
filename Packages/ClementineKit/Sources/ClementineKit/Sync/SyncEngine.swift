@@ -32,9 +32,9 @@ public enum RuleResult: Sendable, Equatable {
 }
 
 /// Brings what's on the phone in line with the rules for one Clementine: asks for each rule's
-/// manifest, downloads the songs that are new or changed into `folder`, and deletes the songs that
-/// no rule wants any more. A song in several rules is downloaded once. Covers and conversions come
-/// later.
+/// manifest, downloads the songs that are new or changed into `folder`, with their covers, and
+/// deletes the songs that no rule wants any more. A song in several rules is downloaded once, and a
+/// cover many songs share is too. Conversions come later.
 ///
 /// `supportedFormats` are the types the phone plays, as for streaming (`Renderer.formats`).
 /// `progress` hears how many of a rule's songs to download have been, before the first and after
@@ -90,6 +90,10 @@ public struct SyncEngine: Sendable {
             try await store.removeItem(serverID: serverID, itemKey: item.itemKey)
             removed += 1
         }
+        for art in try await store.unusedArt() {
+            try? FileManager.default.removeItem(at: folder.appending(path: art.path))
+            try await store.removeArt(key: art.artKey)
+        }
         return removed
     }
 
@@ -117,6 +121,10 @@ public struct SyncEngine: Sendable {
                     try await download(item, serverID: rule.serverID, replacing: have, over: connection)
                     downloaded += 1
                     await progress(rule.id, SyncProgress(done: downloaded, total: total))
+                } else if var have, have.artKey != (item.hasArt ? item.art.key : nil) {
+                    // The same song with another cover, or one kept before covers were.
+                    have.artKey = await art(item, over: connection)
+                    try await store.putItem(have)
                 }
                 keys.append(item.itemKey)
             }
@@ -189,7 +197,35 @@ public struct SyncEngine: Sendable {
             SyncedItem(
                 serverID: serverID, itemKey: item.itemKey, version: item.version, path: path,
                 mimeType: item.mimeType, sizeBytes: item.sizeBytes, delivery: item.delivery,
-                artKey: nil, metadata: try song.serializedData(), pinned: have?.pinned ?? false,
-                added: have?.added ?? now()))
+                artKey: await art(item, over: connection), metadata: try song.serializedData(),
+                pinned: have?.pinned ?? false, added: have?.added ?? now()))
+    }
+
+    /// The key of `item`'s cover, downloading it if the phone doesn't have it yet; nil if it has
+    /// none, or it couldn't be downloaded, so it's tried again next time. A song without a cover
+    /// of its own from Clementine shows the one in its file, if any.
+    private func art(_ item: Pb_Remote_SyncItem, over connection: some SyncConnection) async -> String? {
+        guard item.hasArt, let path = SyncFiles.artPath(key: item.art.key) else { return nil }
+        let key = item.art.key
+        if (try? await store.art(key: key)) != nil { return key }
+
+        let file = folder.appending(path: path)
+        let files = FileManager.default
+        let partial = file.deletingLastPathComponent().appending(path: ".\(UUID().uuidString).part")
+        do {
+            try files.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try await connection.download(item.art.url, to: partial)
+            if files.fileExists(atPath: file.path) {
+                _ = try files.replaceItemAt(file, withItemAt: partial)
+            } else {
+                try files.moveItem(at: partial, to: file)
+            }
+            let size = (try? file.resourceValues(forKeys: [.fileSizeKey]))?.fileSize ?? 0
+            try await store.putArt(SyncedArt(artKey: key, path: path, sizeBytes: Int64(size)))
+            return key
+        } catch {
+            try? files.removeItem(at: partial)
+            return nil
+        }
     }
 }

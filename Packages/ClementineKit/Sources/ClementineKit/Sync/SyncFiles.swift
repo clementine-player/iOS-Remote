@@ -11,6 +11,14 @@ enum SyncFiles {
         return part(artist, otherwise: "Unknown artist") + "/" + part(song.album, otherwise: "Unknown album") + "/"
     }
 
+    /// Where the cover with `key` goes, relative to the synced songs' folder: hidden, since it's
+    /// the app's, not one of the songs. Nil for a key that isn't a hash, so it can't name a file
+    /// somewhere else.
+    static func artPath(key: String) -> String? {
+        guard !key.isEmpty, key.count <= 128, key.allSatisfy(\.isHexDigit) else { return nil }
+        return ".covers/" + key.lowercased()
+    }
+
     static func fileName(_ song: SongMetadata, mimeType: String) -> String {
         let title = part(song.title, otherwise: "Untitled")
         let name = song.track > 0 ? (song.track < 10 ? "0" : "") + String(song.track) + " " + title : title

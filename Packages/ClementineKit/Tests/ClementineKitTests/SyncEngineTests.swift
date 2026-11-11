@@ -84,7 +84,8 @@ struct SyncEngineTests {
         return item
     }
 
-    /// The files in the synced songs' folder, by path, leaving out hidden ones.
+    /// The files in the synced songs' folder, by path, leaving out hidden ones and those in hidden
+    /// folders.
     func files() throws -> [String: String] {
         var files: [String: String] = [:]
         guard let paths = FileManager.default.enumerator(atPath: folder.path) else { return files }
@@ -92,7 +93,7 @@ struct SyncEngineTests {
             let url = folder.appending(path: path)
             var isDirectory: ObjCBool = false
             guard FileManager.default.fileExists(atPath: url.path, isDirectory: &isDirectory), !isDirectory.boolValue,
-                  !url.lastPathComponent.hasPrefix(".") else { continue }
+                  !path.split(separator: "/").contains(where: { $0.hasPrefix(".") }) else { continue }
             files[path] = try String(decoding: Data(contentsOf: url), as: UTF8.self)
         }
         return files
@@ -306,6 +307,91 @@ struct SyncEngineTests {
         await clementine.clearOpened()
         _ = try await engine.sync(clementine)
         #expect(await clementine.opened == ["/d/token/c-1"])
+    }
+
+    /// `item` with the cover `key`, which Clementine serves.
+    func withArt(_ item: Pb_Remote_SyncItem, _ key: String) async -> Pb_Remote_SyncItem {
+        var item = item
+        item.art.key = key
+        item.art.url = "/a/token/\(key)"
+        await clementine.put(item.art.url, Data("cover \(key)".utf8))
+        return item
+    }
+
+    func cover(_ key: String) throws -> String {
+        try String(decoding: Data(contentsOf: folder.appending(path: ".covers/\(key)")), as: UTF8.self)
+    }
+
+    @Test func downloadsEachCoverOnce() async throws {
+        _ = try await rule("smart/library/0b6e")
+        await clementine.serve(
+            "smart/library/0b6e",
+            [await withArt(await song("a"), "c0ffee"), await withArt(await song("b", title: "Tame"), "c0ffee"),
+             await song("c", title: "Hey")])
+        _ = try await engine.sync(clementine)
+
+        #expect(await clementine.opened.filter { $0.hasPrefix("/a/") } == ["/a/token/c0ffee"])
+        #expect(try await store.item(serverID: Self.server, itemKey: "a")?.artKey == "c0ffee")
+        #expect(try await store.item(serverID: Self.server, itemKey: "b")?.artKey == "c0ffee")
+        #expect(try await store.item(serverID: Self.server, itemKey: "c")?.artKey == nil)
+        #expect(try await store.art(key: "c0ffee")?.path == ".covers/c0ffee")
+        #expect(try cover("c0ffee") == "cover c0ffee")
+        // Hidden: they're the app's, not songs.
+        #expect(try files().count == 3)
+
+        let kept = KeptSong(try #require(await store.item(serverID: Self.server, itemKey: "a")), in: folder)
+        #expect(kept.artFile == folder.appending(path: ".covers/c0ffee"))
+    }
+
+    @Test func songsKeptBeforeTheirCoverGetIt() async throws {
+        _ = try await rule("playlist/1")
+        await clementine.serve("playlist/1", [await song("a")])
+        _ = try await engine.sync(clementine)
+
+        // The same song, now with a cover: only the cover's downloaded.
+        await clementine.serve("playlist/1", [await withArt(await song("a"), "beef")])
+        await clementine.clearOpened()
+        let result = try await engine.sync(clementine)
+        #expect(await clementine.opened == ["/a/token/beef"])
+        #expect(result.rules.values.first == .synced(songs: 1, downloaded: 0, skipped: 0))
+        #expect(try await store.item(serverID: Self.server, itemKey: "a")?.artKey == "beef")
+    }
+
+    @Test func aCoverThatCantBeDownloadedIsTriedAgain() async throws {
+        _ = try await rule("playlist/1")
+        let item = await withArt(await song("a"), "beef")
+        await clementine.remove(item.art.url)
+        await clementine.serve("playlist/1", [item])
+        let result = try await engine.sync(clementine)
+        // The song's kept all the same.
+        #expect(result.rules.values.first == .synced(songs: 1, downloaded: 1, skipped: 0))
+        #expect(try await store.item(serverID: Self.server, itemKey: "a")?.artKey == nil)
+
+        await clementine.put(item.art.url, Data("cover beef".utf8))
+        _ = try await engine.sync(clementine)
+        #expect(try await store.item(serverID: Self.server, itemKey: "a")?.artKey == "beef")
+    }
+
+    @Test func coversNoSongUsesAreDeleted() async throws {
+        _ = try await rule("playlist/1")
+        await clementine.serve(
+            "playlist/1", [await withArt(await song("a"), "beef"), await withArt(await song("b", title: "Tame"), "f00d")])
+        _ = try await engine.sync(clementine)
+
+        // One song goes, and the other's cover changes.
+        await clementine.serve("playlist/1", [await withArt(await song("b", title: "Tame"), "cafe")])
+        _ = try await engine.sync(clementine)
+        #expect(try await store.art(key: "beef") == nil)
+        #expect(try await store.art(key: "f00d") == nil)
+        #expect(try cover("cafe") == "cover cafe")
+        #expect(!FileManager.default.fileExists(atPath: folder.appending(path: ".covers/beef").path))
+        #expect(!FileManager.default.fileExists(atPath: folder.appending(path: ".covers/f00d").path))
+    }
+
+    @Test func coverKeysMustBeHashes() {
+        #expect(SyncFiles.artPath(key: "C0FFEE") == ".covers/c0ffee")
+        #expect(SyncFiles.artPath(key: "../songs") == nil)
+        #expect(SyncFiles.artPath(key: "") == nil)
     }
 
     @Test func namesFilesForPeople() {
