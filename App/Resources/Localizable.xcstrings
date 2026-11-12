@@ -2358,6 +2358,36 @@
               }
             }
           }
+        },
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld песни, %@"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld песен, %@"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld песня, %@"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld песен, %@"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -3666,6 +3696,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cualquier red"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Любая сеть"
           }
         },
         "sv" : {
@@ -6423,6 +6459,12 @@
             "value" : "Δεν είναι δυνατή η επικοινωνία με το Clementine"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clementine недоступен"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8368,6 +8410,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Δεν ήταν δυνατή η ολοκλήρωση του συγχρονισμού. Θα γίνει νέα προσπάθεια όταν συνδεθείτε."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось завершить синхронизацию. Она повторится при подключении."
           }
         },
         "sv" : {
@@ -10705,6 +10753,12 @@
             "value" : "Descargar por"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Загрузка завершена"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11362,6 +11416,46 @@
                     "stringUnit" : {
                       "state" : "translated",
                       "value" : "%arg songs…"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Загрузка %1$lld из %2$#@total@"
+          },
+          "substitutions" : {
+            "total" : {
+              "argNum" : 2,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "few" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg песни…"
+                    }
+                  },
+                  "many" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg песен…"
+                    }
+                  },
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg песня…"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg песен…"
                     }
                   }
                 }
@@ -12039,6 +12133,12 @@
             "value" : "Las descargas no están permitidas en esta red"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В этой сети загрузки запрещены"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12182,6 +12282,12 @@
             "value" : "Σε κάθε σύνδεσή μου"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "При каждом моём подключении"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12197,6 +12303,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Σε κάθε σύνδεση"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "При каждом вашем подключении"
           }
         },
         "sv" : {
@@ -13477,6 +13589,12 @@
             "value" : "Διατήρηση σε αυτό το τηλέφωνο"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Хранить на этом телефоне"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13642,6 +13760,12 @@
             "value" : "Διατήρηση των τραγουδιών που περιέχει τώρα"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Хранить песни, которые есть сейчас"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13658,6 +13782,12 @@
             "state" : "translated",
             "value" : "Διατήρηση στο τηλέφωνο: %@"
           }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Хранение %@ на этом телефоне"
+          }
         }
       }
     },
@@ -13668,6 +13798,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Διατήρηση ως έχει"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оставлено как есть"
           }
         },
         "sv" : {
@@ -13685,6 +13821,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Διατηρούνται σε αυτό το τηλέφωνο"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Хранится на этом телефоне"
           }
         },
         "sv" : {
@@ -15320,6 +15462,12 @@
             "value" : "Nunca"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Никогда"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15815,6 +15963,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Δεν υπάρχει πλέον στο Clementine"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Больше нет в Clementine"
           }
         },
         "sv" : {
@@ -16399,6 +16553,12 @@
             "state" : "translated",
             "value" : "Στο iPad"
           }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "На iPad"
+          }
         }
       }
     },
@@ -16411,6 +16571,12 @@
             "value" : "Στο τηλέφωνο"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "На телефоне"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16420,7 +16586,15 @@
       }
     },
     "On this iPad" : {
-      "comment" : "As \"On this phone\", on an iPad: music saved on the iPad, as opposed to Clementine on the computer."
+      "comment" : "As \"On this phone\", on an iPad: music saved on the iPad, as opposed to Clementine on the computer.",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "На этом iPad"
+          }
+        }
+      }
     },
     "On this phone" : {
       "localizations" : {
@@ -17084,6 +17258,12 @@
             "value" : "Ή αναπαραγάγετε τη μουσική αυτού του τηλεφώνου"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Или воспроизводить то, что есть на этом телефоне"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17287,7 +17467,15 @@
       }
     },
     "Paused · %@" : {
-      "comment" : "In Play from, under Clementine or On this phone: it's paused on the song the placeholder names."
+      "comment" : "In Play from, under Clementine or On this phone: it's paused on the song the placeholder names.",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Приостановлено · %@"
+          }
+        }
+      }
     },
     "Pauses Clementine." : {
       "localizations" : {
@@ -17750,6 +17938,12 @@
             "value" : "Αναπαραγωγή από"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Играть с"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17903,6 +18097,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αναπαραγωγή σε αυτό το τηλέφωνο"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Играть на этом телефоне"
           }
         },
         "sv" : {
@@ -18429,7 +18629,15 @@
       }
     },
     "Playing on this iPad" : {
-      "comment" : "As \"Playing on this phone\", on an iPad."
+      "comment" : "As \"Playing on this phone\", on an iPad.",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Воспроизведение на этом iPad"
+          }
+        }
+      }
     },
     "Playing on this phone" : {
       "comment" : "At the top of the player while it plays the music saved on the phone, where it otherwise says which playlist Clementine plays from.",
@@ -18438,6 +18646,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αναπαραγωγή σε αυτό το τηλέφωνο"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Воспроизведение на этом телефоне"
           }
         },
         "sv" : {
@@ -18457,6 +18671,12 @@
             "value" : "Αναπαραγωγή της μουσικής αυτού του τηλεφώνου"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Воспроизведение того, что на этом телефоне"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18466,7 +18686,15 @@
       }
     },
     "Playing · %@" : {
-      "comment" : "In Play from, under Clementine or On this phone: it's playing the song the placeholder names."
+      "comment" : "In Play from, under Clementine or On this phone: it's playing the song the placeholder names.",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Играет · %@"
+          }
+        }
+      }
     },
     "Playlist" : {
       "localizations" : {
@@ -19249,6 +19477,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preparando…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подготовка…"
           }
         },
         "sv" : {
@@ -20486,6 +20720,12 @@
             "value" : "Αφαίρεση"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удалить"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20501,6 +20741,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Να αφαιρεθεί το %@; Τα τραγούδια του θα διαγραφούν από αυτό το τηλέφωνο, εκτός αν περιλαμβάνονται και σε άλλο στοιχείο που διατηρείτε."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удалить %@? Его песни будут удалены с этого телефона, если только они не входят в что-то другое, что вы храните."
           }
         }
       }
@@ -20718,6 +20964,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αφαίρεση από αυτό το τηλέφωνο…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удалить с этого телефона…"
           }
         },
         "sv" : {
@@ -22851,6 +23103,12 @@
             "value" : "Aleatorizar"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перемешать"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23594,6 +23852,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Listas inteligentes"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Умные плейлисты"
           }
         },
         "sv" : {
@@ -24714,6 +24978,36 @@
               }
             }
           }
+        },
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Перестаёт подключаться · %lld песни"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Перестаёт подключаться · %lld песен"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Перестаёт подключаться · %lld песня"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Перестаёт подключаться · %lld песен"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -24826,7 +25120,15 @@
       }
     },
     "Switching pauses the one you leave." : {
-      "comment" : "At the bottom of Play from."
+      "comment" : "At the bottom of Play from.",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "При переключении покидаемое устройство ставится на паузу."
+          }
+        }
+      }
     },
     "Switching…" : {
       "localizations" : {
@@ -24881,6 +25183,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sincronizar ahora"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Синхронизировать сейчас"
           }
         },
         "sv" : {
@@ -26399,6 +26707,12 @@
             "value" : "Ενημέρωση"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновить его"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -26408,7 +26722,15 @@
       }
     },
     "Update kept music in the background" : {
-      "comment" : "A switch, under Download over: lets the phone update what's kept on it from Clementine by itself."
+      "comment" : "A switch, under Download over: lets the phone update what's kept on it from Clementine by itself.",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновлять сохранённую музыку в фоновом режиме"
+          }
+        }
+      }
     },
     "Update library" : {
       "localizations" : {
@@ -26457,10 +26779,26 @@
       }
     },
     "Updated %@" : {
-      "comment" : "When something kept on the phone was last updated from Clementine. The placeholder is a relative time, such as \"2 hours ago\" or \"yesterday\". iOS and Android write it in their own words, so the sentence must read right with it as it is."
+      "comment" : "When something kept on the phone was last updated from Clementine. The placeholder is a relative time, such as \"2 hours ago\" or \"yesterday\". iOS and Android write it in their own words, so the sentence must read right with it as it is.",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновлено %@"
+          }
+        }
+      }
     },
     "Updated just now" : {
-      "comment" : "When something kept on the phone was last updated from Clementine: less than a minute ago."
+      "comment" : "When something kept on the phone was last updated from Clementine: less than a minute ago.",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновлено только что"
+          }
+        }
+      }
     },
     "Various artists" : {
       "comment" : "In the library, the artist that albums by several artists (compilations) are listed under, as Clementine lists them.",
@@ -26475,6 +26813,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Varios artistas"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разные исполнители"
           }
         },
         "sv" : {
@@ -26934,6 +27278,12 @@
             "value" : "Αναμονή για το Clementine"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ожидание Clementine"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -26983,7 +27333,15 @@
       }
     },
     "While the phone is charging, on a network Download over allows, music set to Every time I connect is updated from the last Clementine you connected to, if it's on." : {
-      "comment" : "Under the switch above. \"Every time I connect\" is the choice in the Keep on this phone sheet."
+      "comment" : "Under the switch above. \"Every time I connect\" is the choice in the Keep on this phone sheet.",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пока телефон заряжается, в сети, разрешённой в настройке «Загрузка», музыка, для которой выбрано «При каждом подключении», обновляется из последнего Clementine, к которому вы подключались, если он включён."
+          }
+        }
+      }
     },
     "Wi-Fi and mobile data, not in Low Data Mode" : {
       "comment" : "A choice under Download over: Wi-Fi, and mobile data unless Low Data Mode is on.",
@@ -26992,6 +27350,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wi-Fi και δεδομένα κινητού, όταν η «Χαμηλή κατανάλωση δεδομένων» είναι ανενεργή"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wi-Fi и мобильные данные, не в режиме экономии трафика"
           }
         }
       }
@@ -27009,6 +27373,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wifi solamente"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Только Wi-Fi"
           }
         },
         "sv" : {
