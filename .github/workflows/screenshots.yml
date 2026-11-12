@@ -96,7 +96,7 @@ jobs:
       # A step's condition can't read secrets, so this says whether the R2 token is set.
       HAS_R2_TOKEN: ${{ secrets.R2_ACCESS_KEY_ID != '' }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5.1.0
         with:
           ref: ${{ inputs.ref }}
 
@@ -243,7 +243,7 @@ jobs:
           done
           exit $status
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v5.0.0
         if: always()
         with:
           name: ${{ inputs.artifact || 'screenshots' }}

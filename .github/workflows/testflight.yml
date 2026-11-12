@@ -52,7 +52,7 @@ jobs:
       # A step's condition can't read secrets, so this says whether the API key is set.
       HAS_ASC_KEY: ${{ secrets.ASC_KEY_ID != '' }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5.1.0
         with:
           # The build number comes from the number of commits, and the version from the tags.
           fetch-depth: 0
@@ -92,7 +92,7 @@ jobs:
           TESTING_FEATURES: "YES"
         run: scripts/archive.sh "${{ steps.version.outputs.name }}" "${{ steps.version.outputs.build }}" build/release
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v5.0.0
         if: env.HAS_ASC_KEY == 'true'
         with:
           name: testflight
@@ -100,7 +100,7 @@ jobs:
             build/release/ClementineRemote.ipa
             build/release/ClementineRemote.xcarchive/dSYMs/
 
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1.338.0
         if: env.HAS_ASC_KEY == 'true'
         with:
           ruby-version: "3.4"

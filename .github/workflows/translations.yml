@@ -47,7 +47,7 @@ jobs:
     env:
       TX_TOKEN: ${{ secrets.TX_TOKEN }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5.1.0
       - uses: astral-sh/setup-uv@v10.2.0
         if: env.TX_TOKEN != ''
       - name: Pull the translations made since the last pull
@@ -80,7 +80,7 @@ jobs:
         run: echo "::notice::The TX_TOKEN or TX_KEY secret isn't set, so no translations were pulled. See RELEASING.md."
       # Checked out with the deploy key, so the push below runs the other workflows on the new
       # commit (ci.yml, testflight.yml), as a push with the workflow's own token wouldn't.
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5.1.0
         if: env.TX_TOKEN != '' && env.HAS_TX_KEY == 'true'
         with:
           ref: main
