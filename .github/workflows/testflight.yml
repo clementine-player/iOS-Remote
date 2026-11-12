@@ -52,7 +52,7 @@ jobs:
       # A step's condition can't read secrets, so this says whether the API key is set.
       HAS_ASC_KEY: ${{ secrets.ASC_KEY_ID != '' }}
     steps:
-      - uses: actions/checkout@v5.1.0
+      - uses: actions/checkout@v7.0.1
         with:
           # The build number comes from the number of commits, and the version from the tags.
           fetch-depth: 0
@@ -92,7 +92,7 @@ jobs:
           TESTING_FEATURES: "YES"
         run: scripts/archive.sh "${{ steps.version.outputs.name }}" "${{ steps.version.outputs.build }}" build/release
 
-      - uses: actions/upload-artifact@v5.0.0
+      - uses: actions/upload-artifact@v7.0.2
         if: env.HAS_ASC_KEY == 'true'
         with:
           name: testflight

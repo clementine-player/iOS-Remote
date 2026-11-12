@@ -45,7 +45,7 @@ jobs:
       commit: ${{ steps.plan.outputs.commit }}
       first: ${{ steps.plan.outputs.first }}
     steps:
-      - uses: actions/checkout@v5.1.0
+      - uses: actions/checkout@v7.0.1
         with:
           # All of main's history and tags: the notes and version come from them.
           fetch-depth: 0
@@ -72,7 +72,7 @@ jobs:
             echo "::notice::Nothing has changed since the last release, so there's nothing to release."
           fi
 
-      - uses: actions/upload-artifact@v5.0.0
+      - uses: actions/upload-artifact@v7.0.2
         if: steps.plan.outputs.release == 'true'
         with:
           name: release-notes
@@ -117,7 +117,7 @@ jobs:
       FASTLANE_OPT_OUT_USAGE: "1"
       FASTLANE_HIDE_CHANGELOG: "1"
     steps:
-      - uses: actions/checkout@v5.1.0
+      - uses: actions/checkout@v7.0.1
         with:
           ref: ${{ needs.plan.outputs.commit }}
 
@@ -135,7 +135,7 @@ jobs:
       - name: Build
         run: scripts/archive.sh "$NAME" "$BUILD" build/release
 
-      - uses: actions/upload-artifact@v5.0.0
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: release
           path: |
@@ -176,7 +176,7 @@ jobs:
       FASTLANE_OPT_OUT_USAGE: "1"
       FASTLANE_HIDE_CHANGELOG: "1"
     steps:
-      - uses: actions/checkout@v5.1.0
+      - uses: actions/checkout@v7.0.1
         with:
           ref: ${{ needs.plan.outputs.commit }}
 
@@ -188,12 +188,12 @@ jobs:
           printf '%s\n' "$ASC_PRIVATE_KEY" > "$key"
           echo "ASC_KEY_PATH=$key" >> "$GITHUB_ENV"
 
-      - uses: actions/download-artifact@v5.0.0
+      - uses: actions/download-artifact@v8.0.2
         with:
           name: release-notes
           path: ${{ runner.temp }}/notes
 
-      - uses: actions/download-artifact@v5.0.0
+      - uses: actions/download-artifact@v8.0.2
         with:
           pattern: store-screenshots-*
           path: ${{ runner.temp }}/store-screenshots
