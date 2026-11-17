@@ -30,6 +30,7 @@
 		656537921D83710E755C5F51 /* OutputSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3565B08D99C9EB73FC5E33 /* OutputSheet.swift */; };
 		6F00AA6F669DE2D2094B9ED6 /* QueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB6C96030EC2FA49A4E8212 /* QueueView.swift */; };
 		7232C827CCBC7AADD14B8A97 /* ClementineWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 364851AE9A1126E4A11B1469 /* ClementineWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		75DCA0189DBE9F29A91DB6FA /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F7E61E6A94D6460624E6123E /* PrivacyInfo.xcprivacy */; };
 		761C4231EA060F078910BF81 /* DownloadsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C473DE02F14A3512CD1127FB /* DownloadsModel.swift */; };
 		8337C9D440F6AFBDF803EC32 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9B3C025F4213A8DA1AFDBF /* NetworkMonitor.swift */; };
 		8BC16A794293F5B9E10598BF /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0CF9A7519C0E1D02B75CB8 /* Components.swift */; };
@@ -54,6 +55,7 @@
 		E615AF26FE3FE54B8A706F57 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B17CFBC70A46B3612277583 /* Assets.xcassets */; };
 		ECC005CFCC20810B3ADA1F4D /* ConnectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216338887AAE5E1DC3F81FD0 /* ConnectUITests.swift */; };
 		F654C2A83CDAA6826BF57BF4 /* SongDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0567EB712221368C115A0A43 /* SongDetailsView.swift */; };
+		FFC1DB6B2A48051D33461733 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 53D55F0D9998A5EF6508D53B /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,6 +105,7 @@
 		4856A6293D1829361A2A9A17 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		4B17CFBC70A46B3612277583 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		53A993163DF245FDB672E969 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		53D55F0D9998A5EF6508D53B /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		5EC8D6A33585EA2F0980CEEF /* ConnectionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionSheet.swift; sourceTree = "<group>"; };
 		5F3565B08D99C9EB73FC5E33 /* OutputSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputSheet.swift; sourceTree = "<group>"; };
 		5F415670725AF9A27921DB62 /* ClementineRemoteUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ClementineRemoteUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,6 +138,7 @@
 		E9487E83AC1EF9117BF817B9 /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
 		ECAC7FD0127C2A1352E98E05 /* AppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntents.swift; sourceTree = "<group>"; };
 		EE0CF9A7519C0E1D02B75CB8 /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		F7E61E6A94D6460624E6123E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		FA022D6110999DDCC5895808 /* FoldReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldReader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -256,6 +260,7 @@
 			children = (
 				4B17CFBC70A46B3612277583 /* Assets.xcassets */,
 				8231CF7038EDE553E2AC1660 /* Localizable.xcstrings */,
+				53D55F0D9998A5EF6508D53B /* PrivacyInfo.xcprivacy */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -266,6 +271,7 @@
 				894F103FAB5D80B7A03AAE5D /* ClementineWidget.entitlements */,
 				275DDCC3A769C5E570362F65 /* ClementineWidget.swift */,
 				603095C98126DB9E947CC1B3 /* Info.plist */,
+				F7E61E6A94D6460624E6123E /* PrivacyInfo.xcprivacy */,
 			);
 			path = Widget;
 			sourceTree = "<group>";
@@ -539,6 +545,7 @@
 			files = (
 				C4B3221C0EE87A4832DAB4B6 /* Assets.xcassets in Resources */,
 				D64BCDEA186CDD0D6C01E9BB /* Localizable.xcstrings in Resources */,
+				FFC1DB6B2A48051D33461733 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -548,6 +555,7 @@
 			files = (
 				E615AF26FE3FE54B8A706F57 /* Assets.xcassets in Resources */,
 				4687C804D92FDE4D9C3CE3FE /* Localizable.xcstrings in Resources */,
+				75DCA0189DBE9F29A91DB6FA /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

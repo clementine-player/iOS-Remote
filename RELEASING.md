@@ -185,7 +185,10 @@ Addresses*: Sentry would otherwise keep the address each report was sent from.
    - *App Privacy:* link to [PRIVACY.md](PRIVACY.md) (the listing does too), and answer that
      the app collects *Crash Data* and *Other Diagnostic Data* (under *Diagnostics*), for *App
      Functionality*, not linked to the user's identity and not used for tracking: the crash
-     reports users agree to send (see *Crash reports*).
+     reports users agree to send (see *Crash reports*). The privacy manifests,
+     `App/Resources/PrivacyInfo.xcprivacy` and `Widget/PrivacyInfo.xcprivacy`, say the same, and
+     give the reasons the app uses the APIs Apple asks about; keep them in step with these
+     answers and with the code.
    - *App Information:* the age rating questionnaire (no objectionable content).
    - *Pricing and Availability:* free, in every country.
    - *App Review Information*, on the version page: a contact's name, phone number and email.
