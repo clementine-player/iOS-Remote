@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		015B3D7098D15696CE753DCA /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4806AC63E537A5050C1E6BD /* LibraryView.swift */; };
 		02B054CAB79B78B9185BBFC3 /* InternetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46866E6F5E51462F605F0CA /* InternetView.swift */; };
-		10F30E7ECA7C1265A6F085C4 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 30CA484ABD11D952AE7446E4 /* Sentry */; };
+		10F30E7ECA7C1265A6F085C4 /* Sentry-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = F6D75D7AD5992D41069F4420 /* Sentry-Dynamic */; };
 		198DA2CE0EAEC3C225F8AC81 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 761E362C08E663B70599A6DD /* SwiftUI.framework */; };
 		1B87E42072E67CED101AEDC9 /* ClementineRemoteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9202E1E8FCA97103ED358B /* ClementineRemoteApp.swift */; };
 		1DBC787744D19CBA495822CC /* CommandIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD37699892851B35F20411F /* CommandIntents.swift */; };
@@ -158,7 +158,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D6AE5E0768E9DF84BD802B2 /* ClementineKit in Frameworks */,
-				10F30E7ECA7C1265A6F085C4 /* Sentry in Frameworks */,
+				10F30E7ECA7C1265A6F085C4 /* Sentry-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,7 +455,7 @@
 			name = ClementineRemote;
 			packageProductDependencies = (
 				12273CB88A5BBB32D77ACFB5 /* ClementineKit */,
-				30CA484ABD11D952AE7446E4 /* Sentry */,
+				F6D75D7AD5992D41069F4420 /* Sentry-Dynamic */,
 			);
 			productName = ClementineRemote;
 			productReference = 19DA434663A3FC3E7779EDD6 /* Clementine Remote.app */;
@@ -949,14 +949,14 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = ClementineKit;
 		};
-		30CA484ABD11D952AE7446E4 /* Sentry */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2403D15704937806622CB40B /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
-			productName = Sentry;
-		};
 		406A23301C2BC4419F6BA73E /* ClementineKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ClementineKit;
+		};
+		F6D75D7AD5992D41069F4420 /* Sentry-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2403D15704937806622CB40B /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = "Sentry-Dynamic";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

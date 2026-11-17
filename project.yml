@@ -12,6 +12,9 @@ packages:
   ClementineKit:
     path: Packages/ClementineKit
   # Catches crashes, for the reports the app asks to send (App/Support/CrashReporting.swift).
+  # The app links its dynamic framework (the Sentry-Dynamic product). With the static one (the
+  # Sentry product), Sentry.framework still ended up in the app's Frameworks folder, and App
+  # Store Connect refused the upload: "Sentry.framework/Sentry is not properly signed".
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
     exactVersion: 9.33.0
@@ -39,6 +42,7 @@ targets:
     dependencies:
       - package: ClementineKit
       - package: Sentry
+        product: Sentry-Dynamic
       - target: ClementineWidget
     entitlements:
       path: App/ClementineRemote.entitlements
