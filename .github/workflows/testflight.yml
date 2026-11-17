@@ -120,3 +120,16 @@ jobs:
         run: >
           bundle exec fastlane beta ipa:"$PWD/build/release/ClementineRemote.ipa"
           changelog:"$RUNNER_TEMP/changelog.txt"
+
+      - uses: astral-sh/setup-uv@v10.3.3
+        if: env.HAS_ASC_KEY == 'true'
+
+      # After the upload, so that a failure here doesn't hold up the build. Without the
+      # SENTRY_AUTH_TOKEN secret and the SENTRY_PROJECT variable, it only checks the dSYMs.
+      - name: Upload debug symbols to Sentry
+        if: env.HAS_ASC_KEY == 'true'
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG || 'clementine-player' }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+        run: uv run --only-group sentry scripts/sentry_symbols.py build/release/ClementineRemote.xcarchive

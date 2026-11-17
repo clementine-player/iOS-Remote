@@ -24,6 +24,9 @@ dev = [
     "ty==0.0.84",
     "types-requests>=2.32",
 ]
+# sentry_symbols.py, in the TestFlight and release builds, without the rest:
+# uv run --only-group sentry.
+sentry = ["sentry-cli==3.8.2"]
 
 [tool.ruff]
 target-version = "py311"

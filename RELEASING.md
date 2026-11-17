@@ -139,6 +139,20 @@ Translations are made on Transifex, not in pull requests: the next pull would ov
 3. **The first time,** run the workflow by hand with *Push translations* ticked: it sends the
    catalog's translations up to Transifex, so translators start from them, then pulls.
 
+## Crash reports
+
+Crash reports go to the `clementine-remote-ios` project in the clementine-player organization
+on [Sentry](https://sentry.io). Sentry names the functions in a report from the build's dSYMs,
+which the TestFlight and release workflows upload (`scripts/sentry_symbols.py`), after checking
+that every executable in the archive has one. The dSYMs are kept with each run's artifacts too.
+
+**One-time setup:** in the repository's (or the organization's) settings,
+
+- the variable `SENTRY_PROJECT`: `clementine-remote-ios`. `SENTRY_ORG` can name another
+  organization than `clementine-player`.
+- the secret `SENTRY_AUTH_TOKEN`: an organization token, which can upload debug files.
+  Without it, or without `SENTRY_PROJECT`, the workflows only check the dSYMs.
+
 ## One-time setup
 
 1. **Create the app** in [App Store Connect](https://appstoreconnect.apple.com): *Apps → + →

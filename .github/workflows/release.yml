@@ -162,6 +162,17 @@ jobs:
           git tag -a "$TAG" "$COMMIT" -m "Clementine Remote $NAME"
           git push origin "$TAG"
 
+      - uses: astral-sh/setup-uv@v10.3.3
+
+      # After the upload and the tag, so that a failure here doesn't hold up the release. Without
+      # the SENTRY_AUTH_TOKEN secret and the SENTRY_PROJECT variable, it only checks the dSYMs.
+      - name: Upload debug symbols to Sentry
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG || 'clementine-player' }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+        run: uv run --only-group sentry scripts/sentry_symbols.py build/release/ClementineRemote.xcarchive
+
   submit:
     needs: [plan, build, screenshots]
     runs-on: ubuntu-latest
