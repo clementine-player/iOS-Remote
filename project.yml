@@ -11,6 +11,10 @@ configFiles:
 packages:
   ClementineKit:
     path: Packages/ClementineKit
+  # Catches crashes, for the reports the app asks to send (App/Support/CrashReporting.swift).
+  Sentry:
+    url: https://github.com/getsentry/sentry-cocoa
+    exactVersion: 9.33.0
 settings:
   base:
     SWIFT_VERSION: "6.0"
@@ -21,6 +25,9 @@ settings:
     SWIFT_STRICT_CONCURRENCY: complete
     LOCALIZATION_PREFERS_STRING_CATALOGS: YES
     SWIFT_EMIT_LOC_STRINGS: YES
+    # The Sentry project crash reports go to. Empty, builds send none: App Store and TestFlight
+    # builds set it, from the repository variable SENTRY_DSN (scripts/archive.sh).
+    SENTRY_DSN: ""
 targets:
   ClementineRemote:
     type: application
@@ -31,6 +38,7 @@ targets:
       - path: Shared
     dependencies:
       - package: ClementineKit
+      - package: Sentry
       - target: ClementineWidget
     entitlements:
       path: App/ClementineRemote.entitlements
@@ -53,6 +61,7 @@ targets:
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         AppGroup: $(APP_GROUP)
+        SentryDSN: $(SENTRY_DSN)
         UILaunchScreen:
           UIColorName: Surface
         UIApplicationSupportsIndirectInputEvents: true

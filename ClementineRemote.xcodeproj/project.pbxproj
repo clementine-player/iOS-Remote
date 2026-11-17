@@ -9,10 +9,12 @@
 /* Begin PBXBuildFile section */
 		015B3D7098D15696CE753DCA /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4806AC63E537A5050C1E6BD /* LibraryView.swift */; };
 		02B054CAB79B78B9185BBFC3 /* InternetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46866E6F5E51462F605F0CA /* InternetView.swift */; };
+		10F30E7ECA7C1265A6F085C4 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 30CA484ABD11D952AE7446E4 /* Sentry */; };
 		198DA2CE0EAEC3C225F8AC81 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 761E362C08E663B70599A6DD /* SwiftUI.framework */; };
 		1B87E42072E67CED101AEDC9 /* ClementineRemoteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9202E1E8FCA97103ED358B /* ClementineRemoteApp.swift */; };
 		1DBC787744D19CBA495822CC /* CommandIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD37699892851B35F20411F /* CommandIntents.swift */; };
 		26A8AB385A63716EE8F3DB7E /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A27CF1AC8998F6F615C91C80 /* WidgetKit.framework */; };
+		2922ED382E897D25D2B5BF36 /* CrashReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE1EF3679BD4471AAFEF2A2 /* CrashReporting.swift */; };
 		2DCED78B207233F308ECE495 /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E799EAA26048F3E7A685A1E /* ConnectView.swift */; };
 		2E89727B527288C7A3667C8D /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDE87078B3BE38BF533D5A /* MainView.swift */; };
 		35E7D5066C04B7AD89E61632 /* SharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B044E45F9BBD1D9AA21079 /* SharedState.swift */; };
@@ -123,6 +125,7 @@
 		C4D0E12EF32CE14014407139 /* VolumeButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeButtons.swift; sourceTree = "<group>"; };
 		C636902427E849DF54E5B07F /* AVPlayback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVPlayback.swift; sourceTree = "<group>"; };
 		CD9202E1E8FCA97103ED358B /* ClementineRemoteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClementineRemoteApp.swift; sourceTree = "<group>"; };
+		CDE1EF3679BD4471AAFEF2A2 /* CrashReporting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReporting.swift; sourceTree = "<group>"; };
 		CFC7AB47D2CE0823058DA1A6 /* NowPlaying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlaying.swift; sourceTree = "<group>"; };
 		D46866E6F5E51462F605F0CA /* InternetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternetView.swift; sourceTree = "<group>"; };
 		D4806AC63E537A5050C1E6BD /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
@@ -151,6 +154,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D6AE5E0768E9DF84BD802B2 /* ClementineKit in Frameworks */,
+				10F30E7ECA7C1265A6F085C4 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,6 +281,7 @@
 		88FE4D9DD28CB9D79CAE438C /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				CDE1EF3679BD4471AAFEF2A2 /* CrashReporting.swift */,
 				FA022D6110999DDCC5895808 /* FoldReader.swift */,
 				AE9B3C025F4213A8DA1AFDBF /* NetworkMonitor.swift */,
 				468183AFD2E06A2AAA047535 /* Toast.swift */,
@@ -444,6 +449,7 @@
 			name = ClementineRemote;
 			packageProductDependencies = (
 				12273CB88A5BBB32D77ACFB5 /* ClementineKit */,
+				30CA484ABD11D952AE7446E4 /* Sentry */,
 			);
 			productName = ClementineRemote;
 			productReference = 19DA434663A3FC3E7779EDD6 /* Clementine Remote.app */;
@@ -511,6 +517,7 @@
 			mainGroup = CEF910D3DF895882F5AB4A3F;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				2403D15704937806622CB40B /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				7DEA0FCB5392D9F41F0F3DDA /* XCLocalSwiftPackageReference "Packages/ClementineKit" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -579,6 +586,7 @@
 				8BC16A794293F5B9E10598BF /* Components.swift in Sources */,
 				2DCED78B207233F308ECE495 /* ConnectView.swift in Sources */,
 				5519998FF94C9CDB9C36CA95 /* ConnectionSheet.swift in Sources */,
+				2922ED382E897D25D2B5BF36 /* CrashReporting.swift in Sources */,
 				761C4231EA060F078910BF81 /* DownloadsModel.swift in Sources */,
 				AF5B4FBB88A0EB985218B5A6 /* DownloadsView.swift in Sources */,
 				D84AE4D61449F2DADE7A9BBD /* FoldReader.swift in Sources */,
@@ -731,6 +739,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SENTRY_DSN = "";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -839,6 +848,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SENTRY_DSN = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -915,10 +925,26 @@
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		2403D15704937806622CB40B /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
+			requirement = {
+				kind = exactVersion;
+				version = 9.33.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		12273CB88A5BBB32D77ACFB5 /* ClementineKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ClementineKit;
+		};
+		30CA484ABD11D952AE7446E4 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2403D15704937806622CB40B /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
 		};
 		406A23301C2BC4419F6BA73E /* ClementineKit */ = {
 			isa = XCSwiftPackageProductDependency;

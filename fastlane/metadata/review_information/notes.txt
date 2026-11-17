@@ -7,4 +7,4 @@ For review, there's a Clementine on the internet, with a small library of public
 
 To test with Clementine on your own computer instead: install it from https://www.clementine-player.org/, open Tools → Preferences → Network Remote, turn on "Use a network remote control" (and allow downloads), and connect from a device on the same Wi-Fi network. The app finds it by itself.
 
-The app has no accounts and collects no data.
+The app has no accounts. It collects no data, except for a crash report after the app crashes, when the user agrees to send it.

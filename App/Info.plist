@@ -43,6 +43,8 @@
 	</array>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Clementine Remote finds and talks to Clementine on your local network.</string>
+	<key>SentryDSN</key>
+	<string>$(SENTRY_DSN)</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

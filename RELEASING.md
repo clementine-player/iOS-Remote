@@ -141,17 +141,27 @@ Translations are made on Transifex, not in pull requests: the next pull would ov
 
 ## Crash reports
 
-Crash reports go to the `clementine-remote-ios` project in the clementine-player organization
-on [Sentry](https://sentry.io). Sentry names the functions in a report from the build's dSYMs,
-which the TestFlight and release workflows upload (`scripts/sentry_symbols.py`), after checking
-that every executable in the archive has one. The dSYMs are kept with each run's artifacts too.
+After the app crashes, the next time it starts it asks whether to send a report
+(`App/Support/CrashReporting.swift`), as the desktop Clementine does. The reports go to the
+`clementine-remote-ios` project in the clementine-player organization on
+[Sentry](https://sentry.io): only App Store and TestFlight builds send them, and only those the
+user agrees to send. TestFlight builds' are in the `testflight` environment.
+
+Sentry names the functions in a report from the build's dSYMs, which the TestFlight and release
+workflows upload (`scripts/sentry_symbols.py`), after checking that every executable in the
+archive has one. The dSYMs are kept with each run's artifacts too.
 
 **One-time setup:** in the repository's (or the organization's) settings,
 
+- the variable `SENTRY_DSN`: the project's DSN (*Project Settings → Client Keys*), which the
+  builds put in the app. Without it, they send no crash reports.
 - the variable `SENTRY_PROJECT`: `clementine-remote-ios`. `SENTRY_ORG` can name another
   organization than `clementine-player`.
 - the secret `SENTRY_AUTH_TOKEN`: an organization token, which can upload debug files.
   Without it, or without `SENTRY_PROJECT`, the workflows only check the dSYMs.
+
+In the project's settings, under *Security & Privacy*, turn on *Prevent Storing of IP
+Addresses*: Sentry would otherwise keep the address each report was sent from.
 
 ## One-time setup
 
@@ -173,7 +183,9 @@ that every executable in the archive has one. The dSYMs are kept with each run's
 4. **Before the first release,** fill in what App Store Connect asks for once rather than with
    each version:
    - *App Privacy:* link to [PRIVACY.md](PRIVACY.md) (the listing does too), and answer that
-     the app collects no data.
+     the app collects *Crash Data* and *Other Diagnostic Data* (under *Diagnostics*), for *App
+     Functionality*, not linked to the user's identity and not used for tracking: the crash
+     reports users agree to send (see *Crash reports*).
    - *App Information:* the age rating questionnaire (no objectionable content).
    - *Pricing and Availability:* free, in every country.
    - *App Review Information*, on the version page: a contact's name, phone number and email.
