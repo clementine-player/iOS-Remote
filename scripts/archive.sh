@@ -92,4 +92,20 @@ xcodebuild -exportArchive -archivePath "$archive" -exportOptionsPlist "$out/Expo
   -exportPath "$out/export" "${auth[@]}"
 mv "$out/export/"*.ipa "$out/ClementineRemote.ipa"
 rm -rf "$out/export"
+
+# What App Store Connect checks on upload, so that a bundle it would refuse fails here: every
+# framework is a dynamic library, and everything in the .ipa is signed.
+check="$out/ipa-check"
+rm -rf "$check"
+unzip -q "$out/ClementineRemote.ipa" -d "$check"
+for framework in "$check/Payload/"*.app/Frameworks/*.framework; do
+  [ -e "$framework" ] || continue
+  binary="$framework/$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$framework/Info.plist")"
+  if ! file -b "$binary" | grep -q 'dynamically linked shared library'; then
+    echo "$(basename "$framework") isn't a dynamic library: $(file -b "$binary")" >&2
+    exit 1
+  fi
+done
+codesign --verify --deep --strict --verbose=2 "$check/Payload/"*.app
+rm -rf "$check"
 echo "Built $out/ClementineRemote.ipa: $version ($build)"
