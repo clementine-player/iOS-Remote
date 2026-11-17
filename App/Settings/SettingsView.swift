@@ -20,6 +20,7 @@ struct SettingsView: View {
     @AppStorage(SettingKey.port) private var port = Int(RemoteProtocol.defaultPort)
     @AppStorage(SettingKey.keepScreenOn) private var keepScreenOn = false
     @AppStorage(SettingKey.renderer) private var renderer = true
+    @AppStorage(SettingKey.crashReports) private var crashReports = true
 
     /// Download over: the choice made, or the Wi-Fi only switch before there was one.
     private var networkChoice: Binding<DownloadNetwork> {
@@ -137,6 +138,30 @@ struct SettingsView: View {
                     Text("Keep the screen on")
                     Text("While connected to Clementine.")
                 }
+                if CrashReporting.isAvailable {
+                    Toggle(isOn: $crashReports) {
+                        Text(
+                            "Offer to send crash reports",
+                            comment: "A switch in Settings. The same in the Android app.")
+                        Text(
+                            "The next time the app starts after a crash, ask whether to send a report so the problem can be fixed. Takes effect when the app restarts.",
+                            comment: "Under the switch above. The same in the Android app.")
+                    }
+                    .onChange(of: crashReports) { _, on in
+                        if !on {
+                            // As the privacy policy says: reports not sent yet go with it.
+                            CrashReportStore.standard.removeAll()
+                        }
+                    }
+                    if TestingFeatures.enabled {
+                        // Only for trying crash reports out, so not translated.
+                        Button(role: .destructive) {
+                            CrashReporting.shared?.crash()
+                        } label: {
+                            Text(verbatim: "Crash the app")
+                        }
+                    }
+                }
             }
 
             Section("About") {
@@ -225,7 +250,9 @@ struct AboutView: View {
                     Text("Version \(version)")
                         .textStyle(.bodyMedium)
                         .foregroundStyle(Palette.onSurfaceVariant)
-                    Text("Clementine Remote controls the Clementine music player on your computer. It collects no data: it only talks to your own Clementine, on your own network.")
+                    Text(
+                        "Clementine Remote controls the Clementine music player on your computer. It only talks to your own Clementine, on your own network, and sends a crash report only if you say so.",
+                        comment: "In About, under the app's name and version.")
                         .textStyle(.bodyMedium)
                         .multilineTextAlignment(.center)
                         .foregroundStyle(Palette.onSurfaceVariant)
@@ -252,6 +279,15 @@ struct AboutView: View {
                             Text(verbatim: "SwiftProtobuf")
                                 .textStyle(.bodyLarge)
                             Text("Copyright Apple Inc. and the SwiftProtobuf project authors. Licensed under the Apache License, Version 2.0.")
+                                .textStyle(.bodyMedium)
+                                .foregroundStyle(Palette.onSurfaceVariant)
+                        }
+                        Section {
+                            Text(verbatim: "Sentry")
+                                .textStyle(.bodyLarge)
+                            Text(
+                                "Copyright Sentry. Licensed under the MIT License.",
+                                comment: "In Open-source software, under Sentry: the library that catches crashes for crash reports.")
                                 .textStyle(.bodyMedium)
                                 .foregroundStyle(Palette.onSurfaceVariant)
                         }

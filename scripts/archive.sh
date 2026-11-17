@@ -16,6 +16,9 @@
 # With TESTING_FEATURES=YES (as for TestFlight), the build has the features still being built
 # (see TestingFeatures in ClementineKit). App Store releases are built without.
 #
+# With SENTRY_DSN (as on CI, from the repository variable), the app asks to send crash reports
+# there after it crashes (App/Support/CrashReporting.swift). Without, it never sends any.
+#
 # With ASC_KEY_ID, ASC_ISSUER_ID and ASC_KEY_PATH (an App Store Connect API key, as on CI),
 # Xcode signs in with that key; without them, with the Apple account signed in to Xcode.
 set -euo pipefail
@@ -32,9 +35,12 @@ if [ -n "${ASC_KEY_ID:-}" ]; then
     -authenticationKeyIssuerID "$ASC_ISSUER_ID")
 fi
 
-conditions=()
+build_settings=()
 if [ "${TESTING_FEATURES:-NO}" = YES ]; then
-  conditions=('SWIFT_ACTIVE_COMPILATION_CONDITIONS=$(inherited) TESTING_FEATURES')
+  build_settings=('SWIFT_ACTIVE_COMPILATION_CONDITIONS=$(inherited) TESTING_FEATURES')
+fi
+if [ -n "${SENTRY_DSN:-}" ]; then
+  build_settings+=("SENTRY_DSN=$SENTRY_DSN")
 fi
 
 xcodegen generate --quiet
@@ -44,7 +50,7 @@ xcodebuild archive -project ClementineRemote.xcodeproj -scheme ClementineRemote 
   -destination generic/platform=iOS -archivePath "$archive" \
   -derivedDataPath build/DerivedData-archive \
   MARKETING_VERSION="$version" CURRENT_PROJECT_VERSION="$build" CODE_SIGNING_ALLOWED=NO \
-  ${conditions[@]+"${conditions[@]}"}
+  ${build_settings[@]+"${build_settings[@]}"}
 
 # Each bundle's entitlements, with the build settings they use filled in: the extension first,
 # as signing the app seals what's inside it.

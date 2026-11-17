@@ -5,8 +5,13 @@ import SwiftUI
 struct ClementineRemoteApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @State private var model: AppModel
+    @State private var crashReporting: CrashReporting
 
     init() {
+        // First, so that it catches crashes from here on.
+        let crashReporting = CrashReporting()
+        crashReporting.start()
+        _crashReporting = State(initialValue: crashReporting)
         let model = AppModel()
         AppModel.shared = model
         model.registerBackgroundSync()
@@ -18,6 +23,7 @@ struct ClementineRemoteApp: App {
             RootView()
                 .environment(model)
                 .environment(model.session)
+                .environment(crashReporting)
                 .tint(Palette.primary)
         }
     }
@@ -58,6 +64,7 @@ final class SceneDelegate: NSObject, UIWindowSceneDelegate {
 /// play what's on this phone.
 struct RootView: View {
     @Environment(AppModel.self) private var model
+    @Environment(CrashReporting.self) private var crashReporting
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage(SettingKey.appearance) private var appearance = Appearance.system.rawValue
 
@@ -77,6 +84,31 @@ struct RootView: View {
             model.updateShortcuts()
         }
         .toasts(model.toasts)
+        .alert(
+            Text(
+                "Clementine Remote quit unexpectedly",
+                comment: "The title of the question asked when the app starts after it crashed. The same in the Android app."),
+            isPresented: Binding { crashReporting.isAsking } set: { _ in }
+        ) {
+            Button {
+                crashReporting.send()
+            } label: {
+                Text("Send report", comment: "Answers the question after the app crashed. The same in the Android app.")
+            }
+            Button(role: .cancel) {
+                crashReporting.discard()
+            } label: {
+                Text("Don't send", comment: "Answers the question after the app crashed. The same in the Android app.")
+            }
+        } message: {
+            let question = String(
+                localized: "Clementine Remote crashed last time it was running. Send a crash report to the developers so they can fix the problem?",
+                comment: "The question asked when the app starts after it crashed. The same in the Android app.")
+            let details = String(
+                localized: "The report says what the app was doing when it crashed, and which phone and system version it was running on. You'll be asked again each time the app crashes, and you can turn this off in Settings.",
+                comment: "Under the question asked after the app crashed. The same in the Android app.")
+            Text(verbatim: "\(question)\n\n\(details)")
+        }
         .onChange(of: session.status) { old, _ in
             model.statusChanged(from: old)
             model.updateIdleTimer()

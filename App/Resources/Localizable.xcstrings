@@ -5911,6 +5911,7 @@
       }
     },
     "Clementine Remote controls the Clementine music player on your computer. It collects no data: it only talks to your own Clementine, on your own network." : {
+      "extractionState" : "stale",
       "localizations" : {
         "cs" : {
           "stringUnit" : {
@@ -5955,6 +5956,15 @@
           }
         }
       }
+    },
+    "Clementine Remote controls the Clementine music player on your computer. It only talks to your own Clementine, on your own network, and sends a crash report only if you say so." : {
+      "comment" : "In About, under the app's name and version."
+    },
+    "Clementine Remote crashed last time it was running. Send a crash report to the developers so they can fix the problem?" : {
+      "comment" : "The question asked when the app starts after it crashed. The same in the Android app."
+    },
+    "Clementine Remote quit unexpectedly" : {
+      "comment" : "The title of the question asked when the app starts after it crashed. The same in the Android app."
     },
     "Clementine can send its music here, when it plays on other devices. Takes effect the next time the app connects." : {
       "localizations" : {
@@ -8265,6 +8275,9 @@
         }
       }
     },
+    "Copyright Sentry. Licensed under the MIT License." : {
+      "comment" : "In Open-source software, under Sentry: the library that catches crashes for crash reports."
+    },
     "Couldn't connect to Clementine" : {
       "localizations" : {
         "cs" : {
@@ -9857,6 +9870,9 @@
           }
         }
       }
+    },
+    "Don't send" : {
+      "comment" : "Answers the question after the app crashed. The same in the Android app."
     },
     "Don't shuffle" : {
       "localizations" : {
@@ -16545,6 +16561,9 @@
         }
       }
     },
+    "Offer to send crash reports" : {
+      "comment" : "A switch in Settings. The same in the Android app."
+    },
     "On iPad" : {
       "comment" : "The tab with the music saved on the iPad, as opposed to Clementine on the computer. Keep it short: it's a tab label, under an icon, beside four others.",
       "localizations" : {
@@ -22596,6 +22615,9 @@
         }
       }
     },
+    "Send report" : {
+      "comment" : "Answers the question after the app crashed. The same in the Android app."
+    },
     "Set up in Clementine" : {
       "localizations" : {
         "el" : {
@@ -25583,6 +25605,9 @@
         }
       }
     },
+    "The next time the app starts after a crash, ask whether to send a report so the problem can be fixed. Takes effect when the app restarts." : {
+      "comment" : "Under the switch above. The same in the Android app."
+    },
     "The phone's volume buttons change Clementine's volume while the app is open." : {
       "localizations" : {
         "el" : {
@@ -25622,6 +25647,9 @@
           }
         }
       }
+    },
+    "The report says what the app was doing when it crashed, and which phone and system version it was running on. You'll be asked again each time the app crashes, and you can turn this off in Settings." : {
+      "comment" : "Under the question asked after the app crashed. The same in the Android app."
     },
     "There isn't enough space on this phone" : {
       "localizations" : {

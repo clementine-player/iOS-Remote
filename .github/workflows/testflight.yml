@@ -90,6 +90,8 @@ jobs:
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
           # Testers get the features still being built; App Store releases don't.
           TESTING_FEATURES: "YES"
+          # Where the app sends the crash reports users agree to send.
+          SENTRY_DSN: ${{ vars.SENTRY_DSN }}
         run: scripts/archive.sh "${{ steps.version.outputs.name }}" "${{ steps.version.outputs.build }}" build/release
 
       - uses: actions/upload-artifact@v7.0.2

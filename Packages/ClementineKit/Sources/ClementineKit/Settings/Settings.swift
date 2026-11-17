@@ -29,6 +29,8 @@ public enum SettingKey {
     // Advanced
     public static let keepScreenOn = "pref_keep_screen_on"
     public static let renderer = "pref_renderer"
+    /// Whether to ask to send a crash report after the app crashes (CrashReportStore).
+    public static let crashReports = "pref_crash_reports"
 
     // Saved state
     public static let lastHost = "save_clementine_ip"
