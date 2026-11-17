@@ -6,6 +6,9 @@ only when you say so.
 
 - **Local network.** The app only connects to the Clementine you choose, found on your local
   network or by its address. iOS asks you before the app can look for it.
+- **Background updates.** While the phone is charging, the app connects to the last Clementine
+  you used to update the music you keep on the phone. You can turn this off in Settings, with
+  *Update kept music in the background*.
 - **Storage.** The app keeps the address of your Clementine and its settings on your device.
   Songs you download from Clementine are saved in the app's folder, which you can see in the
   Files app.
@@ -17,7 +20,8 @@ only when you say so.
   it was on: its model, its iOS version, language and time zone, and the state of its memory,
   storage and battery. It doesn't include your name, what you did in the app, or the address of
   your Clementine. Reports are sent to [Sentry](https://sentry.io), which stores them for us in
-  the EU, and are used only to fix crashes. You can turn the question off in Settings, under
+  the EU, without the IP address they were sent from, and deletes them after at most 90 days.
+  They're used only to fix crashes. You can turn the question off in Settings, under
   Advanced; turning it off deletes reports that haven't been sent.
 
 Nothing else leaves your device except the commands and requests sent to your own Clementine.
