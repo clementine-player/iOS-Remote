@@ -27,6 +27,9 @@ workflows:
     '.github/workflows/translations.yml':
         - 'actions/checkout@v7.0.1'
         - 'astral-sh/setup-uv@v10.3.3'
+    '.github/workflows/watch-screenshots.yml':
+        - 'actions/checkout@v7.0.1'
+        - 'actions/upload-artifact@v7.0.2'
 dependencies:
     'actions/checkout@v7.0.1':
         ref: 'v7.0.1'

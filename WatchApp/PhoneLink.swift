@@ -23,6 +23,13 @@ final class PhoneLink: NSObject {
 
     override init() {
         super.init()
+        #if DEBUG
+        // For the App Store's screenshots (WatchUITests): what to show, without a phone.
+        if let showcase = ProcessInfo.processInfo.environment["SHOWCASE_NOW_PLAYING"] {
+            nowPlaying = WatchLinkCoding.decodeState(Data(showcase.utf8))
+            return
+        }
+        #endif
         guard WCSession.isSupported() else { return }
         WCSession.default.delegate = self
         WCSession.default.activate()

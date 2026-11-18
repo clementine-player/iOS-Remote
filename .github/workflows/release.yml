@@ -6,7 +6,7 @@
 # when none has one. It:
 #   - builds the app (scripts/archive.sh), uploads it, and pushes the tag v<version>
 #   - meanwhile, takes the App Store screenshots: screenshots.yml, light, on the devices the App
-#     Store wants (a 6.9" iPhone and a 13" iPad)
+#     Store wants (a 6.9" iPhone and a 13" iPad), and watch-screenshots.yml, the Apple Watch's
 #   - submits the build for App Review with the listing in fastlane/metadata, the screenshots
 #     and the notes. App Review is told to use the demo Clementine, demo.clementine-player.org,
 #     with the auth code in the secret DEMO_AUTH_CODE. Once Apple approves it, it's released.
@@ -98,6 +98,17 @@ jobs:
       ref: ${{ needs.plan.outputs.commit }}
       artifact: ${{ matrix.artifact }}
 
+  # The Apple Watch app's, which the App Store needs too.
+  watch-screenshots:
+    needs: plan
+    if: needs.plan.outputs.release == 'true'
+    uses: ./.github/workflows/watch-screenshots.yml
+    permissions:
+      contents: read
+    with:
+      ref: ${{ needs.plan.outputs.commit }}
+      artifact: store-screenshots-watch
+
   build:
     needs: plan
     if: needs.plan.outputs.release == 'true'
@@ -188,7 +199,7 @@ jobs:
         run: scripts/sentry_release.sh build/release/ClementineRemote.xcarchive
 
   submit:
-    needs: [plan, build, screenshots]
+    needs: [plan, build, screenshots, watch-screenshots]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -239,6 +250,8 @@ jobs:
                 "$out/$device-$(printf %02d $i)-$shot.png"
             done
           done
+          cp "$RUNNER_TEMP/store-screenshots/store-screenshots-watch/screenshots/watch_01_now_playing.png" \
+            "$out/watch-01-now_playing.png"
           ls -l "$out"
 
       - uses: ruby/setup-ruby@v1.338.0

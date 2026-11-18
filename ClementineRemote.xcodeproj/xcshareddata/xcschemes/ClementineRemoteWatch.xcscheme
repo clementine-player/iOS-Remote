@@ -39,7 +39,20 @@
          </BuildableReference>
       </MacroExpansion>
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "457B83F80CECAC3C0ED7E0F8"
+               BuildableName = "ClementineRemoteWatchUITests.xctest"
+               BlueprintName = "ClementineRemoteWatchUITests"
+               ReferencedContainer = "container:ClementineRemote.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
