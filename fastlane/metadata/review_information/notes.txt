@@ -4,6 +4,7 @@ For review, there's a Clementine on the internet, with a small library of public
 1. Open Clementine Remote. Under "Or enter its address", enter the address below and tap Connect.
 2. When the app asks for an auth code, enter the one below.
 3. The queue, the player, the library, search, Clementine's internet services and downloads all work with it. To hear the music on the device itself, tap the computer-and-phone button in the mini player ("Choose where to play"), and choose this iPhone or iPad.
+4. The Apple Watch app controls Clementine through the iPhone: once the iPhone is connected, open Clementine Remote on a paired Apple Watch. The Digital Crown sets the volume.
 
 To test with Clementine on your own computer instead: install it from https://www.clementine-player.org/, open Tools → Preferences → Network Remote, turn on "Use a network remote control" (and allow downloads), and connect from a device on the same Wi-Fi network. The app finds it by itself.
 
