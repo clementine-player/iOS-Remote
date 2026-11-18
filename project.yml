@@ -150,6 +150,9 @@ targets:
       path: WatchApp/Info.plist
       properties:
         CFBundleDisplayName: Clementine Remote
+        # The App Store refuses a watch app whose versions aren't the phone app's.
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         WKApplication: true
         WKCompanionAppBundleIdentifier: $(APP_BUNDLE_ID)
     settings:
