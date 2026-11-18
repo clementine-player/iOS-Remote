@@ -120,6 +120,8 @@ jobs:
       - uses: actions/checkout@v7.0.1
         with:
           ref: ${{ needs.plan.outputs.commit }}
+          # For the commits of the release in Sentry (scripts/sentry_release.sh).
+          fetch-depth: 0
 
       - name: The App Store Connect key
         env:
@@ -175,6 +177,15 @@ jobs:
           SENTRY_ORG: ${{ vars.SENTRY_ORG || 'clementine-player' }}
           SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
         run: uv run --only-group sentry scripts/sentry_symbols.py build/release/ClementineRemote.xcarchive
+
+      # The release in Sentry, with its commits, so that a commit saying "Fixes
+      # CLEMENTINE-REMOTE-IOS-12" resolves that issue. See the script.
+      - name: Create the release in Sentry
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG || 'clementine-player' }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+        run: scripts/sentry_release.sh build/release/ClementineRemote.xcarchive
 
   submit:
     needs: [plan, build, screenshots]
