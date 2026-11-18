@@ -160,6 +160,20 @@ targets:
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: NO
         SKIP_INSTALL: YES
+  # The Apple Watch app's App Store screenshots (.github/workflows/watch-screenshots.yml).
+  ClementineRemoteWatchUITests:
+    type: bundle.ui-testing
+    platform: watchOS
+    sources:
+      - path: WatchUITests
+    dependencies:
+      - target: ClementineRemoteWatch
+      - package: ClementineKit
+        product: ClementineWatch
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(WATCH_BUNDLE_ID).uitests
+        GENERATE_INFOPLIST_FILE: YES
   ClementineRemoteUITests:
     type: bundle.ui-testing
     platform: iOS
@@ -176,6 +190,9 @@ schemes:
     build:
       targets:
         ClementineRemoteWatch: all
+    test:
+      targets:
+        - ClementineRemoteWatchUITests
   ClementineRemote:
     build:
       targets:

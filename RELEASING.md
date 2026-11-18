@@ -48,7 +48,9 @@ clients can have the same note in both.
 - It takes the App Store screenshots: light, on a 6.9" iPhone and a 13" iPad, which the
   App Store scales for smaller ones. These are `UITests/Screenshots.swift`, as on pull requests
   (`.github/workflows/screenshots.yml`), against a real Clementine playing the showcase library.
-  Up to 10 per device, so the settings screen is left out; the order is in `release.yml`.
+  Up to 10 per device, so the settings screen is left out; the order is in `release.yml`. And
+  the Apple Watch app's, on an Apple Watch Ultra 2: `WatchUITests/WatchScreenshots.swift`
+  (`.github/workflows/watch-screenshots.yml`).
 - It submits the build for App Review, with the listing in `fastlane/metadata`, the
   screenshots, and the release notes: the notes of every commit since the last release, or
   "Fixes and improvements." when none has one. Once Apple approves it, it's released.

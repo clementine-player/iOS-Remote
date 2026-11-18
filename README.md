@@ -86,6 +86,16 @@ The workflow also takes the player on an iPhone Duo simulator, closed (`fold_out
 `testTakeFoldScreenshots` and `DESTINATION=id=<the Duo's UDID>`. A test can't open or pose the Duo,
 so check its other poses by hand in Device Hub.
 
+The Apple Watch app's screenshot, for the App Store, is `WatchUITests/WatchScreenshots.swift`, run
+by `.github/workflows/watch-screenshots.yml` on an Apple Watch simulator. A test can't pair the
+watch with a phone, so the app (a debug build) shows the song it's given in
+`SHOWCASE_NOW_PLAYING`. To run it locally:
+
+```sh
+TEST_RUNNER_SCREENSHOTS_DIR=$PWD/screenshots xcodebuild -project ClementineRemote.xcodeproj \
+    -scheme ClementineRemoteWatch -destination "platform=watchOS Simulator,name=Apple Watch Ultra 2 (49mm)" test
+```
+
 The comment needs a Cloudflare R2 bucket to host the images: the workflow's header says which
 secrets and variables to set. Without them, the screenshots are only the run's artifact.
 

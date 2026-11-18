@@ -1,0 +1,105 @@
+# Takes the Apple Watch app's screenshots (WatchUITests/WatchScreenshots.swift), on an Apple Watch
+# Ultra 2 simulator, whose 410 × 502 screenshots the App Store takes. The watch only reaches
+# Clementine through the phone, which a simulator test can't pair it with, so the app shows a song
+# from the showcase library it's given, as the phone would send it.
+#
+# release.yml calls it for the App Store's screenshots. On pull requests that change the watch
+# app, and on main, the screenshots are the run's artifact.
+name: watch-screenshots
+on:
+  pull_request:
+    paths:
+      - .github/workflows/watch-screenshots.yml
+      - WatchApp/**
+      - WatchUITests/**
+      - Packages/ClementineKit/Sources/ClementineWatch/**
+      - project.yml
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/watch-screenshots.yml
+      - WatchApp/**
+      - WatchUITests/**
+      - Packages/ClementineKit/Sources/ClementineWatch/**
+      - project.yml
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      ref:
+        description: The commit to take the screenshots of.
+        type: string
+        required: false
+      artifact:
+        description: The name of the artifact with the screenshots.
+        type: string
+        default: watch-screenshots
+
+# Called, it's the calling workflow's name and ref.
+concurrency:
+  group: watch-screenshots-${{ github.ref }}-${{ inputs.artifact }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  screenshots:
+    runs-on: xcode-27
+    timeout-minutes: 45
+    env:
+      # As in screenshots.yml.
+      DEVELOPER_DIR: /Applications/Xcode_27.1.app/Contents/Developer
+      DEVICE: Apple Watch Ultra 2 (49mm)
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      # watchOS simulators can't override the status bar, so the clock shows the runner's time.
+      - name: Boot a simulator
+        run: |
+          id=$(xcrun simctl list devices available --json | python3 -c '
+          import json, os, sys
+          runtimes = json.load(sys.stdin)["devices"]
+          devices = [device
+                     for runtime in sorted(runtimes, reverse=True) if "watchOS-" in runtime
+                     for device in runtimes[runtime] if device["name"] == os.environ["DEVICE"]]
+          print(devices[0]["udid"] if devices else "")
+          ')
+          if [ -z "$id" ]; then
+            runtime=$(xcrun simctl list runtimes available -j |
+              jq -r '[.runtimes[] | select(.platform == "watchOS")] | sort_by(.version | split(".") | map(tonumber)) | last | .identifier')
+            id=$(xcrun simctl create "$DEVICE" "$DEVICE" "$runtime")
+          fi
+          echo "Using simulator $id"
+          echo "SIMULATOR=$id" >> "$GITHUB_ENV"
+          xcrun simctl boot "$id"
+          xcrun simctl bootstatus "$id" -b
+
+      # xcodebuild passes TEST_RUNNER_ variables to the test without the prefix. CI has no signing
+      # account: build for the simulator without a team.
+      - name: Take the screenshots
+        env:
+          TEST_RUNNER_SCREENSHOTS_DIR: ${{ github.workspace }}/screenshots
+        run: |
+          xcodegen generate --quiet
+          xcodebuild -project ClementineRemote.xcodeproj -scheme ClementineRemoteWatch \
+            -destination "id=$SIMULATOR" -derivedDataPath build/DerivedData \
+            -resultBundlePath build/WatchScreenshots.xcresult test DEVELOPMENT_TEAM=
+          # The test skips itself without its variable, which would pass with nothing to show.
+          if ! ls screenshots/watch_*.png > /dev/null 2>&1; then
+            echo "::error::The test took no screenshots"
+            exit 1
+          fi
+          file screenshots/*.png
+
+      - uses: actions/upload-artifact@v7.0.2
+        if: always()
+        with:
+          name: ${{ inputs.artifact || 'watch-screenshots' }}
+          path: |
+            screenshots/
+            build/WatchScreenshots.xcresult
