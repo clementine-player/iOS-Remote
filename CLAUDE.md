@@ -74,3 +74,8 @@ written for users (what's new, not how it was done). App Store releases collect 
 "What's New" (see [RELEASING.md](RELEASING.md)). Commits that don't change what users see
 (refactoring, tests, CI, docs) have none. When a change goes into both clients, give it the
 same note in both.
+
+A commit that fixes a crash reported to Sentry names the issue in its message, such as `Fixes
+CLEMENTINE-REMOTE-IOS-12`. Sentry resolves the issue when the first TestFlight or App Store build
+with the commit is uploaded (`scripts/sentry_release.sh`), and reopens it if it crashes again in a
+later one.
