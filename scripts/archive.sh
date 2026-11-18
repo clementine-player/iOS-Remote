@@ -96,7 +96,8 @@ mv "$out/export/"*.ipa "$out/ClementineRemote.ipa"
 rm -rf "$out/export"
 
 # What App Store Connect checks on upload, so that a bundle it would refuse fails here: every
-# framework is a dynamic library, and everything in the .ipa is signed.
+# framework is a dynamic library, the bundles inside the app have its version and build number,
+# and everything in the .ipa is signed.
 check="$out/ipa-check"
 rm -rf "$check"
 unzip -q "$out/ClementineRemote.ipa" -d "$check"
@@ -107,6 +108,17 @@ for framework in "$check/Payload/"*.app/Frameworks/*.framework; do
     echo "$(basename "$framework") isn't a dynamic library: $(file -b "$binary")" >&2
     exit 1
   fi
+done
+for bundle in "$check/Payload/"*.app/PlugIns/*.appex "$check/Payload/"*.app/Watch/*.app; do
+  [ -e "$bundle" ] || continue
+  for key in CFBundleShortVersionString CFBundleVersion; do
+    value=$(/usr/libexec/PlistBuddy -c "Print :$key" "$bundle/Info.plist")
+    expected=$([ "$key" = CFBundleVersion ] && echo "$build" || echo "$version")
+    if [ "$value" != "$expected" ]; then
+      echo "$(basename "$bundle")'s $key is $value, not the app's $expected" >&2
+      exit 1
+    fi
+  done
 done
 codesign --verify --deep --strict --verbose=2 "$check/Payload/"*.app
 rm -rf "$check"
