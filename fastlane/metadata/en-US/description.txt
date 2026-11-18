@@ -9,6 +9,7 @@ Features
 • Download songs, albums or whole playlists to your phone, no cable needed
 • Play Clementine's music on your phone instead of your computer, with controls on the lock screen
 • A widget to play, pause and skip from your Home Screen
+• An Apple Watch app to play, pause and skip, with the Digital Crown for the volume
 • Finds Clementine on your network by itself, or connect by address
 
 Setup

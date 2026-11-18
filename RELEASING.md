@@ -84,7 +84,7 @@ There are no certificates or provisioning profiles in the repository or its secr
 `scripts/archive.sh` builds the archive unsigned, and Xcode's cloud signing signs it as it's
 exported, with a distribution certificate Apple keeps and the profiles Xcode makes as it needs
 them. Before that, it signs the app and the widget ad hoc with their entitlements (the app group
-they share), which the export keeps.
+they share), which the export keeps, and the Apple Watch app, which has none, ad hoc too.
 
 The workflows sign in to App Store Connect with an API key, in three repository secrets:
 
@@ -188,7 +188,8 @@ Addresses*: Sentry would otherwise keep the address each report was sent from.
      reports users agree to send (see *Crash reports*). The privacy manifests,
      `App/Resources/PrivacyInfo.xcprivacy` and `Widget/PrivacyInfo.xcprivacy`, say the same, and
      give the reasons the app uses the APIs Apple asks about; keep them in step with these
-     answers and with the code.
+     answers and with the code. The Apple Watch app's, `WatchApp/PrivacyInfo.xcprivacy`, says it
+     collects nothing and uses none of those APIs: the phone sends the crash reports.
    - *App Information:* the age rating questionnaire (no objectionable content).
    - *Pricing and Availability:* free, in every country.
    - *App Review Information*, on the version page: a contact's name, phone number and email.

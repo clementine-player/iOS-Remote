@@ -30,6 +30,8 @@ final class AppModel {
     /// Plays the songs kept on this phone, without Clementine.
     let phonePlayer = PhonePlayer()
     @ObservationIgnored private var nowPlaying: NowPlaying?
+    /// The Apple Watch app's way to Clementine.
+    @ObservationIgnored private var watch: WatchLink?
     @ObservationIgnored private var scenePhase = ScenePhase.active
     /// The smart playlists being put on the playlist, by source id, with what was asked.
     @ObservationIgnored private var smartPlaylistAdds: [String: BrowseAddAction] = [:]
@@ -102,6 +104,7 @@ final class AppModel {
         internet.onAdded = { [weak self] action, result in
             self?.showAdded(action, result: result)
         }
+        watch = WatchLink(model: self)
     }
 
     /// Whether Downloads is On this phone, with the music kept on the phone: when Clementine syncs

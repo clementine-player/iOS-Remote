@@ -5200,6 +5200,9 @@
         }
       }
     },
+    "Can't reach your iPhone" : {
+      "comment" : "On the Apple Watch, when it can't reach the iPhone the app is on."
+    },
     "Cancel" : {
       "localizations" : {
         "ca" : {
@@ -5962,6 +5965,9 @@
     },
     "Clementine Remote crashed last time it was running. Send a crash report to the developers so they can fix the problem?" : {
       "comment" : "The question asked when the app starts after it crashed. The same in the Android app."
+    },
+    "Clementine Remote on your iPhone connects to Clementine for this watch. Keep your iPhone nearby." : {
+      "comment" : "On the Apple Watch, under \"Can't reach your iPhone\"."
     },
     "Clementine Remote quit unexpectedly" : {
       "comment" : "The title of the question asked when the app starts after it crashed. The same in the Android app."
@@ -7660,6 +7666,9 @@
         }
       }
     },
+    "Connect to Clementine in Clementine Remote on your iPhone first." : {
+      "comment" : "On the Apple Watch, under \"Not connected\", when the iPhone has never connected."
+    },
     "Connect to the last Clementine when the app starts." : {
       "localizations" : {
         "cs" : {
@@ -8610,6 +8619,9 @@
           }
         }
       }
+    },
+    "Couldn't reach Clementine on %@." : {
+      "comment" : "On the Apple Watch, under \"Not connected\". The placeholder is Clementine's computer."
     },
     "Couldn't reach Clementine." : {
       "localizations" : {
@@ -16873,6 +16885,9 @@
           }
         }
       }
+    },
+    "Open Clementine Remote on your iPhone." : {
+      "comment" : "On the Apple Watch, under \"Not connected\", before the iPhone has answered."
     },
     "Open Clementine Remote to connect" : {
       "localizations" : {

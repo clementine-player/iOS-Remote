@@ -11,7 +11,7 @@
 # Apple keeps. Signing the archive itself would need a development certificate: a new one on
 # every run. Exporting keeps the entitlements the bundles were signed with, though, and unsigned
 # they have none, so first the app and the widget are signed ad hoc with their own (the app
-# group they share).
+# group they share), and the Apple Watch app, which has none, ad hoc too.
 #
 # With TESTING_FEATURES=YES (as for TestFlight), the build has the features still being built
 # (see TestingFeatures in ClementineKit). App Store releases are built without.
@@ -65,6 +65,8 @@ sign() {
   codesign --force --sign - --entitlements "$out/entitlements.plist" "$bundle"
 }
 sign "$app/PlugIns/ClementineWidget.appex" Widget/ClementineWidget.entitlements
+# The Apple Watch app has no entitlements, but has to be signed for the app's signature to seal it.
+codesign --force --sign - "$app/Watch/ClementineRemoteWatch.app"
 sign "$app" App/ClementineRemote.entitlements
 rm "$out/entitlements.plist"
 
