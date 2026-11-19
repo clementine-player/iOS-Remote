@@ -61,7 +61,14 @@ final class CrashReporting {
 
     /// Crashes the app, to try crash reports out. Only TestFlight and debug builds offer it, and
     /// it crashes under Xcode's debugger without a report.
+    ///
+    /// The report is tagged `crash_type:forced`, as the desktop Clementine tags crashes made with
+    /// `--crash`, so it can be told apart from real crashes in Sentry. The SDK saves the scope with
+    /// its report of the crash, so the tag is on the event it makes from it on the next start.
     func crash() {
+        SentrySDK.configureScope { scope in
+            scope.setTag(value: "forced", key: "crash_type")
+        }
         SentrySDK.crash()
     }
 
