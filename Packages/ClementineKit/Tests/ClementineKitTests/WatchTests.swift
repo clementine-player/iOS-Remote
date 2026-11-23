@@ -8,7 +8,9 @@ struct WatchTests {
             connection: .connected, hostName: "studio-pc", title: "Clair de lune", artist: "Claude Debussy",
             isPlaying: true, volume: 60, length: 300, position: 42, cover: Data([1, 2, 3]))
         let message = WatchLinkCoding.encode(state)
-        #expect(WatchLinkCoding.decodeState(message[WatchLinkCoding.stateKey] as? Data) == state)
+        #expect(WatchLinkCoding.decodeState(message) == state)
+        #expect(WatchLinkCoding.decodeState(message[WatchLinkCoding.stateKey] as? Data)?.cover == nil)
+        #expect(message[WatchLinkCoding.coverKey] as? Data == Data([1, 2, 3]))
     }
 
     @Test func sendsCommands() {

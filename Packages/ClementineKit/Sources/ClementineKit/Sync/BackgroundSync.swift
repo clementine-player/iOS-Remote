@@ -24,12 +24,10 @@ public enum BackgroundSync {
         rules.contains { $0.refreshPolicy != .never || $0.lastSynced == nil }
     }
 
-    /// Syncs in the background with [session], the app's, through [syncer], and returns whether it
-    /// synced. If the app is connected, its connection syncs. Otherwise it connects to the last
-    /// Clementine that synced, or reconnects a session suspended in the background, syncs if the
-    /// Clementine that answers is the one the rules are for, and disconnects again, unless
-    /// [inBackground] says the user has opened the app meanwhile. Cancelling it, as when iOS ends
-    /// the run, gives up waiting; [Syncer.stop] stops the sync itself.
+    /// Syncs in the background using [syncer]: if [session] is already connected, it syncs over it;
+    /// otherwise it opens a dedicated short-lived session to the last Clementine that synced (never
+    /// mutating the app's suspended or disconnected session) and runs it sequentially through
+    /// [syncer] so at most one sync accesses the store and folder at once.
     @discardableResult
     public static func run(
         session: RemoteSession, syncer: Syncer, settings: Settings, inBackground: () -> Bool = { true }
@@ -37,8 +35,14 @@ public enum BackgroundSync {
         guard TestingFeatures.enabled, settings.backgroundSync else { return false }
         switch session.status {
         case .connected:
-            syncer.syncNow()
-            await syncer.finish()
+            // Cancelling BackgroundSync (e.g. BGProcessingTask expiration) must stop the active
+            // sync itself, not just abandon waiting on syncer.finish().
+            await withTaskCancellationHandler {
+                syncer.syncNow()
+                await syncer.finish()
+            } onCancel: {
+                Task { @MainActor in syncer.stop() }
+            }
             return true
         case .connecting, .downloadingData, .reconnecting:
             // Its connection syncs once Clementine says what it is.
@@ -48,48 +52,46 @@ public enum BackgroundSync {
         }
 
         let serverID = settings.syncServerID
-        guard !serverID.isEmpty, !settings.lastHost.isEmpty, let store = syncer.store,
+        // Use the live session endpoint if known, falling back to the last connected server's
+        // port (then settings.port) so servers on non-default ports still sync in the background.
+        let endpoint = session.endpoint ?? Endpoint(host: settings.lastHost, port: settings.lastPort ?? settings.port)
+        guard !serverID.isEmpty, !endpoint.host.isEmpty, let store = syncer.store,
               let rules = try? await store.rules(serverID: serverID), hasRulesToSync(rules)
         else { return false }
 
-        syncer.onlyServerID = serverID
-        defer { syncer.onlyServerID = nil }
-        // The syncer starts syncing when Clementine says what it is, if it's the one. A suspended
-        // session still has what the last Clementine said, so this waits for it to say it again.
+        // Use an isolated session so off-LAN background probes never wipe or alert on the
+        // user's suspended foreground session.
+        let backgroundSession = RemoteSession()
+        defer { backgroundSession.disconnect() }
+
         let heard = Heard()
-        let observer = session.addObserver { message in
+        let observer = backgroundSession.addObserver { message in
             if message.type == .info {
                 heard.info = true
             }
         }
-        defer { session.removeObserver(observer) }
-        let wasSuspended = session.status == .suspended
-        if wasSuspended {
-            // Not offering the phone to play on: a Clementine could start playing on it unasked.
-            session.resume(offeringRenderer: false)
-        } else {
-            session.connect(
-                to: Endpoint(host: settings.lastHost, port: settings.port), authCode: settings.lastAuthCode,
-                sendPlaylistSongs: false)
-        }
+        defer { backgroundSession.removeObserver(observer) }
+
+        backgroundSession.connect(to: endpoint, authCode: settings.lastAuthCode, sendPlaylistSongs: false)
 
         let deadline = ContinuousClock.now + connectTimeout
-        while !heard.info, session.status != .disconnected, ContinuousClock.now < deadline, !Task.isCancelled {
+        while !heard.info, backgroundSession.status != .disconnected,
+              ContinuousClock.now < deadline, !Task.isCancelled {
             try? await Task.sleep(for: .milliseconds(100))
         }
-        let synced = heard.info && session.syncing.available && session.syncing.serverID == serverID
-        if synced {
-            await syncer.finish()
+        guard heard.info, backgroundSession.syncing.available,
+              backgroundSession.syncing.serverID == serverID,
+              !Task.isCancelled
+        else { return false }
+        // If the user brought the app back to the foreground while connecting, let the foreground
+        // connection handle syncing unless it's still disconnected/suspended.
+        guard inBackground() || session.status == .disconnected || session.status == .suspended else {
+            return false
         }
-
-        if inBackground() {
-            if wasSuspended {
-                session.suspend()
-            } else {
-                session.disconnect()
-            }
-        }
-        return synced
+        syncer.onlyServerID = serverID
+        defer { syncer.onlyServerID = nil }
+        await syncer.runExternalSync(using: backgroundSession)
+        return true
     }
 }
 

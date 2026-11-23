@@ -72,7 +72,7 @@ struct LibraryTests {
         let songs = try await library.level(below: albums.items[0], grouping: .artistAlbum, sorting: .ascending)
         #expect(songs.kind == .song)
         #expect(songs.items.map(\.value) == ["Prélude", "Menuet", "Clair de lune"])
-        #expect(songs.items[0].url == "file:///m/Debussy/01 Prélude.ogg")
+        #expect(songs.items[0].url == "file:///m/Debussy/01%20Pr%C3%A9lude.ogg")
         #expect(songs.items[1].url == "file:///m/Debussy/02+Menuet.ogg")
         #expect(songs.items[0].artist == "Claude Debussy")
         #expect(songs.items[0].itemCount == nil)
@@ -232,7 +232,7 @@ struct LibraryTests {
         let songs = try await library.searchLevel(below: albums.items[0], sorting: .ascending)
         #expect(songs.items.map(\.value) == ["Prélude", "Menuet", "Clair de lune"])
         let urls = try await library.searchSongURLs(of: [artist], sorting: .ascending)
-        #expect(urls.first == "file:///m/Debussy/01 Prélude.ogg")
+        #expect(urls.first == "file:///m/Debussy/01%20Pr%C3%A9lude.ogg")
         #expect(urls.count == 3)
     }
 
@@ -241,7 +241,7 @@ struct LibraryTests {
         let artists = try await library.level(below: nil, grouping: .artistAlbum, sorting: .ascending)
         let urls = try await library.songURLs(of: [artists.items[1], artists.items[2]], grouping: .artistAlbum, sorting: .ascending)
         #expect(urls.count == 4)
-        #expect(urls.first == "file:///m/Debussy/01 Prélude.ogg")
+        #expect(urls.first == "file:///m/Debussy/01%20Pr%C3%A9lude.ogg")
     }
 
     @Test func forgetsAnotherClementinesLibrary() async throws {
@@ -294,6 +294,48 @@ struct LibraryTests {
         let library = LibraryStore(directory: FileManager.default.temporaryDirectory.appending(path: UUID().uuidString))
         await #expect(throws: DownloadFailure.forbidden) {
             try await library.download(from: clementine.endpoint, authCode: 0) { _ in }
+        }
+    }
+
+    @Test func keepsEncodedSpecialCharactersInSongURLsAndHandlesBoundsAndDescendingOrder() async throws {
+        let directory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let dbURL = directory.appending(path: "library.db")
+        let database = try Database(path: dbURL.path)
+        try database.execute("""
+            CREATE TABLE songs (title TEXT, album TEXT, artist TEXT, albumartist TEXT, track INTEGER,
+                disc INTEGER, year INTEGER, genre TEXT, filename BLOB, unavailable INTEGER DEFAULT 0,
+                effective_compilation INTEGER DEFAULT 0);
+            """)
+        let encodedURL = "file:///m/100%25%20%231%3Fquery.ogg"
+        try database.run(
+            "INSERT INTO songs (title, album, artist, albumartist, track, disc, year, genre, filename) VALUES (?, ?, ?, '', ?, ?, 2020, 'Pop', ?)",
+            [.text("First"), .text("Alpha"), .text("Artist"), .integer(1), .integer(1), .text(encodedURL)])
+        try database.run(
+            "INSERT INTO songs (title, album, artist, albumartist, track, disc, year, genre, filename) VALUES (?, ?, ?, '', ?, ?, 2020, 'Pop', ?)",
+            [.text("Second"), .text("Beta"), .text("Artist"), .integer(2), .integer(1), .text("file:///m/2.ogg")])
+        try LibraryStore.optimize(dbURL)
+
+        let library = LibraryStore(directory: directory)
+        let artist = try #require(try await library.level(below: nil, grouping: .artist, sorting: .ascending).items.first)
+        let descendingSongs = try await library.level(below: artist, grouping: .artist, sorting: .descending)
+        #expect(descendingSongs.items.map(\.value) == ["Second", "First"])
+        #expect(descendingSongs.items.last?.url == encodedURL)
+
+        // Drilling past the song level returns an empty level safely instead of crashing.
+        let pastLeaf = try await library.level(below: descendingSongs.items[0], grouping: .artist, sorting: .ascending)
+        #expect(pastLeaf.items.isEmpty)
+    }
+
+    @Test func timesOutAStalledLibraryDownload() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        // Accept CONNECT + GET_LIBRARY and then stall forever.
+        clementine.respond { _, _ in }
+
+        let library = LibraryStore(directory: FileManager.default.temporaryDirectory.appending(path: UUID().uuidString))
+        await #expect(throws: DownloadFailure.connection) {
+            try await library.download(from: clementine.endpoint, authCode: 0, receiveTimeout: .milliseconds(150)) { _ in }
         }
     }
 }

@@ -197,4 +197,19 @@ struct InternetBrowserTests {
         session.apply(RemoteMessage(.info) { $0.responseClementineInfo.features = [.browse] })
         #expect(!session.canEnqueueNext)
     }
+
+    @Test func handlesNegativeOffsetsAndTruncatesStaleTailOnRefresh() {
+        let genre = Self.node("n1", children: true)
+        browser.browse(genre)
+        browser.handle(Self.response("n1", nodes: Self.nodes(0..<5), total: 5))
+        #expect(browser.listing(of: genre).nodes.count == 5)
+
+        // Negative offset must not trap.
+        browser.handle(Self.response("n1", nodes: Self.nodes(0..<1), offset: -1, total: 1))
+        #expect(browser.listing(of: genre).nodes.count == 5)
+
+        // Refresh starting at offset 0 truncates stale entries past the response's total.
+        browser.handle(Self.response("n1", nodes: Self.nodes(10..<12), offset: 0, total: 2))
+        #expect(browser.listing(of: genre).nodes.map(\.nodeID) == ["n10", "n11"])
+    }
 }

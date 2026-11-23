@@ -204,6 +204,14 @@ public enum Messages {
         RemoteMessage(.closePlaylist) { $0.requestClosePlaylist.playlistID = playlistID }
     }
 
+    /// Removes every song from a playlist. Needs Clementine 1.4.
+    public static func clearPlaylist(_ playlistID: Int32) -> RemoteMessage {
+        RemoteMessage(.updatePlaylist) {
+            $0.requestUpdatePlaylist.playlistID = playlistID
+            $0.requestUpdatePlaylist.clearPlaylist_p = true
+        }
+    }
+
     /// Creates a playlist called [name], which Clementine then shows. Needs Clementine 1.4.
     public static func createPlaylist(named name: String) -> RemoteMessage {
         RemoteMessage(.updatePlaylist) {

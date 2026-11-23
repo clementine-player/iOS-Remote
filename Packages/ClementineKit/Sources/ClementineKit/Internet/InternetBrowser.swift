@@ -159,10 +159,15 @@ public final class InternetBrowser {
             listing.state = .ready
         }
 
-        // The page replaces what was there, and the list is cut to the children there are now.
+        // Negative offsets/counts from an unexpected response must not trap `replaceSubrange` or `prefix`.
+        guard response.offset >= 0 else { return }
         let offset = Int(response.offset)
-        let total = Int(response.totalCount)
-        if offset <= listing.nodes.count {
+        let total = max(0, Int(response.totalCount))
+        if offset == 0 {
+            // Replace the whole list on page 0 so stale tail items from a previously longer
+            // listing do not linger or advance loadMore past the end.
+            listing.nodes = response.nodes
+        } else if offset <= listing.nodes.count {
             let end = min(listing.nodes.count, offset + response.nodes.count)
             listing.nodes.replaceSubrange(offset..<end, with: response.nodes)
         }

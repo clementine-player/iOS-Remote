@@ -59,8 +59,6 @@ struct SongQuery {
     let table: String
     /// A condition every row must meet, if any.
     var hiddenWhere = ""
-    /// Whether the table's URLs are encoded, as the library's are.
-    var decodesURLs = true
     /// The SQL a field stands for, when it isn't the column of that name.
     var expressions: [String: String] = [:]
 
@@ -71,6 +69,7 @@ struct SongQuery {
     var songLevel: Int { fields.count - 1 }
 
     func kind(ofLevel level: Int) -> ItemKind {
+        guard level >= 0, level < fields.count else { return .song }
         if level == songLevel {
             return .song
         }
@@ -85,19 +84,29 @@ struct SongQuery {
 
     /// The items of [level] within [selection].
     func items(in database: Database, level: Int, selection: [String]) throws -> [BrowseItem] {
+        // Switching library groupings while drilled into a child level can temporarily pass an
+        // out-of-bounds level or selection; return empty instead of trapping on fields[level].
+        guard level >= 0, level < fields.count, selection.count <= fields.count else { return [] }
         let isSongLevel = level == songLevel
         var sql = "SELECT 0 AS _id"
         for field in fields {
             sql += ", \(self.sql(field))"
         }
-        sql += ", CAST(filename AS TEXT), artist, album FROM \(table)"
+        sql += ", CAST(filename AS TEXT), artist, album"
+        // Fold child counts into the main query to avoid an N+1 query per artist/album row.
+        if !isSongLevel {
+            sql += ", COUNT(DISTINCT(\(self.sql(fields[level + 1]))))"
+        }
+        sql += " FROM \(table)"
         sql += whereClause(selection)
         // Names in order for the phone's language, whatever their case or accents (Database), then
         // by their bytes, so names differing only in case are always in the same order.
         // Various artists first, as Clementine lists them.
         let field = self.sql(fields[level])
         if isSongLevel {
-            sql += " ORDER BY album COLLATE LOCALIZED, album, disc, track \(sorting.rawValue)"
+            // Apply sorting.rawValue to every term; otherwise SQLite keeps album/disc ASC.
+            sql += " ORDER BY album COLLATE LOCALIZED \(sorting.rawValue), album \(sorting.rawValue), "
+                + "disc \(sorting.rawValue), track \(sorting.rawValue)"
         } else {
             sql += " GROUP BY \(field) ORDER BY (\(field)) IS char(1) DESC, "
                 + "\(field) COLLATE LOCALIZED \(sorting.rawValue), \(field) \(sorting.rawValue)"
@@ -110,11 +119,13 @@ struct SongQuery {
                 level: level,
                 selection: itemSelection,
                 kind: kind(ofLevel: level),
-                url: decodesURLs ? Self.decode(row[fields.count + 1] ?? "") : row[fields.count + 1] ?? "",
+                // Keep Clementine's QUrl::toEncoded() string verbatim so %23/#, %3F/?, and %
+                // round-trip safely when sent back to the server.
+                url: row[fields.count + 1] ?? "",
                 artist: row[fields.count + 2] ?? "",
                 album: row[fields.count + 3] ?? "")
             if !isSongLevel {
-                item.itemCount = try count(in: database, selection: itemSelection)
+                item.itemCount = row[fields.count + 4].flatMap { Int($0) } ?? 0
             }
             return item
         }
@@ -122,6 +133,7 @@ struct SongQuery {
 
     /// How many distinct items are below [selection].
     func count(in database: Database, selection: [String]) throws -> Int {
+        guard selection.count < fields.count else { return 0 }
         let sql = "SELECT COUNT(DISTINCT(\(self.sql(fields[selection.count])))) FROM \(table)" + whereClause(selection)
         let value = try database.query(sql, selection).first?.first ?? nil
         return value.flatMap { Int($0) } ?? 0
@@ -134,11 +146,6 @@ struct SongQuery {
         }
         return conditions.isEmpty ? "" : " WHERE " + conditions.joined(separator: " AND ")
     }
-
-    /// Clementine stores URLs encoded; the app sends them back decoded, keeping any "+".
-    static func decode(_ url: String) -> String {
-        url.replacingOccurrences(of: "+", with: "%2B").removingPercentEncoding ?? url
-    }
 }
 
 /// Opens levels of a [SongQuery] and finds the songs below items.
@@ -148,6 +155,9 @@ struct SongBrowser {
     /// The level below [opened], or the top level for nil.
     func level(below opened: BrowseItem?, in database: Database) throws -> BrowseLevel {
         let level = opened.map { $0.level + 1 } ?? 0
+        guard level >= 0, level < query.fields.count else {
+            return BrowseLevel(opened: opened, kind: .song, items: [])
+        }
         let items = try query.items(in: database, level: level, selection: opened?.selection ?? [])
         return BrowseLevel(opened: opened, kind: query.kind(ofLevel: level), items: items)
     }

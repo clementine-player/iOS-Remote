@@ -160,10 +160,24 @@ public actor SyncStore {
     public init(url: URL?) throws {
         database = try Database(path: url?.path)
         try database.execute("PRAGMA foreign_keys = ON")
+        if url != nil {
+            // WAL + busy_timeout prevent SQLITE_BUSY when foreground UI and sync tasks overlap.
+            try database.execute("PRAGMA journal_mode = WAL")
+            try database.execute("PRAGMA busy_timeout = 5000")
+        }
         let version = try database.rows("PRAGMA user_version").first?.first?.integer ?? 0
         if version < 1 {
-            try database.execute(Self.schema)
-            try database.execute("PRAGMA user_version = 1")
+            // Wrap schema creation + user_version in a transaction so a crash mid-init cannot
+            // leave partial tables at version 0 that fail every future open.
+            try database.execute("BEGIN")
+            do {
+                try database.execute(Self.schema)
+                try database.execute("PRAGMA user_version = 1")
+                try database.execute("COMMIT")
+            } catch {
+                try? database.execute("ROLLBACK")
+                throw error
+            }
         }
         // Later versions migrate from here, keeping what's on the phone.
     }

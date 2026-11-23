@@ -34,6 +34,7 @@ public enum SettingKey {
 
     // Saved state
     public static let lastHost = "save_clementine_ip"
+    public static let lastPort = "last_port"
     public static let lastServerName = "last_server_name"
     public static let knownHosts = "known_ips"
     public static let lastAuthCode = "last_auth_code"
@@ -98,7 +99,12 @@ public struct Settings: Sendable {
     public var backgroundSync: Bool { store.bool(forKey: SettingKey.backgroundSync) }
     public var autoConnect: Bool { store.bool(forKey: SettingKey.autoConnect) }
     public var port: UInt16 {
-        UInt16(exactly: store.integer(forKey: SettingKey.port)) ?? RemoteProtocol.defaultPort
+        let value = store.integer(forKey: SettingKey.port)
+        // UserDefaults.integer returns 0 when unset or invalid; ignore out-of-range values.
+        guard (1...65535).contains(value), let port = UInt16(exactly: value) else {
+            return RemoteProtocol.defaultPort
+        }
+        return port
     }
     public var keepScreenOn: Bool { store.bool(forKey: SettingKey.keepScreenOn) }
     /// Whether Clementine may play on this phone (remote streaming).
@@ -118,6 +124,13 @@ public struct Settings: Sendable {
     public var lastHost: String {
         get { store.string(forKey: SettingKey.lastHost) ?? "" }
         nonmutating set { store.set(newValue, forKey: SettingKey.lastHost) }
+    }
+    /// The discovered port of the Clementine last connected to; nil when entered manually so
+    /// Settings' default `port` is used without overwriting it.
+    public var lastPort: UInt16? {
+        let value = store.integer(forKey: SettingKey.lastPort)
+        guard (1...65535).contains(value) else { return nil }
+        return UInt16(exactly: value)
     }
     /// The network name of the Clementine last connected to, empty if it was reached by its
     /// address.
@@ -146,10 +159,16 @@ public struct Settings: Sendable {
         nonmutating set { store.set(newValue, forKey: SettingKey.syncServerID) }
     }
 
-    /// Remembers an address connected to, and the Clementine's network name if it was found there.
-    public func remember(host: String, name: String? = nil) {
+    /// Remembers an address connected to, Clementine's network name if found there, and its port
+    /// when discovered on the network (without altering the user's global Settings `port`).
+    public func remember(host: String, name: String? = nil, port: UInt16? = nil) {
         guard !host.isEmpty else { return }
         lastHost = host
+        if let port, (1...65535).contains(Int(port)) {
+            store.set(Int(port), forKey: SettingKey.lastPort)
+        } else {
+            store.removeObject(forKey: SettingKey.lastPort)
+        }
         lastServerName = name ?? ""
         knownHosts = [host] + knownHosts.filter { $0 != host }
     }

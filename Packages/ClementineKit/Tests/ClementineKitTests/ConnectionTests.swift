@@ -397,11 +397,43 @@ struct ConnectionTests {
 
         session.add(songs: [FakeClementine.song], to: 1, action: .replace)
         try await clementine.waitUntil { $0.received.contains { $0.type == .insertUrls } }
+        let sent = clementine.received.filter { $0.type == .updatePlaylist || $0.type == .insertUrls }
+        #expect(sent.map(\.type) == [.updatePlaylist, .insertUrls])
+        #expect(sent.first?.requestUpdatePlaylist.playlistID == 1)
+        #expect(sent.first?.requestUpdatePlaylist.clearPlaylist_p == true)
+        #expect(sent.last?.requestInsertUrls.playNow == true)
+        #expect(session.playlistSongs[1] == [])
+    }
+
+    @Test func replacingFallsBackToRemoveSongsOnClementine13() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        clementine.respond { message, client in
+            guard message.type == .connect else { return }
+            var replies = FakeClementine.firstData
+            replies[0] = RemoteMessage(.info) {
+                $0.responseClementineInfo.version = "1.3.1"
+                $0.responseClementineInfo.state = .playing
+            }
+            for reply in replies {
+                try? await client.send(reply)
+            }
+        }
+
+        let session = RemoteSession()
+        session.connect(to: clementine.endpoint, authCode: 0)
+        try await eventually { session.status == .connected }
+        await clementine.broadcast(RemoteMessage(.playlistSongs) {
+            $0.responsePlaylistSongs.requestedPlaylist.id = 1
+            $0.responsePlaylistSongs.songs = [FakeClementine.song]
+        })
+        try await eventually { session.playlistSongs[1]?.count == 1 }
+
+        session.add(songs: [FakeClementine.song], to: 1, action: .replace)
+        try await clementine.waitUntil { $0.received.contains { $0.type == .insertUrls } }
         let sent = clementine.received.filter { $0.type == .removeSongs || $0.type == .insertUrls }
         #expect(sent.map(\.type) == [.removeSongs, .insertUrls])
         #expect(sent.first?.requestRemoveSongs.playlistID == 1)
-        #expect(sent.last?.requestInsertUrls.playNow == true)
-        #expect(session.playlistSongs[1] == [])
     }
 
     @Test func anOlderClementineDoesntCreatePlaylists() async throws {
@@ -413,6 +445,26 @@ struct ConnectionTests {
         session.connect(to: clementine.endpoint, authCode: 0)
         try await eventually { session.status == .connected }
         #expect(await session.createPlaylist(named: "Nope", timeout: .milliseconds(200)) == nil)
+    }
+
+    @Test func createPlaylistStopsImmediatelyWhenCancelled() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        clementine.respondLikeClementine()
+
+        let session = RemoteSession()
+        session.connect(to: clementine.endpoint, authCode: 0)
+        try await eventually { session.status == .connected }
+
+        let started = ContinuousClock.now
+        let task = Task {
+            await session.createPlaylist(named: "CancelMe", timeout: .seconds(10))
+        }
+        try await Task.sleep(for: .milliseconds(60))
+        task.cancel()
+        let result = await task.value
+        #expect(result == nil)
+        #expect(ContinuousClock.now - started < .seconds(2))
     }
 
     @Test func disconnectSaysGoodbye() async throws {
@@ -456,16 +508,64 @@ struct ConnectionTests {
         try await clementine.waitUntil { $0.received.last?.type == .requestPlaylistSongs }
         #expect(clementine.received.last?.requestPlaylistSongs.id == 1)
     }
+
+    @Test func messageChannelTimesOutAndCancelsWithoutHanging() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        // Accept connection and send nothing.
+        clementine.respond { _, _ in }
+
+        let channel = MessageChannel(endpoint: clementine.endpoint)
+        try await channel.open()
+        defer { channel.cancel() }
+        #expect(channel.remoteEndpoint == clementine.endpoint)
+
+        do {
+            _ = try await channel.receive(timeout: .milliseconds(120))
+            Issue.record("Expected receive to time out")
+        } catch let error as ChannelError {
+            #expect(error == .timedOut)
+        }
+
+        let cancelledChannel = MessageChannel(endpoint: clementine.endpoint)
+        try await cancelledChannel.open()
+        let receiveTask = Task {
+            try await cancelledChannel.receive(timeout: .seconds(5))
+        }
+        try await Task.sleep(for: .milliseconds(40))
+        receiveTask.cancel()
+        do {
+            _ = try await receiveTask.value
+            Issue.record("Expected cancellation")
+        } catch is CancellationError {
+            // Expected
+        }
+        cancelledChannel.cancel()
+    }
 }
 
 struct RemoteCommandTests {
     @Test func sendsOneCommandOnAShortConnection() async throws {
         let clementine = try await FakeClementine()
         defer { clementine.stop() }
+        clementine.respondLikeClementine(authCode: 7)
         try await RemoteCommand.send(RemoteMessage(.next), to: clementine.endpoint, authCode: 7)
         try await clementine.waitUntil { $0.received.count == 3 }
         #expect(clementine.received.map(\.type) == [.connect, .next, .disconnect])
         #expect(clementine.received[0].requestConnect.authCode == 7)
         #expect(!clementine.received[0].requestConnect.sendPlaylistSongs)
+    }
+
+    @Test func rejectsCommandWhenAuthenticationFails() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        clementine.respondLikeClementine(authCode: 7)
+        do {
+            try await RemoteCommand.send(RemoteMessage(.next), to: clementine.endpoint, authCode: 99)
+            Issue.record("Expected auth rejection")
+        } catch let error as RemoteCommandError {
+            #expect(error == .disconnected(.wrongAuthCode))
+        }
+        #expect(clementine.received.map(\.type) == [.connect])
     }
 }

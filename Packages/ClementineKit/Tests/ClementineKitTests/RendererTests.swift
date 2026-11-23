@@ -275,7 +275,7 @@ struct RendererTests {
         var item = Self.item(1)
         item.url = "/s/token/1"
         renderer.handle(Self.load(item))
-        #expect(playback.calls.isEmpty)
+        #expect(playback.calls == [.stop])
         let error = sent.messages.last { $0.type == .rendererError }?.rendererError
         #expect(error?.itemID == 1)
         #expect(error?.scope == .item)
@@ -306,5 +306,40 @@ struct RendererTests {
         try await clementine.waitUntil {
             $0.received.contains { $0.type == .rendererStatus && $0.rendererStatus.itemID == 7 }
         }
+    }
+
+    @Test func reportsPendingSeekTargetUntilByteRangeSeekCompletes() {
+        playback.positionMs = 10_000
+        renderer.handle(Self.load(Self.item(4, seek: .byteRange)))
+        playback.state = .playing
+        sent.messages = []
+
+        renderer.handle(RemoteMessage(.renderSeek) {
+            $0.requestRenderSeek.itemID = 4
+            $0.requestRenderSeek.positionMs = 95_000
+        })
+        #expect(sent.statuses.last?.positionMs == 95_000)
+
+        playback.positionMs = 95_200
+        renderer.playbackSeeked()
+        #expect(sent.statuses.last?.positionMs == 95_200)
+    }
+
+    @Test func pauseLocallyKeepsItemLoadedAndResumesOnRenderPlay() {
+        renderer.handle(Self.load(Self.item(5)))
+        playback.state = .playing
+        sent.messages = []
+
+        renderer.pauseLocally()
+        #expect(renderer.item?.itemID == 5)
+        #expect(playback.calls.last == .pause)
+        #expect(sent.statuses.last?.itemID == 5)
+        #expect(sent.statuses.last?.state == .paused)
+
+        // Switching back to Clementine streaming must resume the still-loaded item.
+        renderer.handle(RemoteMessage(.renderPlay))
+        #expect(playback.calls.last == .play)
+        #expect(sent.statuses.last?.itemID == 5)
+        #expect(sent.statuses.last?.state == .playing)
     }
 }

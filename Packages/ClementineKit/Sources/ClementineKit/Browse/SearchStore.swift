@@ -4,6 +4,11 @@ import Foundation
 /// sections by what matched (see [SearchSections]); an artist or album opens to the level below,
 /// by where the results came from, then album artist, album and song.
 public actor SearchStore {
+    private struct SongKey: Hashable {
+        let provider: String
+        let url: String
+    }
+
     private let database: Database
     /// The search whose results are kept.
     public private(set) var searchID: Int32?
@@ -11,8 +16,9 @@ public actor SearchStore {
     private var query = ""
     /// The results, as they came.
     private var results: [BrowseItem] = []
-    /// Each result's full description, by URL, for adding it to a playlist.
-    private var songs: [String: SongMetadata] = [:]
+    /// Each result's full description, keyed by `(provider, url)`, so duplicate URLs across
+    /// providers never overwrite each other.
+    private var songs: [SongKey: SongMetadata] = [:]
     /// Each provider's icon (image data), by name.
     public private(set) var icons: [String: Data] = [:]
 
@@ -79,36 +85,50 @@ public actor SearchStore {
         if !result.searchProviderIcon.isEmpty {
             icons[result.searchProvider] = result.searchProviderIcon
         }
+        // Buffer inserted items and commit atomically so a failed SQLite insert rolls back
+        // both the database and in-memory maps instead of leaving partial results behind.
         try database.execute("BEGIN")
-        defer { try? database.execute("COMMIT") }
-        for song in result.songMetadata {
-            let groupArtist = song.albumartist.isEmpty ? song.artist : song.albumartist
-            try database.run("""
-                INSERT INTO results (global_search_id, search_query, search_provider, title, album, artist,
-                  albumartist, group_artist, track, disc, pretty_year, year, genre, pretty_length, filename,
-                  is_local, filesize, rating)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """, [
-                    .integer(Int64(result.id)), .text(result.query), .text(result.searchProvider),
-                    .text(song.title), .text(song.album), .text(song.artist), .text(song.albumartist),
-                    .text(groupArtist), .integer(Int64(song.track)), .integer(Int64(song.disc)),
-                    .text(song.prettyYear), .integer(Int64(song.prettyYear) ?? -1), .text(song.genre),
-                    .text(song.prettyLength),
-                    // The URL goes where the library keeps it.
-                    .text(song.url), .integer(song.isLocal ? 1 : 0), .integer(Int64(song.fileSize)),
-                    .real(Double(song.rating)),
-                ])
-            results.append(BrowseItem(
-                level: Self.fields.count - 1, selection: [result.searchProvider, groupArtist, song.album, song.title],
-                kind: .song, url: song.url, artist: song.artist, album: song.album))
-            songs[song.url] = song
+        var inserted: [(item: BrowseItem, key: SongKey, song: SongMetadata)] = []
+        do {
+            for song in result.songMetadata {
+                let groupArtist = song.albumartist.isEmpty ? song.artist : song.albumartist
+                try database.run("""
+                    INSERT INTO results (global_search_id, search_query, search_provider, title, album, artist,
+                      albumartist, group_artist, track, disc, pretty_year, year, genre, pretty_length, filename,
+                      is_local, filesize, rating)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """, [
+                        .integer(Int64(result.id)), .text(result.query), .text(result.searchProvider),
+                        .text(song.title), .text(song.album), .text(song.artist), .text(song.albumartist),
+                        .text(groupArtist), .integer(Int64(song.track)), .integer(Int64(song.disc)),
+                        .text(song.prettyYear), .integer(Int64(song.prettyYear) ?? -1), .text(song.genre),
+                        .text(song.prettyLength),
+                        // The URL goes where the library keeps it.
+                        .text(song.url), .integer(song.isLocal ? 1 : 0), .integer(Int64(song.fileSize)),
+                        .real(Double(song.rating)),
+                    ])
+                let item = BrowseItem(
+                    level: Self.fields.count - 1, selection: [result.searchProvider, groupArtist, song.album, song.title],
+                    kind: .song, url: song.url, artist: song.artist, album: song.album)
+                inserted.append((item, SongKey(provider: result.searchProvider, url: song.url), song))
+            }
+            try database.execute("COMMIT")
+        } catch {
+            try? database.execute("ROLLBACK")
+            throw error
+        }
+        for entry in inserted {
+            results.append(entry.item)
+            songs[entry.key] = entry.song
         }
     }
 
     /// The results so far, in sections.
     public func sections() -> SearchSections {
         SearchSections(query: query, songs: results.compactMap { item in
-            songs[item.url].map { SearchCandidate(item: item, artist: $0.artist, isLocal: $0.isLocal) }
+            songs[SongKey(provider: item.selection.first ?? "", url: item.url)].map {
+                SearchCandidate(item: item, artist: $0.artist, isLocal: $0.isLocal)
+            }
         })
     }
 
@@ -120,14 +140,15 @@ public actor SearchStore {
     /// The songs [items] are or group, described in full.
     public func songs(of items: [BrowseItem], sorting: LibrarySorting) throws -> [SongMetadata] {
         guard let browser = browser(sorting) else { return [] }
-        return try browser.songs(items, in: database).compactMap { songs[$0.url] }
+        return try browser.songs(items, in: database).compactMap {
+            songs[SongKey(provider: $0.selection.first ?? "", url: $0.url)]
+        }
     }
 
     private func browser(_ sorting: LibrarySorting) -> SongBrowser? {
         guard let searchID else { return nil }
         var query = SongQuery(fields: Self.fields, sorting: sorting, table: "results")
         query.hiddenWhere = "global_search_id = \(searchID)"
-        query.decodesURLs = false
         return SongBrowser(query: query)
     }
 }

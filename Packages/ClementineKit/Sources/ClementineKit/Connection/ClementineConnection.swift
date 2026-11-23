@@ -1,4 +1,5 @@
 import Foundation
+import Synchronization
 
 /// The app's connection to Clementine: connects, reports what Clementine sends, and keeps the
 /// connection up, reconnecting when Clementine goes quiet or the network drops.
@@ -55,6 +56,7 @@ public actor ClementineConnection {
 
     private let configuration: Configuration
     private let eventsContinuation: AsyncStream<Event>.Continuation
+    private let resolvedEndpointLock = Mutex<Endpoint?>(nil)
     private var channel: MessageChannel?
     private var lastHeard = ContinuousClock.now
     /// Whether Clementine has sent anything on this connection yet.
@@ -67,6 +69,13 @@ public actor ClementineConnection {
     private var watchdogTask: Task<Void, Never>?
     /// Bytes of the channels closed already.
     private var earlierBytes = (sent: 0, received: 0)
+
+    /// The literal IP endpoint of the active TCP socket, once connected. Stored in a Mutex so
+    /// `@MainActor` callers can read it synchronously without an actor hop; `MediaHttpServer`
+    /// requires HTTP requests to come from the same IP as the TCP socket.
+    public nonisolated var resolvedEndpoint: Endpoint? {
+        resolvedEndpointLock.withLock { $0 }
+    }
 
     public init(
         endpoint: Endpoint, authCode: Int32, renderer: RendererCapabilities? = nil,
@@ -119,8 +128,17 @@ public actor ClementineConnection {
         } catch ChannelError.localNetworkDenied {
             finish(.localNetworkDenied)
             return
+        } catch is CancellationError {
+            finish(.requested)
+            return
         } catch {
             finish(.couldNotConnect)
+            return
+        }
+        // finish() can run while open() is awaiting NWConnection; discard the new channel
+        // instead of installing a live socket and watchdog after close.
+        guard !closed else {
+            channel.cancel()
             return
         }
         use(channel)
@@ -176,6 +194,11 @@ public actor ClementineConnection {
                 return nil
             }
             if let channel = try? await open(sendPlaylistSongs: false) {
+                // Avoid reviving a connection closed while open() was in flight.
+                guard !closed else {
+                    channel.cancel()
+                    return nil
+                }
                 use(channel)
                 eventsContinuation.yield(.reconnected)
                 return channel
@@ -185,6 +208,7 @@ public actor ClementineConnection {
     }
 
     private func open(sendPlaylistSongs: Bool) async throws -> MessageChannel {
+        try Task.checkCancellation()
         let channel = MessageChannel(endpoint: endpoint)
         do {
             try await channel.open(timeout: configuration.connectTimeout)
@@ -199,6 +223,7 @@ public actor ClementineConnection {
 
     private func use(_ channel: MessageChannel) {
         self.channel = channel
+        resolvedEndpointLock.withLock { $0 = channel.remoteEndpoint ?? endpoint }
         lastHeard = .now
     }
 
@@ -248,7 +273,12 @@ public actor ClementineConnection {
     private func finish(_ reason: CloseReason) {
         guard !closed else { return }
         closed = true
+        // Cancel runTask alongside watchdogTask so in-flight open()/reconnect() calls abort
+        // immediately rather than continuing after closed = true.
+        runTask?.cancel()
+        runTask = nil
         watchdogTask?.cancel()
+        watchdogTask = nil
         retire(channel)
         eventsContinuation.yield(.closed(reason))
         eventsContinuation.finish()
