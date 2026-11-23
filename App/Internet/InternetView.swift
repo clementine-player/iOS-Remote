@@ -127,10 +127,15 @@ private struct InternetLevelView: View {
             case .loading:
                 ProgressView("Loading…")
             case .needsSetup(let message):
+                let trimmed = message.trimmingCharacters(in: .whitespacesAndNewlines)
                 ContentUnavailableView {
                     Label("Set up in Clementine", systemImage: "gearshape")
                 } description: {
-                    Text(message)
+                    Text(trimmed.isEmpty
+                        ? String(
+                            localized: "Configure this service in Clementine on your computer.",
+                            comment: "Fallback message when an internet service needs setup in Clementine without custom instructions.")
+                        : trimmed)
                 }
             case .ready:
                 ContentUnavailableView("Nothing here", systemImage: "globe")
@@ -144,10 +149,14 @@ private struct InternetLevelView: View {
 /// What can be done with a node that can go on the playlist.
 struct InternetAddActions: View {
     let add: (BrowseAddAction) -> Void
+    @Environment(RemoteSession.self) private var session
 
     var body: some View {
         Button("Play now", systemImage: "play.fill") { add(.playNow) }
-        Button("Play next", systemImage: "text.line.first.and.arrowtriangle.forward") { add(.playNext) }
+        // Match BrowseAddActions: only offer Play next when the connected Clementine supports it.
+        if session.canEnqueueNext {
+            Button("Play next", systemImage: "text.line.first.and.arrowtriangle.forward") { add(.playNext) }
+        }
         Button("Add to playlist", systemImage: "plus") { add(.append) }
         Button("Replace playlist", systemImage: "arrow.triangle.2.circlepath") { add(.replace) }
     }

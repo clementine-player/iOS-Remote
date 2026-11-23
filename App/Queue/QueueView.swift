@@ -33,7 +33,9 @@ struct QueueView: View {
     var body: some View {
         NavigationStack {
             ScrollViewReader { scroller in
-                List(selection: $selection) {
+                // Bind selection only while editing so SwiftUI List doesn't accept selections
+                // outside edit mode.
+                List(selection: editMode.isEditing ? $selection : nil) {
                     Section {
                         ForEach(songs, id: \.index) { song in
                             row(song)
@@ -64,6 +66,7 @@ struct QueueView: View {
                     }
                 }
                 .onChange(of: shown?.id) { _, _ in
+                    // Selection holds row indices scoped to one playlist; clear on playlist switch.
                     selection = []
                     scrollToPlaying(scroller)
                 }
@@ -153,33 +156,41 @@ struct QueueView: View {
     }
 
     private func row(_ song: Song) -> some View {
-        Button {
+        let content = MediaRow(
+            title: song.title,
+            meta: [song.artist, song.album].filter { !$0.isEmpty }.joined(separator: " · "),
+            trailing: song.prettyLength,
+            playing: song.index == playingIndex
+        ) {
+            SongThumbnail()
+        }
+        return Group {
             if editMode.isEditing {
-                toggle(song)
+                // Let List handle edit-mode selection via .tag(song.index); a Button intercepts row
+                // taps.
+                content
             } else {
-                play(song)
-            }
-        } label: {
-            MediaRow(
-                title: song.title,
-                meta: [song.artist, song.album].filter { !$0.isEmpty }.joined(separator: " · "),
-                trailing: song.prettyLength,
-                playing: song.index == playingIndex
-            ) {
-                SongThumbnail()
+                Button {
+                    play(song)
+                } label: {
+                    content
+                }
             }
         }
         .buttonStyle(.plain)
         .listRowBackground(selection.contains(song.index) ? Palette.secondaryContainer : Palette.surface)
         .listRowSeparator(.hidden)
+        .tag(song.index)
         .id(song.index)
         .accessibilityIdentifier("song-\(song.index)")
         .contextMenu {
-            Button("Play", systemImage: "play") {
-                play(song)
-            }
-            Button("Remove from playlist", systemImage: "trash", role: .destructive) {
-                remove([song])
+            if !editMode.isEditing {
+                Button("Play", systemImage: "play") {
+                    play(song)
+                }
+                Button("Remove from playlist", systemImage: "trash", role: .destructive) {
+                    remove([song])
+                }
             }
         }
     }
@@ -275,14 +286,6 @@ struct QueueView: View {
             [SyncSources.playlistRule(
                 serverID: syncing.serverID, id: playlist.id, name: playlist.name, refreshPolicy: refreshPolicy)],
             title: playlist.name)
-    }
-
-    private func toggle(_ song: Song) {
-        if selection.contains(song.index) {
-            selection.remove(song.index)
-        } else {
-            selection.insert(song.index)
-        }
     }
 
     private func endSelection() {

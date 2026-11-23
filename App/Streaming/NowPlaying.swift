@@ -65,8 +65,10 @@ final class NowPlaying {
             if let duration = phone.duration {
                 info[MPMediaItemPropertyPlaybackDuration] = duration
             }
+            if let artwork = artwork(from: phone.artwork) {
+                info[MPMediaItemPropertyArtwork] = artwork
+            }
             MPNowPlayingInfoCenter.default().nowPlayingInfo = info
-            cover = nil
             setCommandsEnabled(true)
             setSeekEnabled(phone.duration != nil)
             return
@@ -103,7 +105,17 @@ final class NowPlaying {
     /// with the item, and the two can arrive in either order: the cover is only the item's once
     /// they're the same song.
     private func artwork(for item: RenderItem) -> MPMediaItemArtwork? {
-        guard let song = model.session.song, song.url == item.song.url, let data = song.artData else {
+        guard let song = model.session.song, song.url == item.song.url else {
+            return nil
+        }
+        return artwork(from: song.artData)
+    }
+
+    /// Shared artwork cache for both remote streaming and local phone playback; only clears
+    /// `cover` when no image data is present so position updates don't wipe or re-decode it.
+    private func artwork(from data: Data?) -> MPMediaItemArtwork? {
+        guard let data, !data.isEmpty else {
+            cover = nil
             return nil
         }
         if let cover, cover.data == data {

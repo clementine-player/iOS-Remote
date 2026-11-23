@@ -1,3 +1,4 @@
+import AVFoundation
 import BackgroundTasks
 import ClementineKit
 import SwiftUI
@@ -71,7 +72,16 @@ final class AppModel {
     init() {
         let session = RemoteSession()
         self.session = session
-        renderer = Renderer(playback: AVPlayback(), server: { session.endpoint }) { session.send($0) }
+        renderer = Renderer(
+            playback: AVPlayback(
+                // Use AppModel.shared because `self` isn't fully initialized yet (nowPlaying/watch
+                // come later), and route session changes through the central coordinator.
+                onActivateAudio: { AppModel.shared?.activatePlaybackSession(for: .clementine) },
+                onDeactivateAudio: { AppModel.shared?.deactivateAudioSessionIfIdle() }),
+            // Prefer the active TCP socket's resolved IP so AVPlayer HTTP requests hit the same
+            // IP family; Clementine's MediaHttpServer rejects mismatched peer IPs with 403.
+            server: { session.connectedEndpoint ?? session.endpoint }
+        ) { session.send($0) }
         internet = InternetBrowser { session.send($0) }
         syncer = Syncer(
             session: session, store: TestingFeatures.enabled ? Self.openSyncStore() : nil, folder: Self.syncedFolder)
@@ -84,6 +94,7 @@ final class AppModel {
         self.nowPlaying = nowPlaying
         renderer.onUpdate = { nowPlaying.update() }
         phonePlayer.onUpdate = { nowPlaying.update() }
+        phonePlayer.onActivateAudio = { [weak self] in self?.activatePlaybackSession(for: .phone) }
         syncer.networkAllows = { [network] in network.allows($0) }
         session.addObserver { [weak self, renderer, internet] message in
             renderer.handle(message)
@@ -138,7 +149,8 @@ final class AppModel {
     func connectFromPhone() {
         isWithoutClementine = false
         let name = settings.lastServerName
-        connect(host: settings.lastHost, name: name.isEmpty ? nil : name)
+        // Pass saved lastPort so non-default ports are preserved when reconnecting from offline mode.
+        connect(host: settings.lastHost, port: settings.lastPort, name: name.isEmpty ? nil : name)
     }
 
     /// Offers Play on this phone on the app's icon while there's something to play.
@@ -209,6 +221,54 @@ final class AppModel {
         }
     }
 
+    /// Coordinates the single shared `AVAudioSession` between remote streaming (`Renderer`),
+    /// local phone playback (`PhonePlayer`), and physical volume-button interception.
+    var volumeButtonsShouldBeActive: Bool {
+        volumeButtonsShouldBeActive(enabled: settings.volumeButtons, scenePhase: scenePhase)
+    }
+
+    /// Takes `enabled` and `scenePhase` explicitly so `VolumeButtonsView` participates in SwiftUI
+    /// updates, and yields hardware buttons to iOS whenever audio plays on this phone.
+    func volumeButtonsShouldBeActive(enabled: Bool, scenePhase: ScenePhase) -> Bool {
+        enabled && scenePhase == .active && session.status.isActive
+            && !session.isPlayingHere && !isPlayingFromPhone
+    }
+
+    func activatePlaybackSession(for source: PlayFrom) {
+        // Pause the competing local audio owner before claiming the shared `.playback` session.
+        if source == .clementine, phonePlayer.isPlaying {
+            phonePlayer.pause()
+        } else if source == .phone {
+            pauseClementine()
+            renderer.pauseLocally()
+        }
+        let audio = AVAudioSession.sharedInstance()
+        try? audio.setCategory(.playback, mode: .default, policy: .longFormAudio)
+        try? audio.setActive(true)
+    }
+
+    func activateVolumeButtonSession() -> Bool {
+        // Never downgrade an active `.playback` session to `.ambient`, which would let the mute
+        // switch or screen lock silence audio playing on this phone.
+        guard renderer.item == nil, !phonePlayer.isPlaying else { return false }
+        let audio = AVAudioSession.sharedInstance()
+        do {
+            try audio.setCategory(.ambient, options: [.mixWithOthers])
+            try audio.setActive(true)
+            return true
+        } catch {
+            return false
+        }
+    }
+
+    func deactivateAudioSessionIfIdle(includingVolumeButtons: Bool = false) {
+        // Keep the session active if another owner (`PhonePlayer`, `Renderer`, or active
+        // volume-button monitoring) still relies on it.
+        guard renderer.item == nil, !phonePlayer.isPlaying,
+              includingVolumeButtons || !volumeButtonsShouldBeActive else { return }
+        try? AVAudioSession.sharedInstance().setActive(false, options: [.notifyOthersOnDeactivation])
+    }
+
     /// Where synced songs go: beside the downloaded ones, so the Files app shows them too.
     static let syncedFolder = URL.documentsDirectory.appending(path: "Clementine/Synced", directoryHint: .isDirectory)
 
@@ -270,7 +330,7 @@ final class AppModel {
     func connect(host: String, port: UInt16? = nil, name: String? = nil) {
         let host = host.trimmingCharacters(in: .whitespaces)
         guard !host.isEmpty else { return }
-        settings.remember(host: host, name: name)
+        settings.remember(host: host, name: name, port: port)
         stopAutoConnecting()
         connectProblem = nil
         session.connect(
@@ -286,7 +346,7 @@ final class AppModel {
         guard settings.autoConnect, !isAutoConnectOver, !settings.lastHost.isEmpty,
               session.status == .disconnected else { return }
         let name = settings.lastServerName
-        connect(host: settings.lastHost, name: name.isEmpty ? nil : name)
+        connect(host: settings.lastHost, port: settings.lastPort, name: name.isEmpty ? nil : name)
         autoConnectName = name.isEmpty ? nil : name
     }
 
@@ -299,7 +359,9 @@ final class AppModel {
         case .disconnected:
             // Only when the saved address couldn't be reached: not, say, for a wrong auth code.
             guard case .couldNotConnect? = session.closeReason else { return }
-        case .connecting where server.host != session.endpoint?.host:
+        // Compare host and port so a server restarted on a new port at the same IP still triggers
+        // reconnect.
+        case .connecting where Endpoint(host: server.host, port: server.port) != session.endpoint:
             break
         default:
             return
@@ -451,12 +513,17 @@ extension AppModel {
     /// Syncs for [task], over a network Download over allows, and asks for the next one.
     private func runBackgroundSync(_ task: BGTask) {
         scheduleBackgroundSync()
-        let run = Task {
-            guard let path = await NetworkMonitor.currentPath(),
+        let completion = BGTaskCompletion(task)
+        let run = Task<Bool, Never> {
+            // Check cancellation around the async path lookup so an already-expired task bails out
+            // without opening a connection.
+            guard !Task.isCancelled,
+                  let path = await NetworkMonitor.currentPath(),
                   BackgroundSync.allows(
-                      settings.downloadNetwork, expensive: path.expensive, constrained: path.constrained)
-            else { return }
-            await BackgroundSync.run(session: session, syncer: syncer, settings: settings) {
+                      settings.downloadNetwork, expensive: path.expensive, constrained: path.constrained),
+                  !Task.isCancelled
+            else { return false }
+            return await BackgroundSync.run(session: session, syncer: syncer, settings: settings) {
                 UIApplication.shared.applicationState == .background
             }
         }
@@ -465,11 +532,36 @@ extension AppModel {
             Task { @MainActor in
                 syncer.stop()
                 run.cancel()
+                // Report completion immediately on expiration rather than waiting for `run` to
+                // unwind so iOS doesn't terminate the process for missing the deadline.
+                completion.complete(success: false)
             }
         }
         Task {
-            await run.value
-            task.setTaskCompleted(success: true)
+            let success = await run.value
+            completion.complete(success: success)
+        }
+    }
+}
+
+/// Ensures `BGTask.setTaskCompleted(success:)` is invoked at most once across the competing
+/// normal-finish and iOS-expiration paths.
+private final class BGTaskCompletion: @unchecked Sendable {
+    private let task: BGTask
+    private let lock = NSLock()
+    private var finished = false
+
+    init(_ task: BGTask) {
+        self.task = task
+    }
+
+    func complete(success: Bool) {
+        lock.lock()
+        let shouldComplete = !finished
+        finished = true
+        lock.unlock()
+        if shouldComplete {
+            task.setTaskCompleted(success: success)
         }
     }
 }

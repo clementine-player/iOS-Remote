@@ -471,12 +471,6 @@ public final class RemoteSession {
         send(RemoteMessage(.love))
     }
 
-    /// Bans the current song on Last.fm.
-    public func ban() {
-        guard song != nil else { return }
-        send(RemoteMessage(.ban))
-    }
-
     /// Sets Clementine's volume, from 0 to 100.
     public func setVolume(_ percent: Int) {
         volume = max(0, min(100, percent))

@@ -10,6 +10,7 @@
 		015B3D7098D15696CE753DCA /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4806AC63E537A5050C1E6BD /* LibraryView.swift */; };
 		02B054CAB79B78B9185BBFC3 /* InternetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46866E6F5E51462F605F0CA /* InternetView.swift */; };
 		05AD1BE1767A45392CD494C5 /* ClementineWatch in Frameworks */ = {isa = PBXBuildFile; productRef = D1190B34E085877802608D00 /* ClementineWatch */; };
+		0A1647092676A3852AD79904 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4856A6293D1829361A2A9A17 /* Theme.swift */; };
 		0B99087E44B26407F87B9201 /* ClementineRemoteWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6944EAAD175AE565B5AE573E /* ClementineRemoteWatchApp.swift */; };
 		10F30E7ECA7C1265A6F085C4 /* Sentry-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = F6D75D7AD5992D41069F4420 /* Sentry-Dynamic */; };
 		198DA2CE0EAEC3C225F8AC81 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 761E362C08E663B70599A6DD /* SwiftUI.framework */; };
@@ -732,6 +733,7 @@
 				5B2423FA1DE74D6BB9A80BBC /* ClementineWidget.swift in Sources */,
 				1DBC787744D19CBA495822CC /* CommandIntents.swift in Sources */,
 				35E7D5066C04B7AD89E61632 /* SharedState.swift in Sources */,
+				0A1647092676A3852AD79904 /* Theme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -55,8 +55,10 @@ private struct PlayerView: View {
                     Button {
                         link.send(.love)
                     } label: {
+                        // Use white rather than Palette.onPrimary (dark brown on orange), which is
+                        // nearly invisible against watchOS's dark translucent toolbar.
                         Label("Love", systemImage: state.isLoved ? "heart.fill" : "heart")
-                            .foregroundStyle(Palette.onPrimary)
+                            .foregroundStyle(.white)
                     }
                     .disabled(state.isLoved)
                 }
@@ -167,20 +169,26 @@ private struct Backdrop: View {
                     .resizable()
                     .scaledToFill()
             } else {
-                Palette.surfaceContainerHighest
-                Group {
-                    if hasSong {
-                        Image(systemName: "music.note")
-                            .font(.system(size: 56))
-                            .foregroundStyle(Palette.onSurfaceVariant)
-                    } else {
-                        Image("ClementineMark")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 80)
+                // Scale placeholder art and vertical offset proportionally so smaller watch screens
+                // don't overlap the bottom song info and transport controls.
+                GeometryReader { geometry in
+                    ZStack {
+                        Palette.surfaceContainerHighest
+                        Group {
+                            if hasSong {
+                                Image(systemName: "music.note")
+                                    .font(.system(size: min(56, geometry.size.width * 0.28)))
+                                    .foregroundStyle(Palette.onSurfaceVariant)
+                            } else {
+                                Image("ClementineMark")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: min(80, geometry.size.width * 0.4))
+                            }
+                        }
+                        .offset(y: -geometry.size.height * 0.16)
                     }
                 }
-                .offset(y: -64)
             }
             LinearGradient(
                 stops: [
@@ -201,27 +209,35 @@ private struct Transport: View {
     @Environment(PhoneLink.self) private var link
 
     var body: some View {
-        HStack {
-            Button("Previous", systemImage: "backward.end.fill") { link.send(.previous) }
-                .foregroundStyle(.white)
+        // Tighten button widths on narrower watches (< 175pt) so Previous/Next stay tappable; pin
+        // height because GeometryReader otherwise expands greedily.
+        GeometryReader { geometry in
+            let compact = geometry.size.width < 175
+            let playWidth: CGFloat = compact ? min(64, geometry.size.width * 0.38) : 76
+            let playHeight: CGFloat = compact ? 52 : 60
+            HStack {
+                Button("Previous", systemImage: "backward.end.fill") { link.send(.previous) }
+                    .foregroundStyle(.white)
+                    .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity, minHeight: compact ? 46 : 52)
+                Button(isPlaying ? "Pause" : "Play", systemImage: isPlaying ? "pause.fill" : "play.fill") {
+                    link.send(.playPause)
+                }
+                .font(compact ? .title2 : .title)
+                .foregroundStyle(Palette.onPrimaryContainer)
                 .buttonStyle(.plain)
-                .frame(maxWidth: .infinity, minHeight: 52)
-            Button(isPlaying ? "Pause" : "Play", systemImage: isPlaying ? "pause.fill" : "play.fill") {
-                link.send(.playPause)
+                .frame(width: playWidth, height: playHeight)
+                .background(Palette.primaryContainer, in: .rect(cornerRadius: compact ? 16 : 20))
+                Button("Next", systemImage: "forward.end.fill") { link.send(.next) }
+                    .foregroundStyle(.white)
+                    .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity, minHeight: compact ? 46 : 52)
             }
-            .font(.title)
-            .foregroundStyle(Palette.onPrimaryContainer)
-            .buttonStyle(.plain)
-            .frame(width: 76, height: 60)
-            .background(Palette.primaryContainer, in: .rect(cornerRadius: 20))
-            Button("Next", systemImage: "forward.end.fill") { link.send(.next) }
-                .foregroundStyle(.white)
-                .buttonStyle(.plain)
-                .frame(maxWidth: .infinity, minHeight: 52)
+            .labelStyle(.iconOnly)
+            .font(compact ? .title3 : .title2)
+            .environment(\.layoutDirection, .leftToRight)
         }
-        .labelStyle(.iconOnly)
-        .font(.title2)
-        .environment(\.layoutDirection, .leftToRight)
+        .frame(height: 60)
     }
 }
 
@@ -273,6 +289,8 @@ private struct NotConnectedView: View {
                         .padding(.top, 4)
                 }
             }
+            // Keep error copy clear of curved watch screen edges.
+            .padding(.horizontal, 8)
             .frame(maxWidth: .infinity)
         }
     }

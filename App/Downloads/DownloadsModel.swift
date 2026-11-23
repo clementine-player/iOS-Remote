@@ -15,9 +15,8 @@ final class DownloadsModel {
         let id: Int
         let kind: Kind
         var status = DownloadStatus()
-        /// Bytes a second, over the last few seconds.
         var speed: Int64 = 0
-        fileprivate var samples: [(time: ContinuousClock.Instant, bytes: Int64)] = []
+        fileprivate var rate = TrafficRate(window: .seconds(3))
 
         var isFinished: Bool {
             if case .finished = status.state { return true }
@@ -91,7 +90,9 @@ final class DownloadsModel {
     }
 
     private func start(_ kind: Kind, _ request: RemoteMessage, playlistName: String?) {
-        guard let endpoint = model.session.endpoint else { return }
+        // Use the active socket's resolved IP so downloads hit the same address family as the
+        // session.
+        guard let endpoint = model.session.connectedEndpoint ?? model.session.endpoint else { return }
         let id = nextID
         nextID += 1
         var job = Job(id: id, kind: kind)
@@ -109,7 +110,10 @@ final class DownloadsModel {
             endpoint: endpoint, authCode: model.session.authCode, request: request,
             playlistName: playlistName, options: DownloadOptions(directory: directory, settings: model.settings))
         let background = UIApplication.shared.beginBackgroundTask(withName: "Download") { [weak self] in
-            self?.cancel(id)
+            // iOS can invoke expiration handlers off the main thread; hop to @MainActor for cancel(_:).
+            Task { @MainActor [weak self] in
+                self?.cancel(id)
+            }
         }
         tasks[id] = Task {
             let (updates, continuation) = AsyncStream.makeStream(of: DownloadStatus.self, bufferingPolicy: .bufferingNewest(1))
@@ -133,12 +137,8 @@ final class DownloadsModel {
         guard let index = jobs.firstIndex(where: { $0.id == id }) else { return }
         var job = jobs[index]
         job.status = status
-        let now = ContinuousClock.now
-        job.samples.append((now, status.bytes))
-        job.samples.removeAll { now - $0.time > .seconds(3) }
-        if let first = job.samples.first, let last = job.samples.last, last.time > first.time {
-            let seconds = (last.time - first.time).timeInterval
-            job.speed = Int64(Double(last.bytes - first.bytes) / max(seconds, 0.001))
+        if let rate = job.rate.add(Int(clamping: status.bytes)) {
+            job.speed = Int64(rate)
         }
         jobs[index] = job
     }
@@ -224,8 +224,11 @@ extension DownloadsModel.Job {
 
     /// Bytes so far, of the total, and the speed while downloading.
     var sizes: String {
+        // Hide counts and speed until chunk 0 arrives or bytes transfer (e.g. while starting or on
+        // early failure).
+        guard status.totalBytes > 0 || status.bytes > 0 else { return "" }
         var text = "\(formatBytes(status.bytes)) / \(formatBytes(status.totalBytes))"
-        if !isFinished {
+        if !isFinished, speed > 0 {
             text += " (\(formatBytes(speed))/s)"
         }
         return text

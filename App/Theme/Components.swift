@@ -86,15 +86,41 @@ struct PlayPauseButton: View {
     var iconSize: CGFloat = 36
     let action: () -> Void
     var longPress: (() -> Void)?
+    // simultaneousGesture(LongPressGesture) preserves the button's pressed style, so Button's tap
+    // still fires on lift unless suppressed; isPressing resets the flag if the user drags off to
+    // cancel the tap without consuming it.
+    @State private var suppressNextTap = false
+    @GestureState private var isPressing = false
 
     var body: some View {
-        Button(action: action) {
+        Button {
+            if suppressNextTap {
+                suppressNextTap = false
+            } else {
+                action()
+            }
+        } label: {
             Image(systemName: playing ? "pause.fill" : "play.fill")
                 .font(.system(size: iconSize))
                 .contentTransition(.symbolEffect(.replace))
         }
         .buttonStyle(PlayPauseStyle(width: width, height: height))
-        .simultaneousGesture(LongPressGesture().onEnded { _ in longPress?() })
+        .simultaneousGesture(
+            LongPressGesture()
+                .updating($isPressing) { pressing, state, _ in
+                    state = pressing
+                }
+                .onEnded { _ in
+                    guard let longPress else { return }
+                    suppressNextTap = true
+                    longPress()
+                }
+        )
+        .onChange(of: isPressing) { _, pressing in
+            if pressing {
+                suppressNextTap = false
+            }
+        }
         .accessibilityLabel(playing ? "Pause" : "Play")
         .accessibilityAction(named: "Stop after this song") { longPress?() }
         .accessibilityIdentifier("playPause")
@@ -293,6 +319,19 @@ func formatTime(_ seconds: Int) -> String {
 /// Bytes in binary units: "3.2 MiB".
 func formatBytes(_ bytes: Int64) -> String {
     ByteCountFormatter.string(fromByteCount: bytes, countStyle: .binary)
+}
+
+/// Device-specific wording and SF Symbol matching "On this phone" vs "On this iPad".
+enum ThisDevice {
+    @MainActor static var systemImage: String {
+        UIDevice.current.userInterfaceIdiom == .pad ? "ipad" : "iphone"
+    }
+
+    @MainActor static var label: String {
+        UIDevice.current.userInterfaceIdiom == .pad
+            ? String(localized: "On this iPad", comment: "As \"On this phone\", on an iPad: music saved on the iPad, as opposed to Clementine on the computer.")
+            : String(localized: "On this phone")
+    }
 }
 
 extension ShuffleMode {

@@ -29,6 +29,9 @@ struct SongDetailsView: View {
                     case .lyrics:
                         LyricsView()
                     }
+                } else {
+                    ContentUnavailableView("No song playing", systemImage: "music.note")
+                        .padding(.top, Metrics.space4)
                 }
             }
             .padding(.horizontal, Metrics.space6)
@@ -82,20 +85,7 @@ struct SongDetailsView: View {
             DetailRow(label: "File", value: song.filename)
         }
 
-        HStack(spacing: 0) {
-            Text("Rating")
-                .textStyle(.bodyMedium)
-                .foregroundStyle(Palette.onSurfaceVariant)
-                .frame(width: 96, alignment: .leading)
-            Rating(stars: song.rating * 5) { stars in
-                session.rate(stars: stars)
-                if stars == stars.rounded() {
-                    model.toasts.show("Rated \(Int(stars)) stars")
-                } else {
-                    model.toasts.show("Rated \(stars.formatted()) stars")
-                }
-            }
-        }
+        ratingRow(for: song)
 
         if showLastFM {
             HStack(spacing: Metrics.space3) {
@@ -106,14 +96,41 @@ struct SongDetailsView: View {
                     Label("Love", systemImage: session.isLoved ? "heart.fill" : "heart")
                 }
                 .disabled(session.isLoved)
-                Button {
-                    session.ban()
-                    model.toasts.show("Banned on Last.fm")
-                } label: {
-                    Label("Ban", systemImage: "hand.thumbsdown")
-                }
             }
             .buttonStyle(.bordered)
+        }
+    }
+
+    @ViewBuilder
+    private func ratingRow(for song: Song) -> some View {
+        // Stack vertically when narrow widths or large Dynamic Type can't fit five 44pt stars inline.
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: 0) {
+                Text("Rating")
+                    .textStyle(.bodyMedium)
+                    .foregroundStyle(Palette.onSurfaceVariant)
+                    .frame(width: 96, alignment: .leading)
+                Rating(stars: song.rating * 5) { stars in
+                    rateSong(stars)
+                }
+            }
+            VStack(alignment: .leading, spacing: Metrics.space1) {
+                Text("Rating")
+                    .textStyle(.bodyMedium)
+                    .foregroundStyle(Palette.onSurfaceVariant)
+                Rating(stars: song.rating * 5) { stars in
+                    rateSong(stars)
+                }
+            }
+        }
+    }
+
+    private func rateSong(_ stars: Float) {
+        session.rate(stars: stars)
+        if stars == stars.rounded() {
+            model.toasts.show("Rated \(Int(stars)) stars")
+        } else {
+            model.toasts.show("Rated \(stars.formatted()) stars")
         }
     }
 }
@@ -175,6 +192,14 @@ private struct Rating: View {
         .accessibilityElement(children: .contain)
         .accessibilityLabel("Rating")
         .accessibilityValue("\(stars.formatted(.number.precision(.fractionLength(0...1)))) stars")
+        .accessibilityAdjustableAction { direction in
+            // Step in half-star increments for VoiceOver swipe adjustments.
+            switch direction {
+            case .increment: rate(min(5, (stars * 2).rounded() / 2 + 0.5))
+            case .decrement: rate(max(0.5, (stars * 2).rounded() / 2 - 0.5))
+            @unknown default: break
+            }
+        }
     }
 
     private func symbol(_ star: Int) -> String {
@@ -190,8 +215,19 @@ private struct Rating: View {
 
 /// The song's lyrics, asking Clementine for them the first time.
 private struct LyricsView: View {
+    // Key only on URL and title (for changing stream tracks) so arriving artwork or rating changes
+    // don't re-request lyrics or reset the timeout.
+    private struct TrackKey: Equatable {
+        let url: String
+        let title: String
+    }
+
     @Environment(RemoteSession.self) private var session
     @State private var gaveUp = false
+
+    private var trackKey: TrackKey? {
+        session.song.map { TrackKey(url: $0.url, title: $0.title) }
+    }
 
     var body: some View {
         Group {
@@ -219,11 +255,12 @@ private struct LyricsView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .task(id: session.song) {
+        .task(id: trackKey) {
             gaveUp = false
             session.requestLyrics()
-            // Clementine doesn't always answer when it finds nothing.
-            try? await Task.sleep(for: .seconds(15))
+            // Clementine doesn't always answer when it finds nothing. Don't set gaveUp if cancelled
+            // (view dismissed or track changed).
+            guard (try? await Task.sleep(for: .seconds(15))) != nil, !Task.isCancelled else { return }
             gaveUp = true
         }
     }
