@@ -101,7 +101,9 @@ jobs:
           ref: ${{ inputs.ref }}
 
       - name: Install XcodeGen and ffmpeg
-        run: brew install xcodegen ffmpeg
+        run: |
+          scripts/install-xcodegen.sh
+          brew install ffmpeg
 
       - name: Download Clementine
         env:

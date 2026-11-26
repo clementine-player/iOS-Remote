@@ -56,7 +56,7 @@ jobs:
           ref: ${{ inputs.ref }}
 
       - name: Install XcodeGen
-        run: brew install xcodegen
+        run: scripts/install-xcodegen.sh
 
       # watchOS simulators can't override the status bar, so the clock shows the runner's time.
       - name: Boot a simulator

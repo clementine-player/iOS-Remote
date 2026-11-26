@@ -53,7 +53,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.1
       - name: Install XcodeGen
-        run: brew install xcodegen
+        run: scripts/install-xcodegen.sh
       - name: Check the Xcode project matches project.yml
         # The project is generated, but committed: a change to project.yml, or a source file added
         # to a target's folder, needs the regenerated project committed with it.
