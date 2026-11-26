@@ -158,7 +158,7 @@ jobs:
             build/release/ClementineRemote.ipa
             build/release/ClementineRemote.xcarchive/dSYMs/
 
-      - uses: ruby/setup-ruby@v1.338.0
+      - uses: ruby/setup-ruby@v1.342.0
         with:
           ruby-version: "3.4"
           bundler-cache: true
@@ -178,7 +178,7 @@ jobs:
           git tag -a "$TAG" "$COMMIT" -m "Clementine Remote $NAME"
           git push origin "$TAG"
 
-      - uses: astral-sh/setup-uv@v10.3.3
+      - uses: astral-sh/setup-uv@v10.4.0
 
       # After the upload and the tag, so that a failure here doesn't hold up the release. Without
       # the SENTRY_AUTH_TOKEN secret and the SENTRY_PROJECT variable, it only checks the dSYMs.
@@ -254,7 +254,7 @@ jobs:
             "$out/watch-01-now_playing.png"
           ls -l "$out"
 
-      - uses: ruby/setup-ruby@v1.338.0
+      - uses: ruby/setup-ruby@v1.342.0
         with:
           ruby-version: "3.4"
           bundler-cache: true
