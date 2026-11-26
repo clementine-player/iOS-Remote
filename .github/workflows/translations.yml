@@ -48,7 +48,7 @@ jobs:
       TX_TOKEN: ${{ secrets.TX_TOKEN }}
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: astral-sh/setup-uv@v10.3.3
+      - uses: astral-sh/setup-uv@v10.4.0
         if: env.TX_TOKEN != ''
       - name: Pull the translations made since the last pull
         if: env.TX_TOKEN != ''
@@ -85,7 +85,7 @@ jobs:
         with:
           ref: main
           ssh-key: ${{ secrets.TX_KEY }}
-      - uses: astral-sh/setup-uv@v10.3.3
+      - uses: astral-sh/setup-uv@v10.4.0
         if: env.TX_TOKEN != '' && env.HAS_TX_KEY == 'true'
       - name: Pull the translations
         id: pull

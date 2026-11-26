@@ -102,7 +102,7 @@ jobs:
             build/release/ClementineRemote.ipa
             build/release/ClementineRemote.xcarchive/dSYMs/
 
-      - uses: ruby/setup-ruby@v1.338.0
+      - uses: ruby/setup-ruby@v1.342.0
         if: env.HAS_ASC_KEY == 'true'
         with:
           ruby-version: "3.4"
@@ -123,7 +123,7 @@ jobs:
           bundle exec fastlane beta ipa:"$PWD/build/release/ClementineRemote.ipa"
           changelog:"$RUNNER_TEMP/changelog.txt"
 
-      - uses: astral-sh/setup-uv@v10.3.3
+      - uses: astral-sh/setup-uv@v10.4.0
         if: env.HAS_ASC_KEY == 'true'
 
       # After the upload, so that a failure here doesn't hold up the build. Without the
