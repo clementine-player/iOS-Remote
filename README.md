@@ -21,7 +21,9 @@ translations would replace them.
 
 ## Building
 
-Needs Xcode 27.1 or later (for the iOS 27.1 SDK) and [XcodeGen](https://github.com/yonaskolb/XcodeGen).
+Needs Xcode 27.1 or later (for the iOS 27.1 SDK) and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
+2.48.0, the release CI uses (`scripts/install-xcodegen.sh`): another release can generate a
+slightly different project, which CI then refuses.
 
 ```sh
 scripts/build.sh          # regenerate the Xcode project, build for the simulator, sync the strings

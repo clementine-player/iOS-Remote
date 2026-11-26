@@ -81,7 +81,7 @@ jobs:
 
       - name: Install XcodeGen
         if: env.HAS_ASC_KEY == 'true'
-        run: brew install xcodegen
+        run: scripts/install-xcodegen.sh
 
       - name: Build
         if: env.HAS_ASC_KEY == 'true'

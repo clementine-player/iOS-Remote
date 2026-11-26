@@ -1,5 +1,8 @@
 name: ClementineRemote
 options:
+  # The XcodeGen CI uses (scripts/install-xcodegen.sh). Older releases generate a different
+  # project, which CI's check then refuses.
+  minimumXcodeGenVersion: 2.48.0
   bundleIdPrefix: org.clementine-player
   deploymentTarget:
     iOS: "26.0"
