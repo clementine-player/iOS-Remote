@@ -14,7 +14,7 @@ struct ClementineWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: "Clementine", provider: Provider()) { entry in
             WidgetView(entry: entry)
-                .containerBackground(Color("Surface"), for: .widget)
+                .containerBackground(Palette.surface, for: .widget)
         }
         .configurationDisplayName("Clementine")
         .description("Play, pause and skip songs in Clementine.")
@@ -55,10 +55,10 @@ struct WidgetView: View {
                 Spacer()
                 Text("Not connected")
                     .font(.headline)
-                    .foregroundStyle(Color("OnSurface"))
+                    .foregroundStyle(Palette.onSurface)
                 Text("Open Clementine Remote to connect")
                     .font(.caption)
-                    .foregroundStyle(Color("OnSurfaceVariant"))
+                    .foregroundStyle(Palette.onSurfaceVariant)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         } else {
@@ -71,31 +71,32 @@ struct WidgetView: View {
                     if family != .systemSmall {
                         Text(state.host)
                             .font(.caption2)
-                            .foregroundStyle(Color("OnSurfaceVariant"))
+                            .foregroundStyle(Palette.onSurfaceVariant)
+                            .lineLimit(1)
                     }
                 }
                 Spacer(minLength: 0)
                 Text(state.title.isEmpty ? String(localized: "No song playing") : state.title)
                     .font(.headline)
-                    .foregroundStyle(Color("OnSurface"))
+                    .foregroundStyle(Palette.onSurface)
                     .lineLimit(family == .systemSmall ? 2 : 1)
                 if !state.artist.isEmpty {
                     Text(state.artist)
                         .font(.subheadline)
-                        .foregroundStyle(Color("Primary"))
+                        .foregroundStyle(Palette.primary)
                         .lineLimit(1)
                 }
                 HStack(spacing: 8) {
                     Button(intent: PlayPauseIntent()) {
                         Image(systemName: state.isPlaying ? "pause.fill" : "play.fill")
-                            .foregroundStyle(Color("OnPrimaryContainer"))
+                            .foregroundStyle(Palette.onPrimaryContainer)
                             .frame(width: 48, height: 36)
-                            .background(Color("PrimaryContainer"), in: .rect(cornerRadius: 14))
+                            .background(Palette.primaryContainer, in: .rect(cornerRadius: 14))
                     }
                     .accessibilityLabel(state.isPlaying ? "Pause" : "Play")
                     Button(intent: NextIntent()) {
                         Image(systemName: "forward.end.fill")
-                            .foregroundStyle(Color("OnSurface"))
+                            .foregroundStyle(Palette.onSurface)
                             .frame(width: 40, height: 36)
                     }
                     .accessibilityLabel("Next")

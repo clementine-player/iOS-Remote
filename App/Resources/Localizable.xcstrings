@@ -175,6 +175,9 @@
         }
       }
     },
+    "%@ free on this iPad" : {
+      "comment" : "Navigation subtitle showing free storage space on the iPad."
+    },
     "%@ free on this phone" : {
       "localizations" : {
         "cs" : {
@@ -4875,6 +4878,7 @@
       }
     },
     "Ban" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ca" : {
           "stringUnit" : {
@@ -5035,6 +5039,7 @@
       }
     },
     "Banned on Last.fm" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ca" : {
           "stringUnit" : {
@@ -6076,6 +6081,9 @@
         }
       }
     },
+    "Clementine closed the connection." : {
+      "comment" : "Shortcut and widget error when Clementine rejects or closes a control command connection."
+    },
     "Clementine creates the playlist and shows it." : {
       "localizations" : {
         "cs" : {
@@ -6626,6 +6634,7 @@
       }
     },
     "Clementine only accepts connections from its local network." : {
+      "comment" : "Shortcut and widget error when Clementine refuses connections outside its local network.",
       "localizations" : {
         "cs" : {
           "stringUnit" : {
@@ -7241,6 +7250,12 @@
           }
         }
       }
+    },
+    "Configure this in Clementine on your computer." : {
+      "comment" : "Fallback status under a kept rule when Clementine needs setup without providing a custom message."
+    },
+    "Configure this service in Clementine on your computer." : {
+      "comment" : "Fallback message when an internet service needs setup in Clementine without custom instructions."
     },
     "Connect" : {
       "localizations" : {
@@ -12268,6 +12283,7 @@
       }
     },
     "Enter the auth code shown in Clementine's Network Remote settings." : {
+      "comment" : "Shortcut and widget error when Clementine rejects the saved auth code.",
       "localizations" : {
         "el" : {
           "stringUnit" : {
@@ -18124,6 +18140,9 @@
         }
       }
     },
+    "Play on this iPad" : {
+      "comment" : "A button in the dialog when connecting fails on iPad: play the music saved on the iPad instead of connecting."
+    },
     "Play on this phone" : {
       "comment" : "A button in the dialog when connecting fails, and a shortcut on the app's icon: play the music saved on the phone instead of connecting.",
       "localizations" : {
@@ -22891,7 +22910,11 @@
         }
       }
     },
+    "Show a button to love songs." : {
+      "comment" : "Settings toggle subtitle under Last.fm."
+    },
     "Show buttons to love and ban songs." : {
+      "extractionState" : "stale",
       "localizations" : {
         "ca" : {
           "stringUnit" : {

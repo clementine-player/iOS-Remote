@@ -128,7 +128,6 @@ struct PlayFromSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        let isPad = UIDevice.current.userInterfaceIdiom == .pad
         NavigationStack {
             List {
                 Section {
@@ -141,10 +140,8 @@ struct PlayFromSheet: View {
                     ) { pick(.clementine) }
                     .accessibilityIdentifier("playFromClementine")
                     PlayFromRow(
-                        name: isPad
-                            ? String(localized: "On this iPad", comment: "As \"On this phone\", on an iPad: music saved on the iPad, as opposed to Clementine on the computer.")
-                            : String(localized: "On this phone"),
-                        systemImage: isPad ? "ipad" : "iphone",
+                        name: ThisDevice.label,
+                        systemImage: ThisDevice.systemImage,
                         song: model.phonePlayer.playingSong,
                         isPlaying: model.phonePlayer.isPlaying,
                         isChosen: model.playFrom == .phone

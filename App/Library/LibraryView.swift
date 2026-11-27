@@ -60,17 +60,13 @@ private struct LibraryLevelView: View {
         .navigationTitle(opened == nil ? String(localized: "Library") : "")
         .navigationSubtitle(opened == nil && !isSearching && level != nil ? String(localized: "\(level?.items.count ?? 0) items") : "")
         .navigationBarTitleDisplayMode(opened == nil ? .large : .inline)
-        .refreshable {
-            if opened == nil {
-                library.download()
-            }
-        }
+        .modifier(RefreshableIf(enabled: opened == nil) { await library.download() })
         .toolbar { toolbar }
-        .task(id: LoadKey(revision: library.revision, grouping: grouping, sorting: sorting, status: library.status)) {
+        .task(id: LoadKey(revision: library.revision, grouping: grouping, sorting: sorting)) {
             level = await library.level(below: opened)
             selection = []
         }
-        .task(id: SearchKey(revision: library.revision, query: query, status: library.status)) {
+        .task(id: SearchKey(revision: library.revision, query: query)) {
             guard opened == nil else { return }
             if isSearching {
                 // Waits for a pause in typing.
@@ -186,17 +182,17 @@ private struct LibraryLevelView: View {
         .accessibilityIdentifier("librarySmartPlaylists")
     }
 
+    // Deliberately omit library.status: keying on it would blank the list and cancel/restart
+    // loads and searches on every download progress chunk; revision bumps once ready.
     private struct LoadKey: Equatable {
         let revision: Int
         let grouping: String
         let sorting: String
-        let status: LibraryModel.Status
     }
 
     private struct SearchKey: Equatable {
         let revision: Int
         let query: String
-        let status: LibraryModel.Status
     }
 
     @ViewBuilder
@@ -311,5 +307,20 @@ struct ProgressBanner: View {
         .padding(.vertical, Metrics.space2)
         .background(Palette.surface)
         .accessibilityElement(children: .combine)
+    }
+}
+
+/// Attaches `.refreshable` only at the root level so drilled-down pages don't show a no-op
+/// pull-to-refresh spinner.
+private struct RefreshableIf: ViewModifier {
+    let enabled: Bool
+    let action: @Sendable () async -> Void
+
+    func body(content: Content) -> some View {
+        if enabled {
+            content.refreshable(action: action)
+        } else {
+            content
+        }
     }
 }

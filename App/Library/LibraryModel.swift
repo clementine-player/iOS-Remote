@@ -46,7 +46,9 @@ final class LibraryModel {
     }
 
     func download() {
-        guard downloadTask == nil, let endpoint = model.session.endpoint else { return }
+        // Use the active socket's resolved IP so library downloads hit the same IP family as the
+        // session.
+        guard downloadTask == nil, let endpoint = model.session.connectedEndpoint ?? model.session.endpoint else { return }
         if !model.network.allows(model.settings.downloadNetwork) {
             model.toasts.show(DownloadFailure.networkNotAllowed.message)
             return
@@ -117,12 +119,13 @@ final class LibraryModel {
         return (try? await store.songURLs(of: items, grouping: settings.libraryGrouping, sorting: settings.librarySorting)) ?? []
     }
 
-    /// Whether [item] can be kept on this phone, when Clementine syncs: an artist or an album, by
-    /// name. Albums are kept by album artist, as Clementine files them; artists by artist.
+    /// Whether [item] can be kept on this phone, when Clementine syncs: an artist, album artist,
+    /// or album, by name (excluding Various Artists compilations).
     func canKeep(_ item: BrowseItem) -> Bool {
         let fields = model.settings.libraryGrouping.fields
-        return model.session.syncing.available && !item.value.isEmpty && item.level < fields.count
-            && SyncSources.keepableFields.contains(fields[item.level])
+        // Various Artists is a synthetic grouping with no real artist value to keep by.
+        return model.session.syncing.available && !item.value.isEmpty && !item.isVariousArtists
+            && item.level < fields.count && SyncSources.keepableFields.contains(fields[item.level])
     }
 
     /// Keeps [item] on this phone ([canKeep]): its albums, or the artist's songs, updated from
@@ -132,11 +135,10 @@ final class LibraryModel {
         let serverID = model.session.syncing.serverID
         let grouping = model.settings.libraryGrouping
         let rules: [SyncRule]
-        if grouping.fields[item.level] == "artist" {
+        if grouping.fields[item.level] == "artist", !item.isVariousArtists {
             rules = [SyncSources.artistRule(serverID: serverID, artist: item.value, refreshPolicy: refreshPolicy)]
         } else {
-            // One album here can be several in Clementine, filed under different album artists:
-            // keep each.
+            // One album (or album artist) can correspond to several albums in Clementine: keep each.
             rules = ((try? await store.albums(of: item, grouping: grouping)) ?? []).map {
                 SyncSources.albumRule(
                     serverID: serverID, albumArtist: $0.albumArtist, album: $0.album, refreshPolicy: refreshPolicy)

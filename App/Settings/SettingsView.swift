@@ -18,6 +18,8 @@ struct SettingsView: View {
     @AppStorage(SettingKey.albumFolder) private var albumFolder = true
     @AppStorage(SettingKey.autoConnect) private var autoConnect = true
     @AppStorage(SettingKey.port) private var port = Int(RemoteProtocol.defaultPort)
+    @State private var portText = ""
+    @FocusState private var portFocused: Bool
     @AppStorage(SettingKey.keepScreenOn) private var keepScreenOn = false
     @AppStorage(SettingKey.renderer) private var renderer = true
     @AppStorage(SettingKey.crashReports) private var crashReports = true
@@ -53,7 +55,7 @@ struct SettingsView: View {
                 }
                 Toggle(isOn: $showLastFM) {
                     Text("Last.fm")
-                    Text("Show buttons to love and ban songs.")
+                    Text("Show a button to love songs.", comment: "Settings toggle subtitle under Last.fm.")
                 }
             }
 
@@ -122,14 +124,37 @@ struct SettingsView: View {
                     Text("Clementine can send its music here, when it plays on other devices. Takes effect the next time the app connects.")
                 }
                 LabeledContent("Port") {
-                    TextField("Port", value: $port, format: .number.grouping(.never))
+                    // Edit a draft string instead of binding directly to @AppStorage so clearing or
+                    // typing intermediate digits doesn't snap back to 5500 mid-edit; commit on blur
+                    // or via the keyboard Done button since .numberPad has no Return key.
+                    TextField("Port", text: $portText)
                         .keyboardType(.numberPad)
                         .multilineTextAlignment(.trailing)
+                        .focused($portFocused)
+                        .onSubmit { commitPort() }
+                        .onAppear { portText = String(validatedPort(port)) }
                         .onChange(of: port) { _, value in
-                            if !(1...65535).contains(value) {
-                                port = Int(RemoteProtocol.defaultPort)
+                            // Avoid overwriting what the user is currently typing.
+                            if !portFocused {
+                                portText = String(validatedPort(value))
                             }
                         }
+                        .onChange(of: portFocused) { _, focused in
+                            if !focused {
+                                commitPort()
+                            }
+                        }
+                }
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    if portFocused {
+                        Spacer()
+                        Button("Done") {
+                            commitPort()
+                            portFocused = false
+                        }
+                    }
                 }
             }
 
@@ -177,6 +202,22 @@ struct SettingsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .scrollContentBackground(.hidden)
         .background(Palette.surface)
+    }
+
+    private func validatedPort(_ value: Int) -> Int {
+        (1...65535).contains(value) ? value : Int(RemoteProtocol.defaultPort)
+    }
+
+    private func commitPort() {
+        let trimmed = portText.trimmingCharacters(in: .whitespaces)
+        if let parsed = Int(trimmed), (1...65535).contains(parsed) {
+            port = parsed
+            portText = String(parsed)
+        } else {
+            let valid = validatedPort(port)
+            port = valid
+            portText = String(valid)
+        }
     }
 }
 

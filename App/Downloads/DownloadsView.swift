@@ -123,8 +123,12 @@ struct DownloadsView: View {
                         description: Text("Download songs, albums and playlists from the player, the queue and the library. They're saved in the Files app."))
                 }
             }
-            .navigationTitle(model.isOnThisPhone ? String(localized: "On this phone") : String(localized: "Downloads"))
-            .navigationSubtitle(downloads.freeSpace.map { String(localized: "\(formatBytes($0)) free on this phone") } ?? "")
+            .navigationTitle(model.isOnThisPhone ? ThisDevice.label : String(localized: "Downloads"))
+            .navigationSubtitle(downloads.freeSpace.map {
+                UIDevice.current.userInterfaceIdiom == .pad
+                    ? String(localized: "\(formatBytes($0)) free on this iPad", comment: "Navigation subtitle showing free storage space on the iPad.")
+                    : String(localized: "\(formatBytes($0)) free on this phone")
+            } ?? "")
             .connectionToolbar()
             .navigationDestination(for: KeptRoute.self) { route in
                 KeptRuleView(ruleID: route.ruleID)
@@ -196,11 +200,12 @@ private struct PhoneArtistRows: View {
     let songs: [DownloadedSong]
 
     var body: some View {
-        let albums = DownloadedSong.albums(of: songs)
+        // Pre-group once per body pass to avoid scanning all albums and songs per artist row.
+        let albumsByArtist = Dictionary(grouping: DownloadedSong.albums(of: songs), by: \.artist)
+        let looseByArtist = Dictionary(grouping: songs.filter(\.album.isEmpty), by: \.artist)
         ForEach(DownloadedSong.artists(of: songs), id: \.self) { artist in
             // Counted as the library counts: albums, and songs on none.
-            let count = albums.filter { $0.artist == artist }.count
-                + songs.filter { $0.artist == artist && $0.album.isEmpty }.count
+            let count = (albumsByArtist[artist]?.count ?? 0) + (looseByArtist[artist]?.count ?? 0)
             NavigationLink(value: BrowseRoute.artist(artist)) {
                 MediaRow(title: artist, meta: String(localized: "\(count) items")) {
                     IconTile(systemImage: ItemKind.artist.systemImage)
@@ -408,6 +413,12 @@ private struct KeptRow: View {
 /// The songs of something kept on this phone, to play on the phone: Play plays them in order,
 /// Shuffle at random, and a song plays them from it. The song playing is marked.
 private struct KeptRuleView: View {
+    // Include running so the song list also reloads when a sync completes with the same count.
+    private struct ReloadKey: Equatable {
+        let songs: Int?
+        let running: Bool
+    }
+
     let ruleID: Int64
     @Environment(AppModel.self) private var model
     @State private var songs: [KeptSong]?
@@ -472,8 +483,8 @@ private struct KeptRuleView: View {
         }
         .navigationTitle(kept?.rule.title ?? "")
         .navigationBarTitleDisplayMode(.inline)
-        // Read again as syncing changes them.
-        .task(id: kept?.songs) {
+        // Read again as syncing progresses or completes.
+        .task(id: ReloadKey(songs: kept?.songs, running: model.syncer.status.running)) {
             songs = await model.syncer.songs(ruleID)
         }
     }
@@ -506,7 +517,12 @@ extension KeptRule {
         }
         switch result {
         case .needsSetup(let message):
-            return message
+            let trimmed = message.trimmingCharacters(in: .whitespacesAndNewlines)
+            return trimmed.isEmpty
+                ? String(
+                    localized: "Configure this in Clementine on your computer.",
+                    comment: "Fallback status under a kept rule when Clementine needs setup without providing a custom message.")
+                : trimmed
         case .gone:
             return String(
                 localized: "No longer in Clementine",
@@ -573,13 +589,25 @@ private struct JobRow: View {
                     // Once finished it may be an error, which should be read in full.
                     .lineLimit(job.isFinished ? nil : 1)
                 if !job.isFinished {
-                    ProgressView(value: job.status.progress)
+                    // Show an indeterminate bar until chunk sizes are known, and clamp against
+                    // server total-byte rounding.
+                    if case .downloading = job.status.state {
+                        ProgressView(value: min(max(job.status.progress, 0), 1))
+                    } else {
+                        ProgressView()
+                            .progressViewStyle(.linear)
+                    }
                 }
-                Text(job.sizes)
-                    .textStyle(.labelMedium)
-                    .monospacedDigit()
-                    .foregroundStyle(Palette.onSurfaceVariant)
+                if !job.sizes.isEmpty {
+                    Text(job.sizes)
+                        .textStyle(.labelMedium)
+                        .monospacedDigit()
+                        .foregroundStyle(Palette.onSurfaceVariant)
+                }
             }
+            // Combine only the info stack so VoiceOver doesn't merge the cancel button into row
+            // activation.
+            .accessibilityElement(children: .combine)
             Spacer(minLength: 0)
             if let cancel {
                 Button("Cancel download", systemImage: "xmark", action: cancel)
@@ -590,7 +618,6 @@ private struct JobRow: View {
         }
         .contentShape(.rect)
         .listRowBackground(Palette.surface)
-        .accessibilityElement(children: .combine)
     }
 }
 

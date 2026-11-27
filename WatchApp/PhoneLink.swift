@@ -90,8 +90,19 @@ final class PhoneLink: NSObject {
         }
     }
 
+    // Replies to sendMessageData arrive as Data (with base64 cover in JSON), whereas application
+    // context and push messages arrive as dictionaries with a separate raw cover Data key.
     private func received(_ data: Data?) {
         guard let state = WatchLinkCoding.decodeState(data) else { return }
+        apply(state)
+    }
+
+    private func received(_ dictionary: [String: Any]) {
+        guard let state = WatchLinkCoding.decodeState(dictionary) else { return }
+        apply(state)
+    }
+
+    private func apply(_ state: WatchNowPlaying) {
         isPhoneUnreachable = false
         if isAskingToConnect, state.connection != .connecting {
             isAskingToConnect = false
@@ -112,24 +123,31 @@ extension PhoneLink: WCSessionDelegate {
     nonisolated func session(
         _ session: WCSession, activationDidCompleteWith state: WCSessionActivationState, error: Error?
     ) {
-        let data = session.receivedApplicationContext[WatchLinkCoding.stateKey] as? Data
+        let context = SendableDictionary(session.receivedApplicationContext)
         Task { @MainActor in
-            self.received(data)
+            self.received(context.value)
             self.reachabilityChanged()
         }
     }
 
     nonisolated func session(_ session: WCSession, didReceiveApplicationContext context: [String: Any]) {
-        let data = context[WatchLinkCoding.stateKey] as? Data
-        Task { @MainActor in self.received(data) }
+        let wrapped = SendableDictionary(context)
+        Task { @MainActor in self.received(wrapped.value) }
     }
 
     nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
-        let data = message[WatchLinkCoding.stateKey] as? Data
-        Task { @MainActor in self.received(data) }
+        let wrapped = SendableDictionary(message)
+        Task { @MainActor in self.received(wrapped.value) }
     }
 
     nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
         Task { @MainActor in self.reachabilityChanged() }
     }
+}
+
+/// Transfers non-Sendable WatchConnectivity dictionaries across to @MainActor without stripping
+/// the separate cover Data key.
+private struct SendableDictionary: @unchecked Sendable {
+    let value: [String: Any]
+    init(_ value: [String: Any]) { self.value = value }
 }

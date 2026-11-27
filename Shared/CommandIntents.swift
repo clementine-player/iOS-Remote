@@ -16,20 +16,49 @@ extension CommandIntent {
         do {
             try await RemoteCommand.send(message, to: endpoint, authCode: state.authCode)
         } catch {
-            throw CommandError.unreachable
+            throw Self.mapError(error)
         }
         return .result()
+    }
+
+    /// Maps server-side disconnect causes separately so auth and local-network rejections aren't
+    /// reported as generic unreachability.
+    static func mapError(_ error: Error) -> CommandError {
+        guard let remoteError = error as? RemoteCommandError else { return .unreachable }
+        switch remoteError {
+        case .disconnected(.wrongAuthCode), .disconnected(.notAuthenticated):
+            return .wrongAuthCode
+        case .disconnected(.notLocalNetwork):
+            return .notLocalNetwork
+        case .disconnected:
+            return .refused
+        }
     }
 }
 
 enum CommandError: Error, CustomLocalizedStringResourceConvertible {
     case noClementine
     case unreachable
+    case wrongAuthCode
+    case notLocalNetwork
+    case refused
 
     var localizedStringResource: LocalizedStringResource {
         switch self {
         case .noClementine: "Connect to Clementine in Clementine Remote first."
         case .unreachable: "Couldn't reach Clementine."
+        case .wrongAuthCode:
+            LocalizedStringResource(
+                "Enter the auth code shown in Clementine's Network Remote settings.",
+                comment: "Shortcut and widget error when Clementine rejects the saved auth code.")
+        case .notLocalNetwork:
+            LocalizedStringResource(
+                "Clementine only accepts connections from its local network.",
+                comment: "Shortcut and widget error when Clementine refuses connections outside its local network.")
+        case .refused:
+            LocalizedStringResource(
+                "Clementine closed the connection.",
+                comment: "Shortcut and widget error when Clementine rejects or closes a control command connection.")
         }
     }
 }
@@ -57,7 +86,7 @@ struct PlayPauseIntent: CommandIntent {
         do {
             try await RemoteCommand.send(message, to: endpoint, authCode: state.authCode)
         } catch {
-            throw CommandError.unreachable
+            throw Self.mapError(error)
         }
         // Show the change at once in the widget.
         var changed = state

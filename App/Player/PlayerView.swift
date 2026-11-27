@@ -71,11 +71,39 @@ struct PlayerView: View {
                         HStack(alignment: .center, spacing: Metrics.space6) {
                             artwork
                                 .frame(width: max(side, 0), height: max(side, 0))
-                            controls
+                            // Allow scrolling when landscape height or larger Dynamic Type can't fit
+                            // the controls stack cleanly.
+                            ScrollView {
+                                controls
+                            }
+                            .scrollBounceBehavior(.basedOnSize)
                         }
                         .padding(.horizontal, Metrics.space6)
                         .padding(.bottom, Metrics.space4)
                         .frame(maxHeight: .infinity)
+                    } else if geometry.size.height < 600 {
+                        // Compact portrait heights (e.g. small phones or split view) scroll instead
+                        // of clipping controls.
+                        ScrollView {
+                            VStack(spacing: 0) {
+                                artwork
+                                    .frame(maxHeight: 160)
+                                    .padding(.top, Metrics.space3)
+                                songInfo
+                                    .padding(.top, Metrics.space4)
+                                SeekBar()
+                                    .padding(.top, Metrics.space3)
+                                TransportControls()
+                                    .padding(.top, Metrics.space1)
+                                VolumeSlider()
+                                    .padding(.top, Metrics.space2)
+                                actions
+                                    .padding(.top, Metrics.space2)
+                            }
+                            .padding(.horizontal, Metrics.space6)
+                            .padding(.bottom, Metrics.space2)
+                        }
+                        .scrollBounceBehavior(.basedOnSize)
                     } else {
                         VStack(spacing: 0) {
                             artwork
@@ -363,7 +391,12 @@ struct SeekBar: View {
             VStack(spacing: 0) {
                 Slider(
                     value: Binding(
-                        get: { dragging ?? min(seconds, Double(max(length, 1))) },
+                        get: {
+                            // Streams and stopped tracks can report length <= 0; park the disabled
+                            // slider at 0 rather than computing a position against the fallback 0...1 range.
+                            guard length > 0 else { return 0 }
+                            return dragging ?? min(seconds, Double(length))
+                        },
                         set: { dragging = $0 }),
                     in: 0...Double(max(length, 1))
                 ) { editing in
@@ -487,6 +520,10 @@ private struct TransportButton: View {
 struct VolumeSlider: View {
     @Environment(AppModel.self) private var model
     @Environment(RemoteSession.self) private var session
+    // Hold the thumb position while dragging so delayed server volume echoes don't snap it back;
+    // isEditingVolume ensures non-drag updates (e.g. VoiceOver) don't strand draggingVolume.
+    @State private var draggingVolume: Double?
+    @State private var isEditingVolume = false
 
     var body: some View {
         HStack(spacing: Metrics.space3) {
@@ -498,13 +535,34 @@ struct VolumeSlider: View {
             } else {
                 Slider(
                     value: Binding(
-                        get: { Double(session.volume) },
+                        get: { draggingVolume ?? Double(session.volume) },
                         set: { value in
-                            if Int(value.rounded()) != session.volume {
-                                session.setVolume(Int(value.rounded()))
+                            if isEditingVolume {
+                                draggingVolume = value
+                            }
+                            let target = Int(value.rounded())
+                            if target != session.volume {
+                                session.setVolume(target)
                             }
                         }),
-                    in: 0...100)
+                    in: 0...100
+                ) { editing in
+                    isEditingVolume = editing
+                    if !editing {
+                        if let draggingVolume {
+                            let target = Int(draggingVolume.rounded())
+                            if target != session.volume {
+                                session.setVolume(target)
+                            }
+                        }
+                        draggingVolume = nil
+                    }
+                }
+                .onChange(of: session.volume) { _, _ in
+                    if !isEditingVolume {
+                        draggingVolume = nil
+                    }
+                }
                 .accessibilityLabel("Clementine volume")
                 .accessibilityValue("\(session.volume)%")
             }

@@ -109,6 +109,7 @@ targets:
     sources:
       - path: Widget
       - path: Shared
+      - path: App/Theme/Theme.swift
       - path: App/Resources/Assets.xcassets
       # The app's strings and their translations: the widget's own strings are in it too.
       - path: App/Resources/Localizable.xcstrings

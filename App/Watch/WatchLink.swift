@@ -70,22 +70,36 @@ final class WatchLink: NSObject {
         return name.isEmpty ? model.settings.lastHost : name
     }
 
-    /// The cover, made small enough to send.
+    /// The cover, made small enough to stay comfortably within WatchConnectivity's 65 KB payload
+    /// budget (including base64 JSON reply mode).
     private func smallCover(_ data: Data?) -> Data? {
         guard data != coverSource else { return cover }
         coverSource = data
         cover = data.flatMap(UIImage.init(data:)).flatMap { image in
-            let side = Self.coverSize
-            let format = UIGraphicsImageRendererFormat()
-            format.scale = 1
-            let scaled = UIGraphicsImageRenderer(size: CGSize(width: side, height: side), format: format).image { _ in
-                // Fill the square, cropping a cover that isn't.
-                let scale = max(side / image.size.width, side / image.size.height)
-                let size = CGSize(width: image.size.width * scale, height: image.size.height * scale)
-                image.draw(in: CGRect(
-                    x: (side - size.width) / 2, y: (side - size.height) / 2, width: size.width, height: size.height))
+            // 36 KB raw JPEG expands to ~48 KB in base64 JSON replies, leaving room for metadata
+            // under WatchConnectivity's 65 KB payload limit.
+            let maxBytes = 36_000
+            for (side, quality) in [
+                (Self.coverSize, CGFloat(0.6)),
+                (Self.coverSize, CGFloat(0.4)),
+                (CGFloat(240), CGFloat(0.45)),
+                (CGFloat(180), CGFloat(0.35)),
+            ] {
+                let format = UIGraphicsImageRendererFormat()
+                format.scale = 1
+                let scaled = UIGraphicsImageRenderer(size: CGSize(width: side, height: side), format: format).image { _ in
+                    // Fill the square, cropping a cover that isn't.
+                    let scale = max(side / image.size.width, side / image.size.height)
+                    let size = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+                    image.draw(in: CGRect(
+                        x: (side - size.width) / 2, y: (side - size.height) / 2, width: size.width, height: size.height))
+                }
+                if let jpeg = scaled.jpegData(compressionQuality: quality), jpeg.count <= maxBytes {
+                    return jpeg
+                }
             }
-            return scaled.jpegData(compressionQuality: 0.6)
+            // Drop oversized artwork rather than failing delivery of playback state.
+            return nil
         }
         return cover
     }
@@ -147,7 +161,8 @@ final class WatchLink: NSObject {
         case .disconnected:
             guard !model.settings.lastHost.isEmpty else { return false }
             let name = model.settings.lastServerName
-            model.connect(host: model.settings.lastHost, name: name.isEmpty ? nil : name)
+            // Include the saved port so Watch-triggered connects work with non-default ports.
+            model.connect(host: model.settings.lastHost, port: model.settings.lastPort, name: name.isEmpty ? nil : name)
         case .connecting, .downloadingData, .reconnecting:
             break
         }

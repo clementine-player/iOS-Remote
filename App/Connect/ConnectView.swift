@@ -137,7 +137,7 @@ struct ConnectView: View {
                     .keyboardType(.numberPad)
                 Button("Cancel", role: .cancel) {}
                 Button("Connect") {
-                    if let code = Int32(authCode) {
+                    if let code = Int32(authCode.trimmingCharacters(in: .whitespaces)) {
                         model.connect(authCode: code)
                     } else {
                         model.toasts.show("That isn't a valid code")
@@ -149,14 +149,24 @@ struct ConnectView: View {
             } else {
                 Button("OK") {}
                 if model.songsOnPhone > 0 {
-                    Button(String(
-                        localized: "Play on this phone",
-                        comment: "A button in the dialog when connecting fails, and a shortcut on the app's icon: play the music saved on the phone instead of connecting."),
+                    Button(UIDevice.current.userInterfaceIdiom == .pad
+                        ? String(
+                            localized: "Play on this iPad",
+                            comment: "A button in the dialog when connecting fails on iPad: play the music saved on the iPad instead of connecting.")
+                        : String(
+                            localized: "Play on this phone",
+                            comment: "A button in the dialog when connecting fails, and a shortcut on the app's icon: play the music saved on the phone instead of connecting."),
                         action: model.playWithoutClementine)
                 }
             }
         } message: { problem in
             Text(problemMessage(problem))
+        }
+        .onChange(of: model.connectProblem) { _, problem in
+            // Clear any previously entered code so re-prompting doesn't prefill a rejected one.
+            if problem == .authCode {
+                authCode = ""
+            }
         }
     }
 
@@ -425,9 +435,9 @@ private struct OnPhoneRow: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: Metrics.space4) {
-                IconTile(systemImage: UIDevice.current.userInterfaceIdiom == .pad ? "ipad" : "iphone")
+                IconTile(systemImage: ThisDevice.systemImage)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("On this phone")
+                    Text(ThisDevice.label)
                         .textStyle(.bodyLarge)
                         .foregroundStyle(Palette.onSurface)
                     Text(connecting

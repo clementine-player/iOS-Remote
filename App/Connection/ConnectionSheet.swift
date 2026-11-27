@@ -32,7 +32,8 @@ struct ConnectionSheet: View {
                 }
 
                 Section {
-                    if let endpoint = session.endpoint {
+                    // Prefer the active socket's resolved IP over the configured hostname.
+                    if let endpoint = session.connectedEndpoint ?? session.endpoint {
                         LabeledContent("Address", value: "\(endpoint.host) · port \(String(endpoint.port))")
                     }
                     if !session.clementineVersion.isEmpty {

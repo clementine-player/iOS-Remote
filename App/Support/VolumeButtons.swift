@@ -39,13 +39,10 @@ final class VolumeButtonController {
 
     private func start() {
         guard observation == nil else { return }
+        // Arbitrate the shared AVAudioSession through AppModel so volume buttons never downgrade
+        // active playback to .ambient.
+        guard model.activateVolumeButtonSession() else { return }
         let audio = AVAudioSession.sharedInstance()
-        do {
-            try audio.setCategory(.ambient, options: [.mixWithOthers])
-            try audio.setActive(true)
-        } catch {
-            return
-        }
         reference = audio.outputVolume
         // At either end, a press one way wouldn't register.
         if reference <= 0.05 || reference >= 0.95 {
@@ -61,10 +58,7 @@ final class VolumeButtonController {
         guard observation != nil else { return }
         observation?.invalidate()
         observation = nil
-        // While Clementine plays here, the session is the renderer's, playing.
-        if model.renderer.item == nil {
-            try? AVAudioSession.sharedInstance().setActive(false, options: [.notifyOthersOnDeactivation])
-        }
+        model.deactivateAudioSessionIfIdle(includingVolumeButtons: true)
     }
 
     private func changed(to volume: Float) {
@@ -110,8 +104,10 @@ struct VolumeButtonsView: UIViewRepresentable {
     }
 
     func updateUIView(_ view: MPVolumeView, context: Context) {
+        // Pass SwiftUI-tracked enabled and scenePhase so updates re-evaluate alongside AppModel's
+        // observable playback state.
         context.coordinator.update(
-            enabled: enabled && scenePhase == .active && model.session.status.isActive && !model.session.isPlayingHere)
+            enabled: model.volumeButtonsShouldBeActive(enabled: enabled, scenePhase: scenePhase))
     }
 
     static func dismantleUIView(_ view: MPVolumeView, coordinator: VolumeButtonController) {

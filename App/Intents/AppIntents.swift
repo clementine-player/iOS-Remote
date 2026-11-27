@@ -16,7 +16,8 @@ struct ConnectIntent: AppIntent {
         }
         if model.session.status == .disconnected {
             let name = model.settings.lastServerName
-            model.connect(host: model.settings.lastHost, name: name.isEmpty ? nil : name)
+            // Include the saved port so Shortcuts connects when Clementine uses a custom port.
+            model.connect(host: model.settings.lastHost, port: model.settings.lastPort, name: name.isEmpty ? nil : name)
         }
         return .result()
     }

@@ -13,6 +13,7 @@ final class SearchModel: SearchResults {
     /// Bumped when results arrive, so screens reload them.
     private(set) var revision = 0
     private(set) var icons: [String: UIImage] = [:]
+    private var iconData: [String: Data] = [:]
 
     private let store = SearchStore()
     private unowned let model: AppModel
@@ -52,8 +53,11 @@ final class SearchModel: SearchResults {
         if finished {
             isSearching = false
         }
-        guard sections != self.sections || icons.count != self.icons.count else { return }
+        // Compare the raw icon Data so a replaced icon still applies even if the entry count
+        // didn't change, and unchanged icons aren't decoded again on every search chunk.
+        guard sections != self.sections || icons != self.iconData else { return }
         self.sections = sections
+        self.iconData = icons
         self.icons = icons.compactMapValues(UIImage.init(data:))
         revision += 1
     }

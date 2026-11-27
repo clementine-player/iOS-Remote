@@ -63,15 +63,9 @@ struct BrowseRows: View {
         ForEach(rows, id: \.offset) { index, item in
             Group {
                 if isEditing {
-                    Button {
-                        if selection.contains(index) {
-                            selection.remove(index)
-                        } else {
-                            selection.insert(index)
-                        }
-                    } label: {
-                        BrowseRow(item: item, icon: icon(item), meta: meta(item))
-                    }
+                    // Let List handle edit-mode selection via .tag(index); a Button intercepts
+                    // row taps.
+                    BrowseRow(item: item, icon: icon(item), meta: meta(item))
                 } else if item.kind == .song {
                     Button {
                         add([item], .selected, .playIfStopped)

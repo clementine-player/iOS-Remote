@@ -8,20 +8,77 @@ import ClementineKit
 final class AVPlayback: Playback {
     weak var listener: PlaybackListener?
 
+    /// Holds KVO, notification, and timer tokens behind an NSLock so `deinit` (which is
+    /// nonisolated on a @MainActor class) can always tear them down if `stop()` wasn't called.
+    private final class CleanupBag: @unchecked Sendable {
+        private let lock = NSLock()
+        private var kvo: NSKeyValueObservation?
+        private var routeObserver: NSObjectProtocol?
+        private var timer: Timer?
+
+        func attach(kvo: NSKeyValueObservation, routeObserver: NSObjectProtocol, timer: Timer) {
+            lock.lock()
+            let oldKVO = self.kvo
+            let oldRoute = self.routeObserver
+            let oldTimer = self.timer
+            self.kvo = kvo
+            self.routeObserver = routeObserver
+            self.timer = timer
+            lock.unlock()
+            oldKVO?.invalidate()
+            if let oldRoute { NotificationCenter.default.removeObserver(oldRoute) }
+            oldTimer?.invalidate()
+        }
+
+        func clear() {
+            lock.lock()
+            let kvo = self.kvo
+            let routeObserver = self.routeObserver
+            let timer = self.timer
+            self.kvo = nil
+            self.routeObserver = nil
+            self.timer = nil
+            lock.unlock()
+            kvo?.invalidate()
+            if let routeObserver { NotificationCenter.default.removeObserver(routeObserver) }
+            timer?.invalidate()
+        }
+
+        deinit {
+            clear()
+        }
+    }
+
+    private let onActivateAudio: @MainActor () -> Void
+    private let onDeactivateAudio: @MainActor () -> Void
+
     private var player: AVQueuePlayer?
     private var volume: Float = 1
     /// What's playing, and what's queued to follow it. Kept here rather than read from the
     /// player, which may have moved on by the time it says an item ended.
     private var current: AVPlayerItem?
     private var queued: AVPlayerItem?
-    /// KVO can call back on any thread: its handlers are @Sendable and hop to the main actor.
-    private var playerObservation: NSKeyValueObservation?
+    /// Monotonic counter so async `AVPlayerItem.seek` completions ignore superseded seeks or clears.
+    private var seekGeneration: UInt64 = 0
+    private let cleanup = CleanupBag()
     /// Per item: its status, and the notifications of its end.
     private var itemObservations: [ObjectIdentifier: [Any]] = [:]
     /// Per item: the bytes it has fetched that are already counted in [Traffic].
     private var counted: [ObjectIdentifier: Int] = [:]
-    /// Counts what's being fetched while there's a player.
-    private var trafficTimer: Timer?
+
+    init(
+        onActivateAudio: @escaping @MainActor () -> Void = {
+            let session = AVAudioSession.sharedInstance()
+            try? session.setCategory(.playback, mode: .default, policy: .longFormAudio)
+            try? session.setActive(true)
+        },
+        onDeactivateAudio: @escaping @MainActor () -> Void = {
+            try? AVAudioSession.sharedInstance().setActive(false, options: [.notifyOthersOnDeactivation])
+        }
+    ) {
+        self.onActivateAudio = onActivateAudio
+        self.onDeactivateAudio = onDeactivateAudio
+    }
 
     var state: PlaybackState {
         guard let player, let current else { return .idle }
@@ -50,15 +107,25 @@ final class AVPlayback: Playback {
     }
 
     func load(_ source: PlaybackSource, startMs: Int64, playing: Bool) {
-        activateSession()
+        onActivateAudio()
         let player = makePlayer()
         clear()
         let item = makeItem(source)
         current = item
         player.insert(item, after: nil)
         if startMs > 0 {
-            item.seek(to: CMTime(value: startMs, timescale: 1000), toleranceBefore: .zero, toleranceAfter: .zero,
-                      completionHandler: nil)
+            let generation = seekGeneration
+            item.seek(
+                to: CMTime(value: startMs, timescale: 1000),
+                toleranceBefore: .zero, toleranceAfter: .zero
+            ) { @Sendable [weak self, weak item] _ in
+                // Notify only once AVPlayerItem finishes seeking so Desktop gets the post-seek
+                // timestamp rather than the pre-seek position.
+                Task { @MainActor in
+                    guard let self, let item, item === self.current, self.seekGeneration == generation else { return }
+                    self.listener?.playbackSeeked()
+                }
+            }
         }
         player.volume = volume
         if playing {
@@ -85,7 +152,7 @@ final class AVPlayback: Playback {
     }
 
     func play() {
-        activateSession()
+        onActivateAudio()
         player?.play()
     }
 
@@ -94,8 +161,18 @@ final class AVPlayback: Playback {
     }
 
     func seek(toMs positionMs: Int64) {
-        current?.seek(to: CMTime(value: positionMs, timescale: 1000), toleranceBefore: .zero, toleranceAfter: .zero,
-                      completionHandler: nil)
+        guard let item = current else { return }
+        seekGeneration &+= 1
+        let generation = seekGeneration
+        item.seek(
+            to: CMTime(value: positionMs, timescale: 1000),
+            toleranceBefore: .zero, toleranceAfter: .zero
+        ) { @Sendable [weak self, weak item] _ in
+            Task { @MainActor in
+                guard let self, let item, item === self.current, self.seekGeneration == generation else { return }
+                self.listener?.playbackSeeked()
+            }
+        }
     }
 
     func setVolume(_ volume: Float) {
@@ -107,7 +184,9 @@ final class AVPlayback: Playback {
         guard let player else { return }
         player.pause()
         clear()
-        try? AVAudioSession.sharedInstance().setActive(false, options: [.notifyOthersOnDeactivation])
+        cleanup.clear()
+        self.player = nil
+        onDeactivateAudio()
         listener?.playbackStateChanged()
     }
 
@@ -119,14 +198,24 @@ final class AVPlayback: Playback {
         }
         let player = AVQueuePlayer()
         player.actionAtItemEnd = .advance
-        playerObservation = player.observe(\.timeControlStatus) { @Sendable [weak self] _, _ in
+        let playerObservation = player.observe(\.timeControlStatus) { @Sendable [weak self] _, _ in
             Task { @MainActor in self?.listener?.playbackStateChanged() }
+        }
+        let routeObserver = NotificationCenter.default.addObserver(
+            forName: AVAudioSession.routeChangeNotification, object: AVAudioSession.sharedInstance(), queue: .main
+        ) { [weak self] notification in
+            // Pause when headphones or Bluetooth disconnect instead of playing out of the speaker.
+            let reason = (notification.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt)
+                .flatMap(AVAudioSession.RouteChangeReason.init(rawValue:))
+            guard reason == .oldDeviceUnavailable else { return }
+            MainActor.assumeIsolated { self?.pause() }
         }
         self.player = player
         // Twice a second, as the connection sheet reads it.
-        trafficTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
+        let trafficTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.countTraffic() }
         }
+        cleanup.attach(kvo: playerObservation, routeObserver: routeObserver, timer: trafficTimer)
         return player
     }
 
@@ -146,12 +235,6 @@ final class AVPlayback: Playback {
         counted[id] = fetched
     }
 
-    private func activateSession() {
-        let session = AVAudioSession.sharedInstance()
-        try? session.setCategory(.playback, mode: .default, policy: .longFormAudio)
-        try? session.setActive(true)
-    }
-
     private func makeItem(_ source: PlaybackSource) -> AVPlayerItem {
         // Clementine's URLs have no extension: the type it gives says what the audio is.
         var options: [String: Any] = [:]
@@ -165,6 +248,7 @@ final class AVPlayback: Playback {
 
     /// Removes what's playing and queued.
     private func clear() {
+        seekGeneration &+= 1
         for item in [current, queued].compactMap({ $0 }) {
             forget(item)
         }
@@ -176,23 +260,32 @@ final class AVPlayback: Playback {
     private func watch(_ item: AVPlayerItem) {
         let center = NotificationCenter.default
         let id = ObjectIdentifier(item)
+        // Capture item weakly and check object identity (===) so late callbacks can't collide with
+        // reused ObjectIdentifiers after an item is forgotten.
         itemObservations[id] = [
-            item.observe(\.status) { @Sendable [weak self] item, _ in
-                let failure = item.status == .failed ? AVPlayback.describe(item.error) : nil
+            item.observe(\.status) { @Sendable [weak self, weak item] observed, _ in
+                let failure = observed.status == .failed ? AVPlayback.describe(observed.error) : nil
                 Task { @MainActor in
-                    self?.listener?.playbackStateChanged()
+                    guard let self, let item, item === self.current || item === self.queued else { return }
+                    self.listener?.playbackStateChanged()
                     if let failure {
-                        self?.failed(id, message: failure.message, transient: failure.transient)
+                        self.failed(item, message: failure.message, transient: failure.transient)
                     }
                 }
             },
-            center.addObserver(forName: AVPlayerItem.didPlayToEndTimeNotification, object: item, queue: .main) { [weak self] _ in
-                MainActor.assumeIsolated { self?.ended(id) }
+            center.addObserver(forName: AVPlayerItem.didPlayToEndTimeNotification, object: item, queue: .main) { [weak self, weak item] _ in
+                MainActor.assumeIsolated {
+                    guard let item else { return }
+                    self?.ended(item)
+                }
             },
-            center.addObserver(forName: AVPlayerItem.failedToPlayToEndTimeNotification, object: item, queue: .main) { [weak self] notification in
+            center.addObserver(forName: AVPlayerItem.failedToPlayToEndTimeNotification, object: item, queue: .main) { [weak self, weak item] notification in
                 // Stopping partway through is the network's doing: worth loading again.
                 let message = AVPlayback.describe(notification.userInfo?[AVPlayerItemFailedToPlayToEndTimeErrorKey] as? Error).message
-                MainActor.assumeIsolated { self?.failed(id, message: message, transient: true) }
+                MainActor.assumeIsolated {
+                    guard let item else { return }
+                    self?.failed(item, message: message, transient: true)
+                }
             },
         ]
     }
@@ -209,9 +302,10 @@ final class AVPlayback: Playback {
         }
     }
 
-    /// Item [id] played to its end: the queued item follows, if there's one.
-    private func ended(_ id: ObjectIdentifier) {
-        guard let ended = current, ObjectIdentifier(ended) == id else { return }
+    /// [item] played to its end: the queued item follows, if there's one.
+    private func ended(_ item: AVPlayerItem) {
+        guard let ended = current, ended === item else { return }
+        seekGeneration &+= 1
         forget(ended)
         current = queued
         queued = nil
@@ -222,19 +316,35 @@ final class AVPlayback: Playback {
         }
     }
 
-    private func failed(_ id: ObjectIdentifier, message: String, transient: Bool) {
+    private func failed(_ item: AVPlayerItem, message: String, transient: Bool) {
         // Only the item playing matters: a queued one is loaded again if Clementine sends it.
-        guard let current, ObjectIdentifier(current) == id else { return }
+        guard let current, current === item else { return }
         listener?.playbackFailed(message, transient: transient)
     }
 
     /// What went wrong, and whether it's the network's doing, worth trying again.
     private nonisolated static func describe(_ error: Error?) -> (message: String, transient: Bool) {
         guard let error = error as NSError? else { return ("Playback failed", false) }
-        let network = error.domain == NSURLErrorDomain && [
+        return (error.localizedDescription, isTransientNetwork(error))
+    }
+
+    private nonisolated static func isTransientNetwork(_ error: NSError) -> Bool {
+        if error.domain == NSURLErrorDomain, [
             NSURLErrorNetworkConnectionLost, NSURLErrorNotConnectedToInternet, NSURLErrorTimedOut,
-            NSURLErrorCannotConnectToHost,
-        ].contains(error.code)
-        return (error.localizedDescription, network)
+            NSURLErrorCannotConnectToHost, NSURLErrorCannotFindHost, NSURLErrorDNSLookupFailed,
+            NSURLErrorResourceUnavailable,
+        ].contains(error.code) {
+            return true
+        }
+        if error.domain == NSPOSIXErrorDomain, [
+            Int(ECONNRESET), Int(ETIMEDOUT), Int(ENETDOWN), Int(ENETUNREACH), Int(EHOSTUNREACH), Int(EPIPE),
+        ].contains(error.code) {
+            return true
+        }
+        if let underlying = error.userInfo[NSUnderlyingErrorKey] as? NSError {
+            // AVFoundation often wraps the real NSURL/POSIX network drop inside NSUnderlyingErrorKey.
+            return isTransientNetwork(underlying)
+        }
+        return false
     }
 }

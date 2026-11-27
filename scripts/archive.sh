@@ -67,6 +67,21 @@ sign() {
 sign "$app/PlugIns/ClementineWidget.appex" Widget/ClementineWidget.entitlements
 # The Apple Watch app has no entitlements, but has to be signed for the app's signature to seal it.
 codesign --force --sign - "$app/Watch/ClementineRemoteWatch.app"
+if [ "${TESTING_FEATURES:-NO}" != YES ]; then
+  # BackgroundSync is disabled unless TESTING_FEATURES=YES, so App Store builds must not declare
+  # unused `processing` background mode.
+  /usr/libexec/PlistBuddy -c 'Delete :BGTaskSchedulerPermittedIdentifiers' "$app/Info.plist" 2>/dev/null || true
+  if /usr/libexec/PlistBuddy -c 'Print :UIBackgroundModes' "$app/Info.plist" >/dev/null 2>&1; then
+    idx=0
+    while mode=$(/usr/libexec/PlistBuddy -c "Print :UIBackgroundModes:$idx" "$app/Info.plist" 2>/dev/null); do
+      if [ "$mode" = "processing" ]; then
+        /usr/libexec/PlistBuddy -c "Delete :UIBackgroundModes:$idx" "$app/Info.plist"
+      else
+        idx=$((idx + 1))
+      fi
+    done
+  fi
+fi
 sign "$app" App/ClementineRemote.entitlements
 rm "$out/entitlements.plist"
 

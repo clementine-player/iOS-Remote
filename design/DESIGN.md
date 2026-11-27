@@ -169,7 +169,7 @@ From the Song details sheet board. Medium and large detents, grabber, 28 pt corn
   Album, Genre, Year, Track, Disc, Length, Play count, Size, File. Empty values are left out.
   Tapping the cover thumbnail shows the cover full size.
 - Rating: five stars in `primary`, filled, half or empty from Clementine's rating. Tapping star *n*
-  rates the song *n* stars and shows "Rated *n* stars". When Last.fm buttons are on: Love and Ban.
+  rates the song *n* stars and shows "Rated *n* stars". When Last.fm buttons are on: Love.
 - Lyrics: asks Clementine for them the first time, with a spinner; shows the longest lyrics any
   provider found, with the provider's name, or "No lyrics found".
 
