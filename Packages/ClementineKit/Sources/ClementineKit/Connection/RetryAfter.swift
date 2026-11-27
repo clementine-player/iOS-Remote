@@ -3,16 +3,18 @@ import Foundation
 extension Pb_Remote_ResponseDisconnect {
     /// How long until Clementine checks an auth code from this phone again, if it said.
     var retryAfter: Duration? {
-        hasRetryAfterSeconds ? .seconds(retryAfterSeconds) : nil
+        // Protobuf defaults unset retry_after_seconds to 0; treat non-positive as absent.
+        hasRetryAfterSeconds && retryAfterSeconds > 0 ? .seconds(retryAfterSeconds) : nil
     }
 }
 
 extension Duration {
     /// How long Clementine said to wait, for people: in seconds under a minute, and otherwise
     /// rounded up to whole minutes or hours, so it's never over before it's said. "10 seconds",
-    /// "3 minutes", "1 hour".
+    /// "3 minutes", "1 hour", or "a while" when zero or negative.
     public func waitDescription(locale: Locale = .autoupdatingCurrent) -> String {
         var seconds = components.seconds
+        guard seconds > 0 else { return "a while" }
         if seconds >= 60 {
             seconds = (seconds + 59) / 60 * 60
         }

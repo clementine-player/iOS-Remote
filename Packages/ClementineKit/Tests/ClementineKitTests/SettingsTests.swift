@@ -46,4 +46,17 @@ struct SettingsTests {
         #expect(!DownloadNetwork.mobileData.allows(expensive: true, constrained: true))
         #expect(DownloadNetwork.any.allows(expensive: true, constrained: true))
     }
+
+    @Test func remembersAndValidatesPort() {
+        let settings = Settings(suiteName: UUID().uuidString)
+        #expect(settings.port == RemoteProtocol.defaultPort)
+
+        settings.remember(host: "192.168.1.30", name: "studio-pc", port: 5678)
+        #expect(settings.lastPort == 5678)
+        // Remembering a discovered server's port must not overwrite the manual Settings port.
+        #expect(settings.port == RemoteProtocol.defaultPort)
+
+        settings.store.set(0, forKey: SettingKey.port)
+        #expect(settings.port == RemoteProtocol.defaultPort)
+    }
 }

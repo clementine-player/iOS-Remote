@@ -51,8 +51,8 @@ public enum SyncSources {
             kind: Pb_Remote_SyncSourceKind.playlist, refreshPolicy: refreshPolicy)
     }
 
-    /// The library's fields whose items can be kept: an artist's songs, or an album.
-    public static let keepableFields: Set<String> = ["artist", "album"]
+    /// The library's fields whose items can be kept: an artist's, album artist's, or album's songs.
+    public static let keepableFields: Set<String> = ["artist", "albumartist", "album"]
 
     /// As QUrl::toPercentEncoding: every UTF-8 byte but letters, digits and -._~ as %XX.
     static func encode(_ part: String) -> String {

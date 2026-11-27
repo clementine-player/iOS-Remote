@@ -139,3 +139,20 @@ struct SongArtTests {
         #expect(Song(Self.metadata()).artData != nil)
     }
 }
+
+struct RetryAfterAndModesTests {
+    @Test func retryAfterFormatsNonZeroAndZeroSafely() {
+        let english = Locale(identifier: "en_US")
+        #expect(Duration.seconds(3600).waitDescription(locale: english) == "1 hour")
+        #expect(Duration.seconds(0).waitDescription(locale: english) == "a while")
+
+        var missing = Pb_Remote_ResponseDisconnect()
+        missing.retryAfterSeconds = 0
+        #expect(missing.retryAfter == nil)
+    }
+
+    @Test func unknownRepeatModesMapToOff() {
+        #expect(RepeatMode(.repeatOneByOne) == .off)
+        #expect(RepeatMode(.repeatIntro) == .off)
+    }
+}

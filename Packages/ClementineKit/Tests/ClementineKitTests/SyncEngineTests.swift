@@ -463,4 +463,81 @@ struct PhonePlayerTests {
         #expect(PhonePlayer.upcoming(left, chosen: chosen, shuffled: false).map(\.itemKey) == ["b", "d"])
         #expect(Set(PhonePlayer.upcoming(left, chosen: chosen, shuffled: true).map(\.itemKey)) == ["b", "d"])
     }
+
+    @Test func extractsFLACFrontCoverPictureAndSkipsURI() throws {
+        let dir = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        let flac = dir.appending(path: "cover.flac")
+
+        func pictureBlock(type: UInt32, mime: String, payload: Data, isLast: Bool) -> Data {
+            var body = Data()
+            func appendUInt32(_ value: UInt32) {
+                var be = value.bigEndian
+                withUnsafeBytes(of: &be) { body.append(contentsOf: $0) }
+            }
+            appendUInt32(type)
+            let mimeData = Data(mime.utf8)
+            appendUInt32(UInt32(mimeData.count))
+            body.append(mimeData)
+            appendUInt32(0) // description
+            appendUInt32(0); appendUInt32(0); appendUInt32(0); appendUInt32(0)
+            appendUInt32(UInt32(payload.count))
+            body.append(payload)
+
+            var header = Data([
+                (isLast ? 0x80 : 0x00) | 6,
+                UInt8((body.count >> 16) & 0xFF),
+                UInt8((body.count >> 8) & 0xFF),
+                UInt8(body.count & 0xFF),
+            ])
+            header.append(body)
+            return header
+        }
+
+        var contents = Data("fLaC".utf8)
+        contents.append(pictureBlock(type: 3, mime: "-->", payload: Data("ignored".utf8), isLast: false))
+        contents.append(pictureBlock(type: 3, mime: "image/png", payload: Data([0x89, 0x50, 0x4E, 0x47]), isLast: true))
+        try contents.write(to: flac)
+
+        #expect(PhonePlayer.flacPicture(in: flac) == Data([0x89, 0x50, 0x4E, 0x47]))
+    }
+
+    @Test func syncSourcesAndAPFSCasePreservationAndMissingFileRedownload() async throws {
+        #expect(SyncSources.keepableFields == ["artist", "albumartist", "album"])
+
+        let folder = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        let songDir = folder.appending(path: "Artist/Album")
+        try FileManager.default.createDirectory(at: songDir, withIntermediateDirectories: true)
+        try Data("x".utf8).write(to: songDir.appending(path: "01 song.flac"))
+        #expect(SyncFiles.freeName(
+            in: folder, directory: "Artist/Album/", name: "01 Song.flac",
+            own: "Artist/Album/01 song.flac") == "01 Song.flac")
+
+        let store = try SyncStore(url: nil)
+        let ruleID = try await store.addRule(SyncRule(
+            serverID: SyncEngineTests.server, sourceID: "library/album/Artist/Doolittle",
+            title: "Doolittle", kind: .album, refreshPolicy: .onConnect))
+        let engine = SyncEngine(store: store, folder: folder, supportedFormats: ["audio/flac"])
+        let fake = SyncEngineTests.Clementine()
+        var item = Pb_Remote_SyncItem()
+        item.itemKey = "k1"
+        item.version = "v1"
+        item.url = "/d/k1"
+        item.mimeType = "audio/flac"
+        item.sizeBytes = 5
+        item.song.title = "Song"
+        item.song.artist = "Pixies"
+        item.song.album = "Doolittle"
+        item.song.track = 1
+        await fake.put("/d/k1", Data("audio".utf8))
+        await fake.serve("library/album/Artist/Doolittle", [item])
+
+        _ = try await engine.sync(fake)
+        let synced = try #require(try await store.item(serverID: SyncEngineTests.server, itemKey: "k1"))
+        try FileManager.default.removeItem(at: folder.appending(path: synced.path))
+
+        let second = try await engine.sync(fake)
+        #expect(second.rules[ruleID] == .synced(songs: 1, downloaded: 1, skipped: 0))
+        #expect(FileManager.default.fileExists(atPath: folder.appending(path: synced.path).path))
+    }
 }

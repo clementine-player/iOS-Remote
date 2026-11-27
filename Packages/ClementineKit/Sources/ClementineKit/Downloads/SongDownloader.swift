@@ -69,13 +69,18 @@ public struct SongDownloader: Sendable {
     /// The playlist's name, when downloading a playlist.
     public let playlistName: String?
     public let options: DownloadOptions
+    public let receiveTimeout: Duration
 
-    public init(endpoint: Endpoint, authCode: Int32, request: RemoteMessage, playlistName: String?, options: DownloadOptions) {
+    public init(
+        endpoint: Endpoint, authCode: Int32, request: RemoteMessage, playlistName: String?,
+        options: DownloadOptions, receiveTimeout: Duration = .seconds(60)
+    ) {
         self.endpoint = endpoint
         self.authCode = authCode
         self.request = request
         self.playlistName = playlistName
         self.options = options
+        self.receiveTimeout = receiveTimeout
     }
 
     /// Downloads, telling [update] how it's going, and returns the final status.
@@ -91,6 +96,48 @@ public struct SongDownloader: Sendable {
         return status
     }
 
+    private struct PendingFile {
+        let destination: URL
+        let partial: URL
+        let handle: FileHandle
+        let expectedSize: Int64
+        var writtenBytes: Int64 = 0
+    }
+
+    private func discard(_ pending: inout PendingFile?) {
+        guard let active = pending else { return }
+        pending = nil
+        try? active.handle.close()
+        try? FileManager.default.removeItem(at: active.partial)
+    }
+
+    // Stage downloads in a hidden .part file and verify expectedSize before replacing the
+    // destination atomically so cancelled/broken transfers never clobber an existing song.
+    private func commit(_ pending: inout PendingFile?, song: SongMetadata, status: inout DownloadStatus) -> DownloadFailure? {
+        guard let active = pending else { return nil }
+        pending = nil
+        try? active.handle.close()
+        // Skip byte-count verification when the server omitted or zeroed chunk.size.
+        if active.expectedSize > 0 {
+            guard active.writtenBytes == active.expectedSize else {
+                try? FileManager.default.removeItem(at: active.partial)
+                return .connection
+            }
+        }
+        do {
+            if FileManager.default.fileExists(atPath: active.destination.path) {
+                _ = try FileManager.default.replaceItemAt(active.destination, withItemAt: active.partial)
+            } else {
+                try FileManager.default.moveItem(at: active.partial, to: active.destination)
+            }
+        } catch {
+            try? FileManager.default.removeItem(at: active.partial)
+            return .cantSave
+        }
+        status.songs.append(DownloadedSong(title: song.title, artist: song.artist, album: song.album, file: active.destination))
+        return nil
+    }
+
     private func download(_ status: inout DownloadStatus, _ update: @Sendable (DownloadStatus) -> Void) async -> DownloadFailure? {
         let channel = MessageChannel(endpoint: endpoint)
         do {
@@ -103,20 +150,18 @@ public struct SongDownloader: Sendable {
         }
         defer { channel.cancel() }
 
-        var pending: (url: URL, handle: FileHandle)?
+        var pending: PendingFile?
         var song = SongMetadata()
+        var offeredSize: Int64 = 0
         defer {
-            // A partly written song is no use.
-            if let pending {
-                try? pending.handle.close()
-                try? FileManager.default.removeItem(at: pending.url)
-            }
+            // A partly written song is discarded without overwriting any existing copy.
+            discard(&pending)
         }
 
         while true {
             let message: RemoteMessage
             do {
-                message = try await channel.receive()
+                message = try await channel.receive(timeout: receiveTimeout)
             } catch {
                 return Task.isCancelled ? .cancelled : .connection
             }
@@ -124,6 +169,12 @@ public struct SongDownloader: Sendable {
             case .disconnect:
                 return DownloadFailure(message.responseDisconnect)
             case .downloadQueueEmpty:
+                // Commit (or reject if truncated) any open file here and on chunk 0: older
+                // Clementine servers (using integer division + 1 for chunk_count) overcount by 1
+                // on exact 100 KB multiples and never emit chunkNumber == chunkCount.
+                if let failure = commit(&pending, song: song, status: &status) {
+                    return failure
+                }
                 try? await channel.send(RemoteMessage(.disconnect))
                 return nil
             case .downloadTotalSize:
@@ -136,21 +187,25 @@ public struct SongDownloader: Sendable {
             case .songFileChunk:
                 let chunk = message.responseSongFileChunk
                 if chunk.chunkNumber == 0 {
+                    if let failure = commit(&pending, song: song, status: &status) {
+                        return failure
+                    }
                     // An offer of the next song.
                     song = chunk.songMetadata
+                    offeredSize = Int64(chunk.size)
                     let file = file(for: song)
                     let accept = Self.shouldDownload(
-                        savedSize: Self.size(of: file), offeredSize: Int64(chunk.size),
+                        savedSize: Self.size(of: file), offeredSize: offeredSize,
                         replaceExisting: options.replaceExisting)
                     do {
                         try await channel.send(Messages.songOfferResponse(accepted: accept))
                     } catch {
-                        return .connection
+                        return Task.isCancelled ? .cancelled : .connection
                     }
                     if !accept {
                         // Already here: listed with the downloaded songs.
                         status.songs.append(DownloadedSong(title: song.title, artist: song.artist, album: song.album, file: file))
-                        status.bytes += Int64(chunk.size)
+                        status.bytes += offeredSize
                     }
                     status.state = .downloading
                     report(chunk, song, &status)
@@ -158,16 +213,27 @@ public struct SongDownloader: Sendable {
                     continue
                 }
                 if pending == nil {
-                    if let free = LibraryStore.freeSpace(at: options.directory), free < Int64(chunk.size) {
+                    // With convert_lossless enabled, chunk 0 carries the original .flac metadata
+                    // and size while chunk 1 switches to the transcoded extension and size.
+                    if chunk.hasSongMetadata {
+                        song = chunk.songMetadata
+                    }
+                    let expectedSize = chunk.size > 0 ? Int64(chunk.size) : offeredSize
+                    offeredSize = 0
+                    if let free = LibraryStore.freeSpace(at: options.directory), free < expectedSize {
                         return .insufficientSpace
                     }
-                    let file = file(for: song)
+                    let destination = file(for: song)
+                    let folder = destination.deletingLastPathComponent()
+                    // Leading dot hides in-progress transfers from SavedSongs until commit().
+                    let partial = folder.appending(path: ".\(UUID().uuidString).part")
                     do {
-                        try FileManager.default.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
-                        try? FileManager.default.removeItem(at: file)
-                        guard FileManager.default.createFile(atPath: file.path, contents: nil) else { return .cantSave }
-                        pending = (file, try FileHandle(forWritingTo: file))
+                        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+                        guard FileManager.default.createFile(atPath: partial.path, contents: nil) else { return .cantSave }
+                        let handle = try FileHandle(forWritingTo: partial)
+                        pending = PendingFile(destination: destination, partial: partial, handle: handle, expectedSize: expectedSize)
                     } catch {
+                        try? FileManager.default.removeItem(at: partial)
                         return .cantSave
                     }
                 }
@@ -176,11 +242,12 @@ public struct SongDownloader: Sendable {
                 } catch {
                     return .cantSave
                 }
+                pending?.writtenBytes += Int64(chunk.data.count)
                 status.bytes += Int64(chunk.data.count)
-                if chunk.chunkNumber == chunk.chunkCount, let done = pending {
-                    try? done.handle.close()
-                    pending = nil
-                    status.songs.append(DownloadedSong(title: song.title, artist: song.artist, album: song.album, file: done.url))
+                if chunk.chunkCount > 0, chunk.chunkNumber >= chunk.chunkCount {
+                    if let failure = commit(&pending, song: song, status: &status) {
+                        return failure
+                    }
                 }
                 report(chunk, song, &status)
                 update(status)
@@ -222,9 +289,16 @@ public struct SongDownloader: Sendable {
     func file(for song: SongMetadata) -> URL {
         var folder = options.directory
         func append(_ name: String) {
-            let clean = Self.clean(name).trimmingCharacters(in: .whitespaces)
-            if !clean.isEmpty {
-                folder.append(path: clean, directoryHint: .isDirectory)
+            // Stripping dots can expose whitespace or vice versa (e.g. " . . x"); repeat until stable.
+            var candidate = name.trimmingCharacters(in: .whitespacesAndNewlines)
+            while true {
+                let next = Self.clean(String(candidate.drop(while: { $0 == "." || $0.isWhitespace })))
+                    .trimmingCharacters(in: .whitespacesAndNewlines)
+                if next == candidate { break }
+                candidate = next
+            }
+            if !candidate.isEmpty {
+                folder.append(path: candidate, directoryHint: .isDirectory)
             }
         }
         if let playlistName, options.playlistFolder {
@@ -240,13 +314,26 @@ public struct SongDownloader: Sendable {
         if name.isEmpty {
             name = Self.clean(song.title)
         }
+        if name.isEmpty {
+            // Never use an empty name: appending "" to `folder` resolves to `folder` itself.
+            name = "Untitled"
+        }
         return folder.appending(path: name, directoryHint: .notDirectory)
     }
 
-    /// Drops the characters the Android app keeps out of file names, except "-", which is harmless.
-    /// A name of only dots, such as "..", is dropped too, so no song is saved outside the folder.
+    /// Drops control characters and the characters the Android app keeps out of file names,
+    /// except "-", which is harmless. Leading dots and dot-only/blank names are dropped so no song
+    /// is saved hidden or outside the folder, while existing leading spaces remain intact.
     static func clean(_ name: String) -> String {
-        let clean = name.filter { !"\\~#%&*{}/:<>?|\"".contains($0) }
-        return clean.trimmingCharacters(in: .whitespaces).allSatisfy { $0 == "." } ? "" : clean
+        var clean = String(name.filter {
+            $0.unicodeScalars.allSatisfy { $0.value >= 0x20 } && !"\\~#%&*{}/:<>?|\"".contains($0)
+        })
+        if clean.trimmingCharacters(in: .whitespacesAndNewlines).allSatisfy({ $0 == "." }) {
+            return ""
+        }
+        while clean.first == "." {
+            clean.removeFirst()
+        }
+        return clean.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "" : clean
     }
 }

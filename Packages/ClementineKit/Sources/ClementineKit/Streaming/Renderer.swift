@@ -28,6 +28,8 @@ public enum PlaybackState: Sendable, Equatable {
 public protocol PlaybackListener: AnyObject {
     /// [Playback.state] changed.
     func playbackStateChanged()
+    /// A byte-range seek completed on the active item.
+    func playbackSeeked()
     /// The item playing finished, and the queued one started.
     func playbackAdvanced()
     /// The item playing finished, with nothing queued.
@@ -35,6 +37,10 @@ public protocol PlaybackListener: AnyObject {
     /// The item playing failed; [transient] for a network problem worth reloading, rather than an
     /// item that can't be played.
     func playbackFailed(_ message: String, transient: Bool)
+}
+
+public extension PlaybackListener {
+    func playbackSeeked() {}
 }
 
 /// The audio player a [Renderer] drives: one item playing, and optionally the next one queued to
@@ -75,6 +81,11 @@ public final class Renderer {
     /// Where the track is, in milliseconds.
     public var positionMs: Int64 {
         guard let item else { return 0 }
+        // AVPlayerItem.seek is asynchronous; hold the target position until playbackSeeked()
+        // fires so immediate status updates (especially while paused) don't snap back.
+        if let pendingSeek, pendingSeek.itemID == item.itemID {
+            return item.lengthMs > 0 ? min(pendingSeek.positionMs, item.lengthMs) : pendingSeek.positionMs
+        }
         let position = offsetMs + playback.positionMs
         return item.lengthMs > 0 ? min(position, item.lengthMs) : position
     }
@@ -91,6 +102,8 @@ public final class Renderer {
     /// Where the URL playing starts within [item]: an item seeked by loading a new URL
     /// ([SeekMethod.newURL]) starts where the seek went.
     @ObservationIgnored private var offsetMs: Int64 = 0
+    /// Target position of an in-flight `.byteRange` seek until [playbackSeeked] fires.
+    @ObservationIgnored private var pendingSeek: (itemID: Int32, positionMs: Int64)?
     @ObservationIgnored private var reported: Pb_Remote_RendererState?
     @ObservationIgnored private var statusTask: Task<Void, Never>?
 
@@ -125,10 +138,13 @@ public final class Renderer {
             guard item != nil else { return true }
             isPlaying = true
             playback.play()
+            // Report state changes synchronously instead of waiting for asynchronous KVO updates.
+            playbackStateChanged()
         case .renderPause:
             guard item != nil else { return true }
             isPlaying = false
             playback.pause()
+            playbackStateChanged()
         case .renderStop:
             clear()
             playback.stop()
@@ -157,10 +173,20 @@ public final class Renderer {
         }
     }
 
+    /// Pauses playback locally without unloading the current track or tearing down the renderer,
+    /// so switching playback back to Clementine can resume on a subsequent `renderPlay`.
+    public func pauseLocally() {
+        guard item != nil else { return }
+        isPlaying = false
+        playback.pause()
+        playbackStateChanged()
+    }
+
     private func clear() {
         item = nil
         next = nil
         offsetMs = 0
+        pendingSeek = nil
         isPlaying = false
     }
 
@@ -169,7 +195,10 @@ public final class Renderer {
         self.item = item
         next = nil
         reported = nil
+        pendingSeek = nil
         guard let source = self.source(item) else {
+            // Stop any prior track so an invalid new URL cannot leave old audio playing.
+            playback.stop()
             playbackFailed("Not a URL: \(item.url)", transient: false)
             return
         }
@@ -192,12 +221,14 @@ public final class Renderer {
     private func seek(item itemID: Int32, to positionMs: Int64, url: String) {
         // A seek meant for an item that has since changed.
         guard let item, item.itemID == itemID else { return }
+        pendingSeek = nil
         if !url.isEmpty, let target = Self.resolve(url, on: server()) {
             offsetMs = positionMs
             playback.load(PlaybackSource(url: target, mimeType: item.mimeType), startMs: 0, playing: isPlaying)
             playback.queue(next.flatMap(source))
         } else if item.seekMethod == .byteRange {
             offsetMs = 0
+            pendingSeek = (itemID: itemID, positionMs: positionMs)
             playback.seek(toMs: positionMs)
         } else {
             return
@@ -230,7 +261,11 @@ public final class Renderer {
         switch playback.state {
         case .idle: return .loading
         case .buffering: return isPlaying ? .buffering : .paused
-        case .playing: return .playing
+
+        // AVPlayer.timeControlStatus transitions asynchronously after pause(); report .paused
+        // immediately once isPlaying clears so Clementine doesn't bounce back to playing.
+        case .playing: return isPlaying ? .playing : .paused
+
         // Includes playback paused by iOS, such as for a call, which Clementine then shows.
         case .paused: return .paused
         }
@@ -280,11 +315,18 @@ extension Renderer: PlaybackListener {
         }
     }
 
+    public func playbackSeeked() {
+        guard pendingSeek != nil else { return }
+        pendingSeek = nil
+        sendStatus()
+    }
+
     public func playbackAdvanced() {
         guard let ended = item else { return }
         item = next
         next = nil
         offsetMs = 0
+        pendingSeek = nil
         // Clementine hears of the switch first, so the status that follows is about the item it
         // now considers current.
         sendTrackEnded(ended.itemID)

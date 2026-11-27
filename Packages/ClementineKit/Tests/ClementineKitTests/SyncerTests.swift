@@ -345,3 +345,121 @@ final class FakeHTTPServer: Sendable {
         listener.cancel()
     }
 }
+
+@MainActor
+struct RangeResumeTests {
+    @Test func resumesPartialDownloadWithRangeAndIfRangeAndHandlesETagMismatch() async throws {
+        let requests = Mutex([String]())
+        let parameters = NWParameters.tcp
+        parameters.requiredLocalEndpoint = .hostPort(host: .ipv4(.loopback), port: .any)
+        let listener = try NWListener(using: parameters)
+        let ready = AsyncStream<Void>.makeStream()
+        listener.stateUpdateHandler = { state in
+            if case .ready = state { ready.continuation.yield() }
+        }
+        listener.newConnectionHandler = { connection in
+            connection.start(queue: .global())
+            connection.receive(minimumIncompleteLength: 1, maximumLength: 65_536) { data, _, _, _ in
+                let raw = String(decoding: data ?? Data(), as: UTF8.self)
+                requests.withLock { $0.append(raw) }
+                let lower = raw.lowercased()
+                let response: Data
+                if lower.contains("range: bytes=5-") && lower.contains("if-range: \"k:v1\"") {
+                    let tail = Data("56789".utf8)
+                    let head = "HTTP/1.1 206 Partial Content\r\nContent-Range: bytes 5-9/10\r\nContent-Length: \(tail.count)\r\nETag: \"k:v1\"\r\nConnection: close\r\n\r\n"
+                    response = Data(head.utf8) + tail
+                } else {
+                    let fresh = Data("freshdata!".utf8)
+                    let head = "HTTP/1.1 200 OK\r\nContent-Length: \(fresh.count)\r\nETag: \"k:v2\"\r\nConnection: close\r\n\r\n"
+                    response = Data(head.utf8) + fresh
+                }
+                connection.send(content: response, completion: .contentProcessed { _ in connection.cancel() })
+            }
+        }
+        listener.start(queue: .global())
+        for await _ in ready.stream { break }
+        defer { listener.cancel() }
+
+        let dir = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        let partial = dir.appending(path: "song.part")
+        try Data("01234".utf8).write(to: partial)
+        try Data("\"k:v1\"".utf8).write(to: partial.appendingPathExtension("etag"))
+
+        let conn = ClementineSyncConnection(
+            serverID: "s", manifests: SyncManifests(), send: { _ in },
+            server: { Endpoint(host: "127.0.0.1", port: listener.port!.rawValue) })
+        defer { conn.invalidate() }
+
+        try await conn.download("/d/1", to: partial)
+        #expect(try Data(contentsOf: partial) == Data("0123456789".utf8))
+        #expect(!FileManager.default.fileExists(atPath: partial.appendingPathExtension("etag").path))
+
+        // If ETag mismatches on a leftover partial, server responds 200 OK and file is replaced cleanly.
+        try Data("stale".utf8).write(to: partial)
+        try Data("\"k:old\"".utf8).write(to: partial.appendingPathExtension("etag"))
+        try await conn.download("/d/2", to: partial)
+        #expect(try Data(contentsOf: partial) == Data("freshdata!".utf8))
+        #expect(requests.withLock { $0.count } == 2)
+    }
+
+    @Test func contentRangeMismatchRecoversOrThrowsSyncErrorWithoutCancellationError() async throws {
+        let mode = Mutex(0)
+        let parameters = NWParameters.tcp
+        parameters.requiredLocalEndpoint = .hostPort(host: .ipv4(.loopback), port: .any)
+        let listener = try NWListener(using: parameters)
+        let ready = AsyncStream<Void>.makeStream()
+        listener.stateUpdateHandler = { state in
+            if case .ready = state { ready.continuation.yield() }
+        }
+        listener.newConnectionHandler = { connection in
+            connection.start(queue: .global())
+            connection.receive(minimumIncompleteLength: 1, maximumLength: 65_536) { data, _, _, _ in
+                let raw = String(decoding: data ?? Data(), as: UTF8.self).lowercased()
+                let currentMode = mode.withLock { $0 }
+                let response: Data
+                if currentMode == 0 && raw.contains("range: bytes=5-") {
+                    // Bad Content-Range on a 206 resume triggers a fresh retry.
+                    let head = "HTTP/1.1 206 Partial Content\r\nContent-Range: bytes 0-4/10\r\nContent-Length: 5\r\nConnection: close\r\n\r\n"
+                    response = Data(head.utf8) + Data("wrong".utf8)
+                } else if currentMode == 1 {
+                    // Unexpected 206 even without Range must throw SyncConnectionError, not CancellationError.
+                    let head = "HTTP/1.1 206 Partial Content\r\nContent-Range: bytes 0-2/10\r\nContent-Length: 3\r\nConnection: close\r\n\r\n"
+                    response = Data(head.utf8) + Data("bad".utf8)
+                } else {
+                    let fresh = Data("freshdata!".utf8)
+                    let head = "HTTP/1.1 200 OK\r\nContent-Length: \(fresh.count)\r\nETag: \"k:v3\"\r\nConnection: close\r\n\r\n"
+                    response = Data(head.utf8) + fresh
+                }
+                connection.send(content: response, completion: .contentProcessed { _ in connection.cancel() })
+            }
+        }
+        listener.start(queue: .global())
+        for await _ in ready.stream { break }
+        defer { listener.cancel() }
+
+        let dir = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        let partial = dir.appending(path: "song.part")
+        let etag = partial.appendingPathExtension("etag")
+        let conn = ClementineSyncConnection(
+            serverID: "s", manifests: SyncManifests(), send: { _ in },
+            server: { Endpoint(host: "127.0.0.1", port: listener.port!.rawValue) })
+        defer { conn.invalidate() }
+
+        try Data("01234".utf8).write(to: partial)
+        try Data("\"k:v1\"".utf8).write(to: etag)
+        try await conn.download("/d/1", to: partial)
+        #expect(try Data(contentsOf: partial) == Data("freshdata!".utf8))
+
+        mode.withLock { $0 = 1 }
+        try Data("01234".utf8).write(to: partial)
+        try Data("\"k:v1\"".utf8).write(to: etag)
+        do {
+            try await conn.download("/d/2", to: partial)
+            Issue.record("Expected unexpected 206 to fail")
+        } catch let error as SyncConnectionError {
+            #expect(error == .status(206))
+        }
+    }
+}

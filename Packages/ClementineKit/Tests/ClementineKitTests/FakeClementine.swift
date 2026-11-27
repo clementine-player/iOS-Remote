@@ -96,6 +96,7 @@ final class FakeClementine: Sendable {
         let client = MessageChannel(accepted: connection)
         state.withLock { $0.clients.append(client) }
         Task {
+            defer { client.cancel() }
             while let message = try? await client.receive() {
                 let responder = state.withLock { state in
                     state.received.append(message)

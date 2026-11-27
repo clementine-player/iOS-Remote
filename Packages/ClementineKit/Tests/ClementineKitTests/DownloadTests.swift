@@ -304,4 +304,139 @@ struct DownloadTests {
         ).run { _ in }
         #expect(status.state == .finished(.tooManyWrongAuthCodes(retryAfter: .seconds(600))))
     }
+
+    @Test func emptyFilenameAndTitleFallBackToUntitled() {
+        var song = SongMetadata()
+        song.filename = "..."
+        song.title = "/\\:"
+        var options = DownloadOptions(directory: URL(filePath: "/d"))
+        options.artistFolder = false
+        let downloader = SongDownloader(
+            endpoint: Endpoint(host: "x"), authCode: 0, request: RemoteMessage(.downloadSongs),
+            playlistName: nil, options: options)
+        #expect(downloader.file(for: song).path == "/d/Untitled")
+        #expect(SongDownloader.clean(" song.mp3") == " song.mp3")
+        #expect(SongDownloader.clean(".hidden.mp3") == "hidden.mp3")
+        #expect(SongDownloader.clean(" . . ") == " . . ")
+        #expect(SongDownloader.clean("..") == "")
+
+        var spacedDotArtist = SongMetadata()
+        spacedDotArtist.artist = ". . x"
+        spacedDotArtist.album = " . . "
+        spacedDotArtist.filename = "track.mp3"
+        var folderOptions = DownloadOptions(directory: URL(filePath: "/d"))
+        folderOptions.artistFolder = true
+        folderOptions.albumFolder = true
+        let folderDownloader = SongDownloader(
+            endpoint: Endpoint(host: "x"), authCode: 0, request: RemoteMessage(.downloadSongs),
+            playlistName: nil, options: folderOptions)
+        #expect(folderDownloader.file(for: spacedDotArtist).path == "/d/x/track.mp3")
+
+        var leadingSpaceDotArtist = SongMetadata()
+        leadingSpaceDotArtist.artist = " .Foo"
+        leadingSpaceDotArtist.album = "Bar"
+        leadingSpaceDotArtist.filename = "track.mp3"
+        #expect(folderDownloader.file(for: leadingSpaceDotArtist).path == "/d/Foo/Bar/track.mp3")
+    }
+
+    @Test func zeroReportedSizeDownloadSucceeds() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        let directory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        let payload = Data("zero-size-payload".utf8)
+        let item = song("ZeroSize", artist: "Claude Debussy", album: "Suite")
+        clementine.respond { message, client in
+            guard message.type == .downloadSongs else { return }
+            try? await client.send(RemoteMessage(.songFileChunk) {
+                $0.responseSongFileChunk.chunkNumber = 1
+                $0.responseSongFileChunk.chunkCount = 1
+                $0.responseSongFileChunk.fileNumber = 1
+                $0.responseSongFileChunk.fileCount = 1
+                $0.responseSongFileChunk.size = 0
+                $0.responseSongFileChunk.songMetadata = item
+                $0.responseSongFileChunk.data = payload
+            })
+            try? await client.send(RemoteMessage(.downloadQueueEmpty))
+        }
+
+        let status = await SongDownloader(
+            endpoint: clementine.endpoint, authCode: 0, request: Messages.downloadSongs(.currentItem),
+            playlistName: nil, options: DownloadOptions(directory: directory)
+        ).run { _ in }
+        #expect(status.state == .finished(nil))
+        #expect(try Data(contentsOf: directory.appending(path: "Claude Debussy/Suite/ZeroSize.ogg")) == payload)
+    }
+
+    @Test func failedDownloadPreservesExistingSongAndDiscardsPartial() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        let directory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        var options = DownloadOptions(directory: directory)
+        options.artistFolder = false
+        options.replaceExisting = true
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let existing = directory.appending(path: "Clair de lune.ogg")
+        try Data("old".utf8).write(to: existing)
+
+        let item = song("Clair de lune", artist: "Claude Debussy", album: "Suite")
+        clementine.respond { message, client in
+            guard message.type == .downloadSongs else { return }
+            try? await client.send(RemoteMessage(.songFileChunk) {
+                $0.responseSongFileChunk.chunkNumber = 0
+                $0.responseSongFileChunk.fileNumber = 1
+                $0.responseSongFileChunk.fileCount = 1
+                $0.responseSongFileChunk.size = 10
+                $0.responseSongFileChunk.songMetadata = item
+            })
+            try? await clementine.waitUntil { $0.received.contains { $0.type == .songOfferResponse } }
+            try? await client.send(RemoteMessage(.songFileChunk) {
+                $0.responseSongFileChunk.chunkNumber = 1
+                $0.responseSongFileChunk.chunkCount = 2
+                $0.responseSongFileChunk.fileNumber = 1
+                $0.responseSongFileChunk.fileCount = 1
+                $0.responseSongFileChunk.size = 10
+                $0.responseSongFileChunk.data = Data("12345".utf8)
+            })
+            // Queue ends prematurely while 5/10 bytes written.
+            try? await client.send(RemoteMessage(.downloadQueueEmpty))
+        }
+
+        let status = await SongDownloader(
+            endpoint: clementine.endpoint, authCode: 0, request: Messages.downloadSongs(.currentItem),
+            playlistName: nil, options: options
+        ).run { _ in }
+        #expect(status.state == .finished(.connection))
+        #expect(try Data(contentsOf: existing) == Data("old".utf8))
+        let entries = try FileManager.default.contentsOfDirectory(atPath: directory.path)
+        #expect(entries == ["Clair de lune.ogg"])
+    }
+
+    @Test func updatesMetadataFromFirstChunkWhenOfferSkipped() async throws {
+        let clementine = try await FakeClementine()
+        defer { clementine.stop() }
+        let directory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        let item = song("Menuet", artist: "Claude Debussy", album: "Suite")
+        let payload = Data("012345".utf8)
+        clementine.respond { message, client in
+            guard message.type == .downloadSongs else { return }
+            try? await client.send(RemoteMessage(.songFileChunk) {
+                $0.responseSongFileChunk.chunkNumber = 1
+                $0.responseSongFileChunk.chunkCount = 1
+                $0.responseSongFileChunk.fileNumber = 1
+                $0.responseSongFileChunk.fileCount = 1
+                $0.responseSongFileChunk.size = Int32(payload.count)
+                $0.responseSongFileChunk.songMetadata = item
+                $0.responseSongFileChunk.data = payload
+            })
+            try? await client.send(RemoteMessage(.downloadQueueEmpty))
+        }
+
+        let status = await SongDownloader(
+            endpoint: clementine.endpoint, authCode: 0, request: Messages.downloadSongs(.currentItem),
+            playlistName: nil, options: DownloadOptions(directory: directory)
+        ).run { _ in }
+        #expect(status.state == .finished(nil))
+        #expect(status.songs.map(\.title) == ["Menuet"])
+        #expect(try Data(contentsOf: directory.appending(path: "Claude Debussy/Suite/Menuet.ogg")) == payload)
+    }
 }

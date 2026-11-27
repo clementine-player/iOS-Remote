@@ -1,9 +1,16 @@
+import CryptoKit
 import Foundation
 
 /// Where synced songs go in the synced songs' folder: `<artist>/<album>/<track> <title>`, as in the
 /// Android client.
 enum SyncFiles {
     private static let maxName = 100
+
+    /// Deterministic name for an in-progress sync file so interrupted downloads can resume.
+    static func partialName(serverID: String, itemKey: String, version: String) -> String {
+        let digest = SHA256.hash(data: Data("\(serverID)\0\(itemKey)\0\(version)".utf8))
+        return ".partial/" + digest.map { String(format: "%02x", $0) }.joined() + ".part"
+    }
 
     /// The folder `song` goes in, relative to the synced songs' folder, ending in "/".
     static func relativeDirectory(_ song: SongMetadata) -> String {
@@ -34,11 +41,27 @@ enum SyncFiles {
         var candidate = name
         var number = 2
         while FileManager.default.fileExists(atPath: folder.appending(path: directory + candidate).path),
-              directory + candidate != own {
+              !isSameFile(candidate: directory + candidate, own: own, in: folder) {
             candidate = "\(base) (\(number))\(suffix)"
             number += 1
         }
         return candidate
+    }
+
+    // The folder's volume may be case-insensitive (e.g. the simulator on macOS); compare
+    // fileResourceIdentifier so a casing-only change on `own` isn't treated as a collision and
+    // suffixed with " (2)".
+    private static func isSameFile(candidate: String, own: String?, in folder: URL) -> Bool {
+        guard let own else { return false }
+        if candidate == own { return true }
+        let candidateURL = folder.appending(path: candidate)
+        let ownURL = folder.appending(path: own)
+        if let a = (try? candidateURL.resourceValues(forKeys: [.fileResourceIdentifierKey]).fileResourceIdentifier) as? NSObject,
+           let b = (try? ownURL.resourceValues(forKeys: [.fileResourceIdentifierKey]).fileResourceIdentifier) as? NSObject,
+           a == b {
+            return true
+        }
+        return false
     }
 
     static func fileExtension(_ mimeType: String) -> String {

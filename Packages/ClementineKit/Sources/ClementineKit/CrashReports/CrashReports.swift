@@ -1,5 +1,32 @@
 import Foundation
 
+/// Serializes uploads per report directory so concurrent triggers (e.g. launch plus user
+/// approval) cannot upload the same report twice before it is deleted.
+private actor CrashReportSendLock {
+    static let shared = CrashReportSendLock()
+    private var locked: Set<URL> = []
+    private var waiters: [URL: [CheckedContinuation<Void, Never>]] = [:]
+
+    func withLock(_ directory: URL, _ operation: @Sendable () async -> Void) async {
+        let key = directory.standardizedFileURL
+        if locked.contains(key) {
+            await withCheckedContinuation { waiters[key, default: []].append($0) }
+        } else {
+            locked.insert(key)
+        }
+        defer {
+            if var queue = waiters[key], !queue.isEmpty {
+                let next = queue.removeFirst()
+                waiters[key] = queue.isEmpty ? nil : queue
+                next.resume()
+            } else {
+                locked.remove(key)
+            }
+        }
+        await operation()
+    }
+}
+
 /// Crash reports, kept on the phone until the user says whether to send them.
 ///
 /// The app's crash reporter (Sentry's SDK, in the app) writes a report when the app crashes, and
@@ -72,20 +99,28 @@ public struct CrashReportStore: Sendable {
     /// Sentry has turned it down for good; one that couldn't be sent, offline say, is kept to try
     /// again the next time the app starts.
     public func sendApproved(to dsn: SentryDSN, session: URLSession = .shared) async {
-        for report in approvedReports {
-            guard let event = try? Data(contentsOf: report),
-                let envelope = CrashReportUpload.envelope(event: event, dsn: dsn)
-            else {
-                try? FileManager.default.removeItem(at: report)
-                continue
-            }
-            guard let (_, response) = try? await session.data(for: CrashReportUpload.request(envelope: envelope, dsn: dsn)),
-                let status = (response as? HTTPURLResponse)?.statusCode
-            else {
-                continue
-            }
-            if CrashReportUpload.isFinished(status: status) {
-                try? FileManager.default.removeItem(at: report)
+        await CrashReportSendLock.shared.withLock(approved) {
+            for report in approvedReports {
+                let event: Data
+                do {
+                    event = try Data(contentsOf: report)
+                } catch {
+                    // Keep the report across transient read errors so it can retry later.
+                    continue
+                }
+                guard let envelope = CrashReportUpload.envelope(event: event, dsn: dsn) else {
+                    // Permanently corrupt/unparseable event: delete so it can't block future uploads.
+                    try? FileManager.default.removeItem(at: report)
+                    continue
+                }
+                guard let (_, response) = try? await session.data(for: CrashReportUpload.request(envelope: envelope, dsn: dsn)),
+                    let status = (response as? HTTPURLResponse)?.statusCode
+                else {
+                    continue
+                }
+                if CrashReportUpload.isFinished(status: status) {
+                    try? FileManager.default.removeItem(at: report)
+                }
             }
         }
     }

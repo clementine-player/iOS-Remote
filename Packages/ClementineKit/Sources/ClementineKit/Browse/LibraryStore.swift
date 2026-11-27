@@ -132,9 +132,11 @@ public actor LibraryStore {
             """, [match])
         return SearchSections(query: text, songs: rows.map { row in
             let values = row.map { $0 ?? "" }
+            // Keep Clementine's percent-encoded filename verbatim; decoding %23 or %3F breaks
+            // server-side QUrl parsing when tracks with #, ?, or % are queued or downloaded.
             return SearchCandidate(
                 item: BrowseItem(
-                    level: 2, selection: Array(values[0...2]), kind: .song, url: SongQuery.decode(values[4]),
+                    level: 2, selection: Array(values[0...2]), kind: .song, url: values[4],
                     artist: values[3], album: values[1]),
                 artist: values[3])
         })
@@ -188,14 +190,24 @@ public actor LibraryStore {
         if let database {
             return database
         }
+        Self.excludeFromBackup(fileURL)
         let database = try Database(path: fileURL.path, readOnly: true)
         self.database = database
         return database
     }
 
+    /// Excludes the large, re-downloadable library database from iCloud backup.
+    private static func excludeFromBackup(_ url: URL) {
+        var target = url
+        var values = URLResourceValues()
+        values.isExcludedFromBackup = true
+        try? target.setResourceValues(values)
+    }
+
     /// Downloads the library from Clementine, replacing the one on the phone.
     public func download(
-        from endpoint: Endpoint, authCode: Int32, progress: @escaping @Sendable (Progress) -> Void
+        from endpoint: Endpoint, authCode: Int32, receiveTimeout: Duration = .seconds(30),
+        progress: @escaping @Sendable (Progress) -> Void
     ) async throws(DownloadFailure) {
         let partial = fileURL.deletingLastPathComponent().appending(path: "library.db.part")
         try? FileManager.default.createDirectory(at: partial.deletingLastPathComponent(), withIntermediateDirectories: true)
@@ -209,7 +221,7 @@ public actor LibraryStore {
             try await channel.send(RemoteMessage(.getLibrary))
         } catch {
             channel.cancel()
-            throw .connection
+            throw Task.isCancelled ? .cancelled : .connection
         }
         defer { channel.cancel() }
 
@@ -219,7 +231,7 @@ public actor LibraryStore {
         while true {
             let message: RemoteMessage
             do {
-                message = try await channel.receive()
+                message = try await channel.receive(timeout: receiveTimeout)
             } catch {
                 throw Task.isCancelled ? .cancelled : .connection
             }
@@ -253,10 +265,25 @@ public actor LibraryStore {
         try? await channel.send(RemoteMessage(.disconnect))
 
         progress(.optimizing)
-        do {
+        if Task.isCancelled {
+            throw .cancelled
+        }
+        // Run synchronous SQLite integrity check and FTS indexing off the actor so callers
+        // aren't blocked and cancellation stops the build before swapping the live file.
+        let optimizeTask = Task.detached(priority: .userInitiated) {
             try Self.optimize(partial)
+        }
+        do {
+            try await withTaskCancellationHandler {
+                try await optimizeTask.value
+            } onCancel: {
+                optimizeTask.cancel()
+            }
         } catch {
-            throw .corrupt
+            throw Task.isCancelled ? .cancelled : .corrupt
+        }
+        if Task.isCancelled {
+            throw .cancelled
         }
         database = nil
         columns = nil
@@ -270,6 +297,7 @@ public actor LibraryStore {
                 throw .cantSave
             }
         }
+        Self.excludeFromBackup(fileURL)
     }
 
     /// Drops unavailable songs, and adds the full-text index and the indices browsing uses.
@@ -291,8 +319,15 @@ public actor LibraryStore {
     }
 
     public static func freeSpace(at url: URL) -> Int64? {
-        let values = try? url.deletingLastPathComponent()
-            .resourceValues(forKeys: [.volumeAvailableCapacityForImportantUsageKey])
+        // URL.resourceValues fails on paths that don't exist yet (e.g. before the first
+        // download creates its folder), so walk up to the nearest existing ancestor.
+        var probe = url
+        while !FileManager.default.fileExists(atPath: probe.path) {
+            let parent = probe.deletingLastPathComponent()
+            if parent.path == probe.path { break }
+            probe = parent
+        }
+        let values = try? probe.resourceValues(forKeys: [.volumeAvailableCapacityForImportantUsageKey])
         return values?.volumeAvailableCapacityForImportantUsage
     }
 }

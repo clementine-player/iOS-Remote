@@ -31,6 +31,16 @@ public enum RuleResult: Sendable, Equatable {
     case failed(String)
 }
 
+public enum SyncError: Error, Equatable, LocalizedError {
+    case insufficientSpace
+
+    public var errorDescription: String? {
+        switch self {
+        case .insufficientSpace: "Not enough free space on this device"
+        }
+    }
+}
+
 /// Brings what's on the phone in line with the rules for one Clementine: asks for each rule's
 /// manifest, downloads the songs that are new or changed into `folder`, with their covers, and
 /// deletes the songs that no rule wants any more. A song in several rules is downloaded once, and a
@@ -71,7 +81,14 @@ public struct SyncEngine: Sendable {
                 results[rule.id] = try await sync(rule, over: connection)
             } catch is CancellationError {
                 throw CancellationError()
+            } catch let error as URLError where error.code == .cancelled {
+                // URLSession throws URLError(.cancelled) rather than CancellationError when
+                // Syncer.stop() cancels an active transfer; normalize so removeUnwanted() is skipped.
+                throw CancellationError()
             } catch {
+                if Task.isCancelled {
+                    throw CancellationError()
+                }
                 results[rule.id] = .failed(error.localizedDescription)
             }
         }
@@ -94,6 +111,18 @@ public struct SyncEngine: Sendable {
             try? FileManager.default.removeItem(at: folder.appending(path: art.path))
             try await store.removeArt(key: art.artKey)
         }
+        // Sweep abandoned `.partial/` transfers older than 7 days so interrupted downloads don't accumulate.
+        let partialDir = folder.appending(path: ".partial", directoryHint: .isDirectory)
+        if let entries = try? FileManager.default.contentsOfDirectory(
+            at: partialDir, includingPropertiesForKeys: [.contentModificationDateKey], options: .skipsHiddenFiles) {
+            let cutoff = Date().addingTimeInterval(-7 * 86_400)
+            for entry in entries {
+                if let modified = (try? entry.resourceValues(forKeys: [.contentModificationDateKey]))?.contentModificationDate,
+                   modified < cutoff {
+                    try? FileManager.default.removeItem(at: entry)
+                }
+            }
+        }
         return removed
     }
 
@@ -105,19 +134,25 @@ public struct SyncEngine: Sendable {
         default: break
         }
 
-        var wanted: [(item: Pb_Remote_SyncItem, have: SyncedItem?)] = []
+        var wanted: [(item: Pb_Remote_SyncItem, have: SyncedItem?, needsDownload: Bool)] = []
         // A song a playlist has twice is kept once, where it first comes.
         var seen = Set<String>()
         for item in manifest.items where seen.insert(item.itemKey).inserted {
-            wanted.append((item, try await store.item(serverID: rule.serverID, itemKey: item.itemKey)))
+            let have = try await store.item(serverID: rule.serverID, itemKey: item.itemKey)
+            // Verify the file still exists on disk so missing tracks are re-downloaded even when
+            // the stored version matches.
+            let onDisk = have.map { FileManager.default.fileExists(atPath: folder.appending(path: $0.path).path) } ?? false
+            let needsDownload = have?.version != item.version || !onDisk
+            wanted.append((item, have, needsDownload))
         }
-        let total = wanted.count { $0.have?.version != $0.item.version }
+        let total = wanted.count(where: \.needsDownload)
         if total > 0 { await progress(rule.id, SyncProgress(done: 0, total: total)) }
         var downloaded = 0
         var keys: [String] = []
         do {
-            for (item, have) in wanted {
-                if have?.version != item.version {
+            for (item, have, needsDownload) in wanted {
+                try Task.checkCancellation()
+                if needsDownload {
                     try await download(item, serverID: rule.serverID, replacing: have, over: connection)
                     downloaded += 1
                     await progress(rule.id, SyncProgress(done: downloaded, total: total))
@@ -130,11 +165,18 @@ public struct SyncEngine: Sendable {
             }
         } catch {
             // Keep the songs downloaded so far as well as those it had, so a sync cut short
-            // carries on next time rather than starting again.
-            var kept = try await store.ruleItems(ruleID: rule.id).map(\.itemKey)
-            kept += keys.filter { !kept.contains($0) }
-            try await store.setRuleItems(ruleID: rule.id, serverID: rule.serverID, itemKeys: kept)
+            // carries on next time rather than starting again, provided the rule still exists.
+            // Re-checking avoids foreign-key failures if Syncer.remove() deleted the rule.
+            if (try await store.rule(id: rule.id)) != nil {
+                var kept = try await store.ruleItems(ruleID: rule.id).map(\.itemKey)
+                kept += keys.filter { !kept.contains($0) }
+                try await store.setRuleItems(ruleID: rule.id, serverID: rule.serverID, itemKeys: kept)
+            }
             throw error
+        }
+        // Guard against a concurrent Syncer.remove() deleting the rule before committing items.
+        guard (try await store.rule(id: rule.id)) != nil else {
+            throw CancellationError()
         }
         try await store.setRuleItems(ruleID: rule.id, serverID: rule.serverID, itemKeys: keys)
         var synced = rule
@@ -176,8 +218,15 @@ public struct SyncEngine: Sendable {
         let files = FileManager.default
         try files.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
 
-        // Downloaded beside it first, so a download cut short leaves no half a song.
-        let partial = file.deletingLastPathComponent().appending(path: ".\(UUID().uuidString).part")
+        // Deterministic partial file so interrupted downloads can resume with HTTP Range/If-Range
+        // without leaving incomplete files at the final song path.
+        let partial = folder.appending(path: SyncFiles.partialName(serverID: serverID, itemKey: item.itemKey, version: item.version))
+        try files.createDirectory(at: partial.deletingLastPathComponent(), withIntermediateDirectories: true)
+        let existingPartial = (try? partial.resourceValues(forKeys: [.fileSizeKey]).fileSize).map(Int64.init) ?? 0
+        let remaining = max(0, item.sizeBytes - existingPartial)
+        if remaining > 0, let free = LibraryStore.freeSpace(at: folder), free < remaining {
+            throw SyncError.insufficientSpace
+        }
         do {
             try await connection.download(item.url, to: partial)
             if files.fileExists(atPath: file.path) {
@@ -185,20 +234,36 @@ public struct SyncEngine: Sendable {
             } else {
                 try files.moveItem(at: partial, to: file)
             }
-        } catch {
+            try? files.removeItem(at: partial.appendingPathExtension("etag"))
+        } catch SyncConnectionError.status(let code) where (400..<500).contains(code) {
             try? files.removeItem(at: partial)
+            try? files.removeItem(at: partial.appendingPathExtension("etag"))
+            throw SyncConnectionError.status(code)
+        } catch is CancellationError {
+            throw CancellationError()
+        } catch let error as URLError where error.code == .cancelled {
+            throw CancellationError()
+        } catch {
+            // Keep partial data for transient network failures so the next sync can resume; discard
+            // only if partial file is empty.
+            let size = (try? partial.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0
+            if size == 0 {
+                try? files.removeItem(at: partial)
+                try? files.removeItem(at: partial.appendingPathExtension("etag"))
+            }
             throw error
         }
 
-        if let have, have.path != path {
-            try? files.removeItem(at: folder.appending(path: have.path))
-        }
+        // Persist the new database row before deleting any superseded file at a different path.
         try await store.putItem(
             SyncedItem(
                 serverID: serverID, itemKey: item.itemKey, version: item.version, path: path,
                 mimeType: item.mimeType, sizeBytes: item.sizeBytes, delivery: item.delivery,
                 artKey: await art(item, over: connection), metadata: try song.serializedData(),
                 pinned: have?.pinned ?? false, added: have?.added ?? now()))
+        if let have, have.path != path {
+            try? files.removeItem(at: folder.appending(path: have.path))
+        }
     }
 
     /// The key of `item`'s cover, downloading it if the phone doesn't have it yet; nil if it has
@@ -207,10 +272,10 @@ public struct SyncEngine: Sendable {
     private func art(_ item: Pb_Remote_SyncItem, over connection: some SyncConnection) async -> String? {
         guard item.hasArt, let path = SyncFiles.artPath(key: item.art.key) else { return nil }
         let key = item.art.key
-        if (try? await store.art(key: key)) != nil { return key }
-
         let file = folder.appending(path: path)
         let files = FileManager.default
+        // Check the file on disk too in case the cached cover was purged outside SyncStore.
+        if (try? await store.art(key: key)) != nil, files.fileExists(atPath: file.path) { return key }
         let partial = file.deletingLastPathComponent().appending(path: ".\(UUID().uuidString).part")
         do {
             try files.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true)

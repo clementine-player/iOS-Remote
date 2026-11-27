@@ -34,6 +34,8 @@ public final class RemoteSession {
 
     public private(set) var status = Status.disconnected
     public private(set) var endpoint: Endpoint?
+    /// The literal IP endpoint of the current TCP socket, once connected.
+    public private(set) var connectedEndpoint: Endpoint?
     /// Clementine's name on the network, or its address.
     public private(set) var hostName = ""
     public private(set) var authCode: Int32 = 0
@@ -125,6 +127,7 @@ public final class RemoteSession {
     private var lyricsRequested = false
     private var refreshPlaylistsWhenReady = false
     private var observers: [UUID: @MainActor (RemoteMessage) -> Void] = [:]
+    private var statusObservers: [UUID: @MainActor (Status) -> Void] = [:]
 
     public init() {}
 
@@ -146,25 +149,25 @@ public final class RemoteSession {
         closeReason = nil
         connectedSince = nil
         trafficAtConnect = Traffic.byteCounts
-        status = .connecting
+        setStatus(.connecting)
         open(sendPlaylistSongs: sendPlaylistSongs, renderer: renderer)
     }
 
     /// Disconnects, and forgets Clementine's state.
     public func disconnect() {
-        guard let connection else { return }
+        // Reset and emit .disconnected even if drop() already cleared `connection`.
+        guard connection != nil || status != .disconnected else { return }
         drop()
-        Task { await connection.disconnect() }
         reset()
-        status = .disconnected
+        setStatus(.disconnected)
     }
 
     /// Disconnects quietly for the app's time in the background.
     public func suspend() {
-        guard status == .connected || status == .reconnecting, let connection else { return }
+        // Also suspend while .reconnecting (before a new connection is ready).
+        guard status == .connected || status == .reconnecting else { return }
         drop()
-        Task { await connection.disconnect() }
-        status = .suspended
+        setStatus(.suspended)
     }
 
     /// Reconnects after [suspend], then refreshes the playlists. Without [offeringRenderer], as
@@ -172,7 +175,7 @@ public final class RemoteSession {
     /// so nothing can start playing on it unasked; the next connection offers it again.
     public func resume(offeringRenderer: Bool = true) {
         guard status == .suspended, endpoint != nil else { return }
-        status = .reconnecting
+        setStatus(.reconnecting)
         requestedPlaylists = []
         playlistsLoading = nil
         refreshPlaylistsWhenReady = true
@@ -200,6 +203,27 @@ public final class RemoteSession {
         observers[id] = nil
     }
 
+    @discardableResult
+    public func addStatusObserver(_ observer: @escaping @MainActor (Status) -> Void) -> UUID {
+        let id = UUID()
+        statusObservers[id] = observer
+        return id
+    }
+
+    public func removeStatusObserver(_ id: UUID) {
+        statusObservers[id] = nil
+    }
+
+    private func setStatus(_ newStatus: Status) {
+        guard status != newStatus else { return }
+        status = newStatus
+        // Notify status observers (e.g. Syncer) synchronously on transitions so pending
+        // manifest waits fail immediately on disconnect/suspend/reconnect.
+        for observer in statusObservers.values {
+            observer(newStatus)
+        }
+    }
+
     private func open(sendPlaylistSongs: Bool, renderer: RendererCapabilities?) {
         guard let endpoint else { return }
         let connection = ClementineConnection(endpoint: endpoint, authCode: authCode, renderer: renderer)
@@ -221,14 +245,21 @@ public final class RemoteSession {
         Task { await connection.start(sendPlaylistSongs: sendPlaylistSongs) }
     }
 
-    /// Stops listening to the connection.
+    /// Stops listening to the connection and disconnects it cleanly.
     private func drop() {
         sender?.finish()
         sender = nil
+        // Clear `connection` synchronously so stale events from it are ignored immediately,
+        // while closing the old TCP socket politely in the background.
+        let previous = connection
         connection = nil
+        if let previous {
+            Task { await previous.disconnect() }
+        }
     }
 
     private func reset() {
+        connectedEndpoint = nil
         clementineVersion = ""
         song = nil
         playState = .stopped
@@ -257,7 +288,7 @@ public final class RemoteSession {
         guard source === connection else { return }
         switch event {
         case .connected:
-            break
+            connectedEndpoint = source.resolvedEndpoint ?? endpoint
         case .message(let message):
             apply(message)
             for observer in observers.values {
@@ -265,14 +296,22 @@ public final class RemoteSession {
             }
         case .reconnecting:
             if status == .connected {
-                status = .reconnecting
+                setStatus(.reconnecting)
             }
+            // Auto-reconnect uses sendPlaylistSongs: false; clear any mid-load state and schedule
+            // a playlist refresh once .firstDataSentComplete arrives.
+            requestedPlaylists = []
+            playlistsLoading = nil
+            refreshPlaylistsWhenReady = true
         case .reconnected:
-            break
+            connectedEndpoint = source.resolvedEndpoint ?? endpoint
+            requestedPlaylists = []
+            playlistsLoading = nil
+            refreshPlaylistsWhenReady = true
         case .closed(let reason):
             drop()
             reset()
-            status = .disconnected
+            setStatus(.disconnected)
             closeReason = reason == .requested ? nil : reason
         }
     }
@@ -287,7 +326,7 @@ public final class RemoteSession {
             clementineVersion = info.version
             playState = PlayState(info.state)
             if status == .connecting {
-                status = .downloadingData
+                setStatus(.downloadingData)
             }
             canChooseOutput = info.features.contains(.rendering)
             canBrowse = info.features.contains(.browse)
@@ -308,7 +347,7 @@ public final class RemoteSession {
             if connectedSince == nil {
                 connectedSince = .now
             }
-            status = .connected
+            setStatus(.connected)
             if refreshPlaylistsWhenReady {
                 refreshPlaylistsWhenReady = false
                 let loaded = Set(playlistSongs.keys)
@@ -487,9 +526,25 @@ public final class RemoteSession {
         send(Messages.removeSongs(songs.map(\.index), playlistID: playlistID))
     }
 
-    /// Removes every song from a playlist.
+    /// Clementine 1.4 added `UPDATE_PLAYLIST.clear_playlist`; 1.3 ignores it so callers fall back
+    /// to removing known indices.
+    static func supportsClearPlaylist(_ version: String) -> Bool {
+        guard let start = version.firstIndex(where: \.isNumber) else { return false }
+        let numbers = version[start...].prefix { $0.isNumber || $0 == "." }.split(separator: ".")
+        guard numbers.count >= 2, let major = Int(numbers[0]), let minor = Int(numbers[1]) else {
+            return false
+        }
+        return major > 1 || (major == 1 && minor >= 4)
+    }
+
+    /// Removes every song from a playlist. Uses `UPDATE_PLAYLIST.clear_playlist` on Clementine
+    /// 1.4+, falling back to `REMOVE_SONGS` of known indices on 1.3.
     public func clear(playlistID: Int32) {
-        remove(playlistSongs[playlistID] ?? [], from: playlistID)
+        if Self.supportsClearPlaylist(clementineVersion) {
+            send(Messages.clearPlaylist(playlistID))
+        } else {
+            remove(playlistSongs[playlistID] ?? [], from: playlistID)
+        }
         playlistSongs[playlistID] = []
     }
 
@@ -537,11 +592,13 @@ public final class RemoteSession {
         let before = Set(playlists.map(\.id))
         send(Messages.createPlaylist(named: name))
         let deadline = ContinuousClock.now + timeout
-        while ContinuousClock.now < deadline, status.isActive {
+        while ContinuousClock.now < deadline, status.isActive, !Task.isCancelled {
             if let created = playlists.first(where: { !before.contains($0.id) }) {
                 return created
             }
-            try? await Task.sleep(for: .milliseconds(50))
+            // Check sleep's result as well as Task.isCancelled: `try? Task.sleep` swallows
+            // CancellationError, which would otherwise spin on @MainActor until `deadline`.
+            guard (try? await Task.sleep(for: .milliseconds(50))) != nil else { return nil }
         }
         return nil
     }

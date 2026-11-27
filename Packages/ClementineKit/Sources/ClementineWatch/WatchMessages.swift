@@ -83,12 +83,20 @@ public enum WatchCommand: Codable, Equatable, Sendable {
     case refresh
 }
 
-/// How the messages travel: JSON, under one key of WatchConnectivity's dictionaries.
+/// How the messages travel: JSON for metadata and raw JPEG bytes for artwork, so WatchConnectivity
+/// avoids base64 overhead on the 65 KB context limit.
 public enum WatchLinkCoding {
     public static let stateKey = "nowPlaying"
+    public static let coverKey = "cover"
 
     public static func encode(_ state: WatchNowPlaying) -> [String: Any] {
-        [stateKey: encodeData(state)]
+        var stripped = state
+        stripped.cover = nil
+        var dictionary: [String: Any] = [stateKey: encodeData(stripped)]
+        if let cover = state.cover, !cover.isEmpty {
+            dictionary[coverKey] = cover
+        }
+        return dictionary
     }
 
     public static func encodeData(_ state: WatchNowPlaying) -> Data {
@@ -97,6 +105,14 @@ public enum WatchLinkCoding {
 
     public static func decodeState(_ data: Data?) -> WatchNowPlaying? {
         data.flatMap { try? JSONDecoder().decode(WatchNowPlaying.self, from: $0) }
+    }
+
+    public static func decodeState(_ dictionary: [String: Any]) -> WatchNowPlaying? {
+        guard var state = decodeState(dictionary[stateKey] as? Data) else { return nil }
+        if let cover = dictionary[coverKey] as? Data {
+            state.cover = cover
+        }
+        return state
     }
 
     public static func encode(_ command: WatchCommand) -> Data {
